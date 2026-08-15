@@ -687,7 +687,8 @@ function render(DATA) {
     "Sources : formulaire EOD des setters (Google Sheets) et soumissions du scan (Tally). " +
     "Les fenêtres 3 j / 7 j / 30 j se terminent au dernier jour reporté. Instagram uniquement, LinkedIn exclu.<br>" +
     (SNAPSHOT
-      ? "Copie figée du " + SNAPSHOT.generated + ". La version qui se met à jour toute seule est sur GitHub Pages."
+      ? "Copie figée du " + SNAPSHOT.generated + ". La version qui se met à jour toute seule : " +
+        '<a href="https://alexyoucompte99-lang.github.io/console-prospection-lauric/" style="color:var(--accent)">alexyoucompte99-lang.github.io/console-prospection-lauric</a>'
       : "Les chiffres sont lus directement dans les Sheets à chaque ouverture de la page, au retour sur l'onglet, et via le bouton Actualiser.");
 }
 
