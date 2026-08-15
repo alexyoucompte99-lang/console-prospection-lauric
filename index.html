@@ -1,0 +1,841 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Console Prospection Insta · Lauric</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%F0%9F%8E%AF%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f6f0e4;
+    --card: #fdfaf3;
+    --ink: #1d1812;
+    --ink-2: #5b5346;
+    --muted: #8f8573;
+    --grid: #e8e0cf;
+    --baseline: #cfc5af;
+    --border: rgba(61, 44, 22, 0.13);
+    --accent: #2a78d6;
+    --s1: #2a78d6; /* abonnés */
+    --s2: #eb6834; /* likes */
+    --s3: #1baf7a; /* commentaires */
+    --s4: #eda100; /* relances */
+    --s5: #e87ba4; /* autres */
+    --funnel-1: #86b6ef;
+    --funnel-2: #5598e7;
+    --funnel-3: #2a78d6;
+    --funnel-4: #1c5cab;
+    --good: #006300;
+    --bad: #d03b3b;
+    --live: #1baf7a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --page: #0d0d0d;
+      --card: #1a1a19;
+      --ink: #ffffff;
+      --ink-2: #c3c2b7;
+      --muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255, 255, 255, 0.10);
+      --accent: #3987e5;
+      --s1: #3987e5;
+      --s2: #d95926;
+      --s3: #199e70;
+      --s4: #c98500;
+      --s5: #d55181;
+      --funnel-1: #86b6ef;
+      --funnel-2: #5598e7;
+      --funnel-3: #3987e5;
+      --funnel-4: #184f95;
+      --good: #0ca30c;
+      --bad: #e66767;
+      --live: #199e70;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --card: #1a1a19;
+    --ink: #ffffff;
+    --ink-2: #c3c2b7;
+    --muted: #898781;
+    --grid: #2c2c2a;
+    --baseline: #383835;
+    --border: rgba(255, 255, 255, 0.10);
+    --accent: #3987e5;
+    --s1: #3987e5;
+    --s2: #d95926;
+    --s3: #199e70;
+    --s4: #c98500;
+    --s5: #d55181;
+    --funnel-1: #86b6ef;
+    --funnel-2: #5598e7;
+    --funnel-3: #3987e5;
+    --funnel-4: #184f95;
+    --good: #0ca30c;
+    --bad: #e66767;
+    --live: #199e70;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.45;
+  }
+  .wrap { max-width: 1060px; margin: 0 auto; padding: 28px 20px 64px; }
+
+  header { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0 0 4px; }
+  h1 { font-size: 26px; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+  .maj { font-size: 13px; color: var(--ink-2); text-align: right; }
+  .maj strong { color: var(--ink); font-weight: 600; }
+  .majline { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+
+  .pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 999px; border: 1px solid var(--border); color: var(--ink-2); }
+  .pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
+  .pill.live .dot { background: var(--live); }
+  .pill.stale .dot { background: var(--s4); }
+  .pill.err .dot { background: var(--bad); }
+
+  button.refresh {
+    font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+    border: 1px solid var(--border); background: var(--card); color: var(--ink);
+    border-radius: 8px; padding: 5px 12px; display: inline-flex; align-items: center; gap: 6px;
+  }
+  button.refresh:hover { border-color: var(--accent); color: var(--accent); }
+  button.refresh:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  button.refresh[disabled] { opacity: 0.55; cursor: progress; }
+  button.refresh svg { width: 13px; height: 13px; }
+  .spin { animation: spin 0.9s linear infinite; transform-origin: 50% 50%; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  section { margin-bottom: 28px; }
+  .sec-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+  h2 { font-size: 13px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-2); margin: 0; }
+
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+
+  /* sélecteur de période */
+  .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--card); }
+  .seg button { border: 0; background: transparent; color: var(--ink-2); font: inherit; font-size: 13px; font-weight: 600; padding: 6px 14px; cursor: pointer; }
+  .seg button:hover { color: var(--ink); }
+  .seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .seg button.on { background: var(--accent); color: #fff; }
+
+  /* entonnoir */
+  .funnel { display: grid; gap: 10px; }
+  .fstage { display: grid; grid-template-columns: 190px 1fr; gap: 14px; align-items: center; }
+  .flabel { font-size: 13px; color: var(--ink-2); text-align: right; }
+  .flabel .fname { display: block; font-weight: 600; color: var(--ink); }
+  .fbar-zone { display: flex; align-items: center; gap: 12px; min-height: 40px; }
+  .fbar { height: 40px; border-radius: 4px; min-width: 3px; transition: width 0.35s ease; }
+  .fval { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .fsub { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .fconv { font-size: 12px; color: var(--muted); margin: -4px 0; padding-left: 204px; }
+  .fconv b { color: var(--ink-2); font-weight: 600; }
+  .badge-untracked { font-size: 12px; color: var(--muted); font-style: italic; }
+  .fcover { font-size: 12.5px; color: var(--muted); margin: 12px 0 0; border-top: 1px solid var(--grid); padding-top: 10px; }
+  .fcover b { color: var(--ink-2); font-weight: 600; }
+
+  /* tuiles KPI */
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+  .tile h3 { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); margin: 0 0 2px; display: flex; align-items: center; gap: 7px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex: none; }
+  .tile .big { font-size: 30px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.1; margin: 2px 0 0; }
+  .tile .big small { font-size: 13px; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+  .winrows { margin-top: 12px; border-top: 1px solid var(--grid); padding-top: 8px; display: grid; gap: 5px; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .winrow { display: flex; justify-content: space-between; gap: 8px; color: var(--ink-2); }
+  .winrow b { color: var(--ink); font-weight: 600; }
+  .winrow .perday { color: var(--muted); }
+  .winrow.month { border-top: 1px solid var(--grid); padding-top: 5px; margin-top: 1px; }
+  .empty-note { margin-top: 10px; font-size: 12.5px; color: var(--muted); font-style: italic; }
+  .delta { display: block; margin-top: 3px; font-size: 12.5px; font-weight: 600; }
+  .delta.up { color: var(--good); }
+  .delta.down { color: var(--bad); }
+  .delta.flat { color: var(--muted); font-weight: 500; }
+  .delta small { font-weight: 500; color: var(--muted); }
+
+  /* alerte EOD manquant */
+  .alert { display: flex; gap: 10px; align-items: baseline; border: 1px solid var(--border); border-left: 3px solid var(--bad); border-radius: 8px; background: var(--card); padding: 12px 16px; font-size: 13.5px; color: var(--ink-2); margin-bottom: 24px; }
+  .alert[hidden] { display: none; }
+  .alert b { color: var(--ink); }
+  .alert.warn { border-left-color: var(--s4); }
+
+  /* graphiques */
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12.5px; color: var(--ink-2); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .chart-scroll { overflow-x: auto; }
+  svg text { font-family: inherit; }
+  .minis { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+  .mini-title { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); margin: 0 0 10px; display: flex; gap: 7px; align-items: center; }
+
+  /* tooltip */
+  #tip { position: fixed; pointer-events: none; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px; font-size: 12.5px; box-shadow: 0 4px 16px rgba(0,0,0,0.13); display: none; z-index: 10; min-width: 150px; }
+  #tip .tdate { font-weight: 600; margin-bottom: 5px; }
+  #tip .trow { display: flex; justify-content: space-between; gap: 14px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  #tip .trow b { color: var(--ink); }
+
+  /* table */
+  details summary { cursor: pointer; font-size: 13px; font-weight: 600; color: var(--ink-2); padding: 4px 0; }
+  details summary:hover { color: var(--ink); }
+  .tbl-scroll { overflow-x: auto; margin-top: 10px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+  th, td { text-align: right; padding: 6px 10px; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; }
+  th { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 600; }
+  td { color: var(--ink-2); }
+  td.tot { font-weight: 600; color: var(--ink); }
+
+  footer { font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--grid); padding-top: 14px; }
+
+  #boot { padding: 60px 0; text-align: center; color: var(--muted); font-size: 14px; }
+  [hidden] { display: none !important; }
+
+  @media (max-width: 640px) {
+    .fstage { grid-template-columns: 1fr; gap: 4px; }
+    .flabel { text-align: left; }
+    .fconv { padding-left: 0; }
+    .maj { text-align: left; }
+    .majline { justify-content: flex-start; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fbar { transition: none; }
+    .spin { animation: none; }
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">Prospection Instagram</p>
+      <h1>Console setting · Lauric</h1>
+    </div>
+    <div class="maj">
+      <div class="majline">
+        <span class="pill" id="status"><span class="dot"></span><span id="status-text">Chargement…</span></span>
+        <button class="refresh" id="btn-refresh" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+            <path d="M20 11a8 8 0 1 0-1.6 5.4"/><path d="M20 4v7h-7"/>
+          </svg>
+          Actualiser
+        </button>
+      </div>
+      <div class="majline" style="margin-top:4px">Dernier jour reporté : <strong id="lastday">–</strong></div>
+      <div class="majline">Setters actifs (7 j) : <strong id="setters">–</strong></div>
+    </div>
+  </header>
+
+  <div id="boot">Chargement des données…</div>
+
+  <div id="app" hidden>
+    <div class="alert" id="alert" hidden>
+      <span aria-hidden="true">&#9888;</span>
+      <span id="alert-text"></span>
+    </div>
+
+    <section>
+      <div class="sec-head">
+        <h2>Entonnoir</h2>
+        <div class="seg" id="seg" role="group" aria-label="Période">
+          <button data-w="1" id="btn-w1">Hier</button>
+          <button data-w="3">3 jours</button>
+          <button data-w="7" class="on">7 jours</button>
+          <button data-w="30">30 jours</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="funnel" id="funnel"></div>
+        <p class="fcover" id="fcover"></p>
+      </div>
+    </section>
+
+    <section>
+      <h2 style="margin-bottom:10px">Chiffres clés</h2>
+      <div class="tiles" id="tiles"></div>
+    </section>
+
+    <section>
+      <h2 style="margin-bottom:10px">Messages par catégorie</h2>
+      <div class="tiles" id="cat-tiles"></div>
+    </section>
+
+    <section>
+      <h2 style="margin-bottom:10px">Par setter</h2>
+      <div class="card">
+        <div class="tbl-scroll" style="margin-top:0" id="setter-tbl"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <h2>Messages par jour et par catégorie · 30 jours</h2>
+        <div class="legend" id="legend"></div>
+      </div>
+      <div class="card chart-scroll">
+        <div id="chart"></div>
+      </div>
+    </section>
+
+    <section>
+      <h2 style="margin-bottom:10px">Abonnés et scans par jour · 30 jours</h2>
+      <div class="minis" id="minis"></div>
+    </section>
+
+    <section class="card">
+      <details>
+        <summary>Détail jour par jour (30 derniers jours)</summary>
+        <div class="tbl-scroll" id="tbl"></div>
+      </details>
+    </section>
+
+    <footer id="foot"></footer>
+  </div>
+</div>
+
+<div id="tip"></div>
+
+<script>
+/* ============================================================
+   Console Prospection Insta · Lauric
+   Une seule base de code pour deux cibles :
+   - GitHub Pages : lit les Google Sheets en direct (SNAPSHOT === null)
+   - Artifact Claude : données figées injectées par build.py (SNAPSHOT !== null)
+   ============================================================ */
+
+const SNAPSHOT = /*__SNAPSHOT__*/null;
+
+const SHEETS = {
+  eod: "https://docs.google.com/spreadsheets/d/1vVzQXjAGp-lzF1LTeDMg281dan3TcPxrksvWvxZQRuU/export?format=csv&gid=123224703",
+  tally: "https://docs.google.com/spreadsheets/d/1aMQ_zNQbq2xyntex3V_6GDY5pE9pIaD_v-FTCzJWxes/export?format=csv",
+};
+const FALLBACK = { eod: "data/eod.csv", tally: "data/tally.csv" };
+
+// Indices de colonnes du formulaire EOD (onglet "Réponses au formulaire 1")
+const COL = {
+  DATE: 1, SETTER: 2,
+  MSG_NEW: 3, MSG_OLD: 4, MSG_OTHER: 5, RELANCE: 7,
+  SUBS: 13, MSG_LIKE: 15, MSG_COM: 16, SCAN_OK: 17, SCAN_FILLED: 18,
+};
+
+/* ---------- parsing ---------- */
+
+function parseCSV(text) {
+  const rows = [];
+  let row = [], field = "", quoted = false;
+  text = text.replace(/\r\n?/g, "\n");
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (quoted) {
+      if (c === '"') {
+        if (text[i + 1] === '"') { field += '"'; i++; }
+        else quoted = false;
+      } else field += c;
+    } else if (c === '"') quoted = true;
+    else if (c === ",") { row.push(field); field = ""; }
+    else if (c === "\n") { row.push(field); rows.push(row); row = []; field = ""; }
+    else field += c;
+  }
+  if (field.length || row.length) { row.push(field); rows.push(row); }
+  return rows.filter(r => r.length > 1 || (r[0] || "").trim() !== "");
+}
+
+// '25/30' -> 25 ; '40 (messages)' -> 40 ; 'P' / '' -> 0
+const num = v => { const m = /\d+/.exec(v || ""); return m ? +m[0] : 0; };
+
+function parseDate(v) {
+  v = (v || "").trim().split(" ")[0];
+  let m = /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/.exec(v);
+  if (m) {
+    let y = +m[3]; if (y < 100) y += 2000;
+    return isoOf(y, +m[2], +m[1]);
+  }
+  m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v);
+  if (m) return v;
+  return null;
+}
+const pad = n => String(n).padStart(2, "0");
+const isoOf = (y, mo, d) => y + "-" + pad(mo) + "-" + pad(d);
+const iso = d => isoOf(d.getFullYear(), d.getMonth() + 1, d.getDate());
+
+/* ---------- agrégation (miroir de l'ancien build.py) ---------- */
+
+function aggregate(eodText, tallyText) {
+  const rows = parseCSV(eodText).slice(1);
+  const days = new Map();
+  for (const r of rows) {
+    if (r.length < 8) continue;
+    const d = parseDate(r[COL.DATE]) || parseDate(r[0]);
+    if (!d) continue;
+    const g = i => (i < r.length ? num(r[i]) : 0);
+    let day = days.get(d);
+    if (!day) {
+      day = { date: d, mNew: 0, mOld: 0, mLike: 0, mCom: 0, mOther: 0, mRel: 0,
+              subs: 0, scanOk: 0, scanFilled: 0, setters: new Set(), bySetter: {} };
+      days.set(d, day);
+    }
+    const s = (r[COL.SETTER] || "").trim();
+    const instaMsgs = g(COL.MSG_NEW) + g(COL.MSG_OLD) + g(COL.MSG_OTHER) +
+                      g(COL.RELANCE) + g(COL.MSG_LIKE) + g(COL.MSG_COM);
+    if (s) {
+      day.setters.add(s);
+      day.bySetter[s] = (day.bySetter[s] || 0) + instaMsgs;
+    }
+    day.mNew += g(COL.MSG_NEW);
+    day.mOld += g(COL.MSG_OLD);
+    day.mOther += g(COL.MSG_OTHER);
+    day.mRel += g(COL.RELANCE);
+    day.subs += g(COL.SUBS);
+    day.mLike += g(COL.MSG_LIKE);
+    day.mCom += g(COL.MSG_COM);
+    day.scanOk += g(COL.SCAN_OK);
+    day.scanFilled += g(COL.SCAN_FILLED);
+  }
+
+  const tallyRows = parseCSV(tallyText);
+  const header = tallyRows[0] || [];
+  const iName = header.indexOf("Votre prénom");
+  const names = iName >= 0
+    ? tallyRows.slice(1).map(r => (r[iName] || "").trim()).filter(Boolean)
+    : [];
+
+  return {
+    today: iso(new Date()),
+    days: [...days.values()]
+      .sort((a, b) => a.date < b.date ? -1 : 1)
+      .map(d => ({ ...d, setters: [...d.setters].sort() })),
+    tallyCount: Math.max(0, tallyRows.length - 1),
+    tallyNames: names,
+  };
+}
+
+/* ---------- chargement ---------- */
+
+const el = id => document.getElementById(id);
+const statusPill = el("status"), statusText = el("status-text"), btn = el("btn-refresh");
+
+function setStatus(cls, text) {
+  statusPill.className = "pill" + (cls ? " " + cls : "");
+  statusText.textContent = text;
+}
+
+async function get(url, timeoutMs) {
+  const ctl = new AbortController();
+  const t = setTimeout(() => ctl.abort(), timeoutMs || 15000);
+  try {
+    const r = await fetch(url + (url.includes("?") ? "&" : "?") + "_=" + Date.now(),
+                          { cache: "no-store", signal: ctl.signal });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    return await r.text();
+  } finally { clearTimeout(t); }
+}
+
+let lastFetchAt = null, source = null, busy = false;
+
+async function load(showSpinner) {
+  if (busy) return;
+  busy = true;
+  if (showSpinner) {
+    btn.disabled = true;
+    btn.querySelector("svg").classList.add("spin");
+    setStatus("", "Actualisation…");
+  }
+  try {
+    const [eod, tally] = await Promise.all([get(SHEETS.eod), get(SHEETS.tally)]);
+    lastFetchAt = new Date();
+    source = "live";
+    render(aggregate(eod, tally));
+  } catch (e) {
+    try {
+      const [eod, tally] = await Promise.all([get(FALLBACK.eod), get(FALLBACK.tally)]);
+      lastFetchAt = new Date();
+      source = "snapshot";
+      render(aggregate(eod, tally));
+    } catch (e2) {
+      if (!source) {
+        el("boot").textContent = "Impossible de charger les données. Vérifier la connexion, puis Actualiser.";
+        el("boot").hidden = false;
+      }
+      setStatus("err", "Échec du chargement");
+      busy = false;
+      btn.disabled = false;
+      btn.querySelector("svg").classList.remove("spin");
+      return;
+    }
+  }
+  busy = false;
+  btn.disabled = false;
+  btn.querySelector("svg").classList.remove("spin");
+  refreshStatusLabel();
+}
+
+function refreshStatusLabel() {
+  if (SNAPSHOT) return;
+  if (!lastFetchAt) return;
+  const mins = Math.floor((Date.now() - lastFetchAt) / 60000);
+  const ago = mins < 1 ? "à l'instant" : mins < 60 ? "il y a " + mins + " min"
+            : "il y a " + Math.floor(mins / 60) + " h";
+  if (source === "live") setStatus("live", "Données en direct · " + ago);
+  else setStatus("stale", "Hors ligne · copie locale, " + ago);
+}
+setInterval(refreshStatusLabel, 60000);
+
+/* ============================================================
+   Rendu
+   ============================================================ */
+
+const CATS = [
+  { key: "abo",  label: "Abonnés (nouveaux + anciens)", color: "var(--s1)" },
+  { key: "like", label: "Likes",                        color: "var(--s2)" },
+  { key: "com",  label: "Commentaires",                 color: "var(--s3)" },
+  { key: "rel",  label: "Relances",                     color: "var(--s4)" },
+  { key: "oth",  label: "Autres (story...)",            color: "var(--s5)" },
+];
+
+const zero = () => ({ abo: 0, like: 0, com: 0, rel: 0, oth: 0, mNew: 0, mOld: 0, subs: 0, scanOk: 0, scanFilled: 0, setters: [], bySetter: {}, reported: false });
+const msgTotal = r => r.abo + r.like + r.com + r.rel + r.oth;
+const sum = (rows, f) => rows.reduce((a, r) => a + f(r), 0);
+const fmt = n => n.toLocaleString("fr-FR");
+const perDay = (t, n) => (t / n).toLocaleString("fr-FR", { maximumFractionDigits: 1 });
+const frDate = s => new Date(s + "T12:00:00").toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" });
+
+let win = 7;
+let S = null; // état courant
+
+function render(DATA) {
+  const byDate = {};
+  DATA.days.forEach(d => {
+    byDate[d.date] = {
+      abo: d.mNew + d.mOld, like: d.mLike, com: d.mCom, rel: d.mRel, oth: d.mOther,
+      mNew: d.mNew, mOld: d.mOld,
+      subs: d.subs, scanOk: d.scanOk, scanFilled: d.scanFilled, setters: d.setters,
+      bySetter: d.bySetter || {}, reported: true,
+    };
+  });
+
+  // fin de fenêtre : hier, ou aujourd'hui si l'EOD du jour est déjà rempli
+  const today = new Date(DATA.today + "T12:00:00");
+  const lastData = DATA.days.length ? DATA.days[DATA.days.length - 1].date : DATA.today;
+  const end = new Date(today);
+  if (lastData < DATA.today) end.setDate(end.getDate() - 1);
+
+  function lastNDays(n, offset = 0) {
+    const out = [];
+    for (let i = n - 1 + offset; i >= offset; i--) {
+      const d = new Date(end);
+      d.setDate(d.getDate() - i);
+      out.push({ date: iso(d), ...(byDate[iso(d)] || zero()) });
+    }
+    return out;
+  }
+  function monthToDate() {
+    const first = new Date(end.getFullYear(), end.getMonth(), 1);
+    const n = Math.round((end - first) / 86400000) + 1;
+    return { rows: lastNDays(n), n };
+  }
+
+  // colonnes du form jamais utilisées : on l'affiche plutôt que des faux zéros
+  const everTracked = {
+    scanOk: DATA.days.some(d => d.scanOk > 0),
+    scanFilled: DATA.days.some(d => d.scanFilled > 0),
+  };
+  const neverTracked = f => Object.values(byDate).every(r => f(r) === 0);
+
+  S = { DATA, byDate, today, end, lastData, lastNDays, monthToDate, everTracked, neverTracked };
+
+  el("boot").hidden = true;
+  el("app").hidden = false;
+  btn.hidden = !!SNAPSHOT;
+
+  /* ---------- header ---------- */
+  el("lastday").textContent = DATA.days.length ? frDate(lastData) : "aucun";
+  const set7 = [...new Set(lastNDays(7).flatMap(r => r.setters))];
+  el("setters").textContent = set7.length ? set7.join(", ") : "aucun";
+  el("btn-w1").textContent = (lastData === DATA.today) ? "Aujourd'hui" : "Hier";
+
+  /* ---------- alerte EOD manquant ---------- */
+  const gapDays = Math.round((today - new Date(lastData + "T12:00:00")) / 86400000);
+  const alert = el("alert");
+  if (DATA.days.length && gapDays >= 2) {
+    alert.hidden = false;
+    alert.className = "alert" + (gapDays >= 4 ? "" : " warn");
+    el("alert-text").innerHTML =
+      "Aucun EOD rempli depuis le <b>" + frDate(lastData) + "</b> (" + gapDays + " jours) : les jours manquants comptent à zéro dans les chiffres ci-dessous.";
+  } else {
+    alert.hidden = true;
+  }
+
+  renderFunnel();
+
+  /* ---------- tuiles KPI ---------- */
+  function deltaHtml(cur, prev) {
+    const d = cur - prev;
+    if (d === 0) return '<span class="delta flat">= stable <small>vs 7 j précédents</small></span>';
+    const pct = prev > 0 ? " (" + (d > 0 ? "+" : "") + Math.round(100 * d / prev) + " %)" : "";
+    const cls = d > 0 ? "up" : "down";
+    const arrow = d > 0 ? "▲" : "▼";
+    return '<span class="delta ' + cls + '">' + arrow + " " + (d > 0 ? "+" : "") + fmt(d) + pct +
+      ' <small>vs 7 j précédents</small></span>';
+  }
+  function tile(title, color, f, opts = {}) {
+    if (opts.untracked) {
+      return '<div class="card tile"><h3><span class="dot" style="background:' + color + '"></span>' + title + '</h3>' +
+        '<p class="big">–</p>' +
+        '<p class="empty-note">' + (opts.note || "Pas encore reporté dans l'EOD.") + '</p></div>';
+    }
+    const w1 = sum(lastNDays(1), f), w3 = sum(lastNDays(3), f), w7 = sum(lastNDays(7), f), w30 = sum(lastNDays(30), f);
+    const mtd = monthToDate();
+    const rows = [[el("btn-w1").textContent, 1, w1], ["3 derniers jours", 3, w3], ["7 derniers jours", 7, w7], ["30 derniers jours", 30, w30]].map(([l, n, v]) =>
+      '<div class="winrow"><span>' + l + '</span><span><b>' + fmt(v) + '</b>' +
+      (n > 1 ? ' <span class="perday">· ' + perDay(v, n) + '/j</span>' : '') + '</span></div>'
+    ).join("") +
+      '<div class="winrow month"><span>Mois en cours</span><span><b>' + fmt(sum(mtd.rows, f)) +
+      '</b> <span class="perday">· ' + perDay(sum(mtd.rows, f), mtd.n) + '/j</span></span></div>';
+    return '<div class="card tile"><h3><span class="dot" style="background:' + color + '"></span>' + title + '</h3>' +
+      '<p class="big">' + fmt(w7) + ' <small>sur 7 jours</small></p>' +
+      (opts.noDelta ? '' : deltaHtml(w7, sum(lastNDays(7, 7), f))) +
+      '<div class="winrows">' + rows + '</div>' +
+      (opts.note ? '<p class="empty-note">' + opts.note + '</p>' : '') +
+      '</div>';
+  }
+  el("tiles").innerHTML =
+    tile("Messages envoyés", "var(--accent)", msgTotal) +
+    tile("Nouveaux abonnés", "var(--funnel-2)", r => r.subs) +
+    tile("Scans acceptés", "var(--funnel-3)", r => r.scanOk,
+         everTracked.scanOk ? {} : { noDelta: true, note: "Colonne jamais remplie dans l'EOD pour l'instant." }) +
+    tile("Scans remplis", "var(--funnel-4)", r => r.scanFilled,
+         { noDelta: !everTracked.scanFilled, note: (everTracked.scanFilled ? "" : "Non daté dans l'EOD. ") + "Total Tally : " + fmt(DATA.tallyCount) + " scan(s) rempli(s)" +
+           (DATA.tallyNames.length ? " (" + DATA.tallyNames.join(", ") + ")" : "") + "." });
+
+  /* ---------- messages par catégorie ---------- */
+  const fNew7 = sum(lastNDays(7), r => r.mNew), fOld7 = sum(lastNDays(7), r => r.mOld);
+  el("cat-tiles").innerHTML =
+    tile("Abonnés", "var(--s1)", r => r.abo,
+      { note: "Sur 7 jours : " + fmt(fNew7) + " accroche nouveaux abonnés, " + fmt(fOld7) + " anciens abonnés." }) +
+    tile("Likes", "var(--s2)", r => r.like,
+      neverTracked(r => r.like) ? { untracked: true, note: "Accroche sur likes : pas encore reporté dans l'EOD." } : {}) +
+    tile("Commentaires", "var(--s3)", r => r.com,
+      neverTracked(r => r.com) ? { untracked: true, note: "Accroche sur commentaires : pas encore reporté dans l'EOD." } : {}) +
+    tile("Relances", "var(--s4)", r => r.rel,
+      { note: "Relances d'anciennes conversations, en proposant le scan." }) +
+    tile("Autres", "var(--s5)", r => r.oth,
+      { note: "Like, commentaire, story... (colonne texte libre du form)." });
+
+  /* ---------- par setter ---------- */
+  const setterStats = {};
+  DATA.days.forEach(d => {
+    Object.keys(d.bySetter || {}).forEach(name => {
+      const s = setterStats[name] = setterStats[name] || { hier: 0, d7: 0, d30: 0, active30: 0, last: null };
+      s.last = d.date; // days triés par date croissante
+    });
+  });
+  [[1, "hier"], [7, "d7"], [30, "d30"]].forEach(([n, key]) => {
+    lastNDays(n).forEach(r => {
+      Object.entries(r.bySetter).forEach(([name, v]) => {
+        if (setterStats[name]) setterStats[name][key] += v;
+      });
+    });
+  });
+  lastNDays(30).forEach(r => {
+    Object.entries(r.bySetter).forEach(([name, v]) => {
+      if (setterStats[name] && v > 0) setterStats[name].active30++;
+    });
+  });
+  const activeSetters = Object.entries(setterStats)
+    .filter(([, s]) => s.d30 > 0)
+    .sort((a, b) => b[1].d30 - a[1].d30);
+  const stbl = ['<table><thead><tr><th>Setter</th><th>' + el("btn-w1").textContent + '</th><th>7 j</th><th>30 j</th><th>Jours actifs (30 j)</th><th>Dernier report</th></tr></thead><tbody>'];
+  activeSetters.forEach(([name, s]) => {
+    const stale = s.last < iso(new Date(end.getTime() - 86400000));
+    stbl.push('<tr><td class="tot">' + name + '</td><td>' + fmt(s.hier) + '</td><td>' + fmt(s.d7) +
+      '</td><td>' + fmt(s.d30) + '</td><td>' + s.active30 + ' / 30</td><td>' + frDate(s.last) +
+      (stale ? ' <span title="pas de report récent">⚠</span>' : '') + '</td></tr>');
+  });
+  if (!activeSetters.length) stbl.push('<tr><td colspan="6" style="text-align:left;font-style:italic;color:var(--muted)">Aucun setter actif sur les 30 derniers jours.</td></tr>');
+  stbl.push("</tbody></table>");
+  el("setter-tbl").innerHTML = stbl.join("");
+
+  /* ---------- légende ---------- */
+  el("legend").innerHTML = CATS.map(c =>
+    '<span><span class="dot" style="background:' + c.color + '"></span>' + c.label + '</span>').join("");
+
+  /* ---------- graphiques ---------- */
+  const rows30 = lastNDays(30);
+  barChart(el("chart"), rows30, CATS.map(c => ({ label: c.label, color: c.color, f: r => r[c.key] })), 240);
+
+  el("minis").innerHTML = "";
+  mini(rows30, "Abonnés gagnés / jour", r => r.subs, "var(--funnel-2)",
+    "Aucun abonné reporté sur les 30 derniers jours.");
+  mini(rows30, "Scans acceptés / jour", r => r.scanOk, "var(--funnel-3)",
+    "Colonne jamais remplie dans l'EOD pour l'instant.");
+
+  /* ---------- table ---------- */
+  const tbl = ['<table><thead><tr><th>Date</th><th>Setter</th><th>Nouv. abonnés (msg)</th><th>Anciens abonnés (msg)</th><th>Likes</th><th>Comment.</th><th>Relances</th><th>Autres</th><th>Total msg</th><th>Abonnés gagnés</th><th>Scans ok</th></tr></thead><tbody>'];
+  [...rows30].reverse().forEach(r => {
+    tbl.push('<tr><td>' + frDate(r.date) + '</td><td>' + (r.setters.join(", ") || "·") + '</td>' +
+      [r.mNew, r.mOld, r.like, r.com, r.rel, r.oth].map(v => "<td>" + v + "</td>").join("") +
+      '<td class="tot">' + msgTotal(r) + '</td><td>' + r.subs + '</td><td>' + r.scanOk + '</td></tr>');
+  });
+  tbl.push("</tbody></table>");
+  el("tbl").innerHTML = tbl.join("");
+
+  /* ---------- footer ---------- */
+  el("foot").innerHTML =
+    "Sources : formulaire EOD des setters (Google Sheets) et soumissions du scan (Tally). " +
+    "Les fenêtres 3 j / 7 j / 30 j se terminent au dernier jour reporté. Instagram uniquement, LinkedIn exclu.<br>" +
+    (SNAPSHOT
+      ? "Copie figée du " + SNAPSHOT.generated + ". La version qui se met à jour toute seule est sur GitHub Pages."
+      : "Les chiffres sont lus directement dans les Sheets à chaque ouverture de la page, au retour sur l'onglet, et via le bouton Actualiser.");
+}
+
+/* ---------- entonnoir (dépend de la fenêtre choisie) ---------- */
+function renderFunnel() {
+  if (!S) return;
+  const { DATA, lastNDays, everTracked } = S;
+  const rows = lastNDays(win);
+  const msgs = sum(rows, msgTotal);
+  const subs = sum(rows, r => r.subs);
+  const scans = sum(rows, r => r.scanOk);
+  const filled = sum(rows, r => r.scanFilled);
+
+  const rate = v => win > 1 ? perDay(v, win) + " / jour" : "";
+  const stages = [
+    { name: "Messages envoyés", v: msgs, sub: rate(msgs), color: "var(--funnel-1)", tracked: true },
+    { name: "Nouveaux abonnés", v: subs, sub: rate(subs), color: "var(--funnel-2)", tracked: true },
+    { name: "Scans acceptés", v: scans, sub: "", color: "var(--funnel-3)", tracked: everTracked.scanOk },
+    { name: "Scans remplis", v: filled, sub: fmt(DATA.tallyCount) + " au total via Tally", color: "var(--funnel-4)", tracked: everTracked.scanFilled },
+  ];
+  const max = Math.max(msgs, 1);
+  const box = el("funnel");
+  box.innerHTML = "";
+  stages.forEach((s, i) => {
+    const row = document.createElement("div");
+    row.className = "fstage";
+    const pct = Math.max(3, 100 * s.v / max);
+    const val = s.tracked
+      ? '<span class="fval">' + fmt(s.v) + '</span>' + (s.sub ? ' <span class="fsub">' + s.sub + '</span>' : '')
+      : '<span class="badge-untracked">pas encore reporté dans l\'EOD' + (s.sub ? " · " + s.sub : "") + '</span>';
+    row.innerHTML =
+      '<div class="flabel"><span class="fname">' + s.name + '</span></div>' +
+      '<div class="fbar-zone"><div class="fbar" style="width:' + (s.tracked ? pct : 3) + '%;background:' + s.color + '"></div>' + val + '</div>';
+    box.appendChild(row);
+    if (i < stages.length - 1 && s.tracked && stages[i + 1].tracked && s.v > 0) {
+      const conv = document.createElement("div");
+      conv.className = "fconv";
+      conv.innerHTML = "&darr; conversion <b>" + (100 * stages[i + 1].v / s.v).toLocaleString("fr-FR", { maximumFractionDigits: 1 }) + "&nbsp;%</b>";
+      box.appendChild(conv);
+    }
+  });
+
+  // couverture : combien de jours de la fenêtre ont vraiment un EOD
+  const reported = rows.filter(r => r.reported).length;
+  const first = rows[0].date, last = rows[rows.length - 1].date;
+  el("fcover").innerHTML =
+    "Fenêtre du <b>" + frDate(first) + "</b> au <b>" + frDate(last) + "</b> · " +
+    "<b>" + reported + " jour" + (reported > 1 ? "s" : "") + " sur " + rows.length + "</b> avec un EOD rempli" +
+    (reported < rows.length
+      ? " · les " + (rows.length - reported) + " autre" + (rows.length - reported > 1 ? "s" : "") + " comptent à zéro" +
+        (reported ? " (soit " + perDay(msgs, reported) + " messages / jour reporté)" : "")
+      : "");
+}
+el("seg").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  win = +b.dataset.w;
+  document.querySelectorAll("#seg button").forEach(x => x.classList.toggle("on", x === b));
+  renderFunnel();
+});
+
+/* ---------- graphiques ---------- */
+const tip = el("tip");
+function showTip(evt, html) {
+  tip.innerHTML = html;
+  tip.style.display = "block";
+  const x = Math.min(evt.clientX + 14, window.innerWidth - tip.offsetWidth - 8);
+  const y = Math.min(evt.clientY + 14, window.innerHeight - tip.offsetHeight - 8);
+  tip.style.left = x + "px";
+  tip.style.top = y + "px";
+}
+function hideTip() { tip.style.display = "none"; }
+
+function barChart(box, rows, seriesList, height) {
+  const W = Math.max(680, box.clientWidth || 680), H = height, padL = 34, padB = 22, padT = 8;
+  const innerW = W - padL - 8, innerH = H - padT - padB;
+  const maxV = Math.max(...rows.map(r => seriesList.reduce((a, s) => a + s.f(r), 0)), 1);
+  const step = innerW / rows.length;
+  const bw = Math.min(22, step - 4);
+  const ticks = 3;
+  let svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" height="' + H + '" role="img" aria-label="Graphique en barres par jour">';
+  for (let t = 0; t <= ticks; t++) {
+    const v = Math.round(maxV * t / ticks);
+    const y = padT + innerH - innerH * t / ticks;
+    svg += '<line x1="' + padL + '" x2="' + (W - 8) + '" y1="' + y + '" y2="' + y + '" stroke="var(--grid)" stroke-width="1"/>';
+    svg += '<text x="' + (padL - 6) + '" y="' + (y + 4) + '" text-anchor="end" font-size="10.5" fill="var(--muted)">' + v + '</text>';
+  }
+  rows.forEach((r, i) => {
+    const x = padL + i * step + (step - bw) / 2;
+    let y = padT + innerH;
+    let segs = "";
+    seriesList.forEach((s, si) => {
+      const v = s.f(r);
+      if (!v) return;
+      const h = innerH * v / maxV;
+      y -= h;
+      const isTop = seriesList.slice(si + 1).every(s2 => !s2.f(r));
+      const rx = isTop ? 3 : 0;
+      segs += '<rect x="' + x + '" y="' + (y + (si ? 1 : 0)) + '" width="' + bw + '" height="' + Math.max(0.5, h - (si ? 1 : 0)) + '" rx="' + rx + '" fill="' + s.color + '"/>';
+    });
+    const total = seriesList.reduce((a, s) => a + s.f(r), 0);
+    const tipHtml = '<div class="tdate">' + frDate(r.date) + '</div>' +
+      seriesList.filter(s => s.f(r) > 0).map(s => '<div class="trow"><span>' + s.label + '</span><b>' + s.f(r) + '</b></div>').join("") +
+      '<div class="trow" style="margin-top:4px"><span>Total</span><b>' + total + '</b></div>' +
+      (r.setters && r.setters.length ? '<div class="trow"><span>Setter</span><b>' + r.setters.join(", ") + '</b></div>' : "");
+    svg += '<g data-tip="' + tipHtml.replace(/"/g, "&quot;") + '">' +
+      '<rect x="' + (padL + i * step) + '" y="' + padT + '" width="' + step + '" height="' + innerH + '" fill="transparent"/>' + segs + '</g>';
+    if (i % 5 === 0 || i === rows.length - 1) {
+      const d = new Date(r.date + "T12:00:00");
+      svg += '<text x="' + (x + bw / 2) + '" y="' + (H - 6) + '" text-anchor="middle" font-size="10.5" fill="var(--muted)">' +
+        d.getDate() + "/" + (d.getMonth() + 1) + '</text>';
+    }
+  });
+  svg += '<line x1="' + padL + '" x2="' + (W - 8) + '" y1="' + (padT + innerH) + '" y2="' + (padT + innerH) + '" stroke="var(--baseline)" stroke-width="1"/>';
+  svg += "</svg>";
+  box.innerHTML = svg;
+  box.querySelectorAll("g[data-tip]").forEach(g => {
+    g.addEventListener("mousemove", e => showTip(e, g.dataset.tip));
+    g.addEventListener("mouseleave", hideTip);
+  });
+}
+
+function mini(rows30, title, f, color, untrackedNote) {
+  const div = document.createElement("div");
+  div.className = "card";
+  const total = sum(rows30, f);
+  div.innerHTML = '<h3 class="mini-title"><span class="dot" style="background:' + color + '"></span>' + title + '</h3>';
+  const zone = document.createElement("div");
+  div.appendChild(zone);
+  el("minis").appendChild(div);
+  if (total === 0 && untrackedNote) {
+    zone.innerHTML = '<p class="empty-note" style="margin:0">' + untrackedNote + '</p>';
+  } else {
+    barChart(zone, rows30, [{ label: title, color: color, f: f }], 150);
+  }
+}
+
+/* ---------- démarrage ---------- */
+if (SNAPSHOT) {
+  setStatus("stale", "Copie du " + SNAPSHOT.generated);
+  render(aggregate(SNAPSHOT.eod, SNAPSHOT.tally));
+} else {
+  btn.addEventListener("click", () => load(true));
+  // au retour sur l'onglet, si la dernière lecture date de plus de 5 min
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden && lastFetchAt && Date.now() - lastFetchAt > 5 * 60000) load(false);
+  });
+  setInterval(() => { if (!document.hidden) load(false); }, 10 * 60000);
+  load(false);
+}
+</script>

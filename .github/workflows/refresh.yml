@@ -1,0 +1,38 @@
+name: Rafraichir les donnees
+
+# La page lit les Google Sheets en direct dans le navigateur : ce job ne sert
+# qu'a rafraichir la copie de secours (data/*.csv) utilisee si Google est
+# injoignable. L'heure exacte n'a donc aucune importance.
+on:
+  schedule:
+    - cron: "0 6 * * *"   # 8 h a Paris en ete, 7 h en hiver
+    - cron: "0 11 * * *"  # 13 h a Paris en ete, 12 h en hiver
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Telecharger les CSV
+        run: python3 build.py --data-only
+
+      - name: Commiter si ca a change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data
+          if git diff --staged --quiet; then
+            echo "aucun changement"
+          else
+            git commit -m "donnees du $(date -u +'%Y-%m-%d %H:%M') UTC"
+            git push
+          fi
