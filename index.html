@@ -703,16 +703,28 @@ function renderFunnel() {
   const filled = sum(rows, r => r.scanFilled);
 
   const rate = v => win > 1 ? perDay(v, win) + " / jour" : "";
+  // `base` = étape à laquelle on compare pour le taux de conversion. Les abonnés
+  // gagnés et les scans acceptés découlent tous les deux des messages envoyés :
+  // enchaîner abonnés -> scans donnerait des taux absurdes (200 % et plus).
   const stages = [
     { name: "Messages envoyés", v: msgs, sub: rate(msgs), color: "var(--funnel-1)", tracked: true },
-    { name: "Nouveaux abonnés", v: subs, sub: rate(subs), color: "var(--funnel-2)", tracked: true },
-    { name: "Scans acceptés", v: scans, sub: "", color: "var(--funnel-3)", tracked: everTracked.scanOk },
-    { name: "Scans remplis", v: filled, sub: fmt(DATA.tallyCount) + " au total via Tally", color: "var(--funnel-4)", tracked: everTracked.scanFilled },
+    { name: "Nouveaux abonnés", v: subs, sub: rate(subs), color: "var(--funnel-2)", tracked: true, base: 0 },
+    { name: "Scans acceptés", v: scans, sub: "", color: "var(--funnel-3)", tracked: everTracked.scanOk, base: 0 },
+    { name: "Scans remplis", v: filled, sub: fmt(DATA.tallyCount) + " au total via Tally", color: "var(--funnel-4)", tracked: everTracked.scanFilled, base: 2 },
   ];
   const max = Math.max(msgs, 1);
   const box = el("funnel");
   box.innerHTML = "";
-  stages.forEach((s, i) => {
+  stages.forEach(s => {
+    const from = s.base === undefined ? null : stages[s.base];
+    if (from && s.tracked && from.tracked && from.v > 0) {
+      const conv = document.createElement("div");
+      conv.className = "fconv";
+      conv.innerHTML = "&darr; <b>" +
+        (100 * s.v / from.v).toLocaleString("fr-FR", { maximumFractionDigits: 1 }) +
+        "&nbsp;%</b> des " + from.name.toLowerCase();
+      box.appendChild(conv);
+    }
     const row = document.createElement("div");
     row.className = "fstage";
     const pct = Math.max(3, 100 * s.v / max);
@@ -723,12 +735,6 @@ function renderFunnel() {
       '<div class="flabel"><span class="fname">' + s.name + '</span></div>' +
       '<div class="fbar-zone"><div class="fbar" style="width:' + (s.tracked ? pct : 3) + '%;background:' + s.color + '"></div>' + val + '</div>';
     box.appendChild(row);
-    if (i < stages.length - 1 && s.tracked && stages[i + 1].tracked && s.v > 0) {
-      const conv = document.createElement("div");
-      conv.className = "fconv";
-      conv.innerHTML = "&darr; conversion <b>" + (100 * stages[i + 1].v / s.v).toLocaleString("fr-FR", { maximumFractionDigits: 1 }) + "&nbsp;%</b>";
-      box.appendChild(conv);
-    }
   });
 
   // couverture : combien de jours de la fenêtre ont vraiment un EOD
