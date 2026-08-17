@@ -497,6 +497,10 @@ const CATS = [
 
 const zero = () => ({ abo: 0, like: 0, com: 0, rel: 0, oth: 0, mNew: 0, mOld: 0, subs: 0, scanOk: 0, scanFilled: 0, setters: [], bySetter: {}, reported: false });
 const msgTotal = r => r.abo + r.like + r.com + r.rel + r.oth;
+// Colonnes du form dont l'intitulé dit « (proposant le scan) » : nouveaux et
+// anciens abonnés, likes, commentaires, relances. La colonne « autres Insta
+// (like, commentaire, story...) » ne propose pas le scan, elle est donc exclue.
+const msgProposed = r => r.abo + r.like + r.com + r.rel;
 const sum = (rows, f) => rows.reduce((a, r) => a + f(r), 0);
 const fmt = n => n.toLocaleString("fr-FR");
 const perDay = (t, n) => (t / n).toLocaleString("fr-FR", { maximumFractionDigits: 1 });
@@ -603,7 +607,9 @@ function render(DATA) {
   }
   el("tiles").innerHTML =
     tile("Messages envoyés", "var(--accent)", msgTotal) +
-    tile("Nouveaux abonnés", "var(--funnel-2)", r => r.subs) +
+    tile("Scans proposés", "var(--funnel-2)", msgProposed,
+         { note: "Messages dont l'intitulé du form dit « proposant le scan » : abonnés, likes, commentaires, relances. La colonne « autres Insta » est exclue." }) +
+    tile("Nouveaux abonnés", "var(--funnel-1)", r => r.subs) +
     tile("Scans acceptés", "var(--funnel-3)", r => r.scanOk,
          everTracked.scanOk ? {} : { noDelta: true, note: "Colonne jamais remplie dans l'EOD pour l'instant." }) +
     tile("Scans remplis", "var(--funnel-4)", r => r.scanFilled,
@@ -698,18 +704,18 @@ function renderFunnel() {
   const { DATA, lastNDays, everTracked } = S;
   const rows = lastNDays(win);
   const msgs = sum(rows, msgTotal);
-  const subs = sum(rows, r => r.subs);
+  const proposed = sum(rows, msgProposed);
   const scans = sum(rows, r => r.scanOk);
   const filled = sum(rows, r => r.scanFilled);
 
   const rate = v => win > 1 ? perDay(v, win) + " / jour" : "";
-  // `base` = étape à laquelle on compare pour le taux de conversion. Les abonnés
-  // gagnés et les scans acceptés découlent tous les deux des messages envoyés :
-  // enchaîner abonnés -> scans donnerait des taux absurdes (200 % et plus).
+  // `base` = étape à laquelle on compare pour le taux de conversion. Les nouveaux
+  // abonnés gagnés ne font pas partie de cette chaîne (ils découlent des messages,
+  // pas du scan), ils restent dans les chiffres clés.
   const stages = [
     { name: "Messages envoyés", v: msgs, sub: rate(msgs), color: "var(--funnel-1)", tracked: true },
-    { name: "Nouveaux abonnés", v: subs, sub: rate(subs), color: "var(--funnel-2)", tracked: true, base: 0 },
-    { name: "Scans acceptés", v: scans, sub: "", color: "var(--funnel-3)", tracked: everTracked.scanOk, base: 0 },
+    { name: "Scans proposés", v: proposed, sub: "messages proposant le scan", color: "var(--funnel-2)", tracked: true, base: 0 },
+    { name: "Scans acceptés", v: scans, sub: "", color: "var(--funnel-3)", tracked: everTracked.scanOk, base: 1 },
     { name: "Scans remplis", v: filled, sub: fmt(DATA.tallyCount) + " au total via Tally", color: "var(--funnel-4)", tracked: everTracked.scanFilled, base: 2 },
   ];
   const max = Math.max(msgs, 1);
