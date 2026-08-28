@@ -5,8 +5,10 @@ name: Rafraichir les donnees
 # injoignable. L'heure exacte n'a donc aucune importance.
 on:
   schedule:
-    - cron: "0 6 * * *"   # 8 h a Paris en ete, 7 h en hiver
-    - cron: "0 11 * * *"  # 13 h a Paris en ete, 12 h en hiver
+    - cron: "0 5 * * *"    # ~7h00 Paris (ete)
+    - cron: "0 9 * * *"    # ~11h00 Paris
+    - cron: "0 13 * * *"   # ~15h00 Paris
+    - cron: "30 17 * * *"  # ~19h30 Paris
   workflow_dispatch:
 
 permissions:
