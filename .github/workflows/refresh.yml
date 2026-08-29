@@ -1,14 +1,13 @@
 name: Rafraichir les donnees
 
-# La page lit les Google Sheets en direct dans le navigateur : ce job ne sert
-# qu'a rafraichir la copie de secours (data/*.csv) utilisee si Google est
-# injoignable. L'heure exacte n'a donc aucune importance.
+# La page lit les Google Sheets en direct dans le navigateur. Ce job sert a :
+# 1. rafraichir la copie de secours (data/eod.csv, data/tally.csv)
+# 2. recuperer les soumissions Tally PARTIELLES (data/partielles.csv) : Tally ne
+#    les envoie jamais au Sheet, seule l'API les expose -> la page les lit ici.
+# D'ou le passage a un rythme horaire en journee.
 on:
   schedule:
-    - cron: "0 5 * * *"    # ~7h00 Paris (ete)
-    - cron: "0 9 * * *"    # ~11h00 Paris
-    - cron: "0 13 * * *"   # ~15h00 Paris
-    - cron: "30 17 * * *"  # ~19h30 Paris
+    - cron: "15 5-20 * * *"   # toutes les heures, ~7h15 -> ~22h15 Paris (ete)
   workflow_dispatch:
 
 permissions:
@@ -25,6 +24,8 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Telecharger les CSV
+        env:
+          TALLY_API_KEY: ${{ secrets.TALLY_API_KEY }}
         run: python3 build.py --data-only
 
       - name: Commiter si ca a change

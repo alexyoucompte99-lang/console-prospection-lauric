@@ -14,7 +14,7 @@ Usage:
   python3 build.py --data-only  télécharge seulement (utilisé par GitHub Actions)
   python3 build.py --no-fetch   réutilise les CSV déjà téléchargés (debug)
 """
-import csv, io, json, re, sys, urllib.request
+import csv, io, json, os, re, sys, urllib.request
 from datetime import datetime
 from pathlib import Path
 
@@ -24,6 +24,11 @@ EOD_URL = ("https://docs.google.com/spreadsheets/d/"
            "1vVzQXjAGp-lzF1LTeDMg281dan3TcPxrksvWvxZQRuU/export?format=csv&gid=123224703")
 TALLY_URL = ("https://docs.google.com/spreadsheets/d/"
              "1aMQ_zNQbq2xyntex3V_6GDY5pE9pIaD_v-FTCzJWxes/export?format=csv")
+
+# Soumissions partielles du scan Tally (jamais poussées vers le Sheet par Tally,
+# seule l'API les expose). Clé : secret GitHub TALLY_API_KEY, ou fichier local.
+TALLY_FORM_ID = "zxvka0"
+TALLY_KEY_FILE = HERE.parent / "tally-lead-magnet-anais" / "tally-api-key.txt"
 
 COL_DATE, COL_SETTER = 1, 2
 COL_MSG_NEW, COL_MSG_OLD, COL_MSG_OTHER, COL_RELANCE = 3, 4, 5, 7
@@ -49,6 +54,74 @@ def parse_date(v: str):
         except ValueError:
             pass
     return None
+
+
+def tally_key() -> str:
+    k = os.environ.get("TALLY_API_KEY", "").strip()
+    if not k and TALLY_KEY_FILE.exists():
+        k = TALLY_KEY_FILE.read_text().strip()
+    return k
+
+
+def fetch_partials(key: str) -> str:
+    """CSV des soumissions partielles du form Tally, une ligne par prospect en cours."""
+    subs, questions, page = [], [], 1
+    while page <= 20:
+        url = (f"https://api.tally.so/forms/{TALLY_FORM_ID}/submissions"
+               f"?filter=partial&limit=500&page={page}")
+        req = urllib.request.Request(url, headers={
+            "Authorization": "Bearer " + key, "User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=60) as r:
+            body = json.load(r)
+        if page == 1:
+            questions = body.get("questions") or []
+        subs += body.get("submissions") or []
+        if not body.get("hasMore"):
+            break
+        page += 1
+
+    by_title = {}
+    for q in questions:
+        t = (q.get("title") or "").strip().lower()
+        if t.startswith("votre prénom"):
+            by_title.setdefault("prenom", set()).add(q["id"])
+        elif t.startswith("votre numéro whatsapp"):
+            by_title.setdefault("wa", set()).add(q["id"])
+        elif t.startswith("avant de commencer"):
+            by_title.setdefault("profil", set()).add(q["id"])
+        elif re.match(r"q\d", t):
+            by_title.setdefault("questions", set()).add(q["id"])
+    nb_q = len(by_title.get("questions", ())) or 9
+
+    out = io.StringIO()
+    w = csv.writer(out)
+    w.writerow(["Submission ID", "Derniere activite", "Prenom", "WhatsApp",
+                "Profil", "Score", "Questions repondues", "Questions total"])
+    for s in subs:
+        row = {"prenom": "", "wa": "", "profil": "", "score": "", "answered": 0}
+        last = s.get("updatedAt") or s.get("submittedAt") or s.get("createdAt") or ""
+        for r in s.get("responses") or []:
+            a = r.get("answer")
+            qid = r.get("questionId")
+            if isinstance(a, dict) and "score" in a:
+                row["score"] = a["score"]
+                continue
+            if isinstance(a, list):
+                a = ", ".join(str(x) for x in a)
+            a = "" if a is None else str(a).strip()
+            if not a:
+                continue
+            if qid in by_title.get("prenom", ()):
+                row["prenom"] = a
+            elif qid in by_title.get("wa", ()):
+                row["wa"] = a
+            elif qid in by_title.get("profil", ()):
+                row["profil"] = a
+            elif qid in by_title.get("questions", ()):
+                row["answered"] += 1
+        w.writerow([s.get("id", ""), last, row["prenom"], row["wa"],
+                    row["profil"], row["score"], row["answered"], nb_q])
+    return out.getvalue()
 
 
 def js_string(s: str) -> str:
@@ -93,13 +166,21 @@ def recap(eod_text: str, tally_text: str) -> None:
 def main():
     DATA.mkdir(exist_ok=True)
     eod_file, tally_file = DATA / "eod.csv", DATA / "tally.csv"
+    partials_file = DATA / "partielles.csv"
 
     if "--no-fetch" not in sys.argv:
         eod_file.write_text(fetch(EOD_URL), encoding="utf-8")
         tally_file.write_text(fetch(TALLY_URL), encoding="utf-8")
+        key = tally_key()
+        if key:
+            partials_file.write_text(fetch_partials(key), encoding="utf-8")
+        else:
+            print("TALLY_API_KEY absent : partielles non rafraîchies")
 
     eod_text = eod_file.read_text(encoding="utf-8")
     tally_text = tally_file.read_text(encoding="utf-8")
+    partials_text = partials_file.read_text(encoding="utf-8") if partials_file.exists() else ""
+    print(f"partielles: {max(0, len(partials_text.splitlines()) - 1)}")
     recap(eod_text, tally_text)
 
     if "--data-only" in sys.argv:
@@ -108,7 +189,8 @@ def main():
     page = (HERE / "index.html").read_text(encoding="utf-8")
     snapshot = ("{generated:" + js_string(datetime.now().strftime("%d/%m/%Y %H:%M"))
                 + ",eod:" + js_string(eod_text)
-                + ",tally:" + js_string(tally_text) + "}")
+                + ",tally:" + js_string(tally_text)
+                + ",partials:" + js_string(partials_text) + "}")
     out = page.replace("/*__SNAPSHOT__*/null", snapshot, 1)
     if out == page:
         raise SystemExit("marqueur /*__SNAPSHOT__*/null introuvable dans index.html")
