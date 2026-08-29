@@ -231,6 +231,11 @@
   .tally-counts { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
   .tally-counts .pill { font-size: 13px; padding: 5px 13px; }
   .tally-counts .pill b { color: var(--ink); font-size: 15px; }
+  .fpill { font-family: inherit; background: var(--card); cursor: pointer; }
+  .fpill:hover { border-color: var(--accent); color: var(--accent); }
+  .fpill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .fpill.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .fpill.on b { color: #fff; }
 
   /* réponses du scan (repliées) */
   details.answers { margin-top: 10px; }
@@ -421,11 +426,11 @@
 
     <div id="tab-tally" hidden>
       <div class="tally-counts" id="tally-pills"></div>
-      <section>
+      <section id="sec-done">
         <h2 style="margin-bottom:10px">Scans remplis</h2>
         <div class="rlist" id="tally-done"></div>
       </section>
-      <section>
+      <section id="sec-partial">
         <h2 style="margin-bottom:10px">Scans en cours (partiels, non validés)</h2>
         <div class="rlist" id="tally-partial"></div>
       </section>
@@ -1364,6 +1369,21 @@ el("eod-form").addEventListener("submit", async e => {
   btn2.disabled = false;
 });
 
+/* filtre Tous / Remplis / En cours (les pills de compteurs sont cliquables) */
+let tallyFilter = "all";
+function applyTallyFilter() {
+  el("sec-done").hidden = tallyFilter === "partial";
+  el("sec-partial").hidden = tallyFilter === "done";
+  document.querySelectorAll("#tally-pills .fpill").forEach(b =>
+    b.classList.toggle("on", b.dataset.f === tallyFilter));
+}
+el("tally-pills").addEventListener("click", e => {
+  const b = e.target.closest(".fpill");
+  if (!b) return;
+  tallyFilter = b.dataset.f;
+  applyTallyFilter();
+});
+
 /* ---------- onglet Scans Tally : remplis + partiels, avec WhatsApp ---------- */
 function renderTallyTab(tallyText, partialsText) {
   const rows = parseCSV(tallyText);
@@ -1398,9 +1418,10 @@ function renderTallyTab(tallyText, partialsText) {
 
   el("tally-count").textContent = "(" + (done.length + partials.length) + ")";
   el("tally-pills").innerHTML =
-    '<span class="pill"><b>' + done.length + '</b>&nbsp;remplis</span>' +
-    '<span class="pill"><b>' + partials.length + '</b>&nbsp;en cours (partiels)</span>' +
-    '<span class="pill"><b>' + (done.length + partials.length) + '</b>&nbsp;au total</span>';
+    '<button class="pill fpill" data-f="all"><b>' + (done.length + partials.length) + '</b>&nbsp;tous</button>' +
+    '<button class="pill fpill" data-f="done"><b>' + done.length + '</b>&nbsp;remplis</button>' +
+    '<button class="pill fpill" data-f="partial"><b>' + partials.length + '</b>&nbsp;en cours (partiels)</button>';
+  applyTallyFilter();
 
   el("tally-done").innerHTML = done.map(r => {
     const v = i => (i >= 0 && r[i] ? String(r[i]).trim() : "");
