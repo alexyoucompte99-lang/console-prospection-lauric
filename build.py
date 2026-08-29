@@ -93,12 +93,20 @@ def fetch_partials(key: str) -> str:
             by_title.setdefault("questions", set()).add(q["id"])
     nb_q = len(by_title.get("questions", ())) or 9
 
+    # Réponses détaillées : les Q1..Q9 + « Votre résultat arrive... », une colonne
+    # par question (intitulé complet en en-tête, la page les affiche au clic).
+    detail_qs = [q for q in questions
+                 if q["id"] in by_title.get("questions", ())
+                 or (q.get("title") or "").strip().lower().startswith("votre résultat arrive")]
+
     out = io.StringIO()
     w = csv.writer(out)
     w.writerow(["Submission ID", "Derniere activite", "Prenom", "WhatsApp",
-                "Profil", "Score", "Questions repondues", "Questions total"])
+                "Profil", "Score", "Questions repondues", "Questions total"]
+               + [q.get("title") or "" for q in detail_qs])
     for s in subs:
         row = {"prenom": "", "wa": "", "profil": "", "score": "", "answered": 0}
+        answers = {}
         last = s.get("updatedAt") or s.get("submittedAt") or s.get("createdAt") or ""
         for r in s.get("responses") or []:
             a = r.get("answer")
@@ -111,6 +119,7 @@ def fetch_partials(key: str) -> str:
             a = "" if a is None else str(a).strip()
             if not a:
                 continue
+            answers[qid] = a
             if qid in by_title.get("prenom", ()):
                 row["prenom"] = a
             elif qid in by_title.get("wa", ()):
@@ -120,7 +129,8 @@ def fetch_partials(key: str) -> str:
             elif qid in by_title.get("questions", ()):
                 row["answered"] += 1
         w.writerow([s.get("id", ""), last, row["prenom"], row["wa"],
-                    row["profil"], row["score"], row["answered"], nb_q])
+                    row["profil"], row["score"], row["answered"], nb_q]
+                   + [answers.get(q["id"], "") for q in detail_qs])
     return out.getvalue()
 
 

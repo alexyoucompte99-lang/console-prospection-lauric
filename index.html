@@ -228,6 +228,56 @@
   .tally-counts .pill { font-size: 13px; padding: 5px 13px; }
   .tally-counts .pill b { color: var(--ink); font-size: 15px; }
 
+  /* réponses du scan (repliées) */
+  details.answers { margin-top: 10px; }
+  details.answers summary { font-size: 13px; font-weight: 600; color: var(--accent); cursor: pointer; padding: 2px 0; list-style: none; }
+  details.answers summary::before { content: "▸ "; }
+  details.answers[open] summary::before { content: "▾ "; }
+  details.answers summary:hover { text-decoration: underline; }
+  .qalist { margin-top: 8px; display: grid; gap: 8px; border-top: 1px solid var(--grid); padding-top: 10px; }
+  .qa .q { font-size: 12px; color: var(--muted); margin: 0; }
+  .qa .a { font-size: 13.5px; color: var(--ink); font-weight: 500; margin: 1px 0 0; }
+
+  /* formulaire EOD */
+  .eodform { display: grid; gap: 14px; }
+  .eodform label.flab { display: block; font-size: 12.5px; font-weight: 600; color: var(--ink-2); margin-bottom: 4px; }
+  .eodform input[type="date"], .eodform input[type="number"], .eodform input[type="text"], .eodform textarea {
+    font: inherit; font-size: 15px; color: var(--ink); background: var(--page);
+    border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; width: 100%;
+  }
+  .eodform input:focus-visible, .eodform textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: -1px; }
+  .eodform textarea { min-height: 64px; resize: vertical; }
+  .frow2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .srcgrid { display: grid; grid-template-columns: minmax(110px, 1fr) 90px 90px; gap: 8px 10px; align-items: center; }
+  .srcgrid .gh { font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+  .srcgrid .gl { font-size: 13.5px; color: var(--ink-2); }
+  .srcgrid input { text-align: center; padding: 7px 4px; }
+  .setterpick { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .setterpick button.opt { font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--page); color: var(--ink-2); border-radius: 8px; padding: 7px 16px; }
+  .setterpick button.opt.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .setterpick input { width: 140px; }
+  button.send {
+    font: inherit; font-size: 15px; font-weight: 700; cursor: pointer;
+    border: 0; background: var(--accent); color: #fff; border-radius: 9px; padding: 11px 22px;
+  }
+  button.send:hover { filter: brightness(1.08); }
+  button.send[disabled] { opacity: 0.55; cursor: progress; }
+  .sendmsg { font-size: 13.5px; font-weight: 600; margin: 0; }
+  .sendmsg.ok { color: var(--good); }
+  .sendmsg.ko { color: var(--bad); }
+  .formnote { font-size: 12.5px; color: var(--muted); margin: 0; }
+
+  /* pilotage */
+  .pilot { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  .hbar { display: grid; grid-template-columns: 110px 1fr 74px; gap: 8px; align-items: center; font-size: 13px; margin-top: 7px; }
+  .hbar .hl { color: var(--ink-2); text-align: right; }
+  .hbar .track { background: var(--grid); border-radius: 4px; height: 16px; overflow: hidden; }
+  .hbar .fill { display: block; height: 100%; border-radius: 4px; min-width: 2px; }
+  .hbar .hv { font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 600; white-space: nowrap; }
+  .hbar .hv small { color: var(--muted); font-weight: 500; }
+  .bigstat { font-size: 30px; font-weight: 700; margin: 2px 0 0; }
+  .bigstat small { font-size: 13px; font-weight: 500; color: var(--muted); }
+
   #boot { padding: 60px 0; text-align: center; color: var(--muted); font-size: 14px; }
   [hidden] { display: none !important; }
 
@@ -275,6 +325,90 @@
     </div>
 
     <div id="tab-eod" hidden>
+      <section>
+        <h2 style="margin-bottom:10px">Remplir l'EOD du jour</h2>
+        <form class="card eodform" id="eod-form">
+          <div class="frow2">
+            <div>
+              <label class="flab" for="f-date">Date du jour</label>
+              <input type="date" id="f-date" required>
+            </div>
+            <div>
+              <label class="flab">Setter</label>
+              <div class="setterpick" id="f-setters"></div>
+            </div>
+          </div>
+
+          <div>
+            <label class="flab">Accroches envoyées (proposant le scan)</label>
+            <div class="srcgrid">
+              <span></span><span class="gh">Vocaux</span><span class="gh">Écrits</span>
+              <span class="gl">Nouveaux abonnés</span>
+              <input type="number" min="0" inputmode="numeric" data-src="nouveaux" data-mode="vocal">
+              <input type="number" min="0" inputmode="numeric" data-src="nouveaux" data-mode="écrit">
+              <span class="gl">Anciens abonnés</span>
+              <input type="number" min="0" inputmode="numeric" data-src="anciens" data-mode="vocal">
+              <input type="number" min="0" inputmode="numeric" data-src="anciens" data-mode="écrit">
+              <span class="gl">Likes</span>
+              <input type="number" min="0" inputmode="numeric" data-src="likes" data-mode="vocal">
+              <input type="number" min="0" inputmode="numeric" data-src="likes" data-mode="écrit">
+              <span class="gl">Commentaires</span>
+              <input type="number" min="0" inputmode="numeric" data-src="commentaires" data-mode="vocal">
+              <input type="number" min="0" inputmode="numeric" data-src="commentaires" data-mode="écrit">
+              <span class="gl">Relances</span>
+              <input type="number" min="0" inputmode="numeric" data-src="relances" data-mode="vocal">
+              <input type="number" min="0" inputmode="numeric" data-src="relances" data-mode="écrit">
+            </div>
+            <p class="formnote" style="margin-top:6px">Laisse vide ce qui est à zéro. Vocal + écrit = total envoyé dans l'EOD.</p>
+          </div>
+
+          <div class="frow2">
+            <div>
+              <label class="flab" for="f-subs">Abonnés gagnés aujourd'hui</label>
+              <input type="number" min="0" inputmode="numeric" id="f-subs">
+            </div>
+            <div>
+              <label class="flab" for="f-taux">Taux de réponses estimé (%)</label>
+              <input type="number" min="0" max="100" inputmode="numeric" id="f-taux">
+            </div>
+          </div>
+          <div class="frow2">
+            <div>
+              <label class="flab" for="f-scanok">Leads ayant accepté le scan</label>
+              <input type="number" min="0" inputmode="numeric" id="f-scanok">
+            </div>
+            <div>
+              <label class="flab" for="f-scanfilled">Leads ayant rempli le scan</label>
+              <input type="number" min="0" inputmode="numeric" id="f-scanfilled">
+            </div>
+          </div>
+          <div class="frow2">
+            <div>
+              <label class="flab" for="f-totinsta">Scans envoyés au total · Instagram</label>
+              <input type="number" min="0" inputmode="numeric" id="f-totinsta">
+            </div>
+            <div>
+              <label class="flab" for="f-totfb">Scans envoyés au total · Facebook</label>
+              <input type="number" min="0" inputmode="numeric" id="f-totfb">
+            </div>
+          </div>
+          <div>
+            <label class="flab" for="f-notes">Idées d'amélioration ou retours / questions</label>
+            <textarea id="f-notes"></textarea>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+            <button type="submit" class="send" id="f-send">Envoyer l'EOD</button>
+            <p class="sendmsg" id="f-msg" hidden></p>
+          </div>
+          <p class="formnote">Envoyé dans le même Google Form que d'habitude : le Sheet et la console se mettent à jour pareil.</p>
+        </form>
+      </section>
+
+      <section>
+        <h2 style="margin-bottom:10px">Pilotage · quoi améliorer pour booker plus de calls</h2>
+        <div class="pilot" id="pilot"></div>
+      </section>
+
       <section>
         <h2 style="margin-bottom:10px">Derniers EOD reçus</h2>
         <div class="rlist" id="eod-list"></div>
@@ -430,11 +564,14 @@ const iso = d => isoOf(d.getFullYear(), d.getMonth() + 1, d.getDate());
 
 /* ---------- agrégation (miroir de l'ancien build.py) ---------- */
 
+// lignes de test techniques de la console, à ignorer partout
+const isTestRow = r => /test console/i.test(r[COL.SETTER] || "");
+
 function aggregate(eodText, tallyText) {
   const rows = parseCSV(eodText).slice(1);
   const days = new Map();
   for (const r of rows) {
-    if (r.length < 8) continue;
+    if (r.length < 8 || isTestRow(r)) continue;
     const d = parseDate(r[COL.DATE]) || parseDate(r[0]);
     if (!d) continue;
     const g = i => (i < r.length ? num(r[i]) : 0);
@@ -949,28 +1086,60 @@ function renderExtras(eodText, tallyText, partialsText) {
   renderTallyTab(tallyText, partialsText);
 }
 
-/* ---------- onglet EOD : les derniers reports, bruts et simples ---------- */
+/* ---------- onglet EOD : derniers reports + pilotage ---------- */
+
+const SRC_KEYS = ["nouveaux", "anciens", "likes", "commentaires", "relances"];
+const SRC_LABELS = { nouveaux: "Nouveaux abonnés", anciens: "Anciens abonnés", likes: "Likes", commentaires: "Commentaires", relances: "Relances" };
+
+// La ligne « — Détail console : vocal nouveaux 3 · écrit likes 2 » écrite par le
+// formulaire ci-dessous, relue ici pour le pilotage vocal / écrit.
+function parseDetail(text) {
+  const out = { vocal: {}, "écrit": {} };
+  let found = false;
+  const re = /(vocal|écrit|ecrit)\s+(nouveaux|anciens|likes|commentaires|relances)\s+(\d+)/gi;
+  let m;
+  while ((m = re.exec(text || ""))) {
+    const mode = m[1].toLowerCase().startsWith("v") ? "vocal" : "écrit";
+    out[mode][m[2].toLowerCase()] = (out[mode][m[2].toLowerCase()] || 0) + (+m[3]);
+    found = true;
+  }
+  return found ? out : null;
+}
+
 function renderEodTab(eodText) {
-  const rows = parseCSV(eodText).slice(1).filter(r => r.length > 3);
+  const rows = parseCSV(eodText).slice(1).filter(r => r.length > 3 && !isTestRow(r));
   const reports = rows.map(r => {
     const g = i => (i < r.length ? num(r[i]) : 0);
-    const accroches = g(COL.MSG_NEW) + g(COL.MSG_OLD) + g(COL.MSG_LIKE) + g(COL.MSG_COM);
+    const notesRaw = [r[5], r[6], r[12]].map(v => (v || "").trim()).filter(v => v && !/^\d+\s*$/.test(v));
+    const detail = parseDetail(notesRaw.join("\n"));
+    const notes = notesRaw
+      .map(n => n.replace(/\s*—\s*Détail console\s*:.*$/is, "").trim())
+      .filter(Boolean);
     return {
       date: parseDate(r[COL.DATE]) || parseDate(r[0]),
       setter: (r[COL.SETTER] || "").trim() || "?",
-      accroches, rel: g(COL.RELANCE), oth: g(COL.MSG_OTHER),
+      mNew: g(COL.MSG_NEW), mOld: g(COL.MSG_OLD), like: g(COL.MSG_LIKE), com: g(COL.MSG_COM),
+      rel: g(COL.RELANCE), oth: g(COL.MSG_OTHER),
       subs: g(COL.SUBS), scanOk: g(COL.SCAN_OK), scanFilled: g(COL.SCAN_FILLED),
-      // retours libres des setters (des textes atterrissent parfois dans les colonnes chiffrées)
-      notes: [r[5], r[6], r[12]].map(v => (v || "").trim()).filter(v => v && !/^\d+\s*$/.test(v)),
+      notes, detail,
     };
-  }).filter(r => r.date).sort((a, b) => a.date < b.date ? 1 : -1).slice(0, 30);
+  }).filter(r => r.date).sort((a, b) => a.date < b.date ? 1 : -1);
+
+  fillSetterPicker(reports);
+  renderPilot(reports);
 
   el("eod-count").textContent = "";
-  el("eod-list").innerHTML = reports.map(r => {
+  el("eod-list").innerHTML = reports.slice(0, 30).map(r => {
+    const accroches = r.mNew + r.mOld + r.like + r.com;
     const stats = [];
-    if (r.accroches) stats.push("<b>" + fmt(r.accroches) + "</b> accroche" + (r.accroches > 1 ? "s" : ""));
+    if (accroches) stats.push("<b>" + fmt(accroches) + "</b> accroche" + (accroches > 1 ? "s" : ""));
     if (r.rel) stats.push("<b>" + fmt(r.rel) + "</b> relance" + (r.rel > 1 ? "s" : ""));
     if (r.oth) stats.push("<b>" + fmt(r.oth) + "</b> autres messages");
+    if (r.detail) {
+      const t = mode => SRC_KEYS.reduce((a, k) => a + (r.detail[mode][k] || 0), 0);
+      const v = t("vocal"), e = t("écrit");
+      if (v || e) stats.push("dont <b>" + fmt(v) + "</b> vocaux et <b>" + fmt(e) + "</b> écrits");
+    }
     if (r.subs) stats.push("<b>" + fmt(r.subs) + "</b> abonné" + (r.subs > 1 ? "s" : "") + " gagné" + (r.subs > 1 ? "s" : ""));
     if (r.scanOk) stats.push("<b>" + fmt(r.scanOk) + "</b> scan" + (r.scanOk > 1 ? "s" : "") + " accepté" + (r.scanOk > 1 ? "s" : ""));
     if (r.scanFilled) stats.push("<b>" + fmt(r.scanFilled) + "</b> scan" + (r.scanFilled > 1 ? "s" : "") + " rempli" + (r.scanFilled > 1 ? "s" : ""));
@@ -983,6 +1152,188 @@ function renderEodTab(eodText) {
   }).join("") || '<p class="empty-note">Aucun EOD pour l\'instant.</p>';
 }
 
+/* ---------- pilotage : quoi améliorer pour booker plus de calls ---------- */
+function hbars(items, color) {
+  const max = Math.max(...items.map(i => i.v), 1);
+  const total = items.reduce((a, i) => a + i.v, 0);
+  return items.map(i =>
+    '<div class="hbar"><span class="hl">' + esc(i.label) + '</span>' +
+    '<span class="track"><span class="fill" style="width:' + Math.max(2, 100 * i.v / max) + '%;background:' + (i.color || color) + '"></span></span>' +
+    '<span class="hv">' + fmt(i.v) + (total ? ' <small>' + Math.round(100 * i.v / total) + '&nbsp;%</small>' : '') + '</span></div>'
+  ).join("");
+}
+
+function renderPilot(reports) {
+  const box = el("pilot");
+  if (!reports.length) { box.innerHTML = '<p class="empty-note">Pas encore de données.</p>'; return; }
+  const last = reports[0].date;
+  const inWin = (r, n) => {
+    const d = (new Date(last + "T12:00:00") - new Date(r.date + "T12:00:00")) / 86400000;
+    return d >= 0 && d < n;
+  };
+  const w7 = reports.filter(r => inWin(r, 7)), w30 = reports.filter(r => inWin(r, 30));
+  const sumf = (rows, f) => rows.reduce((a, r) => a + f(r), 0);
+  const bySrc = rows => ({
+    nouveaux: sumf(rows, r => r.mNew), anciens: sumf(rows, r => r.mOld),
+    likes: sumf(rows, r => r.like), commentaires: sumf(rows, r => r.com),
+    relances: sumf(rows, r => r.rel),
+  });
+
+  /* 1 — où partent les accroches */
+  const s7 = bySrc(w7);
+  const srcColors = { nouveaux: "var(--s1)", anciens: "var(--funnel-2)", likes: "var(--s2)", commentaires: "var(--s3)", relances: "var(--s4)" };
+  const card1 = '<div class="card"><h3 class="mini-title">Accroches par source · 7 jours</h3>' +
+    hbars(SRC_KEYS.map(k => ({ label: SRC_LABELS[k], v: s7[k], color: srcColors[k] }))) +
+    '<p class="empty-note" style="margin-top:10px">Où part l\'effort. À comparer avec les scans acceptés pour miser sur la source qui convertit.</p></div>';
+
+  /* 2 — vocal vs écrit (rempli via le formulaire de la console) */
+  const agg = { vocal: {}, "écrit": {} };
+  let hasDetail = false;
+  w30.forEach(r => {
+    if (!r.detail) return;
+    hasDetail = true;
+    ["vocal", "écrit"].forEach(m => SRC_KEYS.forEach(k => {
+      agg[m][k] = (agg[m][k] || 0) + (r.detail[m][k] || 0);
+    }));
+  });
+  const tv = SRC_KEYS.reduce((a, k) => a + (agg.vocal[k] || 0), 0);
+  const te = SRC_KEYS.reduce((a, k) => a + (agg["écrit"][k] || 0), 0);
+  const card2 = '<div class="card"><h3 class="mini-title">Vocal vs écrit · 30 jours</h3>' +
+    (hasDetail
+      ? hbars([{ label: "Vocaux", v: tv, color: "var(--s3)" }, { label: "Écrits", v: te, color: "var(--s5)" }]) +
+        '<div style="margin-top:10px">' +
+        SRC_KEYS.filter(k => (agg.vocal[k] || 0) + (agg["écrit"][k] || 0) > 0).map(k =>
+          '<div class="hbar"><span class="hl">' + esc(SRC_LABELS[k]) + '</span>' +
+          '<span class="track"><span class="fill" style="width:' + (100 * (agg.vocal[k] || 0) / Math.max(1, (agg.vocal[k] || 0) + (agg["écrit"][k] || 0))) + '%;background:var(--s3)"></span></span>' +
+          '<span class="hv">' + fmt(agg.vocal[k] || 0) + ' <small>voc</small> / ' + fmt(agg["écrit"][k] || 0) + ' <small>écr</small></span></div>'
+        ).join("") + '</div>'
+      : '<p class="empty-note" style="margin:0">Alimenté par le formulaire ci-dessus (colonnes Vocaux / Écrits). Dès les premiers EOD remplis ici, la comparaison apparaît.</p>') +
+    '</div>';
+
+  /* 3 — conversion vers le call */
+  const acc7 = s7.nouveaux + s7.anciens + s7.likes + s7.commentaires + s7.relances;
+  const s30 = bySrc(w30);
+  const acc30 = s30.nouveaux + s30.anciens + s30.likes + s30.commentaires + s30.relances;
+  const ok7 = sumf(w7, r => r.scanOk), ok30 = sumf(w30, r => r.scanOk);
+  const rate = (ok, acc) => acc ? (100 * ok / acc).toLocaleString("fr-FR", { maximumFractionDigits: 1 }) : "0";
+  const card3 = '<div class="card"><h3 class="mini-title">Conversion vers le call</h3>' +
+    '<p class="bigstat">' + rate(ok7, acc7) + '&nbsp;% <small>d\'accroches → scan accepté · 7 j</small></p>' +
+    '<div class="winrows">' +
+    '<div class="winrow"><span>Scans acceptés · 7 j</span><b>' + fmt(ok7) + '</b></div>' +
+    '<div class="winrow"><span>Scans acceptés · 30 j</span><b>' + fmt(ok30) + '</b></div>' +
+    '<div class="winrow"><span>Taux sur 30 j</span><b>' + rate(ok30, acc30) + ' %</b></div>' +
+    '</div>' +
+    '<p class="empty-note" style="margin-top:10px">C\'est le chiffre à faire monter : chaque scan accepté = un call potentiel pour Lauric.</p></div>';
+
+  box.innerHTML = card1 + card2 + card3;
+}
+
+/* ---------- formulaire EOD -> Google Form (même Sheet qu'avant) ---------- */
+
+// « EOD Setting Lauric » : POST anonyme vers formResponse, comme le vrai form.
+const EOD_FORM = {
+  action: "https://docs.google.com/forms/d/e/1FAIpQLSd-Ux95YotqGM0HvEIKg4GGUSybOjcsdDP36VnltAUIM1npBA/formResponse",
+  date: "entry.90500183",          // type date -> _year/_month/_day
+  setter: "entry.697529811",       // choix : "Constant" ou autre (other_option)
+  setterKnown: ["Constant"],
+  nouveaux: "entry.190514592", anciens: "entry.2042428156",
+  likes: "entry.83726283", commentaires: "entry.1259319603", relances: "entry.1619195505",
+  subs: "entry.1083771628", taux: "entry.751204279",
+  scanOk: "entry.2009256919", scanFilled: "entry.213203747",
+  totInsta: "entry.1106959549", totFb: "entry.1558306788",
+  notes: "entry.2101263388",
+  // champs requis côté Google Form : toujours envoyés (0 par défaut)
+};
+
+let setterChoice = null;
+
+function fillSetterPicker(reports) {
+  const box = el("f-setters");
+  if (box.dataset.filled) return;
+  const names = [...new Set(["Constant", ...reports.slice(0, 60).map(r => r.setter)])]
+    .filter(n => n && n !== "?");
+  box.dataset.filled = "1";
+  box.innerHTML = names.map(n => '<button type="button" class="opt" data-name="' + esc(n) + '">' + esc(n) + '</button>').join("") +
+    '<input type="text" id="f-setter-autre" placeholder="Autre prénom…">';
+  const pick = name => {
+    setterChoice = name;
+    box.querySelectorAll("button.opt").forEach(b => b.classList.toggle("on", b.dataset.name === name));
+  };
+  box.addEventListener("click", e => {
+    const b = e.target.closest("button.opt");
+    if (!b) return;
+    el("f-setter-autre").value = "";
+    pick(b.dataset.name);
+  });
+  el("f-setter-autre").addEventListener("input", e => {
+    if (e.target.value.trim()) pick(null);
+  });
+  pick(names[0]);
+  const d = el("f-date");
+  if (!d.value) d.value = iso(new Date());
+}
+
+el("eod-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const msg = el("f-msg"), btn2 = el("f-send");
+  const setter = setterChoice || el("f-setter-autre").value.trim();
+  if (!setter) {
+    msg.hidden = false; msg.className = "sendmsg ko"; msg.textContent = "Choisis le setter.";
+    return;
+  }
+  const dateVal = el("f-date").value; // yyyy-mm-dd
+  if (!dateVal) return;
+
+  // vocaux / écrits par source -> totaux par source + ligne détail dans les retours
+  const perSrc = {}, detailParts = [];
+  ["vocal", "écrit"].forEach(mode => {
+    document.querySelectorAll('#eod-form input[data-mode="' + mode + '"]').forEach(inp => {
+      const v = Math.max(0, +inp.value || 0);
+      const k = inp.dataset.src;
+      perSrc[k] = (perSrc[k] || 0) + v;
+      if (v) detailParts.push(mode + " " + k + " " + v);
+    });
+  });
+  let notes = el("f-notes").value.trim();
+  if (detailParts.length) notes += (notes ? "\n" : "") + "— Détail console : " + detailParts.join(" · ");
+
+  const [y, mo, d] = dateVal.split("-");
+  const p = new URLSearchParams();
+  // le form a 2 sections : sans pageHistory, Google ignore les champs de la page 2
+  p.set("fvv", "1");
+  p.set("pageHistory", "0,1");
+  p.set(EOD_FORM.date + "_year", y);
+  p.set(EOD_FORM.date + "_month", String(+mo));
+  p.set(EOD_FORM.date + "_day", String(+d));
+  if (EOD_FORM.setterKnown.includes(setter)) p.set(EOD_FORM.setter, setter);
+  else { p.set(EOD_FORM.setter, "__other_option__"); p.set(EOD_FORM.setter + ".other_option_response", setter); }
+  SRC_KEYS.forEach(k => p.set(EOD_FORM[k], String(perSrc[k] || 0)));
+  p.set(EOD_FORM.subs, String(Math.max(0, +el("f-subs").value || 0)));
+  if (el("f-taux").value !== "") p.set(EOD_FORM.taux, String(Math.max(0, +el("f-taux").value || 0)));
+  p.set(EOD_FORM.scanOk, String(Math.max(0, +el("f-scanok").value || 0)));
+  p.set(EOD_FORM.scanFilled, String(Math.max(0, +el("f-scanfilled").value || 0)));
+  p.set(EOD_FORM.totInsta, String(Math.max(0, +el("f-totinsta").value || 0)));
+  p.set(EOD_FORM.totFb, String(Math.max(0, +el("f-totfb").value || 0)));
+  if (notes) p.set(EOD_FORM.notes, notes);
+
+  btn2.disabled = true;
+  msg.hidden = false; msg.className = "sendmsg"; msg.textContent = "Envoi…";
+  try {
+    // no-cors : Google ne renvoie rien de lisible, l'envoi part quand même
+    await fetch(EOD_FORM.action, { method: "POST", mode: "no-cors",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: p.toString() });
+    msg.className = "sendmsg ok";
+    msg.textContent = "EOD envoyé ✅ La console se met à jour dans quelques secondes.";
+    e.target.reset();
+    el("f-date").value = iso(new Date());
+    setTimeout(() => { if (!SNAPSHOT) load(false); }, 5000);
+  } catch (err) {
+    msg.className = "sendmsg ko";
+    msg.textContent = "Échec de l'envoi, vérifier la connexion et réessayer.";
+  }
+  btn2.disabled = false;
+});
+
 /* ---------- onglet Scans Tally : remplis + partiels, avec WhatsApp ---------- */
 function renderTallyTab(tallyText, partialsText) {
   const rows = parseCSV(tallyText);
@@ -993,12 +1344,25 @@ function renderTallyTab(tallyText, partialsText) {
         iR1 = ix("call r1"), iR2 = ix("r2"), iIssue = ix("issue"), iCible = ix("dans la cible");
   const done = rows.slice(1).filter(r => r.length > 2).reverse();
 
+  // colonnes de questions à afficher au clic (Q1..Q9 + « Votre résultat arrive... »)
+  const isQ = t => /^q\d\./i.test((t || "").trim()) || (t || "").trim().toLowerCase().startsWith("votre résultat arrive");
+  const qCols = h.map((t, i) => isQ(t) ? i : -1).filter(i => i >= 0);
+  const answersBlock = (pairs) => {
+    const filled = pairs.filter(p => p.a);
+    if (!filled.length) return "";
+    return '<details class="answers"><summary>Voir les réponses du scan (' + filled.length + ')</summary>' +
+      '<div class="qalist">' + filled.map(p =>
+        '<div class="qa"><p class="q">' + esc(p.q) + '</p><p class="a">' + esc(p.a) + '</p></div>'
+      ).join("") + '</div></details>';
+  };
+
   const prows = parseCSV(partialsText || "");
   const ph = prows[0] || [];
   const pix = name => ph.findIndex(c => (c || "").trim().toLowerCase() === name);
   const pDate = pix("derniere activite"), pPrenom = pix("prenom"), pWa = pix("whatsapp"),
         pProfil = pix("profil"), pScore = pix("score"), pDone = pix("questions repondues"),
         pTot = pix("questions total");
+  const pQCols = ph.map((t, i) => (i > 7 && (t || "").trim()) ? i : -1).filter(i => i >= 0);
   const partials = prows.slice(1).filter(r => r.length > 2)
     .sort((a, b) => (a[pDate] || "") < (b[pDate] || "") ? 1 : -1);
 
@@ -1022,6 +1386,7 @@ function renderTallyTab(tallyText, partialsText) {
       '<span class="badge ok">rempli</span>' +
       '<span class="rmeta">' + esc(v(iProfil)) + '</span></div>' +
       (meta.length ? '<p class="rstats">' + meta.join(" · ") + '</p>' : '') +
+      answersBlock(qCols.map(i => ({ q: h[i], a: v(i) }))) +
       waBtn(v(iWa)) + '</div>';
   }).join("") || '<p class="empty-note">Aucun scan rempli pour l\'instant.</p>';
 
@@ -1034,6 +1399,7 @@ function renderTallyTab(tallyText, partialsText) {
       '<span class="badge warn2">en cours</span>' +
       '<span class="rmeta">' + esc(v(pProfil)) + '</span></div>' +
       '<p class="rstats">' + [prog, v(pDate) ? "dernière activité : " + esc(frDateTime(v(pDate))) : ""].filter(Boolean).join(" · ") + '</p>' +
+      answersBlock(pQCols.map(i => ({ q: ph[i], a: v(i) }))) +
       waBtn(v(pWa)) + '</div>';
   }).join("") || '<p class="empty-note">Aucun scan en cours. (Rafraîchi toutes les heures via l\'API Tally.)</p>';
 }
