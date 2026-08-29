@@ -1250,8 +1250,8 @@ let setterChoice = null;
 function fillSetterPicker(reports) {
   const box = el("f-setters");
   if (box.dataset.filled) return;
-  const names = [...new Set(["Constant", ...reports.slice(0, 60).map(r => r.setter)])]
-    .filter(n => n && n !== "?");
+  const names = [...new Set(["Constant", "Maximilien", ...reports.slice(0, 60).map(r => r.setter)])]
+    .filter(n => n && n !== "?" && n !== "Jean");
   box.dataset.filled = "1";
   box.innerHTML = names.map(n => '<button type="button" class="opt" data-name="' + esc(n) + '">' + esc(n) + '</button>').join("") +
     '<input type="text" id="f-setter-autre" placeholder="Autre prénom…">';
