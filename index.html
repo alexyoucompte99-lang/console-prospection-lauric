@@ -1573,15 +1573,24 @@ function renderVentesTab(tallyText, pfText) {
   const ix = name => h.findIndex(c => (c || "").trim().toLowerCase().startsWith(name));
   const iPrenom = ix("votre prénom"), iWa = ix("votre numéro whatsapp"),
         iSource = ix("source"), iR1 = ix("call r1"), iR2 = ix("r2"),
-        iIssue = ix("issue"), iCible = ix("dans la cible");
+        iIssue = ix("issue"), iCible = ix("dans la cible"),
+        iProfil = ix("avant de commencer"), iScore = ix("score");
+  // toutes les réponses du scan, dépliées au clic sur la carte du call
+  const isQ = t => /^q\d\./i.test((t || "").trim()) || (t || "").trim().toLowerCase().startsWith("votre résultat arrive");
+  const qCols = h.map((t, i) => isQ(t) ? i : -1).filter(i => i >= 0);
   rows.slice(1).forEach(r => {
     const v = i => (i >= 0 && r[i] ? String(r[i]).trim() : "");
     if (!(r[0] || "").trim()) return; // lignes de stats du Sheet (TOTAL, Nb R1...) sans Submission ID
     if (!v(iR1) && !v(iR2) && !v(iIssue)) return; // pas encore entré dans le pipe de vente
+    const qa = [];
+    if (v(iProfil)) qa.push({ q: "Profil", a: v(iProfil) });
+    if (v(iScore)) qa.push({ q: "Score du scan", a: v(iScore) });
+    if (v(iWa)) qa.push({ q: "WhatsApp", a: v(iWa) });
+    qCols.forEach(i => { if (v(i)) qa.push({ q: h[i], a: v(i) }); });
     deals.push({
       from: "scan", name: v(iPrenom) || "Sans prénom", wa: v(iWa),
       origine: v(iSource), r1: v(iR1), r2: v(iR2), issue: v(iIssue),
-      cible: v(iCible).toLowerCase(), notes: [],
+      cible: v(iCible).toLowerCase(), notes: [], qa,
     });
   });
 
@@ -1645,6 +1654,12 @@ function renderVentesTab(tallyText, pfText) {
       (meta.length ? '<p class="rstats">' + meta.join(" · ") + '</p>' : '') +
       (d.issue ? '<p class="rstats">issue : <b style="color:' + color[d.st] + '">' + esc(d.issue) + '</b></p>' : '') +
       (d.notes || []).map(n => '<p class="rnote">' + esc(n) + '</p>').join("") +
+      (d.qa && d.qa.length
+        ? '<details class="answers"><summary>Voir toutes les infos du call (' + d.qa.length + ')</summary>' +
+          '<div class="qalist">' + d.qa.map(p =>
+            '<div class="qa"><p class="q">' + esc(p.q) + '</p><p class="a">' + esc(p.a) + '</p></div>'
+          ).join("") + '</div></details>'
+        : '') +
       (d.wa ? waBtn(d.wa, null) : "") +
       (d.mail ? '<p class="rstats" style="margin-top:6px"><a href="mailto:' + esc(d.mail) + '" style="color:var(--accent)">' + esc(d.mail) + '</a></p>' : '') +
       '</div>';
