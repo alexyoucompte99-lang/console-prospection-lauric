@@ -24,6 +24,15 @@ EOD_URL = ("https://docs.google.com/spreadsheets/d/"
            "1vVzQXjAGp-lzF1LTeDMg281dan3TcPxrksvWvxZQRuU/export?format=csv&gid=123224703")
 TALLY_URL = ("https://docs.google.com/spreadsheets/d/"
              "1aMQ_zNQbq2xyntex3V_6GDY5pE9pIaD_v-FTCzJWxes/export?format=csv")
+# Portefeuille de leads (deals Lauric). Nécessite le partage « tous ceux qui ont
+# le lien » ; tant qu'il est privé, Google renvoie du HTML et on garde la copie.
+PF_URL = ("https://docs.google.com/spreadsheets/d/"
+          "1RdQsQu6FytcHQkWXqXNYTJOi1rhgwJyBE7PJgPtB09c/export?format=csv&gid=0")
+
+# Notification téléphone (app ntfy) quand un nouveau scan Tally est rempli :
+# on compare les Submission ID du CSV fraîchement téléchargé avec la copie
+# précédente et on publie un message par nouveau scan sur ce topic.
+NTFY_TOPIC = "scan-dirigeant-lauric-d7k4q2"
 
 # Soumissions partielles du scan Tally (jamais poussées vers le Sheet par Tally,
 # seule l'API les expose). Clé : secret GitHub TALLY_API_KEY, ou fichier local.
@@ -134,6 +143,42 @@ def fetch_partials(key: str) -> str:
     return out.getvalue()
 
 
+def notify_new_tally(old_text: str, new_text: str) -> None:
+    """Publie une notif ntfy pour chaque scan présent dans new_text mais pas old_text."""
+    def rows(text):
+        r = list(csv.reader(io.StringIO(text)))
+        return (r[0] if r else []), r[1:]
+    _, old_rows = rows(old_text)
+    header, new_rows = rows(new_text)
+    if not header or not old_rows:   # première exécution : pas de référence, pas de spam
+        return
+    idx = {(c or "").strip().lower(): i for i, c in enumerate(header)}
+    def col(row, name):
+        i = next((v for k, v in idx.items() if k.startswith(name)), None)
+        return (row[i].strip() if i is not None and i < len(row) else "")
+    seen = {r[0] for r in old_rows if r}
+    fresh = [r for r in new_rows if r and r[0] not in seen]
+    for r in fresh[:10]:
+        prenom = col(r, "votre prénom") or "Sans prénom"
+        profil = col(r, "avant de commencer")
+        score = col(r, "score")
+        body = prenom
+        if profil:
+            body += " · " + profil
+        if score:
+            body += " · score " + score
+        try:
+            req = urllib.request.Request(
+                "https://ntfy.sh/" + NTFY_TOPIC,
+                data=body.encode("utf-8"),
+                headers={"Title": "Nouveau Scan Dirigeant rempli",
+                         "Tags": "dart", "User-Agent": "Mozilla/5.0"})
+            urllib.request.urlopen(req, timeout=30).read()
+            print("notif ntfy envoyée :", body)
+        except Exception as e:   # la notif ne doit jamais faire échouer le job
+            print("notif ntfy échouée :", e)
+
+
 def js_string(s: str) -> str:
     """JSON sûr à l'intérieur d'un <script> (pas de </script> ni de <!-- qui s'échappe)."""
     return json.dumps(s, ensure_ascii=False).replace("<", "\\u003c").replace("\u2028", "\\u2028")
@@ -176,11 +221,21 @@ def recap(eod_text: str, tally_text: str) -> None:
 def main():
     DATA.mkdir(exist_ok=True)
     eod_file, tally_file = DATA / "eod.csv", DATA / "tally.csv"
-    partials_file = DATA / "partielles.csv"
+    partials_file, pf_file = DATA / "partielles.csv", DATA / "portefeuille.csv"
 
     if "--no-fetch" not in sys.argv:
         eod_file.write_text(fetch(EOD_URL), encoding="utf-8")
-        tally_file.write_text(fetch(TALLY_URL), encoding="utf-8")
+        old_tally = tally_file.read_text(encoding="utf-8") if tally_file.exists() else ""
+        new_tally = fetch(TALLY_URL)
+        notify_new_tally(old_tally, new_tally)
+        tally_file.write_text(new_tally, encoding="utf-8")
+        try:
+            pf_text = fetch(PF_URL)
+            if pf_text.lstrip().startswith("<"):
+                raise ValueError("le Sheet portefeuille est privé (HTML reçu)")
+            pf_file.write_text(pf_text, encoding="utf-8")
+        except Exception as e:
+            print("portefeuille non rafraîchi :", e)
         key = tally_key()
         if key:
             partials_file.write_text(fetch_partials(key), encoding="utf-8")
@@ -190,6 +245,7 @@ def main():
     eod_text = eod_file.read_text(encoding="utf-8")
     tally_text = tally_file.read_text(encoding="utf-8")
     partials_text = partials_file.read_text(encoding="utf-8") if partials_file.exists() else ""
+    pf_text = pf_file.read_text(encoding="utf-8") if pf_file.exists() else ""
     print(f"partielles: {max(0, len(partials_text.splitlines()) - 1)}")
     recap(eod_text, tally_text)
 
@@ -200,7 +256,8 @@ def main():
     snapshot = ("{generated:" + js_string(datetime.now().strftime("%d/%m/%Y %H:%M"))
                 + ",eod:" + js_string(eod_text)
                 + ",tally:" + js_string(tally_text)
-                + ",partials:" + js_string(partials_text) + "}")
+                + ",partials:" + js_string(partials_text)
+                + ",pf:" + js_string(pf_text) + "}")
     out = page.replace("/*__SNAPSHOT__*/null", snapshot, 1)
     if out == page:
         raise SystemExit("marqueur /*__SNAPSHOT__*/null introuvable dans index.html")

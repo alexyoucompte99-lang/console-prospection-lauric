@@ -7,7 +7,8 @@ name: Rafraichir les donnees
 # D'ou le passage a un rythme horaire en journee.
 on:
   schedule:
-    - cron: "15 5-20 * * *"   # toutes les heures, ~7h15 -> ~22h15 Paris (ete)
+    - cron: "*/15 5-20 * * *"   # toutes les 15 min, ~7h -> ~22h Paris (ete),
+                                # pour que la notif ntfy « scan rempli » arrive vite
   workflow_dispatch:
 
 permissions:

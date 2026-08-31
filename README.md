@@ -2,6 +2,10 @@
 
 Console de suivi du setting Instagram de Lauric : entonnoir (messages, nouveaux abonnés, scans acceptés, scans remplis) avec sélecteur Hier / 3 / 7 / 30 jours, chiffres clés avec delta vs 7 jours précédents et cumul du mois, tuiles « Messages par catégorie », vue par setter, messages par jour, alerte si l'EOD n'est plus rempli. Instagram uniquement, LinkedIn exclu.
 
+4 onglets : Vue d'ensemble, EOD (formulaire + pilotage + derniers reports), Scans Tally (remplis + partiels, boutons WhatsApp), **Ventes** (suivi des calls de vente : à venir / en cours / conclues / perdus + CA signé approximatif, croisement des colonnes de suivi du Sheet Tally et du Sheet « portefeuille des leads »).
+
+La console est installable sur téléphone (PWA : manifest + service worker + icônes) : le process à envoyer à Lauric est dans `INSTALLATION-TEL.md`. Une notification ntfy (topic `scan-dirigeant-lauric-d7k4q2`) part à chaque nouveau scan Tally rempli, détecté par le job GitHub qui tourne toutes les 15 min entre ~7h et ~22h Paris.
+
 ## Où ça vit
 
 | | |
@@ -17,7 +21,8 @@ La page live n'a pas besoin d'être régénérée : elle lit les Google Sheets *
 Google Sheets publics, export CSV direct par URL (pas besoin du MCP Drive) :
 
 - EOD setters : `1vVzQXjAGp-lzF1LTeDMg281dan3TcPxrksvWvxZQRuU`, onglet gid `123224703` (« Réponses au formulaire 1 »)
-- Soumissions Tally (scans remplis) : `1aMQ_zNQbq2xyntex3V_6GDY5pE9pIaD_v-FTCzJWxes`
+- Soumissions Tally (scans remplis) : `1aMQ_zNQbq2xyntex3V_6GDY5pE9pIaD_v-FTCzJWxes` (colonnes de suivi vente ajoutées à la main par Lauric : source, Call R1 fait ?, R2 ?, Issue (vente), Dans la cible ; les lignes de stats en bas du Sheet n'ont pas de Submission ID et sont ignorées)
+- Portefeuille des leads : `1RdQsQu6FytcHQkWXqXNYTJOi1rhgwJyBE7PJgPtB09c` — **encore privé** : tant qu'il n'est pas partagé « tous ceux qui ont le lien : lecteur », la page et l'Action utilisent la copie `data/portefeuille.csv` (figée au 31/08/2026). Dès que le partage est activé, tout se met à jour tout seul.
 
 Google renvoie bien les en-têtes CORS sur `export?format=csv`, y compris sur la redirection : le `fetch` depuis GitHub Pages passe.
 
@@ -49,6 +54,8 @@ Options : `--data-only` (télécharge seulement, utilisé par l'Action), `--no-f
 - Plusieurs lignes EOD par date (plusieurs setters, corrections) : elles s'additionnent.
 - Catégories du graphe : Abonnés = colonnes nouveaux + anciens ; Relances = colonne 7 ; Autres = colonne 5 (like/commentaire/story en texte libre au début du form).
 - Les colonnes de l'EOD sont repérées par **index**, pas par nom. Si une question est insérée dans le formulaire, tout décale : ajuster `COL` dans `index.html` et les constantes de `build.py`.
+- Setter Cynthia : le formulaire EOD de la console affiche une question en plus (« Nombre de personnes sur Insta qui ont l'étiquette drapeau »). La valeur part dans le champ notes du Google Form sous la forme `— Étiquette drapeau : N`, relue et affichée dans les derniers EOD (🚩).
+- Onglet Ventes : le classement gagné / perdu / à venir / en cours se fait sur du texte libre (regex dans `classifyDeal`). « client », « vente » (aussi en colonne R1) ou « audit » = gagné ; « non », « KO », « aucune réponse », « trop cher » = perdu ; une date jj/mm future dans R1 / R2 / Propo = à venir ; le reste = en cours. Le CA additionne le premier montant ≥ 100 des issues gagnées (après avoir retiré « / N mois »).
 
 ## Prévisualisation locale
 
