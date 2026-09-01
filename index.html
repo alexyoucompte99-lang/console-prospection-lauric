@@ -242,6 +242,9 @@
   .dupbtn { border-color: var(--muted); color: var(--muted); }
   .dupbtn:hover { background: color-mix(in srgb, var(--muted) 12%, transparent); }
   .dupbtn:disabled { opacity: .6; cursor: default; }
+  .editbtn { border-color: var(--s4); color: var(--s4); }
+  .editbtn:hover { background: color-mix(in srgb, var(--s4) 12%, transparent); }
+  .dealbtns { display: flex; flex-wrap: wrap; gap: 8px; }
   .steps { margin: 0; padding: 0; list-style: none; counter-reset: st; display: grid; gap: 10px; }
   .steps li { counter-increment: st; display: flex; gap: 10px; font-size: 14px; color: var(--ink-2); }
   .steps li::before { content: counter(st); flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 12.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
@@ -251,6 +254,22 @@
   .missrow { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-size: 13px; color: var(--ink-2); }
 
   /* onglet Ventes */
+  .dealedit { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); display: grid; gap: 10px; }
+  .dealedit label.flab { display: block; font-size: 12px; font-weight: 600; color: var(--ink-2); margin-bottom: 3px; }
+  .dealedit input, .dealedit select, .dealedit textarea,
+  .eodform select {
+    font: inherit; font-size: 14.5px; color: var(--ink); background: var(--page);
+    border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; width: 100%;
+  }
+  .dealedit textarea { min-height: 54px; resize: vertical; }
+  .dealedit input:focus-visible, .dealedit select:focus-visible, .dealedit textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: -1px; }
+  .dealedit .send { font-size: 14px; padding: 8px 16px; }
+  .edbtns { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .edbtns .copybtn { margin-top: 0; }
+  .addeal { border: 1px dashed var(--border); border-radius: 10px; padding: 12px 16px; margin-bottom: 20px; background: var(--card); }
+  .addeal > summary { font-size: 14px; font-weight: 700; color: var(--accent); cursor: pointer; list-style: none; }
+  .addeal > summary::before { content: "\25B8  "; }
+  .addeal[open] > summary::before { content: "\25BE  "; }
   .deal { border-left: 4px solid var(--dc, var(--muted)); background: color-mix(in srgb, var(--dc, var(--muted)) 4%, var(--card)); }
   .deal .rname { font-size: 15px; }
   .deal .dwhen { font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
@@ -656,6 +675,43 @@ J'aime bien savoir qui se cache derrière les nouveaux profils. Je te laisse un 
 
     <div id="tab-ventes" hidden>
       <div class="vkpis" id="v-kpis"></div>
+      <details class="addeal">
+        <summary>➕ Ajouter un deal (lead qui n'est ni dans le scan ni dans le portefeuille)</summary>
+        <form class="eodform" id="v-add-form" style="margin-top:12px">
+          <div>
+            <label class="flab" for="va-name">Nom</label>
+            <input type="text" id="va-name" required placeholder="Prénom Nom" autocomplete="off">
+          </div>
+          <div class="frow2">
+            <div>
+              <label class="flab" for="va-st">Statut</label>
+              <select id="va-st">
+                <option value="avenir">🗓 Call ou relance à venir</option>
+                <option value="encours" selected>⏳ En cours</option>
+                <option value="gagne">✅ Vente signée</option>
+                <option value="perdu">❌ Perdu / KO</option>
+              </select>
+            </div>
+            <div>
+              <label class="flab" for="va-when">Date du prochain call</label>
+              <input type="date" id="va-when">
+            </div>
+          </div>
+          <div>
+            <label class="flab" for="va-offre">Proposition d'offre / montant</label>
+            <input type="text" id="va-offre" placeholder="ex : 3000 € / 3 mois" autocomplete="off">
+          </div>
+          <div>
+            <label class="flab" for="va-note">Note</label>
+            <textarea id="va-note" placeholder="D'où vient le lead, ce qui s'est dit…"></textarea>
+          </div>
+          <div class="edbtns">
+            <button type="submit" class="send" id="va-send">Ajouter le deal</button>
+            <p class="sendmsg" id="va-msg" hidden></p>
+          </div>
+        </form>
+        <p class="formnote" style="margin-top:10px">Le deal apparaît dans les listes du dessous et compte dans les compteurs, exactement comme ceux qui viennent des Sheets. Modifiable et retirable ensuite avec « ✏️ Modifier ».</p>
+      </details>
       <section>
         <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">Calls et relances à venir</h2>
         <div class="rlist" id="v-avenir"></div>
@@ -823,7 +879,7 @@ const iso = d => isoOf(d.getFullYear(), d.getMonth() + 1, d.getDate());
 
 // lignes à ignorer dans les stats : tests techniques + soumissions de la
 // boîte à idées (onglet Script setting), qui passent par le même Google Form
-const isTestRow = r => /test console|bo[iî]te\s*[aà]\s*id[ée]es|^\s*doublon\s*$|^\s*tracking\s*$/i.test(r[COL.SETTER] || "");
+const isTestRow = r => /test console|bo[iî]te\s*[aà]\s*id[ée]es|^\s*doublon\s*$|^\s*tracking\s*$|^\s*vente\s*$/i.test(r[COL.SETTER] || "");
 const isIdeaRow = r => /bo[iî]te\s*[aà]\s*id[ée]es/i.test(r[COL.SETTER] || "");
 const isTrackRow = r => /^\s*tracking\s*$/i.test(r[COL.SETTER] || "");
 
@@ -842,6 +898,37 @@ function parseDupKeys(eodText) {
   return set;
 }
 let DUP_KEYS = new Set();
+
+// Modifications faites par Lauric depuis l'onglet Ventes : lignes « Vente » du
+// même Google Form. Un envoi = une ligne, qui porte tout l'état du deal :
+//   — Vente : <clé> · <nom>
+//   — Statut : auto|avenir|encours|gagne|perdu
+//   — Date : aaaa-mm-jj      (prochain call)
+//   — Offre : <texte>        (remplace la colonne Issue du Sheet)
+//   — Note : <texte>
+// Retour aux données du Sheet : « — Vente annulée : <clé> ». La dernière ligne
+// gagne. Une clé inconnue des deux Sheets = un deal ajouté à la main.
+function parseDealEdits(eodText) {
+  const map = new Map();
+  parseCSV(eodText).slice(1).forEach(r => {
+    const joined = [r[5], r[6], r[12]].map(v => (v || "").trim()).filter(Boolean).join("\n");
+    if (!/—\s*Vente/i.test(joined)) return;
+    const off = /—\s*Vente\s+annul[ée]e?\s*:[^\S\n]*([^\n·]+)/i.exec(joined);
+    if (off) { map.delete(off[1].trim()); return; }
+    const m = /—\s*Vente\s*:[^\S\n]*([^\n·]+)(?:·([^\n]*))?/i.exec(joined);
+    if (!m) return;
+    const field = lab => {
+      const x = new RegExp("—\\s*" + lab + "\\s*:[^\\S\\n]*([^\\n]*)", "i").exec(joined);
+      return x ? x[1].trim() : "";
+    };
+    map.set(m[1].trim(), {
+      key: m[1].trim(), name: (m[2] || "").trim(), st: field("Statut").toLowerCase(),
+      when: field("Date"), offre: field("Offre"), note: field("Note"),
+    });
+  });
+  return map;
+}
+let DEAL_EDITS = new Map();
 let LAST_TALLY = "", LAST_PF = "";
 
 function aggregate(eodText, tallyText) {
@@ -1419,6 +1506,7 @@ const frDateTime = s => {
 
 function renderExtras(eodText, tallyText, partialsText, pfText) {
   DUP_KEYS = parseDupKeys(eodText);
+  DEAL_EDITS = parseDealEdits(eodText);
   LAST_TALLY = tallyText; LAST_PF = pfText || "";
   renderEodTab(eodText);
   renderTallyTab(tallyText, partialsText);
@@ -1912,6 +2000,73 @@ document.addEventListener("click", async e => {
   }
 });
 
+/* ---------- onglet Ventes : modification d'un deal par Lauric ---------- */
+
+// texte propre pour le champ notes du Google Form : une seule ligne, pas de
+// tiret cadratin qui casserait le reparsage des marqueurs
+const oneLine = t => String(t || "").replace(/[\r\n]+/g, " / ").replace(/—/g, "-").trim();
+
+document.addEventListener("click", e => {
+  const b = e.target.closest(".editbtn");
+  if (!b) return;
+  const panel = b.closest(".deal").querySelector(".dealedit");
+  panel.hidden = !panel.hidden;
+  b.textContent = panel.hidden ? "✏️ Modifier" : "✕ Fermer";
+});
+
+document.addEventListener("click", async e => {
+  const b = e.target.closest(".ed-save, .ed-reset");
+  if (!b) return;
+  const card = b.closest(".deal"), panel = b.closest(".dealedit"), q = sel => panel.querySelector(sel);
+  const key = card.dataset.key, reset = b.classList.contains("ed-reset");
+  const msg = q(".ed-msg");
+  const name = oneLine(q(".ed-name") ? q(".ed-name").value : card.dataset.name) || "Sans nom";
+  const edit = { key, name, st: q(".ed-st").value, when: q(".ed-when").value,
+                 offre: oneLine(q(".ed-offre").value), note: oneLine(q(".ed-note").value) };
+  const notes = reset
+    ? "— Vente annulée : " + key
+    : ["— Vente : " + key + " · " + name, "— Statut : " + edit.st, "— Date : " + edit.when,
+       "— Offre : " + edit.offre, "— Note : " + edit.note].join("\n");
+  panel.querySelectorAll("button").forEach(x => x.disabled = true);
+  msg.hidden = false; msg.className = "sendmsg ed-msg"; msg.textContent = "Envoi…";
+  try {
+    await postEodRow("Vente", notes);
+    if (reset) DEAL_EDITS.delete(key); else DEAL_EDITS.set(key, edit);
+    renderVentesTab(LAST_TALLY, LAST_PF);   // effet immédiat, le Sheet suit derrière
+  } catch (err) {
+    panel.querySelectorAll("button").forEach(x => x.disabled = false);
+    msg.className = "sendmsg ed-msg ko";
+    msg.textContent = "Échec de l'envoi, vérifier la connexion et réessayer.";
+  }
+});
+
+/* ---------- onglet Ventes : deal ajouté à la main ---------- */
+el("v-add-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const msg = el("va-msg"), btn = el("va-send");
+  const name = oneLine(el("va-name").value);
+  if (!name) return;
+  const edit = { key: "man|" + Date.now().toString(36), name, st: el("va-st").value,
+                 when: el("va-when").value, offre: oneLine(el("va-offre").value),
+                 note: oneLine(el("va-note").value) };
+  btn.disabled = true;
+  msg.hidden = false; msg.className = "sendmsg"; msg.textContent = "Envoi…";
+  try {
+    await postEodRow("Vente", ["— Vente : " + edit.key + " · " + name, "— Statut : " + edit.st,
+                               "— Date : " + edit.when, "— Offre : " + edit.offre,
+                               "— Note : " + edit.note].join("\n"));
+    DEAL_EDITS.set(edit.key, edit);
+    e.target.reset();
+    msg.className = "sendmsg ok";
+    msg.textContent = name + " est dans le suivi ✅";
+    renderVentesTab(LAST_TALLY, LAST_PF);
+  } catch (err) {
+    msg.className = "sendmsg ko";
+    msg.textContent = "Échec de l'envoi, vérifier la connexion et réessayer.";
+  }
+  btn.disabled = false;
+});
+
 /* ---------- tracking saisi directement par Lauric (setter « Tracking ») ---------- */
 el("track-form").addEventListener("submit", async e => {
   e.preventDefault();
@@ -2116,6 +2271,54 @@ function classifyDeal(d, today) {
   return { st: "encours" };
 }
 
+// une modification de Lauric écrase la lecture des Sheets ; « auto » = on
+// reclasse normalement (avec l'offre modifiée si elle l'a été)
+function applyDealEdit(d, e, today) {
+  d.edited = true;
+  if (e.offre) d.issue = e.offre;
+  if (e.note) d.enote = e.note;
+  if (e.name && d.from === "man") d.name = e.name;
+  const st = (e.st || "").trim();
+  if (st && st !== "auto") {
+    d.st = st;
+    d.when = st === "avenir" ? (e.when || d.when || null) : null;
+  } else {
+    d.when = null;
+    Object.assign(d, classifyDeal(d, today));
+    if (e.when && e.when >= today) { d.st = "avenir"; d.when = e.when; }
+  }
+}
+
+// formulaire replié dans chaque carte : statut, date du prochain call, offre, note
+function dealEditPanel(d) {
+  const e = DEAL_EDITS.get(d.key) || {};
+  const stv = e.st || "auto";
+  const opt = (v, lab) => '<option value="' + v + '"' + (stv === v ? " selected" : "") + '>' + lab + '</option>';
+  return '<div class="dealedit" hidden>' +
+    (d.from === "man"
+      ? '<div><label class="flab">Nom</label><input type="text" class="ed-name" value="' + esc(d.name) + '"></div>' : '') +
+    '<div><label class="flab">Statut</label><select class="ed-st">' +
+      opt("auto", "Auto (d'après le Sheet)") +
+      opt("avenir", "🗓 Call ou relance à venir") +
+      opt("encours", "⏳ En cours") +
+      opt("gagne", "✅ Vente signée") +
+      opt("perdu", "❌ Perdu / KO") +
+    '</select></div>' +
+    '<div class="frow2">' +
+      '<div><label class="flab">Date du prochain call</label>' +
+        '<input type="date" class="ed-when" value="' + esc(e.when || (d.st === "avenir" ? (d.when || "") : "")) + '"></div>' +
+      '<div><label class="flab">Proposition d\'offre / montant</label>' +
+        '<input type="text" class="ed-offre" placeholder="ex : 3000 € / 3 mois" value="' + esc(e.offre || d.issue || "") + '"></div>' +
+    '</div>' +
+    '<div><label class="flab">Note</label>' +
+      '<textarea class="ed-note" placeholder="Ce qui s\'est dit, la prochaine étape…">' + esc(e.note || "") + '</textarea></div>' +
+    '<div class="edbtns"><button type="button" class="send ed-save">Enregistrer</button>' +
+      (DEAL_EDITS.has(d.key)
+        ? '<button type="button" class="copybtn ed-reset">↩︎ ' +
+          (d.from === "man" ? "Retirer ce deal" : "Revenir aux données du Sheet") + '</button>' : '') +
+    '</div><p class="sendmsg ed-msg" hidden></p></div>';
+}
+
 function renderVentesTab(tallyText, pfText) {
   const today = iso(new Date());
   const deals = [];
@@ -2169,6 +2372,17 @@ function renderVentesTab(tallyText, pfText) {
   }
 
   deals.forEach(d => Object.assign(d, classifyDeal(d, today)));
+
+  // 3) ce que Lauric a modifié depuis la console : passe devant les Sheets
+  deals.forEach(d => { if (DEAL_EDITS.has(d.key)) applyDealEdit(d, DEAL_EDITS.get(d.key), today); });
+  // une modification dont la clé n'existe dans aucun Sheet = deal ajouté à la main
+  DEAL_EDITS.forEach((e, key) => {
+    if (!e.name || deals.some(d => d.key === key)) return;
+    const d = { key, from: "man", name: e.name, notes: [], st: "encours" };
+    applyDealEdit(d, e, today);
+    deals.push(d);
+  });
+
   // doublons signalés depuis la console : hors compteurs et hors listes, gardés en bas
   const doublons = deals.filter(d => d.key && DUP_KEYS.has(d.key));
   const vivants = deals.filter(d => !d.key || !DUP_KEYS.has(d.key));
@@ -2200,7 +2414,9 @@ function renderVentesTab(tallyText, pfText) {
     : "";
   const card = d => {
     const badges = [];
-    badges.push('<span class="badge src">' + (d.from === "scan" ? "🎯 Scan Dirigeant" : "💼 Portefeuille") + '</span>');
+    badges.push('<span class="badge src">' +
+      (d.from === "scan" ? "🎯 Scan Dirigeant" : d.from === "man" ? "✍️ Ajouté à la main" : "💼 Portefeuille") + '</span>');
+    if (d.edited && d.from !== "man") badges.push('<span class="badge gray">modifié</span>');
     if (d.st === "gagne") badges.push('<span class="badge win">vente ✔</span>');
     if (d.st === "perdu") badges.push('<span class="badge lose">KO</span>');
     if (d.st === "avenir") badges.push('<span class="badge next">' + esc(frDate(d.when)) + '</span>');
@@ -2211,11 +2427,12 @@ function renderVentesTab(tallyText, pfText) {
     if (d.r1) meta.push("R1 : " + esc(d.r1));
     if (d.r2) meta.push("R2 : " + esc(d.r2));
     if (d.propo) meta.push("propo : " + esc(d.propo));
-    return '<div class="rcard deal" style="--dc:' + color[d.st] + '">' +
+    return '<div class="rcard deal" data-key="' + esc(d.key) + '" data-name="' + esc(d.name) + '" style="--dc:' + color[d.st] + '">' +
       '<div class="rhead"><span class="rname">' + esc(d.name) + '</span>' + badges.join("") + '</div>' +
       (meta.length ? '<p class="rstats">' + meta.join(" · ") + '</p>' : '') +
       (d.issue ? '<p class="rstats">proposition d\'offre : <b style="color:' + color[d.st] + '">' + esc(d.issue) + '</b></p>' : '') +
       (d.notes || []).map(n => '<p class="rnote">' + esc(n) + '</p>').join("") +
+      (d.enote ? '<p class="rnote">📝 ' + esc(d.enote) + '</p>' : '') +
       (d.qa && d.qa.length
         ? '<details class="answers"><summary>Voir toutes les infos du call (' + d.qa.length + ')</summary>' +
           '<div class="qalist">' + d.qa.map(p =>
@@ -2224,7 +2441,8 @@ function renderVentesTab(tallyText, pfText) {
         : '') +
       (d.wa ? waBtn(d.wa, null) : "") +
       (d.mail ? '<p class="rstats" style="margin-top:6px"><a href="mailto:' + esc(d.mail) + '" style="color:var(--accent)">' + esc(d.mail) + '</a></p>' : '') +
-      dupBtn(d) +
+      '<div class="dealbtns"><button type="button" class="copybtn editbtn">✏️ Modifier</button>' + dupBtn(d) + '</div>' +
+      dealEditPanel(d) +
       '</div>';
   };
   const fill = (id, list, emptyMsg) => {
@@ -2239,7 +2457,8 @@ function renderVentesTab(tallyText, pfText) {
 
   el("v-note").textContent =
     "Croisement de deux sources : les colonnes de suivi remplies dans le Sheet « Le Scan Dirigeant (réponses) » (source, Call R1, R2, Issue = proposition d'offre, Dans la cible) et le Sheet « portefeuille des leads ». " +
-    (hi < 0 ? "Portefeuille indisponible pour l'instant." : "Une date au format jj/mm dans les colonnes R1 / R2 / Propo suffit pour apparaître dans « à venir ».");
+    (hi < 0 ? "Portefeuille indisponible pour l'instant." : "Une date au format jj/mm dans les colonnes R1 / R2 / Propo suffit pour apparaître dans « à venir ». ") +
+    "« ✏️ Modifier » sur une carte force le statut, la date du prochain call, l'offre et une note sans toucher au Sheet : la console garde ta version tant que tu n'as pas cliqué « Revenir aux données du Sheet ».";
 }
 
 /* ---------- démarrage ---------- */
