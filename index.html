@@ -424,22 +424,12 @@
 
           <div class="frow2">
             <div>
-              <label class="flab" for="f-subs">Abonnés gagnés aujourd'hui</label>
-              <input type="number" min="0" inputmode="numeric" id="f-subs">
-            </div>
-            <div>
               <label class="flab" for="f-taux">Taux de réponses estimé (%)</label>
               <input type="number" min="0" max="100" inputmode="numeric" id="f-taux">
             </div>
-          </div>
-          <div class="frow2">
             <div>
               <label class="flab" for="f-scanok">Leads ayant accepté le scan</label>
               <input type="number" min="0" inputmode="numeric" id="f-scanok">
-            </div>
-            <div>
-              <label class="flab" for="f-scanfilled">Leads ayant rempli le scan</label>
-              <input type="number" min="0" inputmode="numeric" id="f-scanfilled">
             </div>
           </div>
           <div class="frow2">
@@ -452,12 +442,17 @@
               <input type="number" min="0" inputmode="numeric" id="f-totfb">
             </div>
           </div>
+          <div id="f-subs-wrap" hidden>
+            <label class="flab" for="f-total-subs">👥 Nombre total d'abonnés du compte (relevé en fin de journée)</label>
+            <input type="number" min="0" inputmode="numeric" id="f-total-subs">
+            <p class="formnote" style="margin-top:4px" id="f-subs-hint">Le chiffre affiché dans le profil Insta, pas le gain du jour : la console calcule le gain toute seule.</p>
+          </div>
           <div id="f-drapeau-wrap" hidden>
             <label class="flab" for="f-drapeau">🚩 Nombre de personnes sur Insta qui ont l'étiquette drapeau (bien descendre et actualiser toutes les conversations)</label>
             <input type="number" min="0" inputmode="numeric" id="f-drapeau">
             <p class="formnote" style="margin-top:4px">C'est le nombre de leads qui ont l'étiquette drapeau.</p>
           </div>
-          <div>
+          <div id="f-etq-wrap" hidden>
             <label class="flab" for="f-etq-url">🏷️ URL des personnes mises en étiquette (leads chauds)</label>
             <div style="display:flex;gap:8px">
               <input type="url" id="f-etq-url" placeholder="https://www.instagram.com/pseudo" style="flex:1">
@@ -1410,17 +1405,20 @@ function renderEodTab(eodText) {
     const mDrap = /[ÉE]tiquette drapeau\s*:?\s*(\d+)/i.exec(joined);
     const drapeau = mDrap ? +mDrap[1] : null;
     const urls = [...joined.matchAll(/[ÉE]tiquette URL\s*:\s*(\S+)/gi)].map(m => m[1]);
+    const mTot = /—\s*Abonn[ée]s total\s*:\s*(\d+)/i.exec(joined);
     const mImpr = /—\s*Impressions\s*:\s*(\d+)/i.exec(joined);
     const mMc = /—\s*ManyChat Clart[ée]\s*:\s*(\d+)/i.exec(joined);
     const notes = notesRaw
       .map(n => n.replace(/\s*—\s*Détail console\s*:.*$/is, "")
                  .replace(/\s*—\s*[ÉE]tiquette drapeau\s*:?\s*\d+/gi, "")
                  .replace(/\s*—\s*[ÉE]tiquette URL\s*:\s*\S+/gi, "")
+                 .replace(/\s*—\s*Abonn[ée]s total\s*:\s*\d+/gi, "")
                  .replace(/\s*—\s*Impressions\s*:\s*\d+/gi, "")
                  .replace(/\s*—\s*ManyChat Clart[ée]\s*:\s*\d+/gi, "").trim())
       .filter(Boolean);
     return {
       drapeau, urls,
+      totalSubs: mTot ? +mTot[1] : null,
       impr: mImpr ? +mImpr[1] : null,
       mc: mMc ? +mMc[1] : null,
       date: parseDate(r[COL.DATE]) || parseDate(r[0]),
@@ -1432,7 +1430,9 @@ function renderEodTab(eodText) {
     };
   }).filter(r => r.date).sort((a, b) => a.date < b.date ? 1 : -1);
 
+  EOD_REPORTS = reports;
   fillSetterPicker(reports);
+  updateSubsHint();
   renderPilot(reports);
 
   el("eod-count").textContent = "";
@@ -1448,6 +1448,7 @@ function renderEodTab(eodText) {
       if (v || e) stats.push("dont <b>" + fmt(v) + "</b> vocaux et <b>" + fmt(e) + "</b> écrits");
     }
     if (r.subs) stats.push("<b>" + fmt(r.subs) + "</b> abonné" + (r.subs > 1 ? "s" : "") + " gagné" + (r.subs > 1 ? "s" : ""));
+    if (r.totalSubs != null) stats.push("👥 <b>" + fmt(r.totalSubs) + "</b> abonnés au total");
     if (r.scanOk) stats.push("<b>" + fmt(r.scanOk) + "</b> scan" + (r.scanOk > 1 ? "s" : "") + " accepté" + (r.scanOk > 1 ? "s" : ""));
     if (r.scanFilled) stats.push("<b>" + fmt(r.scanFilled) + "</b> scan" + (r.scanFilled > 1 ? "s" : "") + " rempli" + (r.scanFilled > 1 ? "s" : ""));
     if (r.drapeau != null) stats.push("🚩 <b>" + fmt(r.drapeau) + "</b> avec l'étiquette drapeau");
@@ -1528,10 +1529,12 @@ function renderScriptTab(reports, ideas) {
 
   /* tracking : impressions, abonnés, scans, ManyChat Clarté */
   const lastImpr = reports.find(r => r.impr != null);
+  const lastTot = reports.find(r => r.totalSubs != null);   // relevé du soir de Cynthia
   const t = (kc, n, l) => '<div class="vkpi" style="--kc:' + kc + '"><div class="n">' + n + '</div><div class="l">' + l + '</div></div>';
   el("track-tiles").innerHTML =
     t("var(--s1)", lastImpr ? fmt(lastImpr.impr) : "–", "impressions · dernier jour") +
     t("var(--s1)", sumf(w30, r => r.impr) ? fmt(sumf(w30, r => r.impr)) : "–", "impressions · 30 j") +
+    t("var(--funnel-2)", lastTot ? fmt(lastTot.totalSubs) : "–", "abonnés au total · dernier relevé") +
     t("var(--funnel-2)", fmt(sumf(w30, r => r.subs)), "nouveaux abonnés · 30 j") +
     t("var(--funnel-3)", fmt(sumf(w30, r => r.mNew + r.mOld + r.like + r.com + r.rel)), "scans proposés · 30 j") +
     t("var(--s4)", sumf(w30, r => r.mc) ? fmt(sumf(w30, r => r.mc)) : "–", "ManyChat Clarté · 30 j");
@@ -1638,6 +1641,29 @@ const EOD_FORM = {
 };
 
 let setterChoice = null;
+let EOD_REPORTS = [];
+
+/* Cynthia relève chaque soir le TOTAL d'abonnés du compte : la console en
+   déduit le gain du jour (total du soir - dernier total connu) et n'envoie que
+   ce gain dans le champ « abonnés gagnés » du Google Form, pour ne pas casser
+   l'historique. Le total brut part dans les notes en « — Abonnés total : N ». */
+const lastTotalSubs = beforeIso => EOD_REPORTS.find(
+  r => r.totalSubs != null && (!beforeIso || r.date < beforeIso)) || null;
+
+function updateSubsHint() {
+  const hint = el("f-subs-hint");
+  if (!hint) return;
+  const prev = lastTotalSubs(el("f-date").value || null);
+  const base = "Le chiffre affiché dans le profil Insta, pas le gain du jour : la console calcule le gain toute seule.";
+  if (!prev) {
+    hint.textContent = base + " Premier relevé : le gain s'affichera à partir du prochain.";
+    return;
+  }
+  const v = el("f-total-subs").value;
+  const gain = v === "" ? null : Math.max(0, +v || 0) - prev.totalSubs;
+  hint.textContent = base + " Dernier total reporté : " + fmt(prev.totalSubs) + " le " + frDate(prev.date)
+    + (gain == null ? "." : ", soit " + (gain >= 0 ? "+" : "") + fmt(gain) + " aujourd'hui.");
+}
 
 function fillSetterPicker(reports) {
   const box = el("f-setters");
@@ -1647,15 +1673,17 @@ function fillSetterPicker(reports) {
   box.dataset.filled = "1";
   box.innerHTML = names.map(n => '<button type="button" class="opt" data-name="' + esc(n) + '">' + esc(n) + '</button>').join("") +
     '<input type="text" id="f-setter-autre" placeholder="Autre prénom…">';
-  // question spécifique Cynthia : étiquette drapeau sur Insta
+  // questions spécifiques Cynthia : total d'abonnés, étiquette drapeau, URLs d'étiquette
   const isCynthia = n => (n || "").trim().toLowerCase() === "cynthia";
-  const toggleDrapeau = () => {
-    el("f-drapeau-wrap").hidden = !isCynthia(setterChoice || el("f-setter-autre").value);
+  const toggleCynthia = () => {
+    const on = isCynthia(setterChoice || el("f-setter-autre").value);
+    ["f-subs-wrap", "f-drapeau-wrap", "f-etq-wrap"].forEach(id => { el(id).hidden = !on; });
+    if (on) updateSubsHint();
   };
   const pick = name => {
     setterChoice = name;
     box.querySelectorAll("button.opt").forEach(b => b.classList.toggle("on", b.dataset.name === name));
-    toggleDrapeau();
+    toggleCynthia();
   };
   box.addEventListener("click", e => {
     const b = e.target.closest("button.opt");
@@ -1665,8 +1693,10 @@ function fillSetterPicker(reports) {
   });
   el("f-setter-autre").addEventListener("input", e => {
     if (e.target.value.trim()) pick(null);
-    toggleDrapeau();
+    toggleCynthia();
   });
+  el("f-total-subs").addEventListener("input", updateSubsHint);
+  el("f-date").addEventListener("change", updateSubsHint);
   pick(names[0]);
   const d = el("f-date");
   if (!d.value) d.value = iso(new Date());
@@ -1721,6 +1751,13 @@ el("eod-form").addEventListener("submit", async e => {
   });
   let notes = el("f-notes").value.trim();
   if (detailParts.length) notes += (notes ? "\n" : "") + "— Détail console : " + detailParts.join(" · ");
+  let subsGain = 0;
+  if (!el("f-subs-wrap").hidden && el("f-total-subs").value !== "") {
+    const total = Math.max(0, +el("f-total-subs").value || 0);
+    const prev = lastTotalSubs(dateVal);
+    subsGain = prev ? Math.max(0, total - prev.totalSubs) : 0;
+    notes += (notes ? "\n" : "") + "— Abonnés total : " + total;
+  }
   if (!el("f-drapeau-wrap").hidden && el("f-drapeau").value !== "") {
     notes += (notes ? "\n" : "") + "— Étiquette drapeau : " + Math.max(0, +el("f-drapeau").value || 0);
   }
@@ -1739,10 +1776,10 @@ el("eod-form").addEventListener("submit", async e => {
   if (EOD_FORM.setterKnown.includes(setter)) p.set(EOD_FORM.setter, setter);
   else { p.set(EOD_FORM.setter, "__other_option__"); p.set(EOD_FORM.setter + ".other_option_response", setter); }
   SRC_KEYS.forEach(k => p.set(EOD_FORM[k], String(perSrc[k] || 0)));
-  p.set(EOD_FORM.subs, String(Math.max(0, +el("f-subs").value || 0)));
+  p.set(EOD_FORM.subs, String(subsGain));
   if (el("f-taux").value !== "") p.set(EOD_FORM.taux, String(Math.max(0, +el("f-taux").value || 0)));
   p.set(EOD_FORM.scanOk, String(Math.max(0, +el("f-scanok").value || 0)));
-  p.set(EOD_FORM.scanFilled, String(Math.max(0, +el("f-scanfilled").value || 0)));
+  p.set(EOD_FORM.scanFilled, "0");   // plus demandé : les scans remplis remontent tout seuls de Tally
   p.set(EOD_FORM.totInsta, String(Math.max(0, +el("f-totinsta").value || 0)));
   p.set(EOD_FORM.totFb, String(Math.max(0, +el("f-totfb").value || 0)));
   if (notes) p.set(EOD_FORM.notes, notes);
@@ -1759,6 +1796,7 @@ el("eod-form").addEventListener("submit", async e => {
     etqUrls = [];
     renderEtqChips();
     el("f-date").value = iso(new Date());
+    updateSubsHint();
     setTimeout(() => { if (!SNAPSHOT) load(false); }, 5000);
   } catch (err) {
     msg.className = "sendmsg ko";
