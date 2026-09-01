@@ -239,6 +239,9 @@
   .msgcard { white-space: pre-wrap; font-size: 14px; color: var(--ink); background: var(--page); border: 1px dashed var(--border); border-radius: 8px; padding: 12px 14px; margin-top: 10px; overflow-wrap: break-word; }
   .copybtn { font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; border: 1px solid var(--accent); color: var(--accent); background: transparent; border-radius: 7px; padding: 4px 10px; margin-top: 8px; }
   .copybtn:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+  .dupbtn { border-color: var(--muted); color: var(--muted); }
+  .dupbtn:hover { background: color-mix(in srgb, var(--muted) 12%, transparent); }
+  .dupbtn:disabled { opacity: .6; cursor: default; }
   .steps { margin: 0; padding: 0; list-style: none; counter-reset: st; display: grid; gap: 10px; }
   .steps li { counter-increment: st; display: flex; gap: 10px; font-size: 14px; color: var(--ink-2); }
   .steps li::before { content: counter(st); flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 12.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
@@ -532,7 +535,8 @@
         <div class="pilot">
           <div class="card" style="--tc:var(--s1);border-top:3px solid var(--s1)">
             <div class="rhead"><span class="rname">Message A</span><span class="badge next">Constant</span><span class="badge">écrit long</span></div>
-            <div class="msgcard" id="msg-a">Bienvenue et merci de me suivre 🙏
+            <div class="msgcard" id="msg-a">Hello [Prénom] !
+Bienvenue et merci de me suivre 🙏
 [Personnalisation « J'ai vu que... »]
 
 Tu l'as sûrement vu, ici je parle aux dirigeants principalement 😊
@@ -554,7 +558,7 @@ Et puis la cerise sur le gâteau : beaucoup moins de charge mentale pour le diri
 Une question importante :
 Tu es dirigeant d'une boîte ?</div>
             <button type="button" class="copybtn" data-copy="msg-a">Copier le message A</button>
-            <p class="formnote" style="margin-top:8px">Remplacer la ligne [Personnalisation] par un vrai détail du profil avant d'envoyer.</p>
+            <p class="formnote" style="margin-top:8px">Remplacer [Prénom] et la ligne [Personnalisation] par un vrai détail du profil avant d'envoyer.</p>
           </div>
           <div class="card" style="--tc:var(--s5);border-top:3px solid var(--s5)">
             <div class="rhead"><span class="rname">Message B</span><span class="badge src">Cynthia</span><span class="badge">écrit court + vocal</span></div>
@@ -576,7 +580,35 @@ J'aime bien savoir qui se cache derrière les nouveaux profils. Je te laisse un 
       <section>
         <h2 class="hsec" style="--hc:var(--s3);margin-bottom:10px">Tracking setting</h2>
         <div class="vkpis" id="track-tiles"></div>
-        <p class="formnote">Impressions et ManyChat Clarté se remplissent dans le formulaire EOD de la console (nouveaux champs).</p>
+        <p class="formnote">Impressions et ManyChat Clarté se remplissent dans le formulaire EOD des setters. Lauric peut aussi les saisir lui-même ici, sans passer par un EOD.</p>
+        <form class="card eodform" id="track-form" style="margin-top:14px">
+          <h3 class="mini-title">Saisie directe (Lauric)</h3>
+          <div class="frow2">
+            <div>
+              <label class="flab" for="t-date">Jour concerné</label>
+              <input type="date" id="t-date" required>
+            </div>
+            <div>
+              <label class="flab" for="t-subs">👥 Abonnés au total (optionnel)</label>
+              <input type="number" min="0" inputmode="numeric" id="t-subs">
+            </div>
+          </div>
+          <div class="frow2">
+            <div>
+              <label class="flab" for="t-impr">Impressions du jour (stats Insta)</label>
+              <input type="number" min="0" inputmode="numeric" id="t-impr">
+            </div>
+            <div>
+              <label class="flab" for="t-mc">Messages ManyChat Clarté envoyés</label>
+              <input type="number" min="0" inputmode="numeric" id="t-mc">
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+            <button type="submit" class="send" id="t-send">Enregistrer le tracking</button>
+            <p class="sendmsg" id="t-msg" hidden></p>
+          </div>
+          <p class="formnote">Ces lignes alimentent seulement les compteurs ci-dessus : elles ne comptent pas comme un EOD et n'entrent dans aucune stat de setter.</p>
+        </form>
       </section>
 
       <section>
@@ -639,6 +671,11 @@ J'aime bien savoir qui se cache derrière les nouveaux profils. Je te laisse un 
       <section>
         <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px">Perdus / KO (anciens appels)</h2>
         <div class="rlist" id="v-perdus"></div>
+      </section>
+      <section>
+        <h2 class="hsec" style="--hc:var(--muted);margin-bottom:10px">🗂️ Doublons mis de côté <span class="count" id="v-dup-count"></span></h2>
+        <div class="rlist" id="v-doublons"></div>
+        <p class="formnote">Sortis des compteurs et des listes du dessus. Ils restent ici, rien n'est supprimé : « Remettre dans le suivi » les fait revenir.</p>
       </section>
       <p class="formnote" id="v-note"></p>
     </div>
@@ -786,8 +823,26 @@ const iso = d => isoOf(d.getFullYear(), d.getMonth() + 1, d.getDate());
 
 // lignes à ignorer dans les stats : tests techniques + soumissions de la
 // boîte à idées (onglet Script setting), qui passent par le même Google Form
-const isTestRow = r => /test console|bo[iî]te\s*[aà]\s*id[ée]es/i.test(r[COL.SETTER] || "");
+const isTestRow = r => /test console|bo[iî]te\s*[aà]\s*id[ée]es|^\s*doublon\s*$|^\s*tracking\s*$/i.test(r[COL.SETTER] || "");
 const isIdeaRow = r => /bo[iî]te\s*[aà]\s*id[ée]es/i.test(r[COL.SETTER] || "");
+const isTrackRow = r => /^\s*tracking\s*$/i.test(r[COL.SETTER] || "");
+
+// Doublons signalés depuis l'onglet Ventes : lignes « Doublon » du même Google Form,
+// marqueur « — Doublon : <clé> · <nom> », annulation « — Doublon annulé : <clé> ».
+// Les lignes arrivent dans l'ordre d'envoi : la dernière gagne.
+function parseDupKeys(eodText) {
+  const set = new Set();
+  parseCSV(eodText).slice(1).forEach(r => {
+    const joined = [r[5], r[6], r[12]].map(v => (v || "").trim()).filter(Boolean).join("\n");
+    for (const m of joined.matchAll(/—\s*Doublon(\s+annul[ée]e?)?\s*:\s*([^\n·]+)/gi)) {
+      const key = m[2].trim();
+      if (m[1]) set.delete(key); else set.add(key);
+    }
+  });
+  return set;
+}
+let DUP_KEYS = new Set();
+let LAST_TALLY = "", LAST_PF = "";
 
 function aggregate(eodText, tallyText) {
   const rows = parseCSV(eodText).slice(1);
@@ -1363,6 +1418,8 @@ const frDateTime = s => {
 };
 
 function renderExtras(eodText, tallyText, partialsText, pfText) {
+  DUP_KEYS = parseDupKeys(eodText);
+  LAST_TALLY = tallyText; LAST_PF = pfText || "";
   renderEodTab(eodText);
   renderTallyTab(tallyText, partialsText);
   renderVentesTab(tallyText, pfText || "");
@@ -1396,8 +1453,7 @@ function renderEodTab(eodText) {
     text: [r[5], r[6], r[12]].map(v => (v || "").trim()).filter(Boolean).join("\n"),
   })).filter(i => i.text).sort((a, b) => (a.date || "") < (b.date || "") ? 1 : -1);
 
-  const rows = allRows.filter(r => !isTestRow(r));
-  const reports = rows.map(r => {
+  const parseReport = r => {
     const g = i => (i < r.length ? num(r[i]) : 0);
     const notesRaw = [r[5], r[6], r[12]].map(v => (v || "").trim()).filter(v => v && !/^\d+\s*$/.test(v));
     const joined = notesRaw.join("\n");
@@ -1428,7 +1484,12 @@ function renderEodTab(eodText) {
       subs: g(COL.SUBS), scanOk: g(COL.SCAN_OK), scanFilled: g(COL.SCAN_FILLED),
       notes, detail,
     };
-  }).filter(r => r.date).sort((a, b) => a.date < b.date ? 1 : -1);
+  };
+  const byDateDesc = list => list.filter(r => r.date).sort((a, b) => a.date < b.date ? 1 : -1);
+  const reports = byDateDesc(allRows.filter(r => !isTestRow(r)).map(parseReport));
+  // saisies directes de Lauric (setter « Tracking ») : hors stats des setters,
+  // mais elles alimentent les compteurs de l'onglet Script setting
+  const trackRows = byDateDesc(allRows.filter(isTrackRow).map(parseReport));
 
   EOD_REPORTS = reports;
   fillSetterPicker(reports);
@@ -1463,7 +1524,7 @@ function renderEodTab(eodText) {
       '</div>';
   }).join("") || '<p class="empty-note">Aucun EOD pour l\'instant.</p>';
 
-  renderScriptTab(reports, ideas);
+  renderScriptTab(reports, ideas, trackRows);
 }
 
 /* ---------- onglet Script setting : vivier, A/B, tracking, idées ---------- */
@@ -1474,7 +1535,7 @@ function instaName(u) {
   return (u || "").replace(/^https?:\/\//, "").slice(0, 40);
 }
 
-function renderScriptTab(reports, ideas) {
+function renderScriptTab(reports, ideas, trackRows) {
   const last = reports.length ? reports[0].date : null;
   const inWin = (r, n) => {
     if (!last) return false;
@@ -1528,16 +1589,19 @@ function renderScriptTab(reports, ideas) {
     (abRows.every(r => !r.jours) ? '<p class="empty-note">Les chiffres apparaîtront dès les premiers EOD de chaque setter.</p>' : '');
 
   /* tracking : impressions, abonnés, scans, ManyChat Clarté */
-  const lastImpr = reports.find(r => r.impr != null);
-  const lastTot = reports.find(r => r.totalSubs != null);   // relevé du soir de Cynthia
+  const trackAll = [...reports, ...(trackRows || [])].sort((a, b) => a.date < b.date ? 1 : -1);
+  const inWin30 = r => w30.length ? r.date >= w30[w30.length - 1].date : true;
+  const sumT = f => trackAll.filter(inWin30).reduce((a, r) => a + (f(r) || 0), 0);
+  const lastImpr = trackAll.find(r => r.impr != null);
+  const lastTot = trackAll.find(r => r.totalSubs != null);   // relevé du soir de Cynthia (ou saisie Lauric)
   const t = (kc, n, l) => '<div class="vkpi" style="--kc:' + kc + '"><div class="n">' + n + '</div><div class="l">' + l + '</div></div>';
   el("track-tiles").innerHTML =
     t("var(--s1)", lastImpr ? fmt(lastImpr.impr) : "–", "impressions · dernier jour") +
-    t("var(--s1)", sumf(w30, r => r.impr) ? fmt(sumf(w30, r => r.impr)) : "–", "impressions · 30 j") +
+    t("var(--s1)", sumT(r => r.impr) ? fmt(sumT(r => r.impr)) : "–", "impressions · 30 j") +
     t("var(--funnel-2)", lastTot ? fmt(lastTot.totalSubs) : "–", "abonnés au total · dernier relevé") +
     t("var(--funnel-2)", fmt(sumf(w30, r => r.subs)), "nouveaux abonnés · 30 j") +
     t("var(--funnel-3)", fmt(sumf(w30, r => r.mNew + r.mOld + r.like + r.com + r.rel)), "scans proposés · 30 j") +
-    t("var(--s4)", sumf(w30, r => r.mc) ? fmt(sumf(w30, r => r.mc)) : "–", "ManyChat Clarté · 30 j");
+    t("var(--s4)", sumT(r => r.mc) ? fmt(sumT(r => r.mc)) : "–", "ManyChat Clarté · 30 j");
 
   /* boîte à idées */
   el("ideas-list").innerHTML = ideas.slice(0, 30).map(i =>
@@ -1642,6 +1706,30 @@ const EOD_FORM = {
 
 let setterChoice = null;
 let EOD_REPORTS = [];
+
+/* Écriture générique dans le Google Form EOD : sert aux lignes techniques
+   (boîte à idées, doublons, tracking saisi par Lauric). Tous les champs
+   obligatoires du form partent à 0, seul le setter et les notes changent. */
+async function postEodRow(setter, notes, dateIso) {
+  const [y, mo, d] = (dateIso || iso(new Date())).split("-");
+  const p = new URLSearchParams();
+  p.set("fvv", "1");
+  p.set("pageHistory", "0,1");
+  p.set(EOD_FORM.date + "_year", y);
+  p.set(EOD_FORM.date + "_month", String(+mo));
+  p.set(EOD_FORM.date + "_day", String(+d));
+  p.set(EOD_FORM.setter, "__other_option__");
+  p.set(EOD_FORM.setter + ".other_option_response", setter);
+  SRC_KEYS.forEach(k => p.set(EOD_FORM[k], "0"));
+  p.set(EOD_FORM.subs, "0");
+  p.set(EOD_FORM.scanOk, "0");
+  p.set(EOD_FORM.scanFilled, "0");
+  p.set(EOD_FORM.totInsta, "0");
+  p.set(EOD_FORM.totFb, "0");
+  if (notes) p.set(EOD_FORM.notes, notes);
+  await fetch(EOD_FORM.action, { method: "POST", mode: "no-cors",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: p.toString() });
+}
 
 /* Cynthia relève chaque soir le TOTAL d'abonnés du compte : la console en
    déduit le gain du jour (total du soir - dernier total connu) et n'envoie que
@@ -1805,6 +1893,57 @@ el("eod-form").addEventListener("submit", async e => {
   btn2.disabled = false;
 });
 
+/* ---------- onglet Ventes : mise de côté d'un doublon ---------- */
+document.addEventListener("click", async e => {
+  const b = e.target.closest(".dupbtn");
+  if (!b) return;
+  const key = b.dataset.key, undo = b.dataset.undo === "1";
+  const label = b.textContent;
+  b.disabled = true;
+  b.textContent = undo ? "Retour en cours…" : "Mise de côté…";
+  try {
+    await postEodRow("Doublon", "— Doublon" + (undo ? " annulé" : "") + " : " + key +
+                     (b.dataset.name ? " · " + b.dataset.name : ""));
+    if (undo) DUP_KEYS.delete(key); else DUP_KEYS.add(key);
+    renderVentesTab(LAST_TALLY, LAST_PF);   // effet immédiat, le Sheet suit derrière
+  } catch (err) {
+    b.disabled = false;
+    b.textContent = label;
+  }
+});
+
+/* ---------- tracking saisi directement par Lauric (setter « Tracking ») ---------- */
+el("track-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const msg = el("t-msg"), btn = el("t-send");
+  const dateVal = el("t-date").value;
+  if (!dateVal) return;
+  const parts = [];
+  if (el("t-impr").value !== "") parts.push("— Impressions : " + Math.max(0, +el("t-impr").value || 0));
+  if (el("t-mc").value !== "") parts.push("— ManyChat Clarté : " + Math.max(0, +el("t-mc").value || 0));
+  if (el("t-subs").value !== "") parts.push("— Abonnés total : " + Math.max(0, +el("t-subs").value || 0));
+  if (!parts.length) {
+    msg.hidden = false; msg.className = "sendmsg ko";
+    msg.textContent = "Remplis au moins un chiffre.";
+    return;
+  }
+  btn.disabled = true;
+  msg.hidden = false; msg.className = "sendmsg"; msg.textContent = "Envoi…";
+  try {
+    await postEodRow("Tracking", parts.join("\n"), dateVal);
+    msg.className = "sendmsg ok";
+    msg.textContent = "Tracking enregistré ✅ Les compteurs se mettent à jour dans quelques secondes.";
+    e.target.reset();
+    el("t-date").value = iso(new Date());
+    setTimeout(() => { if (!SNAPSHOT) load(false); }, 5000);
+  } catch (err) {
+    msg.className = "sendmsg ko";
+    msg.textContent = "Échec de l'envoi, vérifier la connexion et réessayer.";
+  }
+  btn.disabled = false;
+});
+if (!el("t-date").value) el("t-date").value = iso(new Date());
+
 /* ---------- boîte à idées : même Google Form, setter « Boîte à idées » ---------- */
 el("idea-form").addEventListener("submit", async e => {
   e.preventDefault();
@@ -1926,7 +2065,7 @@ function renderTallyTab(tallyText, partialsText) {
     if (v(iSource)) meta.push("source : " + esc(v(iSource)));
     if (v(iR1)) meta.push("R1 : " + esc(v(iR1)));
     if (v(iR2)) meta.push("R2 : " + esc(v(iR2)));
-    if (v(iIssue)) meta.push("issue : " + esc(v(iIssue)));
+    if (v(iIssue)) meta.push("proposition d'offre : " + esc(v(iIssue)));
     if (v(iCible)) meta.push("dans la cible : " + esc(v(iCible)));
     return '<div class="rcard">' +
       '<div class="rhead"><span class="rname">' + (esc(v(iPrenom)) || "Sans prénom") + '</span>' +
@@ -2002,6 +2141,7 @@ function renderVentesTab(tallyText, pfText) {
     if (v(iWa)) qa.push({ q: "WhatsApp", a: v(iWa) });
     qCols.forEach(i => { if (v(i)) qa.push({ q: h[i], a: v(i) }); });
     deals.push({
+      key: (r[0] || "").trim(),
       from: "scan", name: v(iPrenom) || "Sans prénom", wa: v(iWa),
       origine: v(iSource), r1: v(iR1), r2: v(iR2), issue: v(iIssue),
       cible: v(iCible).toLowerCase(), notes: [], qa,
@@ -2021,6 +2161,7 @@ function renderVentesTab(tallyText, pfText) {
       if (!v(pNom)) return;
       const notes = r.filter((c, i) => i > pIssue && (c || "").trim() && !/^ALEX/i.test(c)).map(c => c.trim());
       deals.push({
+        key: ("pf|" + v(pNom).toLowerCase()).replace(/[·\n]/g, " "),
         from: "pf", name: v(pNom), mail: /@/.test(v(pMail)) ? v(pMail) : "",
         origine: v(pOrig), first: v(pFirst), propo: v(pPropo), issue: v(pIssue), notes,
       });
@@ -2028,7 +2169,10 @@ function renderVentesTab(tallyText, pfText) {
   }
 
   deals.forEach(d => Object.assign(d, classifyDeal(d, today)));
-  const by = st => deals.filter(d => d.st === st);
+  // doublons signalés depuis la console : hors compteurs et hors listes, gardés en bas
+  const doublons = deals.filter(d => d.key && DUP_KEYS.has(d.key));
+  const vivants = deals.filter(d => !d.key || !DUP_KEYS.has(d.key));
+  const by = st => vivants.filter(d => d.st === st);
   const avenir = by("avenir").sort((a, b) => a.when < b.when ? -1 : 1);
   const encours = by("encours").reverse();
   const gagnes = by("gagne").reverse();
@@ -2050,6 +2194,10 @@ function renderVentesTab(tallyText, pfText) {
     '<div class="vkpi" style="--kc:var(--s3)"><div class="n">' + fmt(ca) + '&nbsp;€</div><div class="l">💶 CA signé (approx.)</div></div>';
 
   const color = { avenir: "var(--accent)", encours: "var(--s4)", gagne: "var(--good)", perdu: "var(--bad)" };
+  const dupBtn = d => d.key
+    ? '<button type="button" class="copybtn dupbtn" data-key="' + esc(d.key) + '" data-name="' + esc(d.name) + '"' +
+      (DUP_KEYS.has(d.key) ? ' data-undo="1">↩︎ Remettre dans le suivi' : '>🗂️ Doublon') + '</button>'
+    : "";
   const card = d => {
     const badges = [];
     badges.push('<span class="badge src">' + (d.from === "scan" ? "🎯 Scan Dirigeant" : "💼 Portefeuille") + '</span>');
@@ -2066,7 +2214,7 @@ function renderVentesTab(tallyText, pfText) {
     return '<div class="rcard deal" style="--dc:' + color[d.st] + '">' +
       '<div class="rhead"><span class="rname">' + esc(d.name) + '</span>' + badges.join("") + '</div>' +
       (meta.length ? '<p class="rstats">' + meta.join(" · ") + '</p>' : '') +
-      (d.issue ? '<p class="rstats">issue : <b style="color:' + color[d.st] + '">' + esc(d.issue) + '</b></p>' : '') +
+      (d.issue ? '<p class="rstats">proposition d\'offre : <b style="color:' + color[d.st] + '">' + esc(d.issue) + '</b></p>' : '') +
       (d.notes || []).map(n => '<p class="rnote">' + esc(n) + '</p>').join("") +
       (d.qa && d.qa.length
         ? '<details class="answers"><summary>Voir toutes les infos du call (' + d.qa.length + ')</summary>' +
@@ -2076,6 +2224,7 @@ function renderVentesTab(tallyText, pfText) {
         : '') +
       (d.wa ? waBtn(d.wa, null) : "") +
       (d.mail ? '<p class="rstats" style="margin-top:6px"><a href="mailto:' + esc(d.mail) + '" style="color:var(--accent)">' + esc(d.mail) + '</a></p>' : '') +
+      dupBtn(d) +
       '</div>';
   };
   const fill = (id, list, emptyMsg) => {
@@ -2085,9 +2234,11 @@ function renderVentesTab(tallyText, pfText) {
   fill("v-encours", encours, "Rien en attente.");
   fill("v-gagnes", gagnes, "Pas encore de vente conclue.");
   fill("v-perdus", perdus, "Aucun call perdu. 💪");
+  fill("v-doublons", doublons, "Aucun doublon mis de côté.");
+  el("v-dup-count").textContent = doublons.length ? "(" + doublons.length + ")" : "";
 
   el("v-note").textContent =
-    "Croisement de deux sources : les colonnes de suivi remplies dans le Sheet « Le Scan Dirigeant (réponses) » (source, Call R1, R2, Issue, Dans la cible) et le Sheet « portefeuille des leads ». " +
+    "Croisement de deux sources : les colonnes de suivi remplies dans le Sheet « Le Scan Dirigeant (réponses) » (source, Call R1, R2, Issue = proposition d'offre, Dans la cible) et le Sheet « portefeuille des leads ». " +
     (hi < 0 ? "Portefeuille indisponible pour l'instant." : "Une date au format jj/mm dans les colonnes R1 / R2 / Propo suffit pour apparaître dans « à venir ».");
 }
 
