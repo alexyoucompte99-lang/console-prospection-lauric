@@ -483,16 +483,6 @@
             <div class="chiplist" id="f-etq-list"></div>
             <p class="formnote" style="margin-top:4px">Colle une URL puis « Ajouter » : tu peux en mettre plusieurs d'affilée avant d'envoyer l'EOD. Elles vont dans le vivier leads chauds (onglet Script setting).</p>
           </div>
-          <div class="frow2">
-            <div>
-              <label class="flab" for="f-impr">Impressions du jour (stats Insta)</label>
-              <input type="number" min="0" inputmode="numeric" id="f-impr">
-            </div>
-            <div>
-              <label class="flab" for="f-mc">Messages ManyChat Clarté envoyés</label>
-              <input type="number" min="0" inputmode="numeric" id="f-mc">
-            </div>
-          </div>
           <div>
             <label class="flab" for="f-notes">Idées d'amélioration ou retours / questions</label>
             <textarea id="f-notes"></textarea>
@@ -599,7 +589,7 @@ J'aime bien savoir qui se cache derrière les nouveaux profils. Je te laisse un 
       <section>
         <h2 class="hsec" style="--hc:var(--s3);margin-bottom:10px">Tracking setting</h2>
         <div class="vkpis" id="track-tiles"></div>
-        <p class="formnote">Impressions et ManyChat Clarté se remplissent dans le formulaire EOD des setters. Lauric peut aussi les saisir lui-même ici, sans passer par un EOD.</p>
+        <p class="formnote">Le relevé d'abonnés se remplit via l'EOD de Cynthia ; Lauric peut aussi le saisir directement ici, sans passer par un EOD.</p>
         <form class="card eodform" id="track-form" style="margin-top:14px">
           <h3 class="mini-title">Saisie directe (Lauric)</h3>
           <div class="frow2">
@@ -610,16 +600,6 @@ J'aime bien savoir qui se cache derrière les nouveaux profils. Je te laisse un 
             <div>
               <label class="flab" for="t-subs">👥 Abonnés au total (optionnel)</label>
               <input type="number" min="0" inputmode="numeric" id="t-subs">
-            </div>
-          </div>
-          <div class="frow2">
-            <div>
-              <label class="flab" for="t-impr">Impressions du jour (stats Insta)</label>
-              <input type="number" min="0" inputmode="numeric" id="t-impr">
-            </div>
-            <div>
-              <label class="flab" for="t-mc">Messages ManyChat Clarté envoyés</label>
-              <input type="number" min="0" inputmode="numeric" id="t-mc">
             </div>
           </div>
           <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
@@ -1676,20 +1656,14 @@ function renderScriptTab(reports, ideas, trackRows) {
     '</tbody></table>' +
     (abRows.every(r => !r.jours) ? '<p class="empty-note">Les chiffres apparaîtront dès les premiers EOD de chaque setter.</p>' : '');
 
-  /* tracking : impressions, abonnés, scans, ManyChat Clarté */
+  /* tracking : abonnés + scans (impressions et ManyChat retirés le 01/09, demande d'Alex) */
   const trackAll = [...reports, ...(trackRows || [])].sort((a, b) => a.date < b.date ? 1 : -1);
-  const inWin30 = r => w30.length ? r.date >= w30[w30.length - 1].date : true;
-  const sumT = f => trackAll.filter(inWin30).reduce((a, r) => a + (f(r) || 0), 0);
-  const lastImpr = trackAll.find(r => r.impr != null);
   const lastTot = trackAll.find(r => r.totalSubs != null);   // relevé du soir de Cynthia (ou saisie Lauric)
   const t = (kc, n, l) => '<div class="vkpi" style="--kc:' + kc + '"><div class="n">' + n + '</div><div class="l">' + l + '</div></div>';
   el("track-tiles").innerHTML =
-    t("var(--s1)", lastImpr ? fmt(lastImpr.impr) : "–", "impressions · dernier jour") +
-    t("var(--s1)", sumT(r => r.impr) ? fmt(sumT(r => r.impr)) : "–", "impressions · 30 j") +
     t("var(--funnel-2)", lastTot ? fmt(lastTot.totalSubs) : "–", "abonnés au total · dernier relevé") +
     t("var(--funnel-2)", fmt(sumf(w30, r => r.subs)), "nouveaux abonnés · 30 j") +
-    t("var(--funnel-3)", fmt(sumf(w30, r => r.mNew + r.mOld + r.like + r.com + r.rel)), "scans proposés · 30 j") +
-    t("var(--s4)", sumT(r => r.mc) ? fmt(sumT(r => r.mc)) : "–", "ManyChat Clarté · 30 j");
+    t("var(--funnel-3)", fmt(sumf(w30, r => r.mNew + r.mOld + r.like + r.com + r.rel)), "scans proposés · 30 j");
 
   /* boîte à idées */
   el("ideas-list").innerHTML = ideas.slice(0, 30).map(i =>
@@ -1938,8 +1912,6 @@ el("eod-form").addEventListener("submit", async e => {
     notes += (notes ? "\n" : "") + "— Étiquette drapeau : " + Math.max(0, +el("f-drapeau").value || 0);
   }
   etqUrls.forEach(u => { notes += (notes ? "\n" : "") + "— Étiquette URL : " + u; });
-  if (el("f-impr").value !== "") notes += (notes ? "\n" : "") + "— Impressions : " + Math.max(0, +el("f-impr").value || 0);
-  if (el("f-mc").value !== "") notes += (notes ? "\n" : "") + "— ManyChat Clarté : " + Math.max(0, +el("f-mc").value || 0);
 
   const [y, mo, d] = dateVal.split("-");
   const p = new URLSearchParams();
@@ -2074,12 +2046,10 @@ el("track-form").addEventListener("submit", async e => {
   const dateVal = el("t-date").value;
   if (!dateVal) return;
   const parts = [];
-  if (el("t-impr").value !== "") parts.push("— Impressions : " + Math.max(0, +el("t-impr").value || 0));
-  if (el("t-mc").value !== "") parts.push("— ManyChat Clarté : " + Math.max(0, +el("t-mc").value || 0));
   if (el("t-subs").value !== "") parts.push("— Abonnés total : " + Math.max(0, +el("t-subs").value || 0));
   if (!parts.length) {
     msg.hidden = false; msg.className = "sendmsg ko";
-    msg.textContent = "Remplis au moins un chiffre.";
+    msg.textContent = "Remplis le nombre d'abonnés.";
     return;
   }
   btn.disabled = true;
