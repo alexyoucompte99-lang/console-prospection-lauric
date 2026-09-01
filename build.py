@@ -14,7 +14,7 @@ Usage:
   python3 build.py --data-only  télécharge seulement (utilisé par GitHub Actions)
   python3 build.py --no-fetch   réutilise les CSV déjà téléchargés (debug)
 """
-import csv, io, json, os, re, sys, urllib.request
+import csv, io, json, os, re, sys, urllib.parse, urllib.request
 from datetime import datetime
 from pathlib import Path
 
@@ -33,6 +33,13 @@ PF_URL = ("https://docs.google.com/spreadsheets/d/"
 # on compare les Submission ID du CSV fraîchement téléchargé avec la copie
 # précédente et on publie un message par nouveau scan sur ce topic.
 NTFY_TOPIC = "scan-dirigeant-lauric-d7k4q2"
+
+# Notification Telegram (Alex) quand une idée est envoyée depuis la boîte à
+# idées de l'onglet Script setting : elle arrive dans le Sheet EOD avec le
+# setter « Boîte à idées », on diffe les lignes à chaque run.
+# Secrets GitHub : TG_TOKEN (bot) et TG_CHAT (chat_id).
+IDEA_RE = re.compile(r"bo[iî]te\s*[aà]\s*id[ée]es", re.I)
+IDEA_NOTE_COLS = (5, 6, 12)
 
 # Soumissions partielles du scan Tally (jamais poussées vers le Sheet par Tally,
 # seule l'API les expose). Clé : secret GitHub TALLY_API_KEY, ou fichier local.
@@ -179,6 +186,52 @@ def notify_new_tally(old_text: str, new_text: str) -> None:
             print("notif ntfy échouée :", e)
 
 
+def send_telegram(text: str) -> None:
+    """Envoie un message sur le Telegram d'Alex. N'échoue jamais le job."""
+    token = os.environ.get("TG_TOKEN", "").strip()
+    chat = os.environ.get("TG_CHAT", "").strip()
+    if not token or not chat:
+        print("TG_TOKEN/TG_CHAT absents : notif Telegram ignorée")
+        return
+    data = urllib.parse.urlencode({
+        "chat_id": chat, "text": text, "disable_web_page_preview": "true",
+    }).encode("utf-8")
+    try:
+        req = urllib.request.Request(
+            f"https://api.telegram.org/bot{token}/sendMessage", data=data,
+            headers={"Content-Type": "application/x-www-form-urlencoded"})
+        urllib.request.urlopen(req, timeout=30).read()
+        print("notif Telegram envoyée")
+    except Exception as e:
+        print("notif Telegram échouée :", e)
+
+
+def idea_rows(text: str):
+    """Lignes « Boîte à idées » du CSV EOD, sous forme (clé, date, texte)."""
+    out = []
+    for r in list(csv.reader(io.StringIO(text)))[1:]:
+        if len(r) <= COL_SETTER or not IDEA_RE.search(r[COL_SETTER] or ""):
+            continue
+        note = "\n".join((r[i] or "").strip() for i in IDEA_NOTE_COLS
+                          if i < len(r) and (r[i] or "").strip())
+        if not note:
+            continue
+        out.append(((r[0] or "").strip() + "|" + note, (r[COL_DATE] or "").strip(), note))
+    return out
+
+
+def notify_new_ideas(old_text: str, new_text: str) -> None:
+    """Un message Telegram par nouvelle idée déposée dans la boîte à idées."""
+    if not old_text.strip():        # première exécution : pas de référence
+        return
+    seen = {k for k, _, _ in idea_rows(old_text)}
+    fresh = [i for i in idea_rows(new_text) if i[0] not in seen]
+    for _, date, note in fresh[:10]:
+        send_telegram("💡 Nouvelle idée dans la console Lauric"
+                      + (f" ({date})" if date else "") + "\n\n" + note
+                      + "\n\nhttps://alexyoucompte99-lang.github.io/console-prospection-lauric/#script")
+
+
 def js_string(s: str) -> str:
     """JSON sûr à l'intérieur d'un <script> (pas de </script> ni de <!-- qui s'échappe)."""
     return json.dumps(s, ensure_ascii=False).replace("<", "\\u003c").replace("\u2028", "\\u2028")
@@ -224,7 +277,10 @@ def main():
     partials_file, pf_file = DATA / "partielles.csv", DATA / "portefeuille.csv"
 
     if "--no-fetch" not in sys.argv:
-        eod_file.write_text(fetch(EOD_URL), encoding="utf-8")
+        old_eod = eod_file.read_text(encoding="utf-8") if eod_file.exists() else ""
+        new_eod = fetch(EOD_URL)
+        notify_new_ideas(old_eod, new_eod)
+        eod_file.write_text(new_eod, encoding="utf-8")
         old_tally = tally_file.read_text(encoding="utf-8") if tally_file.exists() else ""
         new_tally = fetch(TALLY_URL)
         notify_new_tally(old_tally, new_tally)

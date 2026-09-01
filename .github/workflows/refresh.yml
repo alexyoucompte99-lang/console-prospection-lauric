@@ -8,7 +8,7 @@ name: Rafraichir les donnees
 on:
   schedule:
     - cron: "*/15 5-20 * * *"   # toutes les 15 min, ~7h -> ~22h Paris (ete),
-                                # pour que la notif ntfy « scan rempli » arrive vite
+                                # pour que les notifs (ntfy scan rempli, Telegram idée) arrivent vite
   workflow_dispatch:
 
 permissions:
@@ -27,6 +27,8 @@ jobs:
       - name: Telecharger les CSV
         env:
           TALLY_API_KEY: ${{ secrets.TALLY_API_KEY }}
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+          TG_CHAT: ${{ secrets.TG_CHAT }}
         run: python3 build.py --data-only
 
       - name: Commiter si ca a change

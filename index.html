@@ -1300,12 +1300,21 @@ function mini(rows30, title, f, color, untrackedNote) {
    Onglets EOD + Scans Tally
    ============================================================ */
 
+const TABS = ["dash", "eod", "tally", "ventes", "script"];
+function showTab(name) {
+  if (!TABS.includes(name)) return;
+  document.querySelectorAll("#tabbar button").forEach(x => x.classList.toggle("on", x.dataset.tab === name));
+  TABS.forEach(t => { el("tab-" + t).hidden = t !== name; });
+}
 el("tabbar").addEventListener("click", e => {
   const b = e.target.closest("button");
   if (!b) return;
-  document.querySelectorAll("#tabbar button").forEach(x => x.classList.toggle("on", x === b));
-  ["dash", "eod", "tally", "ventes", "script"].forEach(t => { el("tab-" + t).hidden = t !== b.dataset.tab; });
+  showTab(b.dataset.tab);
+  history.replaceState(null, "", b.dataset.tab === "dash" ? location.pathname : "#" + b.dataset.tab);
 });
+// lien direct vers un onglet (ex. #script depuis la notif Telegram d'une idée)
+showTab((location.hash || "").replace("#", ""));
+addEventListener("hashchange", () => showTab((location.hash || "").replace("#", "")));
 
 const esc = s => String(s == null ? "" : s)
   .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
