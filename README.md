@@ -6,7 +6,7 @@ Console de suivi du setting Instagram de Lauric : entonnoir (messages, nouveaux 
 
 Marqueurs stockés dans le champ notes du Google Form EOD et reparsés par la page : `— Détail console : …`, `— Étiquette drapeau : N`, `— Étiquette URL : <url>` (une ligne par URL, champ répétable du form console), `— Impressions : N`, `— ManyChat Clarté : N`. Les idées de la boîte à idées passent par le même Google Form avec le setter `Boîte à idées` (exclu de toutes les stats par `isTestRow`/`isIdeaRow`).
 
-La console est installable sur téléphone (PWA : manifest + service worker + icônes) : le process à envoyer à Lauric est dans `INSTALLATION-TEL.md`. Une notification ntfy (topic `scan-dirigeant-lauric-d7k4q2`) part à chaque nouveau scan Tally rempli, détecté par le job GitHub qui tourne toutes les 15 min entre ~7h et ~22h Paris.
+La console est installable sur téléphone (PWA : manifest + service worker + icônes) : le process à envoyer à Lauric est dans `INSTALLATION-TEL.md`. Une notification ntfy (topic `scan-dirigeant-lauric-d7k4q2`) part à chaque nouveau scan Tally rempli, détecté par le job GitHub qui tourne toutes les 15 min entre ~7h et ~22h Paris. Le même job envoie un message Telegram à Alex à chaque nouvelle idée déposée dans la boîte à idées (diff des lignes `Boîte à idées` du Sheet EOD, secrets repo `TG_TOKEN` / `TG_CHAT`, fonction `notify_new_ideas` de build.py). Le message contient un lien `#script` : la page ouvre directement l'onglet visé (`#eod`, `#tally`, `#ventes`, `#script`).
 
 ## Où ça vit
 
