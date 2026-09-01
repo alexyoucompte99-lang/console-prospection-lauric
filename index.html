@@ -231,6 +231,22 @@
   .badge.src { color: var(--s5); border-color: var(--s5); background: color-mix(in srgb, var(--s5) 10%, transparent); }
   .badge.gray { color: var(--muted); }
 
+  /* onglet Script setting */
+  .chiplist { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: color-mix(in srgb, var(--accent) 10%, transparent); color: var(--accent); border: 1px solid var(--accent); max-width: 100%; }
+  .chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 240px; }
+  .chip button { border: 0; background: none; color: inherit; cursor: pointer; font-size: 15px; padding: 0; line-height: 1; }
+  .msgcard { white-space: pre-wrap; font-size: 14px; color: var(--ink); background: var(--page); border: 1px dashed var(--border); border-radius: 8px; padding: 12px 14px; margin-top: 10px; overflow-wrap: break-word; }
+  .copybtn { font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; border: 1px solid var(--accent); color: var(--accent); background: transparent; border-radius: 7px; padding: 4px 10px; margin-top: 8px; }
+  .copybtn:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+  .steps { margin: 0; padding: 0; list-style: none; counter-reset: st; display: grid; gap: 10px; }
+  .steps li { counter-increment: st; display: flex; gap: 10px; font-size: 14px; color: var(--ink-2); }
+  .steps li::before { content: counter(st); flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 12.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+  .steps b { color: var(--ink); }
+  .vivlink { font-weight: 700; font-size: 15px; color: var(--accent); text-decoration: none; }
+  .vivlink:hover { text-decoration: underline; }
+  .missrow { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-size: 13px; color: var(--ink-2); }
+
   /* onglet Ventes */
   .deal { border-left: 4px solid var(--dc, var(--muted)); background: color-mix(in srgb, var(--dc, var(--muted)) 4%, var(--card)); }
   .deal .rname { font-size: 15px; }
@@ -365,6 +381,7 @@
       <button data-tab="eod">📝 EOD <span class="count" id="eod-count"></span></button>
       <button data-tab="tally">🎯 Scans Tally <span class="count" id="tally-count"></span></button>
       <button data-tab="ventes">💰 Ventes <span class="count" id="ventes-count"></span></button>
+      <button data-tab="script">📣 Script setting <span class="count" id="script-count"></span></button>
     </div>
 
     <div id="tab-eod" hidden>
@@ -441,6 +458,25 @@
             <p class="formnote" style="margin-top:4px">C'est le nombre de leads qui ont l'étiquette drapeau.</p>
           </div>
           <div>
+            <label class="flab" for="f-etq-url">🏷️ URL des personnes mises en étiquette (leads chauds)</label>
+            <div style="display:flex;gap:8px">
+              <input type="url" id="f-etq-url" placeholder="https://www.instagram.com/pseudo" style="flex:1">
+              <button type="button" class="send" id="f-etq-add" style="padding:8px 16px;font-size:14px">Ajouter</button>
+            </div>
+            <div class="chiplist" id="f-etq-list"></div>
+            <p class="formnote" style="margin-top:4px">Colle une URL puis « Ajouter » : tu peux en mettre plusieurs d'affilée avant d'envoyer l'EOD. Elles vont dans le vivier leads chauds (onglet Script setting).</p>
+          </div>
+          <div class="frow2">
+            <div>
+              <label class="flab" for="f-impr">Impressions du jour (stats Insta)</label>
+              <input type="number" min="0" inputmode="numeric" id="f-impr">
+            </div>
+            <div>
+              <label class="flab" for="f-mc">Messages ManyChat Clarté envoyés</label>
+              <input type="number" min="0" inputmode="numeric" id="f-mc">
+            </div>
+          </div>
+          <div>
             <label class="flab" for="f-notes">Idées d'amélioration ou retours / questions</label>
             <textarea id="f-notes"></textarea>
           </div>
@@ -475,6 +511,122 @@
       </section>
     </div>
 
+    <div id="tab-script" hidden>
+      <section>
+        <h2 class="hsec" style="--hc:var(--s2);margin-bottom:10px">Le process étiquette (leads chauds)</h2>
+        <div class="card">
+          <ol class="steps">
+            <li><span>Premier message <b>hyper personnalisé</b> (variante A ou B selon le setter) : au moins <b>1 élément de personnalisation</b> vu sur le profil (« J'ai vu que... »), <b>jamais deux messages identiques</b>. On fait de l'humain, pas du ManyChat. Et on <b>se relit avant d'envoyer</b>.</span></li>
+            <li><span>Le prospect répond → on vérifie s'il est <b>dans la cible</b> (dirigeant, manager ou futur manager).</span></li>
+            <li><span>Dans la cible <b>et il semble chaud</b> (vrai intérêt montré) → on met l'<b>étiquette drapeau</b> sur la conversation Insta et on <b>envoie l'URL du profil sur le groupe WhatsApp</b>.</span></li>
+            <li><span>Dès que l'étiquette est posée, <b>Lauric prend le relais direct</b> sur la conversation.</span></li>
+            <li><span><b>Cynthia, tous les soirs</b> : reporte les URLs du groupe dans l'EOD de la console (champ « URL des personnes mises en étiquette »). Elles atterrissent dans le vivier ci-dessous.</span></li>
+            <li><span>Un setter ne sait pas comment personnaliser ? → il <b>envoie l'URL du profil sur le groupe</b> et on lui dit comment faire.</span></li>
+          </ol>
+          <p class="formnote" style="margin-top:12px">Le lead magnet (scan) s'envoie plus tard dans la conversation, jamais dans le premier message. Le report des étiquettes par l'EOD est la V1 : on testera des méthodes plus simples à l'usage.</p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px">🔥 Vivier leads chauds (étiquettes)</h2>
+        <div class="rlist" id="vivier-list"></div>
+      </section>
+
+      <section>
+        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">A/B testing du premier message</h2>
+        <div class="pilot">
+          <div class="card" style="--tc:var(--s1);border-top:3px solid var(--s1)">
+            <div class="rhead"><span class="rname">Message A</span><span class="badge next">Constant</span><span class="badge">écrit long</span></div>
+            <div class="msgcard" id="msg-a">Bienvenue et merci de me suivre 🙏
+[Personnalisation « J'ai vu que... »]
+
+Tu l'as sûrement vu, ici je parle aux dirigeants principalement 😊
+
+J'ai dirigé pendant 10 ans je connais par cœur les défis :
+Tout porter sur ses épaules.
+Le stress du chiffre.
+Recruter, motiver ses employés.
+Prendre une tonne de décisions.
+Etc.
+
+✅ Depuis de nombreuses années j'applique une méthode que j'ai apprise auprès des plus grands dirigeants !
+👉 + d'engagement
+👉 + de business
+C'est dingue la différence.
+
+Et puis la cerise sur le gâteau : beaucoup moins de charge mentale pour le dirigeant 😎
+
+Une question importante :
+Tu es dirigeant d'une boîte ?</div>
+            <button type="button" class="copybtn" data-copy="msg-a">Copier le message A</button>
+            <p class="formnote" style="margin-top:8px">Remplacer la ligne [Personnalisation] par un vrai détail du profil avant d'envoyer.</p>
+          </div>
+          <div class="card" style="--tc:var(--s5);border-top:3px solid var(--s5)">
+            <div class="rhead"><span class="rname">Message B</span><span class="badge src">Cynthia</span><span class="badge">écrit court + vocal</span></div>
+            <div class="msgcard" id="msg-b">Hello [Prénom] ! Merci beaucoup pour ton abonnement, ça fait super plaisir de te voir ici ! 😁
+
+[Personnalisation « J'ai vu que... »]
+
+J'aime bien savoir qui se cache derrière les nouveaux profils. Je te laisse un petit vocal pour me présenter rapidement !</div>
+            <button type="button" class="copybtn" data-copy="msg-b">Copier le message B</button>
+            <p class="formnote" style="margin-top:8px">Puis envoyer le vocal « VOCAL VARIANTE A » (dispo dans la conversation Insta avec Alex MAJOREL). Remplacer [Prénom] et la ligne [Personnalisation].</p>
+          </div>
+        </div>
+        <div class="card" style="margin-top:14px">
+          <h3 class="mini-title">Résultats par variante · 30 jours (via l'EOD)</h3>
+          <div class="tbl-scroll" style="margin-top:0" id="ab-stats"></div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="hsec" style="--hc:var(--s3);margin-bottom:10px">Tracking setting</h2>
+        <div class="vkpis" id="track-tiles"></div>
+        <p class="formnote">Impressions et ManyChat Clarté se remplissent dans le formulaire EOD de la console (nouveaux champs).</p>
+      </section>
+
+      <section>
+        <h2 class="hsec" style="--hc:var(--s4);margin-bottom:10px">À tester ensuite</h2>
+        <div class="pilot">
+          <div class="card">
+            <h3 class="mini-title">Profil muet → vocal de Lauric</h3>
+            <p class="rstats" style="margin:0 0 6px">Si le profil ne donne aucune info à personnaliser : « Hello [Prénom] ! » + un vocal de Lauric.</p>
+            <div class="msgcard" id="msg-vocal">Trame du vocal : « Finalement je te fais un vocal. Je suis allé voir ton profil et je n'ai pas vu si tu étais à ton compte ou pas. Par contre j'ai vu que tu avais réagi à plusieurs de mes vidéos, j'imagine que tu es quelqu'un que ces sujets travaillent... »</div>
+          </div>
+          <div class="card">
+            <h3 class="mini-title">Proposition IA n°1 · la curieuse</h3>
+            <div class="msgcard" id="msg-p1">Hello [Prénom] ! Petite habitude ici : je vais voir le profil de chaque personne qui s'abonne. [J'ai vu que...] Du coup je suis curieux : tu diriges quoi en ce moment ?</div>
+            <button type="button" class="copybtn" data-copy="msg-p1">Copier</button>
+          </div>
+          <div class="card">
+            <h3 class="mini-title">Proposition IA n°2 · la question unique</h3>
+            <div class="msgcard" id="msg-p2">Bienvenue [Prénom] 🙏 Une seule question, promis : c'est quoi le sujet qui te prend le plus la tête dans ta boîte en ce moment ? Je lis tout et je réponds en vocal.</div>
+            <button type="button" class="copybtn" data-copy="msg-p2">Copier</button>
+          </div>
+          <div class="card">
+            <h3 class="mini-title">Proposition IA n°3 · la franche</h3>
+            <div class="msgcard" id="msg-p3">Hello [Prénom], merci pour l'abonnement ! Je ne vais pas te faire le message copié-collé habituel. [J'ai vu que...] Ça m'a donné envie de te poser la question en vrai : tu es à ton compte ou tu diriges une équipe ?</div>
+            <button type="button" class="copybtn" data-copy="msg-p3">Copier</button>
+          </div>
+        </div>
+        <p class="formnote" style="margin-top:10px">Les propositions IA sont à valider avec Lauric avant de partir en test. L'esprit recherché : un message qui sort de l'ordinaire, authentique sans chercher à prouver, franc, direct et gentil.</p>
+      </section>
+
+      <section>
+        <h2 class="hsec" style="--hc:var(--s5);margin-bottom:10px">💡 Boîte à idées</h2>
+        <form class="card eodform" id="idea-form">
+          <div>
+            <label class="flab" for="idea-text">Une idée de message, d'angle, d'amélioration du process ?</label>
+            <textarea id="idea-text" required></textarea>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+            <button type="submit" class="send">Envoyer l'idée</button>
+            <p class="sendmsg" id="idea-msg" hidden></p>
+          </div>
+        </form>
+        <div class="rlist" id="ideas-list" style="margin-top:14px"></div>
+      </section>
+    </div>
+
     <div id="tab-ventes" hidden>
       <div class="vkpis" id="v-kpis"></div>
       <section>
@@ -501,6 +653,7 @@
       <span aria-hidden="true">&#9888;</span>
       <span id="alert-text"></span>
     </div>
+    <div class="card" id="eod-missing" hidden style="margin-bottom:24px"></div>
 
     <section>
       <div class="sec-head">
@@ -636,8 +789,10 @@ const iso = d => isoOf(d.getFullYear(), d.getMonth() + 1, d.getDate());
 
 /* ---------- agrégation (miroir de l'ancien build.py) ---------- */
 
-// lignes de test techniques de la console, à ignorer partout
-const isTestRow = r => /test console/i.test(r[COL.SETTER] || "");
+// lignes à ignorer dans les stats : tests techniques + soumissions de la
+// boîte à idées (onglet Script setting), qui passent par le même Google Form
+const isTestRow = r => /test console|bo[iî]te\s*[aà]\s*id[ée]es/i.test(r[COL.SETTER] || "");
+const isIdeaRow = r => /bo[iî]te\s*[aà]\s*id[ée]es/i.test(r[COL.SETTER] || "");
 
 function aggregate(eodText, tallyText) {
   const rows = parseCSV(eodText).slice(1);
@@ -853,6 +1008,26 @@ function render(DATA) {
       "Aucun EOD rempli depuis le <b>" + frDate(lastData) + "</b> (" + gapDays + " jours) : les jours manquants comptent à zéro dans les chiffres ci-dessous.";
   } else {
     alert.hidden = true;
+  }
+
+  /* ---------- EOD non faits, par setter actif (14 j) sur les 7 derniers jours ---------- */
+  const missBox = el("eod-missing");
+  const activeSet14 = [...new Set(lastNDays(14).flatMap(r => Object.keys(r.bySetter)))].sort();
+  if (activeSet14.length) {
+    const rows7 = lastNDays(7);
+    const perSetter = activeSet14
+      .map(s => ({ s, miss: rows7.filter(r => !(s in r.bySetter)).map(r => r.date) }))
+      .filter(x => x.miss.length);
+    missBox.hidden = false;
+    missBox.innerHTML = '<h3 class="mini-title" style="margin-bottom:8px">EOD non faits · 7 derniers jours</h3>' +
+      (perSetter.length
+        ? perSetter.map(x =>
+            '<div class="missrow"><b style="color:var(--ink)">' + esc(x.s) + '</b>' +
+            x.miss.map(d => '<span class="badge lose">' + esc(frDate(d)) + '</span>').join("") +
+            '</div>').join('<div style="height:7px"></div>')
+        : '<p style="margin:0;color:var(--good);font-weight:600;font-size:13.5px">✅ Tous les setters actifs ont rempli leur EOD sur les 7 derniers jours.</p>');
+  } else {
+    missBox.hidden = true;
   }
 
   renderFunnel();
@@ -1129,7 +1304,7 @@ el("tabbar").addEventListener("click", e => {
   const b = e.target.closest("button");
   if (!b) return;
   document.querySelectorAll("#tabbar button").forEach(x => x.classList.toggle("on", x === b));
-  ["dash", "eod", "tally", "ventes"].forEach(t => { el("tab-" + t).hidden = t !== b.dataset.tab; });
+  ["dash", "eod", "tally", "ventes", "script"].forEach(t => { el("tab-" + t).hidden = t !== b.dataset.tab; });
 });
 
 const esc = s => String(s == null ? "" : s)
@@ -1210,19 +1385,35 @@ function parseDetail(text) {
 }
 
 function renderEodTab(eodText) {
-  const rows = parseCSV(eodText).slice(1).filter(r => r.length > 3 && !isTestRow(r));
+  const allRows = parseCSV(eodText).slice(1).filter(r => r.length > 3);
+  // idées envoyées depuis la boîte à idées (setter « Boîte à idées », exclu des stats)
+  const ideas = allRows.filter(isIdeaRow).map(r => ({
+    date: parseDate(r[COL.DATE]) || parseDate(r[0]),
+    text: [r[5], r[6], r[12]].map(v => (v || "").trim()).filter(Boolean).join("\n"),
+  })).filter(i => i.text).sort((a, b) => (a.date || "") < (b.date || "") ? 1 : -1);
+
+  const rows = allRows.filter(r => !isTestRow(r));
   const reports = rows.map(r => {
     const g = i => (i < r.length ? num(r[i]) : 0);
     const notesRaw = [r[5], r[6], r[12]].map(v => (v || "").trim()).filter(v => v && !/^\d+\s*$/.test(v));
-    const detail = parseDetail(notesRaw.join("\n"));
-    const mDrap = /[ÉE]tiquette drapeau\s*:?\s*(\d+)/i.exec(notesRaw.join("\n"));
+    const joined = notesRaw.join("\n");
+    const detail = parseDetail(joined);
+    const mDrap = /[ÉE]tiquette drapeau\s*:?\s*(\d+)/i.exec(joined);
     const drapeau = mDrap ? +mDrap[1] : null;
+    const urls = [...joined.matchAll(/[ÉE]tiquette URL\s*:\s*(\S+)/gi)].map(m => m[1]);
+    const mImpr = /—\s*Impressions\s*:\s*(\d+)/i.exec(joined);
+    const mMc = /—\s*ManyChat Clart[ée]\s*:\s*(\d+)/i.exec(joined);
     const notes = notesRaw
       .map(n => n.replace(/\s*—\s*Détail console\s*:.*$/is, "")
-                 .replace(/\s*—\s*[ÉE]tiquette drapeau\s*:?\s*\d+/gi, "").trim())
+                 .replace(/\s*—\s*[ÉE]tiquette drapeau\s*:?\s*\d+/gi, "")
+                 .replace(/\s*—\s*[ÉE]tiquette URL\s*:\s*\S+/gi, "")
+                 .replace(/\s*—\s*Impressions\s*:\s*\d+/gi, "")
+                 .replace(/\s*—\s*ManyChat Clart[ée]\s*:\s*\d+/gi, "").trim())
       .filter(Boolean);
     return {
-      drapeau,
+      drapeau, urls,
+      impr: mImpr ? +mImpr[1] : null,
+      mc: mMc ? +mMc[1] : null,
       date: parseDate(r[COL.DATE]) || parseDate(r[0]),
       setter: (r[COL.SETTER] || "").trim() || "?",
       mNew: g(COL.MSG_NEW), mOld: g(COL.MSG_OLD), like: g(COL.MSG_LIKE), com: g(COL.MSG_COM),
@@ -1251,6 +1442,9 @@ function renderEodTab(eodText) {
     if (r.scanOk) stats.push("<b>" + fmt(r.scanOk) + "</b> scan" + (r.scanOk > 1 ? "s" : "") + " accepté" + (r.scanOk > 1 ? "s" : ""));
     if (r.scanFilled) stats.push("<b>" + fmt(r.scanFilled) + "</b> scan" + (r.scanFilled > 1 ? "s" : "") + " rempli" + (r.scanFilled > 1 ? "s" : ""));
     if (r.drapeau != null) stats.push("🚩 <b>" + fmt(r.drapeau) + "</b> avec l'étiquette drapeau");
+    if (r.urls.length) stats.push("🏷️ <b>" + r.urls.length + "</b> URL" + (r.urls.length > 1 ? "s" : "") + " étiquette ajoutée" + (r.urls.length > 1 ? "s" : ""));
+    if (r.impr != null) stats.push("<b>" + fmt(r.impr) + "</b> impressions");
+    if (r.mc != null) stats.push("<b>" + fmt(r.mc) + "</b> ManyChat Clarté");
     return '<div class="rcard">' +
       '<div class="rhead"><span class="rname">' + esc(frDate(r.date)) + '</span>' +
       '<span class="rmeta">' + esc(r.setter) + '</span></div>' +
@@ -1258,6 +1452,87 @@ function renderEodTab(eodText) {
       r.notes.map(n => '<p class="rnote">' + esc(n) + '</p>').join("") +
       '</div>';
   }).join("") || '<p class="empty-note">Aucun EOD pour l\'instant.</p>';
+
+  renderScriptTab(reports, ideas);
+}
+
+/* ---------- onglet Script setting : vivier, A/B, tracking, idées ---------- */
+
+function instaName(u) {
+  const m = /instagram\.com\/([A-Za-z0-9._]+)/i.exec(u || "");
+  if (m) return "@" + m[1];
+  return (u || "").replace(/^https?:\/\//, "").slice(0, 40);
+}
+
+function renderScriptTab(reports, ideas) {
+  const last = reports.length ? reports[0].date : null;
+  const inWin = (r, n) => {
+    if (!last) return false;
+    const d = (new Date(last + "T12:00:00") - new Date(r.date + "T12:00:00")) / 86400000;
+    return d >= 0 && d < n;
+  };
+  const w30 = reports.filter(r => inWin(r, 30));
+  const sumf = (rows, f) => rows.reduce((a, r) => a + (f(r) || 0), 0);
+
+  /* vivier leads chauds : URLs d'étiquettes reportées dans les EOD, dédupliquées */
+  const seen = new Map();
+  [...reports].reverse().forEach(r => (r.urls || []).forEach(u => {
+    const key = u.replace(/\/+$/, "").toLowerCase();
+    if (!seen.has(key)) seen.set(key, { url: u, date: r.date, setter: r.setter });
+    else seen.get(key).date = r.date; // dernière fois vue
+  }));
+  const vivier = [...seen.values()].sort((a, b) => a.date < b.date ? 1 : -1);
+  el("script-count").textContent = vivier.length ? "(" + vivier.length + ")" : "";
+  el("vivier-list").innerHTML = vivier.map(v => {
+    const href = /^https?:\/\//i.test(v.url) ? v.url : "https://" + v.url;
+    return '<div class="rcard deal" style="--dc:var(--bad)">' +
+      '<div class="rhead"><a class="vivlink" href="' + esc(href) + '" target="_blank" rel="noopener">' + esc(instaName(v.url)) + ' ↗</a>' +
+      '<span class="badge lose">🔥 lead chaud</span>' +
+      '<span class="rmeta">étiquette posée, ajouté le ' + esc(frDate(v.date)) + ' · Lauric a le relais</span></div>' +
+      '</div>';
+  }).join("") || '<p class="empty-note">Aucune URL d\'étiquette reportée pour l\'instant. Elles s\'ajoutent via le formulaire EOD (champ 🏷️), reporté chaque soir par Cynthia.</p>';
+
+  /* A/B : Constant = variante A, Cynthia = variante B, chiffres EOD sur 30 j */
+  const variants = [
+    { v: "A", setter: "Constant", fmt: "écrit long" },
+    { v: "B", setter: "Cynthia", fmt: "écrit court + vocal" },
+  ];
+  const abRows = variants.map(x => {
+    const mine = w30.filter(r => (r.setter || "").toLowerCase() === x.setter.toLowerCase());
+    return {
+      ...x,
+      jours: mine.length,
+      accroches: sumf(mine, r => r.mNew + r.mOld + r.like + r.com),
+      relances: sumf(mine, r => r.rel),
+      subs: sumf(mine, r => r.subs),
+      scanOk: sumf(mine, r => r.scanOk),
+    };
+  });
+  el("ab-stats").innerHTML =
+    '<table><thead><tr><th>Variante</th><th>Setter</th><th>Jours actifs</th><th>Accroches</th><th>Relances</th><th>Abonnés gagnés</th><th>Scans acceptés</th></tr></thead><tbody>' +
+    abRows.map(r =>
+      '<tr><td class="tot">Message ' + r.v + ' <span style="color:var(--muted);font-weight:500">(' + esc(r.fmt) + ')</span></td><td>' + esc(r.setter) +
+      '</td><td>' + r.jours + '</td><td>' + fmt(r.accroches) + '</td><td>' + fmt(r.relances) +
+      '</td><td>' + fmt(r.subs) + '</td><td>' + fmt(r.scanOk) + '</td></tr>').join("") +
+    '</tbody></table>' +
+    (abRows.every(r => !r.jours) ? '<p class="empty-note">Les chiffres apparaîtront dès les premiers EOD de chaque setter.</p>' : '');
+
+  /* tracking : impressions, abonnés, scans, ManyChat Clarté */
+  const lastImpr = reports.find(r => r.impr != null);
+  const t = (kc, n, l) => '<div class="vkpi" style="--kc:' + kc + '"><div class="n">' + n + '</div><div class="l">' + l + '</div></div>';
+  el("track-tiles").innerHTML =
+    t("var(--s1)", lastImpr ? fmt(lastImpr.impr) : "–", "impressions · dernier jour") +
+    t("var(--s1)", sumf(w30, r => r.impr) ? fmt(sumf(w30, r => r.impr)) : "–", "impressions · 30 j") +
+    t("var(--funnel-2)", fmt(sumf(w30, r => r.subs)), "nouveaux abonnés · 30 j") +
+    t("var(--funnel-3)", fmt(sumf(w30, r => r.mNew + r.mOld + r.like + r.com + r.rel)), "scans proposés · 30 j") +
+    t("var(--s4)", sumf(w30, r => r.mc) ? fmt(sumf(w30, r => r.mc)) : "–", "ManyChat Clarté · 30 j");
+
+  /* boîte à idées */
+  el("ideas-list").innerHTML = ideas.slice(0, 30).map(i =>
+    '<div class="rcard"><div class="rhead"><span class="rname">💡</span>' +
+    (i.date ? '<span class="rmeta">' + esc(frDate(i.date)) + '</span>' : '') + '</div>' +
+    '<p class="rnote" style="margin-top:4px">' + esc(i.text) + '</p></div>').join("") ||
+    '<p class="empty-note">Aucune idée pour l\'instant. La première lance la machine !</p>';
 }
 
 /* ---------- pilotage : quoi améliorer pour booker plus de calls ---------- */
@@ -1388,6 +1663,32 @@ function fillSetterPicker(reports) {
   if (!d.value) d.value = iso(new Date());
 }
 
+/* URLs d'étiquettes : ajout multiple (chips) avant l'envoi de l'EOD */
+let etqUrls = [];
+function renderEtqChips() {
+  el("f-etq-list").innerHTML = etqUrls.map((u, i) =>
+    '<span class="chip"><span>' + esc(u) + '</span><button type="button" data-i="' + i + '" aria-label="Retirer cette URL">×</button></span>').join("");
+}
+function addEtqUrl() {
+  const inp = el("f-etq-url");
+  const v = inp.value.trim();
+  if (!v) return;
+  if (!etqUrls.includes(v)) etqUrls.push(v);
+  inp.value = "";
+  inp.focus();
+  renderEtqChips();
+}
+el("f-etq-add").addEventListener("click", addEtqUrl);
+el("f-etq-url").addEventListener("keydown", e => {
+  if (e.key === "Enter") { e.preventDefault(); addEtqUrl(); }
+});
+el("f-etq-list").addEventListener("click", e => {
+  const b = e.target.closest("button[data-i]");
+  if (!b) return;
+  etqUrls.splice(+b.dataset.i, 1);
+  renderEtqChips();
+});
+
 el("eod-form").addEventListener("submit", async e => {
   e.preventDefault();
   const msg = el("f-msg"), btn2 = el("f-send");
@@ -1414,6 +1715,9 @@ el("eod-form").addEventListener("submit", async e => {
   if (!el("f-drapeau-wrap").hidden && el("f-drapeau").value !== "") {
     notes += (notes ? "\n" : "") + "— Étiquette drapeau : " + Math.max(0, +el("f-drapeau").value || 0);
   }
+  etqUrls.forEach(u => { notes += (notes ? "\n" : "") + "— Étiquette URL : " + u; });
+  if (el("f-impr").value !== "") notes += (notes ? "\n" : "") + "— Impressions : " + Math.max(0, +el("f-impr").value || 0);
+  if (el("f-mc").value !== "") notes += (notes ? "\n" : "") + "— ManyChat Clarté : " + Math.max(0, +el("f-mc").value || 0);
 
   const [y, mo, d] = dateVal.split("-");
   const p = new URLSearchParams();
@@ -1443,6 +1747,8 @@ el("eod-form").addEventListener("submit", async e => {
     msg.className = "sendmsg ok";
     msg.textContent = "EOD envoyé ✅ La console se met à jour dans quelques secondes.";
     e.target.reset();
+    etqUrls = [];
+    renderEtqChips();
     el("f-date").value = iso(new Date());
     setTimeout(() => { if (!SNAPSHOT) load(false); }, 5000);
   } catch (err) {
@@ -1450,6 +1756,67 @@ el("eod-form").addEventListener("submit", async e => {
     msg.textContent = "Échec de l'envoi, vérifier la connexion et réessayer.";
   }
   btn2.disabled = false;
+});
+
+/* ---------- boîte à idées : même Google Form, setter « Boîte à idées » ---------- */
+el("idea-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const txt = el("idea-text").value.trim();
+  if (!txt) return;
+  const msg = el("idea-msg");
+  const [y, mo, d] = iso(new Date()).split("-");
+  const p = new URLSearchParams();
+  p.set("fvv", "1");
+  p.set("pageHistory", "0,1");
+  p.set(EOD_FORM.date + "_year", y);
+  p.set(EOD_FORM.date + "_month", String(+mo));
+  p.set(EOD_FORM.date + "_day", String(+d));
+  p.set(EOD_FORM.setter, "__other_option__");
+  p.set(EOD_FORM.setter + ".other_option_response", "Boîte à idées");
+  SRC_KEYS.forEach(k => p.set(EOD_FORM[k], "0"));
+  p.set(EOD_FORM.subs, "0");
+  p.set(EOD_FORM.scanOk, "0");
+  p.set(EOD_FORM.scanFilled, "0");
+  p.set(EOD_FORM.totInsta, "0");
+  p.set(EOD_FORM.totFb, "0");
+  p.set(EOD_FORM.notes, txt);
+  msg.hidden = false; msg.className = "sendmsg"; msg.textContent = "Envoi…";
+  try {
+    await fetch(EOD_FORM.action, { method: "POST", mode: "no-cors",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: p.toString() });
+    msg.className = "sendmsg ok";
+    msg.textContent = "Idée envoyée ✅ Elle apparaît dans la liste d'ici quelques secondes.";
+    e.target.reset();
+    setTimeout(() => { if (!SNAPSHOT) load(false); }, 5000);
+  } catch (err) {
+    msg.className = "sendmsg ko";
+    msg.textContent = "Échec de l'envoi, vérifier la connexion et réessayer.";
+  }
+});
+
+/* boutons « Copier » des messages A/B et propositions */
+document.addEventListener("click", e => {
+  const b = e.target.closest(".copybtn[data-copy]");
+  if (!b) return;
+  const src = el(b.dataset.copy);
+  if (!src) return;
+  const done = () => {
+    const old = b.textContent;
+    b.textContent = "Copié ✅";
+    setTimeout(() => { b.textContent = old; }, 1600);
+  };
+  const fallback = () => {
+    const r = document.createRange();
+    r.selectNodeContents(src);
+    const sel = getSelection();
+    sel.removeAllRanges(); sel.addRange(r);
+    document.execCommand("copy");
+    sel.removeAllRanges();
+    done();
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText)
+    navigator.clipboard.writeText(src.textContent).then(done).catch(fallback);
+  else fallback();
 });
 
 /* filtre Tous / Remplis / En cours (les pills de compteurs sont cliquables) */

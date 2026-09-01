@@ -2,7 +2,9 @@
 
 Console de suivi du setting Instagram de Lauric : entonnoir (messages, nouveaux abonnés, scans acceptés, scans remplis) avec sélecteur Hier / 3 / 7 / 30 jours, chiffres clés avec delta vs 7 jours précédents et cumul du mois, tuiles « Messages par catégorie », vue par setter, messages par jour, alerte si l'EOD n'est plus rempli. Instagram uniquement, LinkedIn exclu.
 
-4 onglets : Vue d'ensemble, EOD (formulaire + pilotage + derniers reports), Scans Tally (remplis + partiels, boutons WhatsApp), **Ventes** (suivi des calls de vente : à venir / en cours / conclues / perdus + CA signé approximatif, croisement des colonnes de suivi du Sheet Tally et du Sheet « portefeuille des leads »).
+5 onglets : Vue d'ensemble (avec panneau « EOD non faits » par setter actif), EOD (formulaire + pilotage + derniers reports), Scans Tally (remplis + partiels, boutons WhatsApp), **Ventes** (suivi des calls de vente : à venir / en cours / conclues / perdus + CA signé approximatif, croisement des colonnes de suivi du Sheet Tally et du Sheet « portefeuille des leads », bouton « Voir toutes les infos du call » par carte), **Script setting** (process étiquette leads chauds, vivier d'URLs cliquables vers Insta, A/B testing des messages A Constant / B Cynthia avec résultats EOD par variante, tracking impressions + ManyChat Clarté, propositions IA, boîte à idées).
+
+Marqueurs stockés dans le champ notes du Google Form EOD et reparsés par la page : `— Détail console : …`, `— Étiquette drapeau : N`, `— Étiquette URL : <url>` (une ligne par URL, champ répétable du form console), `— Impressions : N`, `— ManyChat Clarté : N`. Les idées de la boîte à idées passent par le même Google Form avec le setter `Boîte à idées` (exclu de toutes les stats par `isTestRow`/`isIdeaRow`).
 
 La console est installable sur téléphone (PWA : manifest + service worker + icônes) : le process à envoyer à Lauric est dans `INSTALLATION-TEL.md`. Une notification ntfy (topic `scan-dirigeant-lauric-d7k4q2`) part à chaque nouveau scan Tally rempli, détecté par le job GitHub qui tourne toutes les 15 min entre ~7h et ~22h Paris.
 
