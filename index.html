@@ -254,12 +254,24 @@
   .missrow { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-size: 13px; color: var(--ink-2); }
 
   /* onglets Calls Calendly */
-  .callform { display: grid; gap: 10px; margin-top: 10px; border-top: 1px solid var(--grid); padding-top: 10px; }
-  .callform select, .callform input[type="text"] {
+  .callform { display: grid; gap: 12px; margin-top: 10px; border-top: 1px solid var(--grid); padding-top: 12px; }
+  .callform textarea {
     font: inherit; font-size: 14px; color: var(--ink); background: var(--page);
-    border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; width: 100%;
+    border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; width: 100%;
+    min-height: 54px; resize: vertical;
   }
-  .callform select:focus-visible, .callform input:focus-visible { outline: 2px solid var(--accent); outline-offset: -1px; }
+  .callform textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: -1px; }
+  .optrow { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+  .optrow .ol { font-size: 11.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); width: 76px; flex: none; }
+  .opt-pill {
+    font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+    border: 1px solid var(--border); background: var(--card); color: var(--ink-2);
+    border-radius: 999px; padding: 5px 14px;
+  }
+  .opt-pill:hover { border-color: var(--accent); color: var(--accent); }
+  .opt-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .opt-pill.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .opt-pill.qn { width: 34px; height: 34px; padding: 0; text-align: center; }
 
   /* onglet Ventes */
   .dealedit { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); display: grid; gap: 10px; }
@@ -537,11 +549,12 @@
     </div>
 
     <div id="tab-car" hidden>
-      <section>
+      <div class="tally-counts" id="car-pills"></div>
+      <section id="sec-car-todo">
         <h2 class="hsec" style="--hc:var(--s4);margin-bottom:10px">Calls passés à remplir</h2>
         <div class="rlist" id="car-todo"></div>
       </section>
-      <section>
+      <section id="sec-car-done">
         <h2 class="hsec" style="--hc:var(--good);margin-bottom:10px">Calls remplis</h2>
         <div class="rlist" id="car-done"></div>
       </section>
@@ -962,6 +975,8 @@ function parseCallEdits(eodText) {
     };
     map.set(m[1].trim(), {
       st: field("CallStatut").toLowerCase(),
+      res: field("CallResultat").toLowerCase(),
+      q: field("CallQualif"),
       issue: field("CallIssue"), note: field("CallNote"),
     });
   });
@@ -1664,21 +1679,37 @@ const firstName = n => {
   return w ? w[0].toUpperCase() + w.slice(1).toLowerCase() : "";
 };
 
+// Formulaire par call, sur le modèle de la console Selfty : rangées de pills
+// Show-up / Résultat / Qualifié 1-10, un commentaire, un bouton Valider.
+const CALL_ST = [["present", "Présent"], ["noshow", "No-show"], ["reporte", "Reporté"], ["annule", "Annulé"]];
+const CALL_RES = [["vente", "Vente 🎉"], ["pasvente", "Pas de vente"], ["followup", "Follow-up"], ["paspitche", "Pas pitché"]];
+
 function callForm(c, e) {
+  const pill = (g, v, label, cur, extra) =>
+    '<button type="button" class="opt-pill' + (extra || "") + (cur === v ? " on" : "") +
+    '" data-g="' + g + '" data-v="' + v + '">' + label + '</button>';
+  const st = e.st === "fait" ? "present" : (e.st || "");   // compat anciennes lignes
+  let qRow = "";
+  for (let i = 1; i <= 10; i++) qRow += pill("q", String(i), i, String(e.q || ""), " qn");
   return '<form class="callform" data-uuid="' + esc(c.uuid) + '" data-name="' + esc(c.name) + '">' +
-    '<div class="frow2"><div><label class="flab">Statut du call</label>' +
-    '<select class="cf-st">' +
-    '<option value="fait"' + (!e.st || e.st === "fait" ? " selected" : "") + '>Fait</option>' +
-    '<option value="noshow"' + (e.st === "noshow" ? " selected" : "") + '>No-show</option>' +
-    '<option value="annule"' + (e.st === "annule" ? " selected" : "") + '>Annulé</option>' +
-    '</select></div>' +
-    '<div><label class="flab">Issue (vente)</label>' +
-    '<input type="text" class="cf-issue" placeholder="vente, KO, R2 prévu, à relancer…" value="' + esc(e.issue || "") + '"></div></div>' +
-    '<div><label class="flab">Note</label><input type="text" class="cf-note" value="' + esc(e.note || "") + '"></div>' +
+    '<div class="optrow"><span class="ol">Show-up</span>' + CALL_ST.map(([v, l]) => pill("st", v, l, st)).join("") + '</div>' +
+    '<div class="optrow"><span class="ol">Résultat</span>' + CALL_RES.map(([v, l]) => pill("res", v, l, e.res || "")).join("") + '</div>' +
+    '<div class="optrow"><span class="ol">Qualifié</span>' + qRow + '<span style="color:var(--muted);font-size:13px">/10</span></div>' +
+    '<textarea class="cf-note" placeholder="Commentaire : ton avis, les objections, la prochaine étape…">' + esc(e.note || "") + '</textarea>' +
     '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">' +
-    '<button type="submit" class="send" style="padding:8px 18px;font-size:14px">Enregistrer</button>' +
+    '<button type="submit" class="send" style="padding:8px 22px;font-size:14px">Valider</button>' +
+    '<span style="font-size:12.5px;color:var(--muted)">Enregistre ce que tu as coché dans le Sheet</span>' +
     '<p class="sendmsg cf-msg" hidden></p></div></form>';
 }
+
+/* une seule pill active par rangée ; re-cliquer désélectionne */
+document.addEventListener("click", e => {
+  const b = e.target.closest(".callform .opt-pill");
+  if (!b) return;
+  const wasOn = b.classList.contains("on");
+  b.closest(".optrow").querySelectorAll(".opt-pill").forEach(x => x.classList.remove("on"));
+  if (!wasOn) b.classList.add("on");
+});
 
 function renderCallsTabs(calText) {
   LAST_CAL = calText || "";
@@ -1723,6 +1754,11 @@ function renderCallsTabs(calText) {
   const todo = past.filter(c => c.status === "active" && !CALL_EDITS.has(c.uuid));
   const done = past.filter(c => c.status !== "active" || CALL_EDITS.has(c.uuid));
   el("car-count").textContent = todo.length ? "(" + todo.length + ")" : "";
+  el("car-pills").innerHTML =
+    '<button class="pill fpill" data-f="todo"><b>' + todo.length + '</b>&nbsp;à remplir</button>' +
+    '<button class="pill fpill" data-f="done"><b>' + done.length + '</b>&nbsp;remplis</button>' +
+    '<button class="pill fpill" data-f="all"><b>' + (todo.length + done.length) + '</b>&nbsp;tous</button>';
+  applyCarFilter();
   el("car-todo").innerHTML = todo.map(c =>
     '<div class="rcard deal" style="--dc:var(--s4)">' +
     '<div class="rhead"><span class="rname">' + esc(c.name) + '</span>' +
@@ -1732,22 +1768,43 @@ function renderCallsTabs(calText) {
     callForm(c, {}) + '</div>').join("") ||
     '<p class="empty-note">Rien à remplir : tous les calls passés ont leur suivi. 💪</p>';
 
-  const stLabel = { fait: ["fait ✔", "win"], noshow: ["no-show", "lose"], annule: ["annulé", "gray"] };
+  const stLabel = { present: ["présent ✔", "win"], fait: ["présent ✔", "win"], noshow: ["no-show", "lose"],
+                    reporte: ["reporté", "warn2"], annule: ["annulé", "gray"] };
+  const resLabel = { vente: ["vente 🎉", "win"], pasvente: ["pas de vente", "gray"],
+                     followup: ["follow-up", "next"], paspitche: ["pas pitché", "gray"] };
   el("car-done").innerHTML = done.map(c => {
-    const e = CALL_EDITS.get(c.uuid);
+    const e = CALL_EDITS.get(c.uuid) || {};
     const canceled = c.status !== "active";
-    const [lab, cls] = canceled ? ["annulé (Calendly)", "gray"] : (stLabel[(e || {}).st] || ["rempli", "ok"]);
+    const [lab, cls] = canceled ? ["annulé (Calendly)", "gray"] : (stLabel[e.st] || ["rempli", "ok"]);
+    const res = resLabel[e.res];
     const border = cls === "lose" ? "var(--bad)" : cls === "win" ? "var(--good)" : "var(--muted)";
     return '<div class="rcard deal" style="--dc:' + border + '">' +
       '<div class="rhead"><span class="rname">' + esc(c.name) + '</span>' +
       '<span class="badge ' + cls + '">' + lab + '</span>' +
+      (res ? '<span class="badge ' + res[1] + '">' + res[0] + '</span>' : '') +
+      (e.q ? '<span class="badge">qualifié ' + esc(e.q) + '/10</span>' : '') +
       '<span class="rmeta">' + esc(frDT(c.start)) + ' · ' + esc(c.evt) + '</span></div>' +
-      (e && e.issue ? '<p class="rstats">issue : <b>' + esc(e.issue) + '</b></p>' : '') +
-      (e && e.note ? '<p class="rnote">' + esc(e.note) + '</p>' : '') +
-      (canceled ? '' : '<details class="answers"><summary>Modifier le suivi</summary>' + callForm(c, e || {}) + '</details>') +
+      (e.issue ? '<p class="rstats">issue : <b>' + esc(e.issue) + '</b></p>' : '') +
+      (e.note ? '<p class="rnote">' + esc(e.note) + '</p>' : '') +
+      (canceled ? '' : '<details class="answers"><summary>Modifier le suivi</summary>' + callForm(c, e) + '</details>') +
       '</div>';
   }).join("") || '<p class="empty-note">Aucun call passé pour l\'instant.</p>';
 }
+
+/* filtre À remplir / Remplis / Tous, comme la console Selfty */
+let carFilter = "todo";
+function applyCarFilter() {
+  el("sec-car-todo").hidden = carFilter === "done";
+  el("sec-car-done").hidden = carFilter === "todo";
+  document.querySelectorAll("#car-pills .fpill").forEach(b =>
+    b.classList.toggle("on", b.dataset.f === carFilter));
+}
+el("car-pills").addEventListener("click", e => {
+  const b = e.target.closest(".fpill");
+  if (!b) return;
+  carFilter = b.dataset.f;
+  applyCarFilter();
+});
 
 /* envoi du suivi d'un call (délégué : les formulaires sont re-rendus) */
 document.addEventListener("submit", async e => {
@@ -1755,17 +1812,26 @@ document.addEventListener("submit", async e => {
   if (!f) return;
   e.preventDefault();
   const msg = f.querySelector(".cf-msg"), btn2 = f.querySelector("button.send");
-  const edit = {
-    st: f.querySelector(".cf-st").value,
-    issue: f.querySelector(".cf-issue").value.trim(),
-    note: f.querySelector(".cf-note").value.trim(),
+  const sel = g => {
+    const b = f.querySelector('.opt-pill[data-g="' + g + '"].on');
+    return b ? b.dataset.v : "";
   };
+  const edit = { st: sel("st"), res: sel("res"), q: sel("q"),
+                 note: f.querySelector(".cf-note").value.trim() };
+  if (!edit.st) {
+    msg.hidden = false; msg.className = "sendmsg ko cf-msg";
+    msg.textContent = "Coche le show-up du call.";
+    return;
+  }
   btn2.disabled = true;
   msg.hidden = false; msg.className = "sendmsg cf-msg"; msg.textContent = "Envoi…";
+  const lines = ["— Call : " + f.dataset.uuid + " · " + f.dataset.name,
+                 "— CallStatut : " + edit.st];
+  if (edit.res) lines.push("— CallResultat : " + edit.res);
+  if (edit.q) lines.push("— CallQualif : " + edit.q);
+  if (edit.note) lines.push("— CallNote : " + edit.note);
   try {
-    await postEodRow("CallSuivi", ["— Call : " + f.dataset.uuid + " · " + f.dataset.name,
-      "— CallStatut : " + edit.st, "— CallIssue : " + edit.issue,
-      "— CallNote : " + edit.note].join("\n"));
+    await postEodRow("CallSuivi", lines.join("\n"));
     CALL_EDITS.set(f.dataset.uuid, edit);
     renderCallsTabs(LAST_CAL);
   } catch (err) {
