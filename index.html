@@ -253,6 +253,14 @@
   .vivlink:hover { text-decoration: underline; }
   .missrow { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-size: 13px; color: var(--ink-2); }
 
+  /* onglets Calls Calendly */
+  .callform { display: grid; gap: 10px; margin-top: 10px; border-top: 1px solid var(--grid); padding-top: 10px; }
+  .callform select, .callform input[type="text"] {
+    font: inherit; font-size: 14px; color: var(--ink); background: var(--page);
+    border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; width: 100%;
+  }
+  .callform select:focus-visible, .callform input:focus-visible { outline: 2px solid var(--accent); outline-offset: -1px; }
+
   /* onglet Ventes */
   .dealedit { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); display: grid; gap: 10px; }
   .dealedit label.flab { display: block; font-size: 12px; font-weight: 600; color: var(--ink-2); margin-bottom: 3px; }
@@ -402,6 +410,8 @@
       <button data-tab="dash" class="on">📊 Vue d'ensemble</button>
       <button data-tab="eod">📝 EOD <span class="count" id="eod-count"></span></button>
       <button data-tab="tally">🎯 Scans Tally <span class="count" id="tally-count"></span></button>
+      <button data-tab="cav">📞 Calls à venir <span class="count" id="cav-count"></span></button>
+      <button data-tab="car">📋 Calls à remplir <span class="count" id="car-count"></span></button>
       <button data-tab="ventes">💰 Ventes <span class="count" id="ventes-count"></span></button>
       <button data-tab="script">📣 Script setting <span class="count" id="script-count"></span></button>
     </div>
@@ -516,6 +526,26 @@
         <h2 style="margin-bottom:10px">Scans en cours (partiels, non validés)</h2>
         <div class="rlist" id="tally-partial"></div>
       </section>
+    </div>
+
+    <div id="tab-cav" hidden>
+      <section>
+        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">Calls Calendly à venir</h2>
+        <div class="rlist" id="cav-list"></div>
+      </section>
+      <p class="formnote">RDV lus sur le Calendly de Lauric, rafraîchis toutes les 15 min (~7h-22h). Le bouton « Écrit pré-rédigé » envoie un message de confirmation avant le call.</p>
+    </div>
+
+    <div id="tab-car" hidden>
+      <section>
+        <h2 class="hsec" style="--hc:var(--s4);margin-bottom:10px">Calls passés à remplir</h2>
+        <div class="rlist" id="car-todo"></div>
+      </section>
+      <section>
+        <h2 class="hsec" style="--hc:var(--good);margin-bottom:10px">Calls remplis</h2>
+        <div class="rlist" id="car-done"></div>
+      </section>
+      <p class="formnote">Le suivi rempli ici part dans le Sheet EOD (lignes techniques « CallSuivi », exclues des stats) : rien d'autre à faire, la console le relit toute seule.</p>
     </div>
 
     <div id="tab-script" hidden>
@@ -807,6 +837,8 @@ const FALLBACK = { eod: "data/eod.csv", tally: "data/tally.csv", pf: "data/porte
 // Les soumissions partielles Tally ne sont jamais poussées vers le Sheet :
 // un job GitHub les récupère via l'API toutes les heures dans ce fichier.
 const PARTIALS_URL = "data/partielles.csv";
+// RDV Calendly de Lauric, écrits par le job GitHub (le jeton reste en secret)
+const CAL_URL = "data/calendly.csv";
 
 // Indices de colonnes du formulaire EOD (onglet "Réponses au formulaire 1")
 const COL = {
@@ -859,7 +891,7 @@ const iso = d => isoOf(d.getFullYear(), d.getMonth() + 1, d.getDate());
 
 // lignes à ignorer dans les stats : tests techniques + soumissions de la
 // boîte à idées (onglet Script setting), qui passent par le même Google Form
-const isTestRow = r => /test console|bo[iî]te\s*[aà]\s*id[ée]es|^\s*doublon\s*$|^\s*tracking\s*$|^\s*vente\s*$/i.test(r[COL.SETTER] || "");
+const isTestRow = r => /test console|bo[iî]te\s*[aà]\s*id[ée]es|^\s*doublon\s*$|^\s*tracking\s*$|^\s*vente\s*$|^\s*callsuivi\s*$/i.test(r[COL.SETTER] || "");
 const isIdeaRow = r => /bo[iî]te\s*[aà]\s*id[ée]es/i.test(r[COL.SETTER] || "");
 const isTrackRow = r => /^\s*tracking\s*$/i.test(r[COL.SETTER] || "");
 
@@ -910,6 +942,33 @@ function parseDealEdits(eodText) {
 }
 let DEAL_EDITS = new Map();
 let LAST_TALLY = "", LAST_PF = "";
+
+// Suivi des calls Calendly rempli par Lauric (onglet Calls à remplir) : lignes
+// « CallSuivi » du même Google Form, la dernière ligne par call gagne.
+//   — Call : <uuid> · <nom>
+//   — CallStatut : fait|noshow|annule
+//   — CallIssue : <texte>
+//   — CallNote : <texte>
+function parseCallEdits(eodText) {
+  const map = new Map();
+  parseCSV(eodText).slice(1).forEach(r => {
+    const joined = [r[5], r[6], r[12]].map(v => (v || "").trim()).filter(Boolean).join("\n");
+    if (!/—\s*Call\s*:/i.test(joined)) return;
+    const m = /—\s*Call\s*:[^\S\n]*([^\n·]+)/i.exec(joined);
+    if (!m) return;
+    const field = lab => {
+      const x = new RegExp("—\\s*" + lab + "\\s*:[^\\S\\n]*([^\\n]*)", "i").exec(joined);
+      return x ? x[1].trim() : "";
+    };
+    map.set(m[1].trim(), {
+      st: field("CallStatut").toLowerCase(),
+      issue: field("CallIssue"), note: field("CallNote"),
+    });
+  });
+  return map;
+}
+let CALL_EDITS = new Map();
+let LAST_CAL = "";
 
 function aggregate(eodText, tallyText) {
   const rows = parseCSV(eodText).slice(1);
@@ -992,6 +1051,7 @@ async function load(showSpinner) {
     setStatus("", "Actualisation…");
   }
   const partials = await get(PARTIALS_URL).catch(() => "");
+  const cal = await get(CAL_URL).catch(() => "");
   // le portefeuille a son propre fallback : un export CSV privé renvoie du HTML
   const pf = await get(SHEETS.pf)
     .then(t => /^\s*</.test(t) ? Promise.reject(new Error("privé")) : t)
@@ -1001,14 +1061,14 @@ async function load(showSpinner) {
     lastFetchAt = new Date();
     source = "live";
     render(aggregate(eod, tally));
-    renderExtras(eod, tally, partials, pf);
+    renderExtras(eod, tally, partials, pf, cal);
   } catch (e) {
     try {
       const [eod, tally] = await Promise.all([get(FALLBACK.eod), get(FALLBACK.tally)]);
       lastFetchAt = new Date();
       source = "snapshot";
       render(aggregate(eod, tally));
-      renderExtras(eod, tally, partials, pf);
+      renderExtras(eod, tally, partials, pf, cal);
     } catch (e2) {
       if (!source) {
         el("boot").textContent = "Impossible de charger les données. Vérifier la connexion, puis Actualiser.";
@@ -1417,7 +1477,7 @@ function mini(rows30, title, f, color, untrackedNote) {
    Onglets EOD + Scans Tally
    ============================================================ */
 
-const TABS = ["dash", "eod", "tally", "ventes", "script"];
+const TABS = ["dash", "eod", "tally", "cav", "car", "ventes", "script"];
 function showTab(name) {
   if (!TABS.includes(name)) return;
   document.querySelectorAll("#tabbar button").forEach(x => x.classList.toggle("on", x.dataset.tab === name));
@@ -1484,13 +1544,15 @@ const frDateTime = s => {
     " " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
 };
 
-function renderExtras(eodText, tallyText, partialsText, pfText) {
+function renderExtras(eodText, tallyText, partialsText, pfText, calText) {
   DUP_KEYS = parseDupKeys(eodText);
   DEAL_EDITS = parseDealEdits(eodText);
+  CALL_EDITS = parseCallEdits(eodText);
   LAST_TALLY = tallyText; LAST_PF = pfText || "";
   renderEodTab(eodText);
   renderTallyTab(tallyText, partialsText);
   renderVentesTab(tallyText, pfText || "");
+  renderCallsTabs(calText || "");
 }
 
 /* ---------- onglet EOD : derniers reports + pilotage ---------- */
@@ -1594,6 +1656,124 @@ function renderEodTab(eodText) {
 
   renderScriptTab(reports, ideas, trackRows);
 }
+
+/* ---------- onglets Calls Calendly : à venir + à remplir ---------- */
+
+const firstName = n => {
+  const w = (n || "").trim().split(/\s+/)[0] || "";
+  return w ? w[0].toUpperCase() + w.slice(1).toLowerCase() : "";
+};
+
+function callForm(c, e) {
+  return '<form class="callform" data-uuid="' + esc(c.uuid) + '" data-name="' + esc(c.name) + '">' +
+    '<div class="frow2"><div><label class="flab">Statut du call</label>' +
+    '<select class="cf-st">' +
+    '<option value="fait"' + (!e.st || e.st === "fait" ? " selected" : "") + '>Fait</option>' +
+    '<option value="noshow"' + (e.st === "noshow" ? " selected" : "") + '>No-show</option>' +
+    '<option value="annule"' + (e.st === "annule" ? " selected" : "") + '>Annulé</option>' +
+    '</select></div>' +
+    '<div><label class="flab">Issue (vente)</label>' +
+    '<input type="text" class="cf-issue" placeholder="vente, KO, R2 prévu, à relancer…" value="' + esc(e.issue || "") + '"></div></div>' +
+    '<div><label class="flab">Note</label><input type="text" class="cf-note" value="' + esc(e.note || "") + '"></div>' +
+    '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">' +
+    '<button type="submit" class="send" style="padding:8px 18px;font-size:14px">Enregistrer</button>' +
+    '<p class="sendmsg cf-msg" hidden></p></div></form>';
+}
+
+function renderCallsTabs(calText) {
+  LAST_CAL = calText || "";
+  const rows = parseCSV(LAST_CAL);
+  const h = rows[0] || [];
+  const ix = n => h.findIndex(c => (c || "").trim().toLowerCase() === n);
+  const iU = ix("uuid"), iD = ix("debut"), iE = ix("evenement"), iS = ix("statut"),
+        iN = ix("invite"), iM = ix("email"), iT = ix("telephone"),
+        iQ = ix("reponses"), iV = ix("lien visio");
+  const now = new Date();
+  const calls = rows.slice(1).filter(r => r.length > 3).map(r => {
+    const v = i => (i >= 0 && r[i] ? String(r[i]).trim() : "");
+    return { uuid: v(iU), start: new Date(v(iD)), name: v(iN) || "Sans nom", evt: v(iE),
+             status: v(iS), email: v(iM), tel: v(iT), qa: v(iQ), visio: v(iV) };
+  }).filter(c => c.uuid && !isNaN(c.start));
+
+  const frDT = d => d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }) +
+    " à " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+  const mailLine = c => c.email
+    ? '<p class="rstats" style="margin-top:6px"><a href="mailto:' + esc(c.email) + '" style="color:var(--accent)">' + esc(c.email) + '</a></p>' : '';
+
+  /* à venir */
+  const upcoming = calls.filter(c => c.status === "active" && c.start >= now).sort((a, b) => a.start - b.start);
+  el("cav-count").textContent = upcoming.length ? "(" + upcoming.length + ")" : "";
+  el("cav-list").innerHTML = upcoming.map(c => {
+    const today = iso(c.start) === iso(now);
+    const msg = "Salut " + firstName(c.name) + ", c'est Lauric. On a rendez-vous " + frDT(c.start) +
+      " pour ton heure d'accompagnement offerte. Je voulais juste confirmer que c'est toujours bon pour toi ?";
+    return '<div class="rcard deal" style="--dc:var(--accent)">' +
+      '<div class="rhead"><span class="rname">' + esc(c.name) + '</span>' +
+      '<span class="badge next">' + esc(frDT(c.start)) + '</span>' +
+      (today ? '<span class="badge win">aujourd\'hui</span>' : '') +
+      '<span class="rmeta">' + esc(c.evt) + '</span></div>' +
+      (c.qa ? '<p class="rstats">' + esc(c.qa) + '</p>' : '') +
+      (c.visio ? '<p class="rstats"><a href="' + esc(c.visio) + '" target="_blank" rel="noopener" style="color:var(--accent)">Lien visio ↗</a></p>' : '') +
+      waBtn(c.tel, msg) + mailLine(c) +
+      '</div>';
+  }).join("") || '<p class="empty-note">Aucun call à venir sur le Calendly de Lauric.</p>';
+
+  /* à remplir / remplis */
+  const past = calls.filter(c => c.start < now).sort((a, b) => b.start - a.start);
+  const todo = past.filter(c => c.status === "active" && !CALL_EDITS.has(c.uuid));
+  const done = past.filter(c => c.status !== "active" || CALL_EDITS.has(c.uuid));
+  el("car-count").textContent = todo.length ? "(" + todo.length + ")" : "";
+  el("car-todo").innerHTML = todo.map(c =>
+    '<div class="rcard deal" style="--dc:var(--s4)">' +
+    '<div class="rhead"><span class="rname">' + esc(c.name) + '</span>' +
+    '<span class="badge warn2">à remplir</span>' +
+    '<span class="rmeta">' + esc(frDT(c.start)) + ' · ' + esc(c.evt) + '</span></div>' +
+    (c.qa ? '<p class="rstats">' + esc(c.qa) + '</p>' : '') +
+    callForm(c, {}) + '</div>').join("") ||
+    '<p class="empty-note">Rien à remplir : tous les calls passés ont leur suivi. 💪</p>';
+
+  const stLabel = { fait: ["fait ✔", "win"], noshow: ["no-show", "lose"], annule: ["annulé", "gray"] };
+  el("car-done").innerHTML = done.map(c => {
+    const e = CALL_EDITS.get(c.uuid);
+    const canceled = c.status !== "active";
+    const [lab, cls] = canceled ? ["annulé (Calendly)", "gray"] : (stLabel[(e || {}).st] || ["rempli", "ok"]);
+    const border = cls === "lose" ? "var(--bad)" : cls === "win" ? "var(--good)" : "var(--muted)";
+    return '<div class="rcard deal" style="--dc:' + border + '">' +
+      '<div class="rhead"><span class="rname">' + esc(c.name) + '</span>' +
+      '<span class="badge ' + cls + '">' + lab + '</span>' +
+      '<span class="rmeta">' + esc(frDT(c.start)) + ' · ' + esc(c.evt) + '</span></div>' +
+      (e && e.issue ? '<p class="rstats">issue : <b>' + esc(e.issue) + '</b></p>' : '') +
+      (e && e.note ? '<p class="rnote">' + esc(e.note) + '</p>' : '') +
+      (canceled ? '' : '<details class="answers"><summary>Modifier le suivi</summary>' + callForm(c, e || {}) + '</details>') +
+      '</div>';
+  }).join("") || '<p class="empty-note">Aucun call passé pour l\'instant.</p>';
+}
+
+/* envoi du suivi d'un call (délégué : les formulaires sont re-rendus) */
+document.addEventListener("submit", async e => {
+  const f = e.target.closest("form.callform");
+  if (!f) return;
+  e.preventDefault();
+  const msg = f.querySelector(".cf-msg"), btn2 = f.querySelector("button.send");
+  const edit = {
+    st: f.querySelector(".cf-st").value,
+    issue: f.querySelector(".cf-issue").value.trim(),
+    note: f.querySelector(".cf-note").value.trim(),
+  };
+  btn2.disabled = true;
+  msg.hidden = false; msg.className = "sendmsg cf-msg"; msg.textContent = "Envoi…";
+  try {
+    await postEodRow("CallSuivi", ["— Call : " + f.dataset.uuid + " · " + f.dataset.name,
+      "— CallStatut : " + edit.st, "— CallIssue : " + edit.issue,
+      "— CallNote : " + edit.note].join("\n"));
+    CALL_EDITS.set(f.dataset.uuid, edit);
+    renderCallsTabs(LAST_CAL);
+  } catch (err) {
+    msg.className = "sendmsg ko cf-msg";
+    msg.textContent = "Échec de l'envoi, vérifier la connexion et réessayer.";
+    btn2.disabled = false;
+  }
+});
 
 /* ---------- onglet Script setting : vivier, A/B, tracking, idées ---------- */
 
@@ -2435,7 +2615,7 @@ function renderVentesTab(tallyText, pfText) {
 if (SNAPSHOT) {
   setStatus("stale", "Copie du " + SNAPSHOT.generated);
   render(aggregate(SNAPSHOT.eod, SNAPSHOT.tally));
-  renderExtras(SNAPSHOT.eod, SNAPSHOT.tally, SNAPSHOT.partials || "", SNAPSHOT.pf || "");
+  renderExtras(SNAPSHOT.eod, SNAPSHOT.tally, SNAPSHOT.partials || "", SNAPSHOT.pf || "", SNAPSHOT.cal || "");
 } else {
   // version installable sur téléphone (PWA) : uniquement sur la page GitHub Pages
   if ("serviceWorker" in navigator && location.protocol === "https:") {

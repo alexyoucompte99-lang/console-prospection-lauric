@@ -46,6 +46,12 @@ IDEA_NOTE_COLS = (5, 6, 12)
 TALLY_FORM_ID = "zxvka0"
 TALLY_KEY_FILE = HERE.parent / "tally-lead-magnet-anais" / "tally-api-key.txt"
 
+# Calls Calendly de Lauric (onglets « Calls à venir » et « Calls à remplir »).
+# Jeton : secret GitHub CALENDLY_TOKEN, ou fichier local gitignoré. Le jeton ne
+# doit JAMAIS apparaître dans la page ni dans le repo (public) : seul le CSV
+# data/calendly.csv, écrit ici, est exposé.
+CAL_KEY_FILE = HERE / "calendly-token.txt"
+
 COL_DATE, COL_SETTER = 1, 2
 COL_MSG_NEW, COL_MSG_OLD, COL_MSG_OTHER, COL_RELANCE = 3, 4, 5, 7
 COL_SUBS, COL_MSG_LIKE, COL_MSG_COM, COL_SCAN_OK, COL_SCAN_FILLED = 13, 15, 16, 17, 18
@@ -147,6 +153,66 @@ def fetch_partials(key: str) -> str:
         w.writerow([s.get("id", ""), last, row["prenom"], row["wa"],
                     row["profil"], row["score"], row["answered"], nb_q]
                    + [answers.get(q["id"], "") for q in detail_qs])
+    return out.getvalue()
+
+
+def calendly_token() -> str:
+    k = os.environ.get("CALENDLY_TOKEN", "").strip()
+    if not k and CAL_KEY_FILE.exists():
+        k = CAL_KEY_FILE.read_text().strip()
+    return k
+
+
+def fetch_calendly(token: str) -> str:
+    """CSV des RDV Calendly de Lauric (90 j passés -> 90 j futurs), un par ligne."""
+    from datetime import timedelta, timezone
+
+    def api(url):
+        req = urllib.request.Request(url, headers={
+            "Authorization": "Bearer " + token, "User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=60) as r:
+            return json.load(r)
+
+    me = api("https://api.calendly.com/users/me")["resource"]["uri"]
+    now = datetime.now(timezone.utc)
+    qs = urllib.parse.urlencode({
+        "user": me, "count": 100, "sort": "start_time:desc",
+        "min_start_time": (now - timedelta(days=90)).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "max_start_time": (now + timedelta(days=90)).strftime("%Y-%m-%dT%H:%M:%SZ"),
+    })
+    events, url = [], "https://api.calendly.com/scheduled_events?" + qs
+    while url:
+        body = api(url)
+        events += body.get("collection") or []
+        url = (body.get("pagination") or {}).get("next_page")
+
+    out = io.StringIO()
+    w = csv.writer(out)
+    w.writerow(["UUID", "Debut", "Evenement", "Statut", "Invite", "Email",
+                "Telephone", "Reponses", "Lien visio"])
+    for e in events:
+        uuid = e["uri"].rsplit("/", 1)[-1]
+        inv = {}
+        try:
+            coll = api(e["uri"] + "/invitees").get("collection") or []
+            inv = coll[0] if coll else {}
+        except Exception as exc:
+            print("invitee KO", uuid, exc)
+        phone = inv.get("text_reminder_number") or ""
+        qa_parts = []
+        for q in inv.get("questions_and_answers") or []:
+            ans = (q.get("answer") or "").strip()
+            if not ans:
+                continue
+            if not phone and re.search(r"t[ée]l[ée]phone|phone|whatsapp|num[ée]ro",
+                                       q.get("question") or "", re.I):
+                phone = ans
+            else:
+                qa_parts.append(((q.get("question") or "").strip() + " : " + ans))
+        loc = e.get("location") or {}
+        w.writerow([uuid, e.get("start_time", ""), (e.get("name") or "").strip(),
+                    e.get("status", ""), inv.get("name", ""), inv.get("email", ""),
+                    phone, " | ".join(qa_parts), loc.get("join_url") or ""])
     return out.getvalue()
 
 
@@ -297,12 +363,23 @@ def main():
             partials_file.write_text(fetch_partials(key), encoding="utf-8")
         else:
             print("TALLY_API_KEY absent : partielles non rafraîchies")
+        cal = calendly_token()
+        if cal:
+            try:
+                (DATA / "calendly.csv").write_text(fetch_calendly(cal), encoding="utf-8")
+            except Exception as e:
+                print("calendly non rafraîchi :", e)
+        else:
+            print("CALENDLY_TOKEN absent : calls non rafraîchis")
 
     eod_text = eod_file.read_text(encoding="utf-8")
     tally_text = tally_file.read_text(encoding="utf-8")
     partials_text = partials_file.read_text(encoding="utf-8") if partials_file.exists() else ""
     pf_text = pf_file.read_text(encoding="utf-8") if pf_file.exists() else ""
-    print(f"partielles: {max(0, len(partials_text.splitlines()) - 1)}")
+    cal_file = DATA / "calendly.csv"
+    cal_text = cal_file.read_text(encoding="utf-8") if cal_file.exists() else ""
+    print(f"partielles: {max(0, len(partials_text.splitlines()) - 1)}, "
+          f"calls calendly: {max(0, len(cal_text.splitlines()) - 1)}")
     recap(eod_text, tally_text)
 
     if "--data-only" in sys.argv:
@@ -313,7 +390,8 @@ def main():
                 + ",eod:" + js_string(eod_text)
                 + ",tally:" + js_string(tally_text)
                 + ",partials:" + js_string(partials_text)
-                + ",pf:" + js_string(pf_text) + "}")
+                + ",pf:" + js_string(pf_text)
+                + ",cal:" + js_string(cal_text) + "}")
     out = page.replace("/*__SNAPSHOT__*/null", snapshot, 1)
     if out == page:
         raise SystemExit("marqueur /*__SNAPSHOT__*/null introuvable dans index.html")

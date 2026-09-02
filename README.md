@@ -2,7 +2,7 @@
 
 Console de suivi du setting Instagram de Lauric : entonnoir (messages, nouveaux abonnés, scans acceptés, scans remplis) avec sélecteur Hier / 3 / 7 / 30 jours, chiffres clés avec delta vs 7 jours précédents et cumul du mois, tuiles « Messages par catégorie », vue par setter, messages par jour, alerte si l'EOD n'est plus rempli. Instagram uniquement, LinkedIn exclu.
 
-5 onglets : Vue d'ensemble (avec panneau « EOD non faits » par setter actif), EOD (formulaire + pilotage + derniers reports), Scans Tally (remplis + partiels, boutons WhatsApp), **Ventes** (suivi des calls de vente : à venir / en cours / conclues / perdus + CA signé approximatif, croisement des colonnes de suivi du Sheet Tally et du Sheet « portefeuille des leads », bouton « Voir toutes les infos du call » par carte, **modification directe de chaque deal par Lauric** et ajout d'un deal à la main), **Script setting** (process étiquette leads chauds, vivier d'URLs cliquables vers Insta, A/B testing des messages A Constant / B Cynthia avec résultats EOD par variante, tracking abonnés + scans (saisie directe du total d'abonnés par Lauric), propositions IA, boîte à idées).
+7 onglets : Vue d'ensemble (avec panneau « EOD non faits » par setter actif), EOD (formulaire + pilotage + derniers reports), Scans Tally (remplis + partiels, boutons WhatsApp), **Calls à venir** (RDV Calendly futurs, message WhatsApp de confirmation pré-call + lien visio), **Calls à remplir** (RDV Calendly passés avec suivi fait/no-show/annulé + issue + note, rempli par Lauric depuis la page via des lignes « CallSuivi » du Google Form, la dernière ligne par call gagne), **Ventes** (suivi des calls de vente : à venir / en cours / conclues / perdus + CA signé approximatif, croisement des colonnes de suivi du Sheet Tally et du Sheet « portefeuille des leads », bouton « Voir toutes les infos du call » par carte, **modification directe de chaque deal par Lauric** et ajout d'un deal à la main), **Script setting** (process étiquette leads chauds, vivier d'URLs cliquables vers Insta, A/B testing des messages A Constant / B Cynthia avec résultats EOD par variante, tracking abonnés + scans (saisie directe du total d'abonnés par Lauric), propositions IA, boîte à idées).
 
 Le Google Form EOD sert aussi de base d'écriture pour la console (le front GitHub Pages ne peut pas écrire dans un Sheet) : `postEodRow(setter, notes, date)` poste une ligne technique avec un setter réservé — `Boîte à idées`, `Doublon` (mise de côté d'un deal dans l'onglet Ventes, marqueur `— Doublon : <clé> · <nom>`, retour avec `— Doublon annulé : <clé>`, la dernière ligne gagne), `Vente` (modification d'un deal depuis l'onglet Ventes, voir plus bas) et `Tracking` (saisie directe de Lauric dans l'onglet Script setting). Ces 4 setters sont exclus de toutes les stats par `isTestRow`.
 
@@ -19,6 +19,10 @@ La console est installable sur téléphone (PWA : manifest + service worker + ic
 | **Repo** | https://github.com/alexyoucompte99-lang/console-prospection-lauric |
 
 La page live n'a pas besoin d'être régénérée : elle lit les Google Sheets **en direct dans le navigateur**, à chaque ouverture, au retour sur l'onglet (si la dernière lecture date de plus de 5 min), toutes les 10 min tant que l'onglet est visible, et sur clic du bouton **Actualiser**. Le petit badge en haut à droite dit d'où viennent les chiffres et de quand ils datent.
+
+## Calendly
+
+Les RDV de Lauric viennent de l'API Calendly (`fetch_calendly` dans build.py, 90 j passés → 90 j futurs, invités + téléphone extrait des questions). Le jeton (personal access token de lauric.sergent.pro@gmail.com, reçu le 03/09/2026) vit dans le secret GitHub `CALENDLY_TOKEN` et localement dans `calendly-token.txt` (gitignoré). **Il ne doit jamais apparaître dans la page ni être commité** : seul `data/calendly.csv` est public, comme les autres CSV.
 
 ## Sources
 
