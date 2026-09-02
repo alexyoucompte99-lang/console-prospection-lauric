@@ -261,6 +261,11 @@
     min-height: 54px; resize: vertical;
   }
   .callform textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: -1px; }
+  .callform input[type="text"], .callform input[type="url"] {
+    font: inherit; font-size: 14px; color: var(--ink); background: var(--page);
+    border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; width: 100%;
+  }
+  .callform input:focus-visible { outline: 2px solid var(--accent); outline-offset: -1px; }
   .optrow { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
   .optrow .ol { font-size: 11.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); width: 76px; flex: none; }
   .opt-pill {
@@ -977,6 +982,7 @@ function parseCallEdits(eodText) {
       st: field("CallStatut").toLowerCase(),
       res: field("CallResultat").toLowerCase(),
       q: field("CallQualif"),
+      propo: field("CallPropo"), rec: field("CallRec"),
       issue: field("CallIssue"), note: field("CallNote"),
     });
   });
@@ -1695,6 +1701,10 @@ function callForm(c, e) {
     '<div class="optrow"><span class="ol">Show-up</span>' + CALL_ST.map(([v, l]) => pill("st", v, l, st)).join("") + '</div>' +
     '<div class="optrow"><span class="ol">Résultat</span>' + CALL_RES.map(([v, l]) => pill("res", v, l, e.res || "")).join("") + '</div>' +
     '<div class="optrow"><span class="ol">Qualifié</span>' + qRow + '<span style="color:var(--muted);font-size:13px">/10</span></div>' +
+    '<div class="frow2"><div><label class="flab">Proposition faite</label>' +
+    '<input type="text" class="cf-propo" placeholder="ex : 5000 ht / 6 mois, audit 890…" value="' + esc(e.propo || "") + '"></div>' +
+    '<div><label class="flab">Enregistrement du call (lien)</label>' +
+    '<input type="url" class="cf-rec" placeholder="https://…" value="' + esc(e.rec || "") + '"></div></div>' +
     '<textarea class="cf-note" placeholder="Commentaire : ton avis, les objections, la prochaine étape…">' + esc(e.note || "") + '</textarea>' +
     '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">' +
     '<button type="submit" class="send" style="padding:8px 22px;font-size:14px">Valider</button>' +
@@ -1784,7 +1794,9 @@ function renderCallsTabs(calText) {
       (res ? '<span class="badge ' + res[1] + '">' + res[0] + '</span>' : '') +
       (e.q ? '<span class="badge">qualifié ' + esc(e.q) + '/10</span>' : '') +
       '<span class="rmeta">' + esc(frDT(c.start)) + ' · ' + esc(c.evt) + '</span></div>' +
+      (e.propo ? '<p class="rstats">proposition : <b>' + esc(e.propo) + '</b></p>' : '') +
       (e.issue ? '<p class="rstats">issue : <b>' + esc(e.issue) + '</b></p>' : '') +
+      (e.rec ? '<p class="rstats">🎙️ <a href="' + esc(/^https?:\/\//i.test(e.rec) ? e.rec : "https://" + e.rec) + '" target="_blank" rel="noopener" style="color:var(--accent)">Écouter l\'enregistrement du call ↗</a></p>' : '') +
       (e.note ? '<p class="rnote">' + esc(e.note) + '</p>' : '') +
       (canceled ? '' : '<details class="answers"><summary>Modifier le suivi</summary>' + callForm(c, e) + '</details>') +
       '</div>';
@@ -1817,6 +1829,8 @@ document.addEventListener("submit", async e => {
     return b ? b.dataset.v : "";
   };
   const edit = { st: sel("st"), res: sel("res"), q: sel("q"),
+                 propo: f.querySelector(".cf-propo").value.trim(),
+                 rec: f.querySelector(".cf-rec").value.trim(),
                  note: f.querySelector(".cf-note").value.trim() };
   if (!edit.st) {
     msg.hidden = false; msg.className = "sendmsg ko cf-msg";
@@ -1829,6 +1843,8 @@ document.addEventListener("submit", async e => {
                  "— CallStatut : " + edit.st];
   if (edit.res) lines.push("— CallResultat : " + edit.res);
   if (edit.q) lines.push("— CallQualif : " + edit.q);
+  if (edit.propo) lines.push("— CallPropo : " + edit.propo);
+  if (edit.rec) lines.push("— CallRec : " + edit.rec);
   if (edit.note) lines.push("— CallNote : " + edit.note);
   try {
     await postEodRow("CallSuivi", lines.join("\n"));
