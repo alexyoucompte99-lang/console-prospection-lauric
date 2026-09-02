@@ -298,6 +298,47 @@ def notify_new_ideas(old_text: str, new_text: str) -> None:
                       + "\n\nhttps://alexyoucompte99-lang.github.io/console-prospection-lauric/#script")
 
 
+def notify_new_calls(old_text: str, new_text: str) -> None:
+    """Un message Telegram (Alex) par nouveau RDV apparu sur le Calendly de Lauric."""
+    if not old_text.strip():        # première exécution : pas de référence
+        return
+
+    def rows(text):
+        r = list(csv.reader(io.StringIO(text)))
+        return (r[0] if r else []), r[1:]
+
+    _, old_rows = rows(old_text)
+    header, new_rows = rows(new_text)
+    if not header:
+        return
+    seen = {r[0] for r in old_rows if r}
+    idx = {(c or "").strip().lower(): i for i, c in enumerate(header)}
+
+    def col(row, name):
+        i = idx.get(name)
+        return row[i].strip() if i is not None and i < len(row) else ""
+
+    for r in [x for x in new_rows if x and x[0] not in seen][:10]:
+        if col(r, "statut") != "active":
+            continue
+        quand = col(r, "debut")
+        try:
+            from zoneinfo import ZoneInfo
+            dt = datetime.fromisoformat(quand.replace("Z", "+00:00")).astimezone(
+                ZoneInfo("Europe/Paris"))
+            jours = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
+            mois = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
+                    "août", "septembre", "octobre", "novembre", "décembre"]
+            quand = f"{jours[dt.weekday()]} {dt.day} {mois[dt.month - 1]} à {dt:%H:%M}"
+        except Exception:
+            pass
+        send_telegram("📞 Nouveau call booké chez Lauric\n\n"
+                      + (col(r, "invite") or "Sans nom") + " · " + quand
+                      + ("\n" + col(r, "evenement") if col(r, "evenement") else "")
+                      + ("\nTél : " + col(r, "telephone") if col(r, "telephone") else "")
+                      + "\n\nhttps://alexyoucompte99-lang.github.io/console-prospection-lauric/#cav")
+
+
 def js_string(s: str) -> str:
     """JSON sûr à l'intérieur d'un <script> (pas de </script> ni de <!-- qui s'échappe)."""
     return json.dumps(s, ensure_ascii=False).replace("<", "\\u003c").replace("\u2028", "\\u2028")
@@ -366,7 +407,11 @@ def main():
         cal = calendly_token()
         if cal:
             try:
-                (DATA / "calendly.csv").write_text(fetch_calendly(cal), encoding="utf-8")
+                cal_path = DATA / "calendly.csv"
+                old_cal = cal_path.read_text(encoding="utf-8") if cal_path.exists() else ""
+                new_cal = fetch_calendly(cal)
+                notify_new_calls(old_cal, new_cal)
+                cal_path.write_text(new_cal, encoding="utf-8")
             except Exception as e:
                 print("calendly non rafraîchi :", e)
         else:

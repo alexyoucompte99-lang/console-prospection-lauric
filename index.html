@@ -1569,7 +1569,7 @@ function renderExtras(eodText, tallyText, partialsText, pfText, calText) {
   DUP_KEYS = parseDupKeys(eodText);
   DEAL_EDITS = parseDealEdits(eodText);
   CALL_EDITS = parseCallEdits(eodText);
-  LAST_TALLY = tallyText; LAST_PF = pfText || "";
+  LAST_TALLY = tallyText; LAST_PF = pfText || ""; LAST_CAL = calText || "";
   renderEodTab(eodText);
   renderTallyTab(tallyText, partialsText);
   renderVentesTab(tallyText, pfText || "");
@@ -1850,6 +1850,7 @@ document.addEventListener("submit", async e => {
     await postEodRow("CallSuivi", lines.join("\n"));
     CALL_EDITS.set(f.dataset.uuid, edit);
     renderCallsTabs(LAST_CAL);
+    renderVentesTab(LAST_TALLY, LAST_PF);   // un call « vente » met à jour l'onglet Ventes
   } catch (err) {
     msg.className = "sendmsg ko cf-msg";
     msg.textContent = "Échec de l'envoi, vérifier la connexion et réessayer.";
@@ -2605,6 +2606,25 @@ function renderVentesTab(tallyText, pfText) {
 
   deals.forEach(d => Object.assign(d, classifyDeal(d, today)));
 
+  // 2b) calls Calendly marqués « vente » dans Calls à remplir : le deal du même
+  // prénom passe gagné tout seul (évite la double saisie). Une modification
+  // manuelle de Lauric (bloc 3) garde le dernier mot.
+  const ventesCalls = new Map();
+  parseCSV(LAST_CAL).slice(1).forEach(r => {
+    const e = CALL_EDITS.get((r[0] || "").trim());
+    if (!e || e.res !== "vente") return;
+    const fn = firstName(r[4] || "").toLowerCase();
+    if (fn) ventesCalls.set(fn, { date: (r[1] || "").slice(0, 10), propo: e.propo || "" });
+  });
+  deals.forEach(d => {
+    const fn = firstName(d.name || "").toLowerCase();
+    const vc = fn && ventesCalls.get(fn);
+    if (!vc || d.st === "gagne") return;
+    d.st = "gagne";
+    d.fromCall = vc;
+    if (!d.issue && vc.propo) d.issue = vc.propo;   // alimente l'affichage et le CA
+  });
+
   // 3) ce que Lauric a modifié depuis la console : passe devant les Sheets
   deals.forEach(d => { if (DEAL_EDITS.has(d.key)) applyDealEdit(d, DEAL_EDITS.get(d.key), today); });
   // une modification dont la clé n'existe dans aucun Sheet = deal ajouté à la main
@@ -2650,6 +2670,7 @@ function renderVentesTab(tallyText, pfText) {
       (d.from === "scan" ? "🎯 Scan Dirigeant" : d.from === "man" ? "✍️ Ajouté à la main" : "💼 Portefeuille") + '</span>');
     if (d.edited && d.from !== "man") badges.push('<span class="badge gray">modifié</span>');
     if (d.st === "gagne") badges.push('<span class="badge win">vente ✔</span>');
+    if (d.fromCall) badges.push('<span class="badge next">📞 vente au call' + (d.fromCall.date ? " du " + esc(frDate(d.fromCall.date)) : "") + '</span>');
     if (d.st === "perdu") badges.push('<span class="badge lose">KO</span>');
     if (d.st === "avenir") badges.push('<span class="badge next">' + esc(frDate(d.when)) + '</span>');
     if (d.cible === "non") badges.push('<span class="badge gray">hors cible</span>');
