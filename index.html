@@ -277,6 +277,10 @@
   .opt-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .opt-pill.on { background: var(--accent); border-color: var(--accent); color: #fff; }
   .opt-pill.qn { width: 34px; height: 34px; padding: 0; text-align: center; }
+  .stagerow .opt-pill.on { background: var(--good); border-color: var(--good); }
+  .vkpi.vf { cursor: pointer; }
+  .vkpi.vf:hover { outline: 2px solid var(--kc); outline-offset: 1px; }
+  .vkpi.vf.on { outline: 3px solid var(--kc); outline-offset: 1px; }
 
   /* onglet Ventes */
   .dealedit { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); display: grid; gap: 10px; }
@@ -523,7 +527,10 @@
       </section>
 
       <section>
-        <h2 style="margin-bottom:10px">Pilotage · quoi améliorer pour booker plus de calls</h2>
+        <div class="sec-head">
+          <h2>Pilotage · quoi améliorer pour booker plus de calls</h2>
+          <div class="tally-counts" id="pilot-pills" style="margin:0"></div>
+        </div>
         <div class="pilot" id="pilot"></div>
       </section>
 
@@ -584,7 +591,10 @@
 
       <section>
         <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px">🔥 Vivier leads chauds (étiquettes)</h2>
-        <div class="rlist" id="vivier-list"></div>
+        <details class="answers" id="vivier-fold">
+          <summary id="vivier-sum">Voir le vivier</summary>
+          <div class="rlist" id="vivier-list" style="margin-top:10px"></div>
+        </details>
       </section>
 
       <section>
@@ -740,23 +750,23 @@ J'aime bien savoir qui se cache derrière les nouveaux profils. Je te laisse un 
         </form>
         <p class="formnote" style="margin-top:10px">Le deal apparaît dans les listes du dessous et compte dans les compteurs, exactement comme ceux qui viennent des Sheets. Modifiable et retirable ensuite avec « ✏️ Modifier ».</p>
       </details>
-      <section>
+      <section id="sec-v-avenir">
         <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">Calls et relances à venir</h2>
         <div class="rlist" id="v-avenir"></div>
       </section>
-      <section>
+      <section id="sec-v-encours">
         <h2 class="hsec" style="--hc:var(--s4);margin-bottom:10px">En cours (call fait, pas encore conclu)</h2>
         <div class="rlist" id="v-encours"></div>
       </section>
-      <section>
+      <section id="sec-v-gagnes">
         <h2 class="hsec" style="--hc:var(--good);margin-bottom:10px">Ventes conclues</h2>
         <div class="rlist" id="v-gagnes"></div>
       </section>
-      <section>
+      <section id="sec-v-perdus">
         <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px">Perdus / KO (anciens appels)</h2>
         <div class="rlist" id="v-perdus"></div>
       </section>
-      <section>
+      <section id="sec-v-dup">
         <h2 class="hsec" style="--hc:var(--muted);margin-bottom:10px">🗂️ Doublons mis de côté <span class="count" id="v-dup-count"></span></h2>
         <div class="rlist" id="v-doublons"></div>
         <p class="formnote">Sortis des compteurs et des listes du dessus. Ils restent ici, rien n'est supprimé : « Remettre dans le suivi » les fait revenir.</p>
@@ -991,6 +1001,20 @@ function parseCallEdits(eodText) {
 let CALL_EDITS = new Map();
 let LAST_CAL = "";
 
+// Étapes d'encaissement d'une vente (comme la console Selfty) : lignes « Vente »
+// avec « — Étape vente : <clé> · vente|contrat|paye », la dernière gagne.
+function parseStages(eodText) {
+  const map = new Map();
+  parseCSV(eodText).slice(1).forEach(r => {
+    const joined = [r[5], r[6], r[12]].map(v => (v || "").trim()).filter(Boolean).join("\n");
+    const re = /—\s*[ÉE]tape vente\s*:[^\S\n]*([^\n·]+)·\s*(vente|contrat|paye)/gi;
+    let m;
+    while ((m = re.exec(joined))) map.set(m[1].trim(), m[2].toLowerCase());
+  });
+  return map;
+}
+let STAGE_EDITS = new Map();
+
 function aggregate(eodText, tallyText) {
   const rows = parseCSV(eodText).slice(1);
   const days = new Map();
@@ -1211,10 +1235,15 @@ function render(DATA) {
   /* ---------- EOD non faits, par setter actif (14 j) sur les 7 derniers jours ---------- */
   const missBox = el("eod-missing");
   const activeSet14 = [...new Set(lastNDays(14).flatMap(r => Object.keys(r.bySetter)))].sort();
+  // un setter n'est en retard qu'à partir de son premier EOD (Cynthia a rejoint le 3/09)
+  const firstSeen = {};
+  DATA.days.forEach(d => Object.keys(d.bySetter || {}).forEach(s => {
+    if (!(s in firstSeen)) firstSeen[s] = d.date;
+  }));
   if (activeSet14.length) {
     const rows7 = lastNDays(7);
     const perSetter = activeSet14
-      .map(s => ({ s, miss: rows7.filter(r => !(s in r.bySetter)).map(r => r.date) }))
+      .map(s => ({ s, miss: rows7.filter(r => !(s in r.bySetter) && r.date >= (firstSeen[s] || "")).map(r => r.date) }))
       .filter(x => x.miss.length);
     missBox.hidden = false;
     missBox.innerHTML = '<h3 class="mini-title" style="margin-bottom:8px">EOD non faits · 7 derniers jours</h3>' +
@@ -1569,6 +1598,7 @@ function renderExtras(eodText, tallyText, partialsText, pfText, calText) {
   DUP_KEYS = parseDupKeys(eodText);
   DEAL_EDITS = parseDealEdits(eodText);
   CALL_EDITS = parseCallEdits(eodText);
+  STAGE_EDITS = parseStages(eodText);
   LAST_TALLY = tallyText; LAST_PF = pfText || ""; LAST_CAL = calText || "";
   renderEodTab(eodText);
   renderTallyTab(tallyText, partialsText);
@@ -1645,7 +1675,10 @@ function renderEodTab(eodText) {
   EOD_REPORTS = reports;
   fillSetterPicker(reports);
   updateSubsHint();
-  renderPilot(reports);
+  PILOT_REPORTS = reports;
+  renderPilotPills(reports);
+  renderPilot(pilotSetter === "all" ? reports
+    : reports.filter(r => (r.setter || "").toLowerCase() === pilotSetter));
 
   el("eod-count").textContent = "";
   el("eod-list").innerHTML = reports.slice(0, 30).map(r => {
@@ -1851,6 +1884,12 @@ document.addEventListener("submit", async e => {
     CALL_EDITS.set(f.dataset.uuid, edit);
     renderCallsTabs(LAST_CAL);
     renderVentesTab(LAST_TALLY, LAST_PF);   // un call « vente » met à jour l'onglet Ventes
+    if (edit.res === "vente") {
+      // notif instantanée sur le topic ntfy (comme la vente instantanée Selfty)
+      fetch("https://ntfy.sh/" + NTFY_TOPIC_PAGE, { method: "POST",
+        headers: { "Title": "Vente marquee dans la console" },
+        body: "💰 Vente : " + f.dataset.name + (edit.propo ? " · " + edit.propo : "") }).catch(() => {});
+    }
   } catch (err) {
     msg.className = "sendmsg ko cf-msg";
     msg.textContent = "Échec de l'envoi, vérifier la connexion et réessayer.";
@@ -1885,6 +1924,9 @@ function renderScriptTab(reports, ideas, trackRows) {
   }));
   const vivier = [...seen.values()].sort((a, b) => a.date < b.date ? 1 : -1);
   el("script-count").textContent = vivier.length ? "(" + vivier.length + ")" : "";
+  el("vivier-sum").textContent = vivier.length
+    ? "🔥 " + vivier.length + " lead" + (vivier.length > 1 ? "s" : "") + " chaud" + (vivier.length > 1 ? "s" : "") + " · déplier / replier"
+    : "Aucun lead chaud pour l'instant";
   el("vivier-list").innerHTML = vivier.map(v => {
     const href = /^https?:\/\//i.test(v.url) ? v.url : "https://" + v.url;
     return '<div class="rcard deal" style="--dc:var(--bad)">' +
@@ -1946,6 +1988,31 @@ function hbars(items, color) {
     '<span class="hv">' + fmt(i.v) + (total ? ' <small>' + Math.round(100 * i.v / total) + '&nbsp;%</small>' : '') + '</span></div>'
   ).join("");
 }
+
+/* pilotage par setter : Constant et Cynthia ont deux stratégies différentes */
+let PILOT_REPORTS = [];
+let pilotSetter = "all";
+function renderPilotPills(reports) {
+  const last = reports.length ? reports[0].date : null;
+  const recent = reports.filter(r => {
+    if (!last) return false;
+    const d = (new Date(last + "T12:00:00") - new Date(r.date + "T12:00:00")) / 86400000;
+    return d >= 0 && d < 30;
+  });
+  const names = [...new Set(recent.map(r => (r.setter || "").trim()).filter(n => n && n !== "?"))];
+  el("pilot-pills").innerHTML =
+    '<button class="pill fpill' + (pilotSetter === "all" ? " on" : "") + '" data-s="all">Tous</button>' +
+    names.map(n => '<button class="pill fpill' + (pilotSetter === n.toLowerCase() ? " on" : "") +
+      '" data-s="' + esc(n.toLowerCase()) + '">' + esc(n) + '</button>').join("");
+}
+el("pilot-pills").addEventListener("click", e => {
+  const b = e.target.closest(".fpill");
+  if (!b) return;
+  pilotSetter = b.dataset.s;
+  renderPilotPills(PILOT_REPORTS);
+  renderPilot(pilotSetter === "all" ? PILOT_REPORTS
+    : PILOT_REPORTS.filter(r => (r.setter || "").toLowerCase() === pilotSetter));
+});
 
 function renderPilot(reports) {
   const box = el("pilot");
@@ -2645,19 +2712,29 @@ function renderVentesTab(tallyText, pfText) {
   const perdus = by("perdu").reverse();
 
   // CA signé approximatif : premier montant >= 100 trouvé dans l'issue des deals gagnés
-  const ca = gagnes.reduce((a, d) => {
+  const amount = d => {
     const m = /(\d[\d\s]{2,})/.exec((d.issue || "").replace(/\/\s*\d+\s*mois/i, ""));
     const v = m ? +m[1].replace(/\s/g, "") : 0;
-    return a + (v >= 100 ? v : 0);
-  }, 0);
+    return v >= 100 ? v : 0;
+  };
+  const ca = gagnes.reduce((a, d) => a + amount(d), 0);
+  const stage = d => STAGE_EDITS.get(d.key) || "vente";
+  const signes = gagnes.filter(d => stage(d) !== "vente");
+  const payes = gagnes.filter(d => stage(d) === "paye");
+  const caPaye = payes.reduce((a, d) => a + amount(d), 0);
 
   el("ventes-count").textContent = gagnes.length ? "(" + gagnes.length + ")" : "";
+  const sub = t => '<div class="l" style="font-size:11px;opacity:0.85;text-transform:none;letter-spacing:0">' + t + '</div>';
   el("v-kpis").innerHTML =
-    '<div class="vkpi" style="--kc:var(--accent)"><div class="n">' + avenir.length + '</div><div class="l">🗓 à venir</div></div>' +
-    '<div class="vkpi" style="--kc:var(--s4)"><div class="n">' + encours.length + '</div><div class="l">⏳ en cours</div></div>' +
-    '<div class="vkpi" style="--kc:var(--good)"><div class="n">' + gagnes.length + '</div><div class="l">✅ ventes</div></div>' +
-    '<div class="vkpi" style="--kc:var(--bad)"><div class="n">' + perdus.length + '</div><div class="l">❌ perdus</div></div>' +
-    '<div class="vkpi" style="--kc:var(--s3)"><div class="n">' + fmt(ca) + '&nbsp;€</div><div class="l">💶 CA signé (approx.)</div></div>';
+    '<div class="vkpi vf" data-vf="avenir" style="--kc:var(--accent)"><div class="n">' + avenir.length + '</div><div class="l">🗓 à venir</div></div>' +
+    '<div class="vkpi vf" data-vf="encours" style="--kc:var(--s4)"><div class="n">' + encours.length + '</div><div class="l">⏳ en cours</div></div>' +
+    '<div class="vkpi vf" data-vf="gagne" style="--kc:var(--good)"><div class="n">' + gagnes.length + '</div><div class="l">✅ ventes</div>' +
+      sub("📄 " + signes.length + " contrat" + (signes.length > 1 ? "s" : "") + " signé" + (signes.length > 1 ? "s" : "") +
+          " · 💶 " + payes.length + " payé" + (payes.length > 1 ? "s" : "")) + '</div>' +
+    '<div class="vkpi vf" data-vf="perdu" style="--kc:var(--bad)"><div class="n">' + perdus.length + '</div><div class="l">❌ perdus</div></div>' +
+    '<div class="vkpi" style="--kc:var(--s3)"><div class="n">' + fmt(ca) + '&nbsp;€</div><div class="l">💶 CA signé (approx.)</div>' +
+      sub("dont " + fmt(caPaye) + " € encaissés") + '</div>';
+  applyVFilter();
 
   const color = { avenir: "var(--accent)", encours: "var(--s4)", gagne: "var(--good)", perdu: "var(--bad)" };
   const dupBtn = d => d.key
@@ -2670,6 +2747,8 @@ function renderVentesTab(tallyText, pfText) {
       (d.from === "scan" ? "🎯 Scan Dirigeant" : d.from === "man" ? "✍️ Ajouté à la main" : "💼 Portefeuille") + '</span>');
     if (d.edited && d.from !== "man") badges.push('<span class="badge gray">modifié</span>');
     if (d.st === "gagne") badges.push('<span class="badge win">vente ✔</span>');
+    if (d.st === "gagne" && stage(d) === "paye") badges.push('<span class="badge win">💶 payé</span>');
+    else if (d.st === "gagne" && stage(d) === "contrat") badges.push('<span class="badge next">📄 contrat signé</span>');
     if (d.fromCall) badges.push('<span class="badge next">📞 vente au call' + (d.fromCall.date ? " du " + esc(frDate(d.fromCall.date)) : "") + '</span>');
     if (d.st === "perdu") badges.push('<span class="badge lose">KO</span>');
     if (d.st === "avenir") badges.push('<span class="badge next">' + esc(frDate(d.when)) + '</span>');
@@ -2694,6 +2773,16 @@ function renderVentesTab(tallyText, pfText) {
         : '') +
       (d.wa ? waBtn(d.wa, null) : "") +
       (d.mail ? '<p class="rstats" style="margin-top:6px"><a href="mailto:' + esc(d.mail) + '" style="color:var(--accent)">' + esc(d.mail) + '</a></p>' : '') +
+      (d.st === "gagne" && d.key
+        ? (() => {
+            const cur = stage(d);
+            const rank = { vente: 0, contrat: 1, paye: 2 };
+            const p = (v, label) => '<button type="button" class="opt-pill' + (rank[cur] >= rank[v] ? " on" : "") +
+              '" data-stage="' + v + '">' + label + '</button>';
+            return '<div class="optrow stagerow" data-key="' + esc(d.key) + '" data-name="' + esc(d.name) + '" style="margin-top:8px">' +
+              '<span class="ol">Suivi</span>' + p("vente", "💰 Vente conclue") + p("contrat", "📄 Contrat signé") + p("paye", "💶 Paiement reçu") + '</div>';
+          })()
+        : '') +
       '<div class="dealbtns"><button type="button" class="copybtn editbtn">✏️ Modifier</button>' + dupBtn(d) + '</div>' +
       dealEditPanel(d) +
       '</div>';
@@ -2713,6 +2802,44 @@ function renderVentesTab(tallyText, pfText) {
     (hi < 0 ? "Portefeuille indisponible pour l'instant." : "Une date au format jj/mm dans les colonnes R1 / R2 / Propo suffit pour apparaître dans « à venir ». ") +
     "« ✏️ Modifier » sur une carte force le statut, la date du prochain call, l'offre et une note sans toucher au Sheet : la console garde ta version tant que tu n'as pas cliqué « Revenir aux données du Sheet ».";
 }
+
+/* filtres de l'onglet Ventes : cliquer une tuile n'affiche que sa liste, re-cliquer remet tout */
+let vFilter = "all";
+function applyVFilter() {
+  const map = { avenir: "sec-v-avenir", encours: "sec-v-encours", gagne: "sec-v-gagnes", perdu: "sec-v-perdus" };
+  Object.entries(map).forEach(([k, id]) => { el(id).hidden = vFilter !== "all" && vFilter !== k; });
+  el("sec-v-dup").hidden = vFilter !== "all";
+  document.querySelectorAll("#v-kpis .vf").forEach(t => t.classList.toggle("on", t.dataset.vf === vFilter));
+}
+el("v-kpis").addEventListener("click", e => {
+  const t = e.target.closest(".vf");
+  if (!t) return;
+  vFilter = (vFilter === t.dataset.vf) ? "all" : t.dataset.vf;
+  applyVFilter();
+});
+
+/* étapes de vente : clic = on avance à cette étape, re-clic = on recule d'un cran */
+document.addEventListener("click", async e => {
+  const b = e.target.closest(".stagerow .opt-pill");
+  if (!b) return;
+  const row = b.closest(".stagerow");
+  const cur = STAGE_EDITS.get(row.dataset.key) || "vente";
+  const v = b.dataset.stage;
+  const next = v !== cur ? v : (v === "paye" ? "contrat" : "vente");
+  STAGE_EDITS.set(row.dataset.key, next);
+  renderVentesTab(LAST_TALLY, LAST_PF);
+  try {
+    await postEodRow("Vente", "— Étape vente : " + row.dataset.key + " · " + next);
+  } catch (err) { /* le Sheet rattrapera au prochain envoi */ }
+  if (next === "paye") {
+    fetch("https://ntfy.sh/" + NTFY_TOPIC_PAGE, { method: "POST",
+      headers: { "Title": "Paiement recu" },
+      body: "💶 Paiement reçu : " + row.dataset.name }).catch(() => {});
+  }
+});
+
+// topic ntfy déjà suivi par Lauric (et Alex) : la page peut y publier en direct
+const NTFY_TOPIC_PAGE = "scan-dirigeant-lauric-d7k4q2";
 
 /* ---------- démarrage ---------- */
 if (SNAPSHOT) {
