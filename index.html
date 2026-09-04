@@ -439,6 +439,7 @@
       <button data-tab="dash" class="on">📊 Vue d'ensemble</button>
       <button data-tab="eod">📝 EOD <span class="count" id="eod-count"></span></button>
       <button data-tab="tally">🎯 Scans Tally <span class="count" id="tally-count"></span></button>
+      <button data-tab="leads">👤 Leads <span class="count" id="leads-count"></span></button>
       <button data-tab="calls">📞 Calls <span class="count" id="calls-count"></span></button>
       <button data-tab="ventes">💰 Ventes <span class="count" id="ventes-count"></span></button>
       <button data-tab="script">📣 Script setting <span class="count" id="script-count"></span></button>
@@ -559,6 +560,15 @@
         <h2 style="margin-bottom:10px">Scans en cours (partiels, non validés)</h2>
         <div class="rlist" id="tally-partial"></div>
       </section>
+    </div>
+
+    <div id="tab-leads" hidden>
+      <div class="tally-counts" id="leads-pills"></div>
+      <section>
+        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">👤 Tous les leads et leur avancée</h2>
+        <div class="rlist" id="leads-list"></div>
+      </section>
+      <p class="formnote" id="leads-note"></p>
     </div>
 
     <div id="tab-calls" hidden>
@@ -1143,6 +1153,7 @@ async function load(showSpinner) {
   }
   const partials = await get(PARTIALS_URL).catch(() => "");
   const cal = await get(CAL_URL).catch(() => "");
+  const leadsCsv = await get("data/leads-insta.csv").catch(() => "");
   // le portefeuille a son propre fallback : un export CSV privé renvoie du HTML
   const pf = await get(SHEETS.pf)
     .then(t => /^\s*</.test(t) ? Promise.reject(new Error("privé")) : t)
@@ -1152,14 +1163,14 @@ async function load(showSpinner) {
     lastFetchAt = new Date();
     source = "live";
     render(aggregate(eod, tally));
-    renderExtras(eod, tally, partials, pf, cal);
+    renderExtras(eod, tally, partials, pf, cal, leadsCsv);
   } catch (e) {
     try {
       const [eod, tally] = await Promise.all([get(FALLBACK.eod), get(FALLBACK.tally)]);
       lastFetchAt = new Date();
       source = "snapshot";
       render(aggregate(eod, tally));
-      renderExtras(eod, tally, partials, pf, cal);
+      renderExtras(eod, tally, partials, pf, cal, leadsCsv);
     } catch (e2) {
       if (!source) {
         el("boot").textContent = "Impossible de charger les données. Vérifier la connexion, puis Actualiser.";
@@ -1573,7 +1584,7 @@ function mini(rows30, title, f, color, untrackedNote) {
    Onglets EOD + Scans Tally
    ============================================================ */
 
-const TABS = ["dash", "eod", "tally", "calls", "ventes", "script", "abonnes"];
+const TABS = ["dash", "eod", "tally", "leads", "calls", "ventes", "script", "abonnes"];
 const TAB_ALIAS = { cav: "calls", car: "calls" };   // anciens liens #cav / #car
 function showTab(name) {
   name = TAB_ALIAS[name] || name;
@@ -1642,7 +1653,7 @@ const frDateTime = s => {
     " " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
 };
 
-function renderExtras(eodText, tallyText, partialsText, pfText, calText) {
+function renderExtras(eodText, tallyText, partialsText, pfText, calText, leadsText) {
   DUP_KEYS = parseDupKeys(eodText);
   DEAL_EDITS = parseDealEdits(eodText);
   CALL_EDITS = parseCallEdits(eodText);
@@ -1653,6 +1664,7 @@ function renderExtras(eodText, tallyText, partialsText, pfText, calText) {
   renderTallyTab(tallyText, partialsText);
   renderVentesTab(tallyText, pfText || "");
   renderCallsTabs(calText || "");
+  renderLeadsTab(leadsText || "");
 }
 
 /* ---------- onglet EOD : derniers reports + pilotage ---------- */
@@ -1925,6 +1937,124 @@ function renderCallsTabs(calText) {
   renderCockpit();
   applySearch();
 }
+
+/* ---------- onglet Leads : base centrale de tous les leads et leur avancée ---------- */
+
+const LEAD_STAGES = [
+  ["accroche", "✉️ accroche envoyée", "var(--muted)"],
+  ["vu", "👀 vu sans réponse", "var(--s4)"],
+  ["repondu", "💬 répondu", "var(--accent)"],
+  ["chaud", "🔥 lead chaud", "var(--s2)"],
+  ["scan", "🎯 scan rempli", "var(--funnel-3)"],
+  ["call", "📞 call", "var(--funnel-4)"],
+  ["vente", "💰 vente", "var(--good)"],
+];
+const LEAD_RANK = Object.fromEntries(LEAD_STAGES.map(([k], i) => [k, i]));
+
+function renderLeadsTab(leadsText) {
+  const map = new Map();
+  const norm = s => (s || "").trim().toLowerCase();
+  const keyOf = (nom, pseudo) => firstName(nom || "").toLowerCase() || norm(pseudo);
+  const touch = (key, patch, stage) => {
+    if (!key) return;
+    const o = map.get(key) || { key, stages: new Set(), srcs: new Set() };
+    if (stage) o.stages.add(stage);
+    Object.entries(patch || {}).forEach(([k, v]) => {
+      if (k === "src") { if (v) o.srcs.add(v); }
+      else if (v && !o[k]) o[k] = v;
+    });
+    map.set(key, o);
+  };
+
+  /* 1) relevé manuel des convs Insta (data/leads-insta.csv) */
+  const lr = parseCSV(leadsText || "");
+  const lh = lr[0] || [];
+  const lx = n => lh.findIndex(c => norm(c) === n);
+  const iPs = lx("pseudo"), iNo = lx("nom"), iSt = lx("statut"), iPc = lx("premier contact"),
+        iDe = lx("detail"), iRe = lx("releve");
+  let releve = "";
+  lr.slice(1).forEach(r => {
+    const v = i => (i >= 0 && r[i] ? String(r[i]).trim() : "");
+    if (!v(iNo) && !v(iPs)) return;
+    releve = v(iRe) || releve;
+    const st = v(iSt);
+    const stage = st === "repondu" ? "repondu" : (st === "vu" || st === "reagi") ? "vu" : "accroche";
+    touch(keyOf(v(iNo), v(iPs)),
+      { nom: v(iNo), pseudo: v(iPs), premier: v(iPc), detail: v(iDe),
+        src: "Relevé Insta", reagi: st === "reagi" ? "1" : "" }, stage);
+  });
+
+  /* 2) étiquettes leads chauds (URLs reportées dans l'EOD) */
+  (EOD_REPORTS || []).forEach(r => (r.urls || []).forEach(u => {
+    const ps = instaName(u).replace(/^@/, "");
+    if (ps) touch(norm(ps), { nom: "@" + ps, pseudo: ps, src: "Étiquette" }, "chaud");
+  }));
+
+  /* 3) scans Tally remplis (+ vente si l'issue le dit) */
+  const tr = parseCSV(LAST_TALLY || "");
+  const th = tr[0] || [];
+  const tx = n => th.findIndex(c => norm(c).startsWith(n));
+  const tPre = tx("votre prénom"), tWa = tx("votre numéro whatsapp"), tSc = tx("score"), tIs = tx("issue");
+  tr.slice(1).forEach(r => {
+    if (!(r[0] || "").trim()) return;
+    const v = i => (i >= 0 && r[i] ? String(r[i]).trim() : "");
+    if (!v(tPre)) return;
+    touch(keyOf(v(tPre), ""), { nom: v(tPre), wa: v(tWa), score: v(tSc), src: "Scan" }, "scan");
+    if (/client|vente/i.test(v(tIs))) touch(keyOf(v(tPre), ""), {}, "vente");
+  });
+
+  /* 4) calls Calendly + suivi (vente si le call est validé vente) */
+  parseCSV(LAST_CAL || "").slice(1).forEach(r => {
+    const nom = (r[4] || "").trim();
+    if (!nom || (r[3] || "").trim() !== "active") return;
+    touch(keyOf(nom, ""), { nom, tel: (r[6] || "").trim(), src: "Calendly" }, "call");
+    const e = CALL_EDITS.get((r[0] || "").trim());
+    if (e && e.res === "vente") touch(keyOf(nom, ""), {}, "vente");
+  });
+
+  const leads = [...map.values()].map(o => {
+    o.best = [...o.stages].sort((a, b) => LEAD_RANK[b] - LEAD_RANK[a])[0] || "accroche";
+    return o;
+  }).sort((a, b) => LEAD_RANK[b.best] - LEAD_RANK[a.best]);
+
+  el("leads-count").textContent = leads.length ? "(" + leads.length + ")" : "";
+  el("leads-pills").innerHTML =
+    '<button class="pill fpill on" data-f="all"><b>' + leads.length + '</b>&nbsp;tous</button>' +
+    LEAD_STAGES.map(([k, label]) => {
+      const n = leads.filter(l => l.best === k).length;
+      return n ? '<button class="pill fpill" data-f="' + k + '"><b>' + n + '</b>&nbsp;' + label + '</button>' : "";
+    }).join("");
+
+  el("leads-list").innerHTML = leads.map(l => {
+    const [, label, color] = LEAD_STAGES.find(([k]) => k === l.best);
+    return '<div class="rcard deal" data-stage="' + l.best + '" style="--dc:' + color + '">' +
+      '<div class="rhead"><span class="rname">' + esc(l.nom || l.key) + '</span>' +
+      '<span class="badge" style="color:' + color + ';border-color:' + color + '">' + label + '</span>' +
+      (l.reagi ? '<span class="badge next">❤️ a réagi</span>' : '') +
+      [...l.srcs].map(s => '<span class="badge gray">' + esc(s) + '</span>').join("") +
+      (l.premier ? '<span class="rmeta">1er contact : ' + esc(l.premier) + '</span>' : '') +
+      '</div>' +
+      (l.score ? '<p class="rstats">score scan : <b>' + esc(l.score) + '</b></p>' : '') +
+      (l.detail ? '<p class="rnote">' + esc(l.detail) + '</p>' : '') +
+      (l.pseudo ? '<p class="rstats" style="margin-top:6px"><a class="vivlink" href="https://www.instagram.com/' + esc(l.pseudo) + '/" target="_blank" rel="noopener">@' + esc(l.pseudo) + ' ↗</a></p>' : '') +
+      (l.wa || l.tel ? waBtn(l.wa || l.tel, null) : '') +
+      '</div>';
+  }).join("") || '<p class="empty-note">Aucun lead pour l\'instant.</p>';
+
+  el("leads-note").textContent =
+    "Base centrale, fusionnée par prénom : relevé manuel des conversations Insta" +
+    (releve ? " (dernier relevé le " + releve + ", fait par Claude dans Chrome)" : "") +
+    ", étiquettes leads chauds de l'EOD, scans Tally remplis et calls Calendly. Le badge coloré = l'étape la plus avancée connue du lead.";
+  applySearch();
+}
+
+el("leads-pills").addEventListener("click", e => {
+  const b = e.target.closest(".fpill");
+  if (!b) return;
+  document.querySelectorAll("#leads-pills .fpill").forEach(x => x.classList.toggle("on", x === b));
+  const f = b.dataset.f;
+  document.querySelectorAll("#leads-list .rcard").forEach(c => { c.hidden = f !== "all" && c.dataset.stage !== f; });
+});
 
 /* vues de l'onglet Calls : À venir / À remplir / Remplis / À relancer */
 let callsView = "avenir";
@@ -3165,7 +3295,7 @@ const NTFY_TOPIC_PAGE = "scan-dirigeant-lauric-d7k4q2";
 if (SNAPSHOT) {
   setStatus("stale", "Copie du " + SNAPSHOT.generated);
   render(aggregate(SNAPSHOT.eod, SNAPSHOT.tally));
-  renderExtras(SNAPSHOT.eod, SNAPSHOT.tally, SNAPSHOT.partials || "", SNAPSHOT.pf || "", SNAPSHOT.cal || "");
+  renderExtras(SNAPSHOT.eod, SNAPSHOT.tally, SNAPSHOT.partials || "", SNAPSHOT.pf || "", SNAPSHOT.cal || "", "");
 } else {
   // version installable sur téléphone (PWA) : uniquement sur la page GitHub Pages
   if ("serviceWorker" in navigator && location.protocol === "https:") {
