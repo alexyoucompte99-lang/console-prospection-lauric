@@ -442,6 +442,7 @@
       <button data-tab="calls">📞 Calls <span class="count" id="calls-count"></span></button>
       <button data-tab="ventes">💰 Ventes <span class="count" id="ventes-count"></span></button>
       <button data-tab="script">📣 Script setting <span class="count" id="script-count"></span></button>
+      <button data-tab="abonnes">🆕 Nouveaux abonnés <span class="count" id="abonnes-count"></span></button>
     </div>
     <input type="search" id="q" class="search" placeholder="🔍 Rechercher un prénom…" autocomplete="off">
 
@@ -717,6 +718,16 @@ J'aime bien savoir qui se cache derrière les nouveaux profils. Je te laisse un 
           </div>
         </form>
         <div class="rlist" id="ideas-list" style="margin-top:14px"></div>
+      </section>
+    </div>
+
+    <div id="tab-abonnes" hidden>
+      <section>
+        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">🆕 Nouveaux abonnés à contacter</h2>
+        <div class="card" style="margin-bottom:14px">
+          <p class="rstats" style="margin:0">Claude passe sur la liste des abonnés du compte, repère les nouveaux, analyse chaque profil et propose un premier message personnalisé dans l'esprit du script. <b>L'envoi reste 100% manuel</b> : ouvrir le profil, relire le message, l'adapter si besoin, envoyer. Puis cocher « Contacté ».</p>
+        </div>
+        <div id="abonnes-list"></div>
       </section>
     </div>
 
@@ -1562,7 +1573,7 @@ function mini(rows30, title, f, color, untrackedNote) {
    Onglets EOD + Scans Tally
    ============================================================ */
 
-const TABS = ["dash", "eod", "tally", "calls", "ventes", "script"];
+const TABS = ["dash", "eod", "tally", "calls", "ventes", "script", "abonnes"];
 const TAB_ALIAS = { cav: "calls", car: "calls" };   // anciens liens #cav / #car
 function showTab(name) {
   name = TAB_ALIAS[name] || name;
@@ -2612,6 +2623,64 @@ document.addEventListener("click", e => {
     navigator.clipboard.writeText(src.textContent).then(done).catch(fallback);
   else fallback();
 });
+
+/* ---------- onglet Nouveaux abonnés : liste maintenue par Claude ---------- */
+// Chaque passage de Claude sur la liste des abonnés ajoute ses entrées ici
+// (les plus récentes en premier). La coche « Contacté » est locale au téléphone
+// ou au navigateur qui l'a cochée (localStorage), c'est la V1 du test.
+const NEW_FOLLOWERS = [
+  {
+    pseudo: "nadlin202533", nom: "nadou", detecte: "04/09/2026",
+    profil: "Profil muet : 0 publication, 65 abonnés mais suit 4 233 comptes. Probablement un compte de masse, priorité basse.",
+    cible: "❓ À qualifier (profil vide)",
+    message: "Hello Nadou ! Merci de me suivre 🙏\n\nJe suis allé voir ton profil mais il ne dit pas grand-chose sur toi, du coup je suis curieux : qu'est-ce qui t'a amené par ici ?\n\nTu diriges une boîte ou une équipe ?"
+  },
+  {
+    pseudo: "samcaulier", nom: "Sam Caulier", detecte: "04/09/2026",
+    profil: "3 reels (rando/hiking, voyage), photo de couple, compte catégorisé « Produit/service » : sûrement une activité derrière. Le plus intéressant des trois.",
+    cible: "✅ Potentiel (compte pro « Produit/service »)",
+    message: "Hello Sam ! Merci pour ton abonnement, ça fait plaisir 🙏\n\nJ'ai vu tes reels de rando, le trip hiking donne envie ! Et j'ai remarqué que ton compte est en mode pro, du coup je suis curieux de savoir qui se cache derrière : tu es à ton compte ou tu diriges une équipe ?"
+  },
+  {
+    pseudo: "99dam_ien99", nom: "Damien99", detecte: "04/09/2026",
+    profil: "Compte privé tout neuf : 0 publication, 1 abonné, suit 187 comptes. Impossible de personnaliser plus.",
+    cible: "❓ À qualifier (compte privé)",
+    message: "Hello Damien ! Merci pour ton abonnement 🙏\n\nTon profil est privé donc je n'ai pas pu voir qui tu es, et j'aime bien savoir à qui je parle 😄\n\nDis-moi, tu es dirigeant ou en passe de le devenir ?"
+  }
+];
+function renderAbonnes() {
+  const box = el("abonnes-list");
+  if (!box) return;
+  let seen = {};
+  try { seen = JSON.parse(localStorage.getItem("nf-contacted") || "{}"); } catch (e) {}
+  const todo = NEW_FOLLOWERS.filter(f => !seen[f.pseudo]).length;
+  const cnt = el("abonnes-count");
+  if (cnt) cnt.textContent = todo ? "· " + todo : "";
+  box.innerHTML = NEW_FOLLOWERS.map((f, i) => {
+    const done = !!seen[f.pseudo];
+    return '<div class="card" style="margin-bottom:14px' + (done ? ";opacity:.55" : "") + '">' +
+      '<div class="rhead"><span class="rname">' + esc(f.nom) + ' <span style="font-weight:500;color:var(--muted)">@' + esc(f.pseudo) + '</span></span>' +
+      '<span class="badge">détecté le ' + esc(f.detecte) + '</span></div>' +
+      '<p class="rstats" style="margin:8px 0 2px"><b>' + esc(f.cible) + '</b> · ' + esc(f.profil) + '</p>' +
+      '<div class="msgcard" id="nf-msg-' + i + '">' + esc(f.message) + '</div>' +
+      '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px">' +
+      '<a class="copybtn" style="text-decoration:none;display:inline-block" href="https://www.instagram.com/' + esc(f.pseudo) + '/" target="_blank" rel="noopener">Ouvrir le profil ↗</a>' +
+      '<button type="button" class="copybtn" data-copy="nf-msg-' + i + '" style="margin-top:8px">Copier le message</button>' +
+      '<label style="font-size:13px;display:inline-flex;gap:6px;align-items:center;cursor:pointer;margin-top:8px">' +
+      '<input type="checkbox" class="nf-done" data-pseudo="' + esc(f.pseudo) + '"' + (done ? " checked" : "") + '> Contacté</label>' +
+      '</div></div>';
+  }).join("") || '<div class="card"><p class="rstats" style="margin:0">Aucun nouvel abonné en attente.</p></div>';
+}
+document.addEventListener("change", e => {
+  const c = e.target.closest(".nf-done");
+  if (!c) return;
+  let seen = {};
+  try { seen = JSON.parse(localStorage.getItem("nf-contacted") || "{}"); } catch (err) {}
+  if (c.checked) seen[c.dataset.pseudo] = true; else delete seen[c.dataset.pseudo];
+  try { localStorage.setItem("nf-contacted", JSON.stringify(seen)); } catch (err) {}
+  renderAbonnes();
+});
+renderAbonnes();
 
 /* filtre Tous / Remplis / En cours (les pills de compteurs sont cliquables) */
 let tallyFilter = "all";
