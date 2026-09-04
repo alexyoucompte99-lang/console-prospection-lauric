@@ -2,7 +2,7 @@
 
 Console de suivi du setting Instagram de Lauric : entonnoir (messages, nouveaux abonnés, scans acceptés, scans remplis) avec sélecteur Hier / 3 / 7 / 30 jours, chiffres clés avec delta vs 7 jours précédents et cumul du mois, tuiles « Messages par catégorie », vue par setter, messages par jour, alerte si l'EOD n'est plus rempli. Instagram uniquement, LinkedIn exclu.
 
-7 onglets : Vue d'ensemble (avec panneau « EOD non faits » par setter actif), EOD (formulaire + pilotage + derniers reports), Scans Tally (remplis + partiels, boutons WhatsApp), **Calls à venir** (RDV Calendly futurs, message WhatsApp de confirmation pré-call + lien visio), **Calls à remplir** (RDV Calendly passés avec suivi fait/no-show/annulé + issue + note, rempli par Lauric depuis la page via des lignes « CallSuivi » du Google Form, la dernière ligne par call gagne), **Ventes** (suivi des calls de vente : à venir / en cours / conclues / perdus + CA signé approximatif, croisement des colonnes de suivi du Sheet Tally et du Sheet « portefeuille des leads », bouton « Voir toutes les infos du call » par carte, **modification directe de chaque deal par Lauric** et ajout d'un deal à la main), **Script setting** (process étiquette leads chauds, vivier d'URLs cliquables vers Insta, A/B testing des messages A Constant / B Cynthia avec résultats EOD par variante, tracking abonnés + scans (saisie directe du total d'abonnés par Lauric), propositions IA, boîte à idées).
+6 onglets : Vue d'ensemble (avec panneau « EOD non faits » par setter actif), EOD (formulaire + pilotage + derniers reports), Scans Tally (remplis + partiels, boutons WhatsApp), **Calls** (fusion le 04/09 : vues À venir / À remplir / Remplis / À relancer par pills ; à venir = RDV Calendly futurs avec message WhatsApp de confirmation pré-call + lien visio ; à relancer = calls follow-up ou pas de vente avec message WhatsApp de relance ; à remplir = RDV Calendly passés avec suivi fait/no-show/annulé + issue + note, rempli par Lauric depuis la page via des lignes « CallSuivi » du Google Form, la dernière ligne par call gagne), **Ventes** (suivi des calls de vente : à venir / en cours / conclues / perdus + CA signé approximatif, croisement des colonnes de suivi du Sheet Tally et du Sheet « portefeuille des leads », bouton « Voir toutes les infos du call » par carte, **modification directe de chaque deal par Lauric** et ajout d'un deal à la main), **Script setting** (process étiquette leads chauds, vivier d'URLs cliquables vers Insta, A/B testing des messages A Constant / B Cynthia avec résultats EOD par variante, tracking abonnés + scans (saisie directe du total d'abonnés par Lauric), propositions IA, boîte à idées).
 
 Le Google Form EOD sert aussi de base d'écriture pour la console (le front GitHub Pages ne peut pas écrire dans un Sheet) : `postEodRow(setter, notes, date)` poste une ligne technique avec un setter réservé — `Boîte à idées`, `Doublon` (mise de côté d'un deal dans l'onglet Ventes, marqueur `— Doublon : <clé> · <nom>`, retour avec `— Doublon annulé : <clé>`, la dernière ligne gagne), `Vente` (modification d'un deal depuis l'onglet Ventes, voir plus bas), `Tracking` (saisie directe de Lauric dans l'onglet Script setting) et `CallSuivi` (suivi d'un call Calendly depuis l'onglet Calls à remplir : `— Call : <uuid> · <nom>` + `— CallStatut : fait|noshow|annule` + `— CallIssue` + `— CallNote`). Ces 5 setters sont exclus de toutes les stats par `isTestRow`.
 
@@ -19,6 +19,17 @@ La console est installable sur téléphone (PWA : manifest + service worker + ic
 | **Repo** | https://github.com/alexyoucompte99-lang/console-prospection-lauric |
 
 La page live n'a pas besoin d'être régénérée : elle lit les Google Sheets **en direct dans le navigateur**, à chaque ouverture, au retour sur l'onglet (si la dernière lecture date de plus de 5 min), toutes les 10 min tant que l'onglet est visible, et sur clic du bouton **Actualiser**. Le petit badge en haut à droite dit d'où viennent les chiffres et de quand ils datent.
+
+## Ajouts du 04/09
+
+- **Cockpit** en haut de la Vue d'ensemble : calls du jour, à remplir, ventes du mois, € encaissés — tuiles cliquables vers l'onglet concerné.
+- **Funnel complet** « Du message à la vente · 30 jours » sous l'entonnoir (messages → scans acceptés → calls faits → ventes).
+- **Récap par mois** dans Ventes (calls, faits, no-show, show-up %, ventes, CA depuis la propo des calls).
+- **Versements** sur les ventes : payé en 1x/2x/3x + versements reçus (marqueur `— Versements : <clé> · r/t`), CA encaissé au prorata.
+- **Recherche par prénom** sous les onglets, filtre toutes les cartes.
+- **Dates relatives** (« hier », « dans 3 j ») sur les cartes calls et deals.
+- **Rappel « Calls du jour »** : notif ntfy vers 7h Paris (jeton `data/.rappel-calls` commité pour ne l'envoyer qu'une fois par jour).
+- Les anciens liens `#cav` / `#car` redirigent vers `#calls` (TAB_ALIAS).
 
 ## Calendly
 

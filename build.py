@@ -336,7 +336,61 @@ def notify_new_calls(old_text: str, new_text: str) -> None:
                       + (col(r, "invite") or "Sans nom") + " · " + quand
                       + ("\n" + col(r, "evenement") if col(r, "evenement") else "")
                       + ("\nTél : " + col(r, "telephone") if col(r, "telephone") else "")
-                      + "\n\nhttps://alexyoucompte99-lang.github.io/console-prospection-lauric/#cav")
+                      + "\n\nhttps://alexyoucompte99-lang.github.io/console-prospection-lauric/#calls")
+
+
+def notify_today_calls(cal_text: str) -> None:
+    """Vers 7h Paris, une notif ntfy (topic Lauric) avec les calls du jour.
+    Une seule fois par jour : jeton data/.rappel-calls, commité avec data/."""
+    try:
+        from zoneinfo import ZoneInfo
+        now = datetime.now(ZoneInfo("Europe/Paris"))
+    except Exception:
+        return
+    if now.hour < 7:
+        return
+    stamp = DATA / ".rappel-calls"
+    today = now.strftime("%Y-%m-%d")
+    if stamp.exists() and stamp.read_text().strip() == today:
+        return
+    stamp.write_text(today)   # écrit même sans call du jour, pour ne tester qu'une fois
+    rows = list(csv.reader(io.StringIO(cal_text)))
+    if not rows:
+        return
+    idx = {(c or "").strip().lower(): i for i, c in enumerate(rows[0])}
+
+    def col(row, name):
+        i = idx.get(name)
+        return row[i].strip() if i is not None and i < len(row) else ""
+
+    todays = []
+    for r in rows[1:]:
+        if not r or col(r, "statut") != "active":
+            continue
+        try:
+            from zoneinfo import ZoneInfo
+            dt = datetime.fromisoformat(col(r, "debut").replace("Z", "+00:00")).astimezone(
+                ZoneInfo("Europe/Paris"))
+        except Exception:
+            continue
+        if dt.strftime("%Y-%m-%d") == today:
+            todays.append(f"{dt:%H:%M} · " + (col(r, "invite") or "Sans nom")
+                          + (" · " + col(r, "telephone") if col(r, "telephone") else ""))
+    if not todays:
+        return
+    body = ("📞 " + str(len(todays)) + " call" + ("s" if len(todays) > 1 else "")
+            + " aujourd'hui :\n" + "\n".join(sorted(todays))
+            + "\n\nhttps://alexyoucompte99-lang.github.io/console-prospection-lauric/#calls")
+    try:
+        req = urllib.request.Request(
+            "https://ntfy.sh/" + NTFY_TOPIC,
+            data=body.encode("utf-8"),
+            headers={"Title": "Calls du jour", "Tags": "telephone_receiver",
+                     "User-Agent": "Mozilla/5.0"})
+        urllib.request.urlopen(req, timeout=30).read()
+        print("rappel calls du jour envoyé")
+    except Exception as e:
+        print("rappel calls du jour échoué :", e)
 
 
 def js_string(s: str) -> str:
@@ -412,6 +466,7 @@ def main():
                 new_cal = fetch_calendly(cal)
                 notify_new_calls(old_cal, new_cal)
                 cal_path.write_text(new_cal, encoding="utf-8")
+                notify_today_calls(new_cal)
             except Exception as e:
                 print("calendly non rafraîchi :", e)
         else:
