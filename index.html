@@ -564,6 +564,13 @@
 
     <div id="tab-leads" hidden>
       <div class="tally-counts" id="leads-pills"></div>
+      <section id="sec-leads-ab" hidden>
+        <h2 class="hsec" style="--hc:var(--s1);margin-bottom:10px">🧪 A/B des accroches (relevé Insta)</h2>
+        <div class="card">
+          <div class="tbl-scroll" style="margin-top:0" id="leads-ab"></div>
+          <p class="formnote" style="margin-top:10px" id="leads-ab-note"></p>
+        </div>
+      </section>
       <section>
         <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">👤 Tous les leads et leur avancée</h2>
         <div class="rlist" id="leads-list"></div>
@@ -1970,17 +1977,26 @@ function renderLeadsTab(leadsText) {
   const lr = parseCSV(leadsText || "");
   const lh = lr[0] || [];
   const lx = n => lh.findIndex(c => norm(c) === n);
-  const iPs = lx("pseudo"), iNo = lx("nom"), iSt = lx("statut"), iPc = lx("premier contact"),
-        iDe = lx("detail"), iRe = lx("releve");
+  const iPs = lx("pseudo"), iNo = lx("nom"), iSt = lx("statut"), iVa = lx("variante"),
+        iPc = lx("premier contact"), iDe = lx("detail"), iRe = lx("releve");
   let releve = "";
+  const vstats = {};   // stats par variante d'accroche (A / B / ancienne / perso)
   lr.slice(1).forEach(r => {
     const v = i => (i >= 0 && r[i] ? String(r[i]).trim() : "");
     if (!v(iNo) && !v(iPs)) return;
     releve = v(iRe) || releve;
     const st = v(iSt);
+    const va = v(iVa);
+    if (va) {
+      const s = vstats[va] = vstats[va] || { env: 0, vu: 0, reagi: 0, rep: 0 };
+      s.env++;
+      if (st !== "nonvu") s.vu++;          // une réaction ou une réponse implique une vue
+      if (st === "reagi") s.reagi++;
+      if (st === "repondu") s.rep++;
+    }
     const stage = st === "repondu" ? "repondu" : (st === "vu" || st === "reagi") ? "vu" : "accroche";
     touch(keyOf(v(iNo), v(iPs)),
-      { nom: v(iNo), pseudo: v(iPs), premier: v(iPc), detail: v(iDe),
+      { nom: v(iNo), pseudo: v(iPs), premier: v(iPc), detail: v(iDe), variante: va,
         src: "Relevé Insta", reagi: st === "reagi" ? "1" : "" }, stage);
   });
 
@@ -2023,13 +2039,35 @@ function renderLeadsTab(leadsText) {
     LEAD_STAGES.map(([k, label]) => {
       const n = leads.filter(l => l.best === k).length;
       return n ? '<button class="pill fpill" data-f="' + k + '"><b>' + n + '</b>&nbsp;' + label + '</button>' : "";
-    }).join("");
+    }).join("") +
+    ["A", "B"].filter(k => vstats[k]).map(k =>
+      '<button class="pill fpill" data-fv="' + k + '"><b>' + vstats[k].env + '</b>&nbsp;' +
+      (k === "A" ? "🅰 message A" : "🅱 message B") + '</button>').join("");
+
+  /* stats A/B des accroches */
+  const VAR_LABELS = { A: "🅰 Message A · long (Constant)", B: "🅱 Message B · court + vocal (Cynthia)",
+                       ancienne: "Ancien script", perso: "Perso / réseau" };
+  const vkeys = ["A", "B", "ancienne", "perso"].filter(k => vstats[k]);
+  el("sec-leads-ab").hidden = !vkeys.length;
+  const pct = (n, d) => d ? Math.round(100 * n / d) + " %" : "–";
+  el("leads-ab").innerHTML =
+    '<table><thead><tr><th>Accroche</th><th>Envoyées</th><th>Vues</th><th>% vues</th><th>❤️ Réactions</th><th>Réponses</th><th>% réponses</th></tr></thead><tbody>' +
+    vkeys.map(k => {
+      const s = vstats[k];
+      return '<tr><td class="tot">' + (VAR_LABELS[k] || k) + '</td><td>' + s.env + '</td><td>' + s.vu +
+        '</td><td>' + pct(s.vu, s.env) + '</td><td>' + s.reagi + '</td><td class="tot">' + s.rep +
+        '</td><td class="tot">' + pct(s.rep, s.env) + '</td></tr>';
+    }).join("") + '</tbody></table>';
+  el("leads-ab-note").textContent =
+    "Une réaction ou une réponse compte aussi comme vue. Chiffres issus du relevé manuel des convs Insta" +
+    (releve ? " du " + releve : "") + " : ils s'affinent à chaque nouveau relevé, et le verdict A vs B demandera du volume.";
 
   el("leads-list").innerHTML = leads.map(l => {
     const [, label, color] = LEAD_STAGES.find(([k]) => k === l.best);
-    return '<div class="rcard deal" data-stage="' + l.best + '" style="--dc:' + color + '">' +
+    return '<div class="rcard deal" data-stage="' + l.best + '" data-va="' + esc(l.variante || "") + '" style="--dc:' + color + '">' +
       '<div class="rhead"><span class="rname">' + esc(l.nom || l.key) + '</span>' +
       '<span class="badge" style="color:' + color + ';border-color:' + color + '">' + label + '</span>' +
+      (l.variante === "A" || l.variante === "B" ? '<span class="badge src">' + (l.variante === "A" ? "🅰 msg A" : "🅱 msg B") + '</span>' : '') +
       (l.reagi ? '<span class="badge next">❤️ a réagi</span>' : '') +
       [...l.srcs].map(s => '<span class="badge gray">' + esc(s) + '</span>').join("") +
       (l.premier ? '<span class="rmeta">1er contact : ' + esc(l.premier) + '</span>' : '') +
@@ -2052,8 +2090,10 @@ el("leads-pills").addEventListener("click", e => {
   const b = e.target.closest(".fpill");
   if (!b) return;
   document.querySelectorAll("#leads-pills .fpill").forEach(x => x.classList.toggle("on", x === b));
-  const f = b.dataset.f;
-  document.querySelectorAll("#leads-list .rcard").forEach(c => { c.hidden = f !== "all" && c.dataset.stage !== f; });
+  document.querySelectorAll("#leads-list .rcard").forEach(c => {
+    if (b.dataset.fv) c.hidden = c.dataset.va !== b.dataset.fv;         // filtre par variante d'accroche
+    else c.hidden = b.dataset.f !== "all" && c.dataset.stage !== b.dataset.f;
+  });
 });
 
 /* vues de l'onglet Calls : À venir / À remplir / Remplis / À relancer */
