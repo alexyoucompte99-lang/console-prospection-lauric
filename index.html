@@ -2830,10 +2830,12 @@ function renderVentesTab(tallyText, pfText) {
   // prénom passe gagné tout seul (évite la double saisie). Une modification
   // manuelle de Lauric (bloc 3) garde le dernier mot.
   const ventesCalls = new Map();
+  const bookedFn = new Set();   // prénoms qui ont un vrai RDV Calendly à venir
   parseCSV(LAST_CAL).slice(1).forEach(r => {
+    const fn = firstName(r[4] || "").toLowerCase();
+    if (fn && (r[3] || "").trim() === "active" && new Date((r[1] || "").trim()) >= new Date()) bookedFn.add(fn);
     const e = CALL_EDITS.get((r[0] || "").trim());
     if (!e || e.res !== "vente") return;
-    const fn = firstName(r[4] || "").toLowerCase();
     if (fn) ventesCalls.set(fn, { date: (r[1] || "").slice(0, 10), propo: e.propo || "" });
   });
   deals.forEach(d => {
@@ -2912,7 +2914,11 @@ function renderVentesTab(tallyText, pfText) {
     else if (d.st === "gagne" && stage(d) === "contrat") badges.push('<span class="badge next">📄 contrat signé</span>');
     if (d.fromCall) badges.push('<span class="badge next">📞 vente au call' + (d.fromCall.date ? " du " + esc(frDate(d.fromCall.date)) : "") + '</span>');
     if (d.st === "perdu") badges.push('<span class="badge lose">KO</span>');
-    if (d.st === "avenir") badges.push('<span class="badge next">' + esc(frDate(d.when)) + ' · ' + esc(relFr(d.when)) + '</span>');
+    if (d.st === "avenir") {
+      badges.push('<span class="badge next">' + esc(frDate(d.when)) + ' · ' + esc(relFr(d.when)) + '</span>');
+      if (!bookedFn.has(firstName(d.name || "").toLowerCase()))
+        badges.push('<span class="badge warn2">⚠️ pas de résa Calendly</span>');
+    }
     if (d.cible === "non") badges.push('<span class="badge gray">hors cible</span>');
     const meta = [];
     if (d.origine) meta.push("origine : " + esc(d.origine));
@@ -3001,6 +3007,15 @@ function renderVentesTab(tallyText, pfText) {
       '<tr><td class="tot">' + esc(moisFr(k)) + '</td><td>' + m.tot + '</td><td>' + m.faits + '</td><td>' + m.noshow +
       '</td><td>' + (m.faits + m.noshow ? Math.round(100 * m.faits / (m.faits + m.noshow)) + " %" : "–") +
       '</td><td class="tot">' + m.ventes + '</td><td>' + (m.ca ? fmt(m.ca) + " €" : "–") + '</td></tr>').join("") +
+    (() => {
+      const a = months.reduce((x, [, m]) => ({ tot: x.tot + m.tot, faits: x.faits + m.faits,
+        noshow: x.noshow + m.noshow, ventes: x.ventes + m.ventes, ca: x.ca + m.ca }),
+        { tot: 0, faits: 0, noshow: 0, ventes: 0, ca: 0 });
+      return '<tr style="border-top:2px solid var(--baseline)"><td class="tot">Tout</td><td class="tot">' + a.tot +
+        '</td><td class="tot">' + a.faits + '</td><td class="tot">' + a.noshow +
+        '</td><td class="tot">' + (a.faits + a.noshow ? Math.round(100 * a.faits / (a.faits + a.noshow)) + " %" : "–") +
+        '</td><td class="tot">' + a.ventes + '</td><td class="tot">' + (a.ca ? fmt(a.ca) + " €" : "–") + '</td></tr>';
+    })() +
     '</tbody></table>';
 
   applySearch();
