@@ -1990,7 +1990,7 @@ function renderLeadsTab(leadsText) {
     if (va) {
       const s = vstats[va] = vstats[va] || { env: 0, vu: 0, reagi: 0, rep: 0 };
       s.env++;
-      if (st !== "nonvu") s.vu++;          // une réaction ou une réponse implique une vue
+      if (st === "vu" || st === "reagi" || st === "repondu") s.vu++;   // « envoye » = vu non vérifié
       if (st === "reagi") s.reagi++;
       if (st === "repondu") s.rep++;
     }
@@ -2046,8 +2046,9 @@ function renderLeadsTab(leadsText) {
 
   /* stats A/B des accroches */
   const VAR_LABELS = { A: "🅰 Message A · long (Constant)", B: "🅱 Message B · court + vocal (Cynthia)",
-                       ancienne: "Ancien script", perso: "Perso / réseau" };
-  const vkeys = ["A", "B", "ancienne", "perso"].filter(k => vstats[k]);
+                       ancienne: "Ancien script", perso: "Perso / réseau",
+                       relance2808: "🎙️ Relance du 28/08 (vocal + texte)" };
+  const vkeys = ["A", "B", "relance2808", "ancienne", "perso"].filter(k => vstats[k]);
   el("sec-leads-ab").hidden = !vkeys.length;
   const pct = (n, d) => d ? Math.round(100 * n / d) + " %" : "–";
   el("leads-ab").innerHTML =
