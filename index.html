@@ -564,6 +564,10 @@
 
     <div id="tab-leads" hidden>
       <div class="tally-counts" id="leads-pills"></div>
+      <section id="sec-leads-prio" hidden>
+        <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px">🔥 À relancer en priorité (analyse du relevé)</h2>
+        <div class="rlist" id="leads-prio"></div>
+      </section>
       <section id="sec-leads-ab" hidden>
         <h2 class="hsec" style="--hc:var(--s1);margin-bottom:10px">🧪 A/B des accroches (relevé Insta)</h2>
         <div class="card">
@@ -1978,8 +1982,10 @@ function renderLeadsTab(leadsText) {
   const lh = lr[0] || [];
   const lx = n => lh.findIndex(c => norm(c) === n);
   const iPs = lx("pseudo"), iNo = lx("nom"), iSt = lx("statut"), iVa = lx("variante"),
-        iPc = lx("premier contact"), iDe = lx("detail"), iRe = lx("releve");
+        iPc = lx("premier contact"), iDe = lx("detail"), iRe = lx("releve"),
+        iPr = lx("prio"), iRa = lx("raison"), iMg = lx("message");
   let releve = "";
+  const prios = [];    // leads à relancer en priorité (colonne Prio du relevé)
   const vstats = {};   // stats par variante d'accroche (A / B / ancienne / perso)
   lr.slice(1).forEach(r => {
     const v = i => (i >= 0 && r[i] ? String(r[i]).trim() : "");
@@ -1998,7 +2004,24 @@ function renderLeadsTab(leadsText) {
     touch(keyOf(v(iNo), v(iPs)),
       { nom: v(iNo), pseudo: v(iPs), premier: v(iPc), detail: v(iDe), variante: va,
         src: "Relevé Insta", reagi: st === "reagi" ? "1" : "" }, stage);
+    if (v(iPr)) prios.push({ n: +v(iPr), nom: v(iNo), pseudo: v(iPs), raison: v(iRa), msg: v(iMg) });
   });
+
+  /* leads chauds prioritaires, avec la raison et un message proposé prêt à copier */
+  prios.sort((a, b) => a.n - b.n);
+  el("sec-leads-prio").hidden = !prios.length;
+  el("leads-prio").innerHTML = prios.map((p, i) =>
+    '<div class="rcard deal" style="--dc:var(--bad)">' +
+    '<div class="rhead"><span class="badge lose">n°' + p.n + '</span>' +
+    '<span class="rname">' + esc(p.nom) + '</span>' +
+    (p.pseudo ? '<a class="vivlink" href="https://www.instagram.com/' + esc(p.pseudo) + '/" target="_blank" rel="noopener">@' + esc(p.pseudo) + ' ↗</a>' : '') +
+    '</div>' +
+    '<p class="rstats">👉 ' + esc(p.raison) + '</p>' +
+    (p.msg
+      ? '<div class="msgcard" id="prio-msg-' + i + '">' + esc(p.msg) + '</div>' +
+        '<button type="button" class="copybtn" data-copy="prio-msg-' + i + '">Copier le message proposé</button>'
+      : '') +
+    '</div>').join("");
 
   /* 2) étiquettes leads chauds (URLs reportées dans l'EOD) */
   (EOD_REPORTS || []).forEach(r => (r.urls || []).forEach(u => {
