@@ -49,18 +49,27 @@ Créer un NOUVEL onglet, ne toucher à aucun autre onglet, le fermer à la fin.
 RÈGLE ABSOLUE : ne JAMAIS ouvrir une conversation qui contient une réponse non lue
 (ligne en gras / texte « Unread » dans la liste). Ouvrir une conv non lue envoie le « vu » au lead.
 
-Pour chaque abonné dont Contacte = non (nouveaux + anciens non contactés) :
+PIÈGE vérifié le 05/09 : le champ « Rechercher » de la messagerie ne liste QUE des comptes (« Plus de comptes »),
+il ne fait PAS remonter les conversations existantes. Ne pas s'en servir pour décider « contacté ou pas ».
+
+Méthode qui marche : parcourir la liste de la boîte Primary elle-même.
 1. Ouvrir `https://www.instagram.com/direct/inbox/` (onglet Primary ; General = perso, on n'y va pas).
-2. Taper le pseudo (puis le nom si rien) dans le champ de recherche de la messagerie et lire les résultats
-   SANS cliquer. Trois cas :
-   - Aucun résultat, ou seulement une fiche « profil » sans extrait de message : Contacte = non.
-   - Un résultat avec extrait qui commence par « Vous : » / « You: » : Contacte = oui. La conv peut être
-     ouverte sans risque (le dernier message est le nôtre) : cliquer, lire le texte exact du dernier message
-     de Lauric (ou « Vocal »), sa date, l'indication « Vu » en dessous (→ Statut vu) ou un ❤️ (→ reagi),
-     sinon Statut envoye. Copier l'URL de la page dans Conv. Revenir à la boîte.
-   - Un résultat en gras / « Unread » : Contacte = oui, Statut = repondu, Date contact = date affichée,
+2. Lire la liste du haut vers le bas par captures (zoom sur la colonne de gauche, x 70-480) en scrollant
+   par 3 crans avec la souris sur la liste, 4 à 7 s d'attente à chaque fois : la liste charge par paquets
+   lents et reste parfois bloquée sur un squelette gris (réessayer un scroll après 7 s). Lire jusqu'à ce que
+   les horodatages dépassent 3 j : un nouvel abonné contacté a forcément une conv plus récente que ça.
+   Les entrées se lisent : nom affiché, extrait (« Vous: … » = notre dernier message, sinon c'est le lead
+   qui a parlé en dernier), horodatage. Une conv non lue est en gras avec un point bleu.
+3. Croiser par NOM AFFICHÉ (le pseudo n'apparaît pas dans la liste) avec les abonnés à vérifier. Trois cas :
+   - Absent de la liste : Contacte = non.
+   - Présent avec extrait « Vous: … » : Contacte = oui. La conv peut être ouverte sans risque (dernier message
+     = le nôtre) : cliquer l'entrée (find « conversation list item <Nom> » puis left_click sur le ref), attendre
+     5 s, lire le texte après le dernier « Voir profil » dans main.innerText : horodatage (« Ven 22:45 » =
+     jour de la semaine + heure, à convertir en date), texte exact, « Vu : il y a … » sous le message
+     (→ Statut vu) ou ❤️ (→ reagi), sinon envoye. Conv = location.href (`/direct/t/<id>/`).
+     Les emojis manquent dans main.innerText : reprendre le texte depuis l'extrait de la liste ou une capture.
+   - Présent en gras / point bleu (réponse non lue) : Contacte = oui, Statut = repondu, Date contact = horodatage,
      Message envoye = « (réponse non lue, conv non ouverte) », Conv vide. NE PAS OUVRIR.
-3. Vider le champ de recherche avant le suivant.
 
 Exclure des relevés : CON$TANT (@constant_blt, setter), « Utilisateur Instagram » (comptes supprimés),
 Alexandre Majorel (épinglé).
