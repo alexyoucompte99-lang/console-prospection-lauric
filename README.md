@@ -82,3 +82,14 @@ Options : `--data-only` (télécharge seulement, utilisé par l'Action), `--no-f
 ## Prévisualisation locale
 
 Serveur `lauric-dashboard` dans `/Users/alex/Alex/.claude/launch.json` (port 8752), page `index.html`.
+
+## Nouveaux abonnés : relevé nocturne (05/09/2026)
+
+L'onglet « 🆕 Nouveaux abonnés » lit `data/abonnes.csv`. Ce fichier est réécrit chaque nuit vers 4 h
+par la tâche planifiée Claude `releve-abonnes-lauric` (app Claude Desktop d'Alex, Chrome d'Alex avec
+le compte lauric_sergent), qui suit le runbook `RELEVE-ABONNES.md` : nouveaux followers, vérification
+« contacté ou pas » dans la messagerie (sans ouvrir les convs non lues), message perso pour les autres,
+commit + push. Pré-requis côté Mac : branché, en veille (pas éteint), app Claude et Chrome ouverts,
+réveil auto `pmset repeat wakeorpoweron MTWRFSU 03:55:00`, agent launchd
+`com.alex.caffeinate-releve-4h` (caffeinate 3h56 → 5h26) pour empêcher la veille pendant le relevé.
+Journal : `data/abonnes.log`.

@@ -743,13 +743,25 @@ J'aime bien savoir qui se cache derrière les nouveaux profils. Je te laisse un 
     </div>
 
     <div id="tab-abonnes" hidden>
-      <section>
-        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">🆕 Nouveaux abonnés à contacter</h2>
-        <div class="card" style="margin-bottom:14px">
-          <p class="rstats" style="margin:0">Claude passe sur la liste des abonnés du compte, repère les nouveaux, analyse chaque profil et propose un premier message personnalisé dans l'esprit du script. <b>L'envoi reste 100% manuel</b> : ouvrir le profil, relire le message, l'adapter si besoin, envoyer. Puis cocher « Contacté ».</p>
-        </div>
-        <div id="abonnes-list"></div>
+      <div class="tally-counts" id="nf-pills"></div>
+      <section id="sec-nf-todo">
+        <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px">🚨 Pas encore contactés · message perso prêt à envoyer</h2>
+        <div id="nf-todo"></div>
       </section>
+      <section id="sec-nf-local" hidden>
+        <h2 class="hsec" style="--hc:var(--s4);margin-bottom:10px">☑️ Cochés « contacté » à la main · vérification au prochain relevé</h2>
+        <div id="nf-local"></div>
+      </section>
+      <section>
+        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">🗂 Data · tous les nouveaux abonnés relevés</h2>
+        <div class="card">
+          <div class="tbl-scroll" style="margin-top:0" id="nf-data"></div>
+          <p class="formnote" style="margin-top:10px" id="nf-note"></p>
+        </div>
+      </section>
+      <div class="card" style="margin-top:14px">
+        <p class="rstats" style="margin:0">Chaque nuit vers 4 h, Claude relève les nouveaux abonnés du compte, vérifie dans la messagerie qui a déjà reçu un message (avec le texte envoyé, la date et le lien de la conversation) et prépare un premier message personnalisé pour les autres. <b>L'envoi reste 100% manuel</b> : ouvrir le profil, relire, adapter, envoyer, puis cocher « Contacté ». La coche est confirmée par le relevé suivant.</p>
+      </div>
     </div>
 
     <div id="tab-ventes" hidden>
@@ -1165,6 +1177,7 @@ async function load(showSpinner) {
   const partials = await get(PARTIALS_URL).catch(() => "");
   const cal = await get(CAL_URL).catch(() => "");
   const leadsCsv = await get("data/leads-insta.csv").catch(() => "");
+  get("data/abonnes.csv").then(renderAbonnesTab).catch(() => renderAbonnesTab(""));
   // le portefeuille a son propre fallback : un export CSV privé renvoie du HTML
   const pf = await get(SHEETS.pf)
     .then(t => /^\s*</.test(t) ? Promise.reject(new Error("privé")) : t)
@@ -2818,63 +2831,89 @@ document.addEventListener("click", e => {
   else fallback();
 });
 
-/* ---------- onglet Nouveaux abonnés : liste maintenue par Claude ---------- */
-// Chaque passage de Claude sur la liste des abonnés ajoute ses entrées ici
-// (les plus récentes en premier). La coche « Contacté » est locale au téléphone
-// ou au navigateur qui l'a cochée (localStorage), c'est la V1 du test.
-const NEW_FOLLOWERS = [
-  {
-    pseudo: "nadlin202533", nom: "nadou", detecte: "04/09/2026",
-    profil: "Profil muet : 0 publication, 65 abonnés mais suit 4 233 comptes. Probablement un compte de masse, priorité basse.",
-    cible: "❓ À qualifier (profil vide)",
-    message: "Hello Nadou ! Merci de me suivre 🙏\n\nJe suis allé voir ton profil mais il ne dit pas grand-chose sur toi, du coup je suis curieux : qu'est-ce qui t'a amené par ici ?\n\nTu diriges une boîte ou une équipe ?"
-  },
-  {
-    pseudo: "samcaulier", nom: "Sam Caulier", detecte: "04/09/2026",
-    profil: "3 reels (rando/hiking, voyage), photo de couple, compte catégorisé « Produit/service » : sûrement une activité derrière. Le plus intéressant des trois.",
-    cible: "✅ Potentiel (compte pro « Produit/service »)",
-    message: "Hello Sam ! Merci pour ton abonnement, ça fait plaisir 🙏\n\nJ'ai vu tes reels de rando, le trip hiking donne envie ! Et j'ai remarqué que ton compte est en mode pro, du coup je suis curieux de savoir qui se cache derrière : tu es à ton compte ou tu diriges une équipe ?"
-  },
-  {
-    pseudo: "99dam_ien99", nom: "Damien99", detecte: "04/09/2026",
-    profil: "Compte privé tout neuf : 0 publication, 1 abonné, suit 187 comptes. Impossible de personnaliser plus.",
-    cible: "❓ À qualifier (compte privé)",
-    message: "Hello Damien ! Merci pour ton abonnement 🙏\n\nTon profil est privé donc je n'ai pas pu voir qui tu es, et j'aime bien savoir à qui je parle 😄\n\nDis-moi, tu es dirigeant ou en passe de le devenir ?"
-  }
-];
-function renderAbonnes() {
-  const box = el("abonnes-list");
-  if (!box) return;
-  let seen = {};
-  try { seen = JSON.parse(localStorage.getItem("nf-contacted") || "{}"); } catch (e) {}
-  const todo = NEW_FOLLOWERS.filter(f => !seen[f.pseudo]).length;
-  const cnt = el("abonnes-count");
-  if (cnt) cnt.textContent = todo ? "· " + todo : "";
-  box.innerHTML = NEW_FOLLOWERS.map((f, i) => {
-    const done = !!seen[f.pseudo];
-    return '<div class="card" style="margin-bottom:14px' + (done ? ";opacity:.55" : "") + '">' +
-      '<div class="rhead"><span class="rname">' + esc(f.nom) + ' <span style="font-weight:500;color:var(--muted)">@' + esc(f.pseudo) + '</span></span>' +
-      '<span class="badge">détecté le ' + esc(f.detecte) + '</span></div>' +
-      '<p class="rstats" style="margin:8px 0 2px"><b>' + esc(f.cible) + '</b> · ' + esc(f.profil) + '</p>' +
-      '<div class="msgcard" id="nf-msg-' + i + '">' + esc(f.message) + '</div>' +
-      '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px">' +
-      '<a class="copybtn" style="text-decoration:none;display:inline-block" href="https://www.instagram.com/' + esc(f.pseudo) + '/" target="_blank" rel="noopener">Ouvrir le profil ↗</a>' +
-      '<button type="button" class="copybtn" data-copy="nf-msg-' + i + '" style="margin-top:8px">Copier le message</button>' +
-      '<label style="font-size:13px;display:inline-flex;gap:6px;align-items:center;cursor:pointer;margin-top:8px">' +
-      '<input type="checkbox" class="nf-done" data-pseudo="' + esc(f.pseudo) + '"' + (done ? " checked" : "") + '> Contacté</label>' +
-      '</div></div>';
-  }).join("") || '<div class="card"><p class="rstats" style="margin:0">Aucun nouvel abonné en attente.</p></div>';
+/* ---------- onglet Nouveaux abonnés : data/abonnes.csv (relevé nocturne de Claude) ---------- */
+// Colonnes : Pseudo, Nom, Detecte, Profil, Cible, Message propose, Contacte (oui/non),
+// Date contact, Message envoye, Statut (envoye/vu/repondu), Conv (URL), Releve.
+// Le relevé de 4 h réécrit le fichier (runbook RELEVE-ABONNES.md). La coche « Contacté »
+// est locale (localStorage) et sert de pré-marquage jusqu'au relevé suivant.
+let NF_FILTER = "all";
+function nfSeen() { try { return JSON.parse(localStorage.getItem("nf-contacted") || "{}"); } catch (e) { return {}; } }
+function parseAbonnes(text) {
+  const rows = parseCSV(text || "");
+  const h = rows[0] || [];
+  const ix = n => h.findIndex(c => (c || "").trim().toLowerCase() === n);
+  const I = { pseudo: ix("pseudo"), nom: ix("nom"), detecte: ix("detecte"), profil: ix("profil"), cible: ix("cible"),
+              msg: ix("message propose"), contacte: ix("contacte"), date: ix("date contact"), envoye: ix("message envoye"),
+              statut: ix("statut"), conv: ix("conv"), releve: ix("releve") };
+  const g = (r, k) => I[k] < 0 ? "" : (r[I[k]] || "").trim();
+  return rows.slice(1).map(r => ({
+    pseudo: g(r, "pseudo"), nom: g(r, "nom") || g(r, "pseudo"), detecte: g(r, "detecte"), profil: g(r, "profil"),
+    cible: g(r, "cible"), message: g(r, "msg"), contacte: /^(oui|yes|1|true)/i.test(g(r, "contacte")),
+    date: g(r, "date"), envoye: g(r, "envoye"), statut: g(r, "statut").toLowerCase(), conv: g(r, "conv"), releve: g(r, "releve")
+  })).filter(f => f.pseudo);
 }
+const NF_STATUT = { envoye: "📨 envoyé, pas vu", vu: "👁 vu, pas de réponse", repondu: "💬 a répondu", reagi: "❤️ a réagi" };
+function nfCard(f, i, local) {
+  return '<div class="card" style="margin-bottom:14px">' +
+    '<div class="rhead"><span class="rname" style="font-size:17px">' + esc(f.nom) + ' <span style="font-weight:500;color:var(--muted)">@' + esc(f.pseudo) + '</span></span>' +
+    '<span class="badge">abonné le ' + esc(f.detecte) + (parseDate(f.detecte) ? " · " + relFr(parseDate(f.detecte)) : "") + '</span></div>' +
+    '<p class="rstats" style="margin:8px 0 2px"><b>' + esc(f.cible) + '</b>' + (f.profil ? ' · ' + esc(f.profil) : '') + '</p>' +
+    (f.message ? '<div class="msgcard" id="nf-msg-' + i + '">' + esc(f.message) + '</div>' : '<p class="formnote">Pas de message proposé (profil pas encore analysé).</p>') +
+    '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px">' +
+    '<a class="copybtn" style="text-decoration:none;display:inline-block" href="https://www.instagram.com/' + esc(f.pseudo) + '/" target="_blank" rel="noopener">Ouvrir le profil ↗</a>' +
+    (f.message ? '<button type="button" class="copybtn" data-copy="nf-msg-' + i + '" style="margin-top:8px">Copier le message</button>' : '') +
+    '<label style="font-size:13px;display:inline-flex;gap:6px;align-items:center;cursor:pointer;margin-top:8px">' +
+    '<input type="checkbox" class="nf-done" data-pseudo="' + esc(f.pseudo) + '"' + (local ? " checked" : "") + '> Contacté</label>' +
+    '</div></div>';
+}
+let NF_LIST = [];
+function renderAbonnesTab(text) {
+  if (text !== undefined) NF_LIST = parseAbonnes(text);
+  const box = el("nf-todo");
+  if (!box) return;
+  const seen = nfSeen();
+  const todo = NF_LIST.filter(f => !f.contacte && !seen[f.pseudo]);
+  const local = NF_LIST.filter(f => !f.contacte && seen[f.pseudo]);
+  const done = NF_LIST.filter(f => f.contacte);
+  const cnt = el("abonnes-count");
+  if (cnt) cnt.textContent = todo.length ? "· " + todo.length : "";
+  box.innerHTML = todo.map((f, i) => nfCard(f, i, false)).join("") ||
+    '<div class="card"><p class="rstats" style="margin:0">✅ Tout le monde a été contacté.</p></div>';
+  el("sec-nf-local").hidden = !local.length;
+  el("nf-local").innerHTML = local.map((f, i) => nfCard(f, 1000 + i, true)).join("");
+  const pills = [["all", "Tous", NF_LIST.length], ["todo", "🚨 À contacter", todo.length], ["done", "✅ Contactés", done.length],
+                 ["rep", "💬 Ont répondu", done.filter(f => /repondu|reagi/.test(f.statut)).length]];
+  el("nf-pills").innerHTML = pills.map(p => '<button type="button" class="fpill' + (NF_FILTER === p[0] ? " on" : "") + '" data-f="' + p[0] + '">' + p[1] + ' <b>' + p[2] + '</b></button>').join("");
+  const shown = NF_LIST.filter(f => NF_FILTER === "all" || (NF_FILTER === "todo" && !f.contacte) || (NF_FILTER === "done" && f.contacte) || (NF_FILTER === "rep" && /repondu|reagi/.test(f.statut)));
+  el("nf-data").innerHTML = shown.length ?
+    '<table><thead><tr><th>Abonné</th><th>Abonné le</th><th>Cible</th><th>Contacté</th><th>Date</th><th>Statut</th><th>Message envoyé</th><th>Conv</th></tr></thead><tbody>' +
+    shown.map(f => '<tr' + (!f.contacte ? ' style="background:color-mix(in srgb,var(--bad) 8%,transparent)"' : '') + '>' +
+      '<td><a href="https://www.instagram.com/' + esc(f.pseudo) + '/" target="_blank" rel="noopener"><b>' + esc(f.nom) + '</b></a><br><span style="color:var(--muted)">@' + esc(f.pseudo) + '</span></td>' +
+      '<td>' + esc(f.detecte) + '</td><td>' + esc(f.cible) + '</td>' +
+      '<td>' + (f.contacte ? "✅ oui" : (seen[f.pseudo] ? "☑️ coché, à vérifier" : "❌ non")) + '</td>' +
+      '<td>' + esc(f.date) + '</td><td>' + (NF_STATUT[f.statut] || esc(f.statut)) + '</td>' +
+      '<td style="max-width:360px;white-space:pre-wrap;font-size:12.5px">' + esc(f.envoye) + '</td>' +
+      '<td>' + (f.conv ? '<a href="' + esc(f.conv) + '" target="_blank" rel="noopener">ouvrir ↗</a>' : '') + '</td></tr>').join("") +
+    '</tbody></table>' : '<p class="rstats" style="margin:0">Aucun abonné relevé pour ce filtre.</p>';
+  const lastRel = NF_LIST.map(f => parseDate(f.releve)).filter(Boolean).sort().reverse()[0];
+  el("nf-note").textContent = NF_LIST.length + " abonné" + (NF_LIST.length > 1 ? "s" : "") + " relevé" + (NF_LIST.length > 1 ? "s" : "") +
+    " · " + done.length + " contacté" + (done.length > 1 ? "s" : "") + " · " + todo.length + " à contacter" +
+    (lastRel ? " · dernier relevé " + relFr(lastRel) : "") + ". Statut = ce que montre la messagerie (les conversations avec une réponse non lue ne sont jamais ouvertes par le relevé).";
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("#nf-pills .fpill");
+  if (!b) return;
+  NF_FILTER = b.dataset.f;
+  renderAbonnesTab();
+});
 document.addEventListener("change", e => {
   const c = e.target.closest(".nf-done");
   if (!c) return;
-  let seen = {};
-  try { seen = JSON.parse(localStorage.getItem("nf-contacted") || "{}"); } catch (err) {}
+  const seen = nfSeen();
   if (c.checked) seen[c.dataset.pseudo] = true; else delete seen[c.dataset.pseudo];
   try { localStorage.setItem("nf-contacted", JSON.stringify(seen)); } catch (err) {}
-  renderAbonnes();
+  renderAbonnesTab();
 });
-renderAbonnes();
 
 /* filtre Tous / Remplis / En cours (les pills de compteurs sont cliquables) */
 let tallyFilter = "all";
