@@ -27,6 +27,25 @@ Les anciennes lignes sont CONSERVÉES et mises à jour (Contacte / Date / Messag
 Une ligne passée à `oui` ne repasse jamais à `non`. Écrire le CSV avec le module `csv` de Python
 (quoting minimal, UTF-8, retours à la ligne dans les champs entre guillemets), jamais à la main.
 
+## Méthode API (préférée depuis le 07/09, lecture seule, bien plus fiable que le scroll)
+
+La modale « Followers » reste souvent bloquée sur un spinner et la liste de la messagerie charge par paquets.
+Depuis un onglet instagram.com connecté (compte lauric_sergent), `javascript_tool` peut appeler l'API interne
+en GET avec `credentials:'include'` et les en-têtes `x-ig-app-id: 936619743392459`, `x-requested-with: XMLHttpRequest` :
+
+- Followers (les plus récents en premier, 50 par page, `next_max_id` pour la suite) :
+  `/api/v1/friendships/77138870834/followers/?count=50&search_surface=follow_list_page` → `users[]` (pk, username, full_name, is_private).
+- Fiche d'un profil (bio, compteurs, catégorie) : `/api/v1/users/<pk>/info/` → `user`. Attendre 3 à 4 s entre deux appels
+  (`web_profile_info` répond 429, ne pas l'utiliser ; `feed/user` renvoie du HTML, ouvrir le profil dans l'onglet et lire
+  les `alt` des images de `main` pour avoir les légendes).
+- Messagerie SANS envoyer de « vu » : `/api/v1/direct_v2/inbox/?folder=&limit=45&thread_message_limit=10` → `inbox.threads[]` :
+  `thread_id` (URL de conv = `https://www.instagram.com/direct/t/<thread_id>/`), `users[0].username`, `items[]` (user_id 77138870834 = Lauric,
+  `text`, `item_type` text/voice_media, `timestamp` en µs), `read_state` ≠ 0 = réponse non lue, `last_seen_at[<pk du lead>]` = ce que le lead a vu.
+  Un GET sur l'inbox ne marque rien comme lu : on peut lire la réponse du lead sans ouvrir la conv.
+  Piège : la sortie de javascript_tool masque les longs identifiants dans un objet JSON (« BLOCKED ») ; les renvoyer dans une chaîne jointe par « | ».
+
+Si l'API répond en HTML ou 4xx, revenir à la méthode visuelle ci-dessous.
+
 ## Étape 1 : nouveaux abonnés (Chrome d'Alex, compte lauric_sergent connecté)
 
 Outils : `mcp__claude-in-chrome__*` chargés en UN SEUL appel ToolSearch
