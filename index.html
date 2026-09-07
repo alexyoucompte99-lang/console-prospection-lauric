@@ -743,6 +743,14 @@ J'aime bien savoir qui se cache derrière les nouveaux profils. Je te laisse un 
     </div>
 
     <div id="tab-abonnes" hidden>
+      <section>
+        <h2 class="hsec" style="--hc:var(--s3);margin-bottom:10px">📈 Abonnés du compte · relevé automatique 18 h</h2>
+        <div class="vkpis" id="nt-kpis"></div>
+        <div class="card">
+          <div id="nt-chart"></div>
+          <p class="formnote" style="margin-top:8px" id="nt-note"></p>
+        </div>
+      </section>
       <div class="tally-counts" id="nf-pills"></div>
       <section id="sec-nf-todo">
         <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px">🚨 Pas encore contactés · message perso prêt à envoyer</h2>
@@ -1178,6 +1186,7 @@ async function load(showSpinner) {
   const cal = await get(CAL_URL).catch(() => "");
   const leadsCsv = await get("data/leads-insta.csv").catch(() => "");
   get("data/abonnes.csv").then(renderAbonnesTab).catch(() => renderAbonnesTab(""));
+  get("data/abonnes_total.csv").then(renderTotalChart).catch(() => renderTotalChart(""));
   // le portefeuille a son propre fallback : un export CSV privé renvoie du HTML
   const pf = await get(SHEETS.pf)
     .then(t => /^\s*</.test(t) ? Promise.reject(new Error("privé")) : t)
@@ -2831,6 +2840,87 @@ document.addEventListener("click", e => {
   else fallback();
 });
 
+
+/* ---------- courbe des abonnés : data/abonnes_total.csv (relevé de 18 h, colonnes Date, Abonne scrappe) ---------- */
+function parseTotal(text) {
+  const rows = parseCSV(text || "");
+  const h = rows[0] || [];
+  const ix = n => h.findIndex(c => (c || "").trim().toLowerCase().startsWith(n));
+  const iD = ix("date"), iN = ix("abonn");
+  const byDate = {};
+  rows.slice(1).forEach(r => {
+    const d = parseDate(iD < 0 ? r[0] : r[iD]);
+    const n = parseInt(String((iN < 0 ? r[1] : r[iN]) || "").replace(/[^\d]/g, ""), 10);
+    if (d && n > 0) byDate[d] = n;   // dernier relevé du jour gagne
+  });
+  return Object.keys(byDate).sort().map(d => ({ date: d, n: byDate[d] }));
+}
+function renderTotalChart(text) {
+  const pts = parseTotal(text);
+  const box = el("nt-chart"), kp = el("nt-kpis"), note = el("nt-note");
+  if (!pts.length) {
+    kp.innerHTML = "";
+    box.innerHTML = '<p class="rstats" style="margin:0">Aucun relevé pour l\'instant.</p>';
+    note.textContent = "Chaque soir à 18 h, Claude relève le nombre d'abonnés affiché sur @lauric_sergent et l'ajoute à data/abonnes_total.csv.";
+    return;
+  }
+  const last = pts[pts.length - 1], prev = pts[pts.length - 2];
+  const dayMs = 864e5;
+  const at = daysAgo => { const lim = new Date(last.date + "T12:00:00").getTime() - daysAgo * dayMs; const c = pts.filter(p => new Date(p.date + "T12:00:00").getTime() <= lim); return c.length ? c[c.length - 1] : null; };
+  const p7 = at(7), p30 = at(30);
+  const dlt = (a, b) => a && b ? (b.n - a.n >= 0 ? "+" : "") + (b.n - a.n) : "·";
+  kp.innerHTML = [
+    ["var(--s3)", last.n.toLocaleString("fr-FR"), "abonnés · " + frDate(last.date)],
+    ["var(--accent)", dlt(prev, last), "vs relevé précédent" + (prev ? " (" + frDate(prev.date) + ")" : "")],
+    ["var(--s1)", dlt(p7, last), "sur 7 jours"],
+    ["var(--s4)", dlt(p30, last), "sur 30 jours"]
+  ].map(k => '<div class="vkpi" style="--kc:' + k[0] + '"><div class="n">' + k[1] + '</div><div class="l">' + k[2] + '</div></div>').join("");
+  lineChart(box, pts);
+  note.textContent = pts.length + " relevé" + (pts.length > 1 ? "s" : "") + " depuis le " + frDate(pts[0].date) +
+    " · relevé automatique chaque soir à 18 h (compteur affiché sur le profil @lauric_sergent, écrit dans data/abonnes_total.csv).";
+}
+function lineChart(box, pts) {
+  const W = Math.max(680, box.clientWidth || 680), H = 220, padL = 46, padB = 24, padT = 10, padR = 14;
+  const innerW = W - padL - padR, innerH = H - padT - padB;
+  const t0 = new Date(pts[0].date + "T12:00:00").getTime(), t1 = new Date(pts[pts.length - 1].date + "T12:00:00").getTime();
+  const span = Math.max(t1 - t0, 864e5 * 6);
+  const vals = pts.map(p => p.n);
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  const pad = Math.max(5, Math.round((hi - lo) * 0.15));
+  lo = Math.max(0, lo - pad); hi = hi + pad;
+  const X = p => padL + innerW * (new Date(p.date + "T12:00:00").getTime() - t0) / span;
+  const Y = v => padT + innerH - innerH * (v - lo) / (hi - lo);
+  let svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" height="' + H + '" role="img" aria-label="Évolution du nombre d\'abonnés">';
+  const ticks = 4;
+  for (let t = 0; t <= ticks; t++) {
+    const v = Math.round(lo + (hi - lo) * t / ticks), y = Y(v);
+    svg += '<line x1="' + padL + '" x2="' + (W - padR) + '" y1="' + y + '" y2="' + y + '" stroke="var(--grid)" stroke-width="1"/>';
+    svg += '<text x="' + (padL - 6) + '" y="' + (y + 4) + '" text-anchor="end" font-size="10.5" fill="var(--muted)">' + v.toLocaleString("fr-FR") + '</text>';
+  }
+  const path = pts.map((p, i) => (i ? "L" : "M") + X(p).toFixed(1) + " " + Y(p.n).toFixed(1)).join(" ");
+  const area = path + " L" + X(pts[pts.length - 1]).toFixed(1) + " " + (padT + innerH) + " L" + X(pts[0]).toFixed(1) + " " + (padT + innerH) + " Z";
+  svg += '<path d="' + area + '" fill="var(--s3)" opacity="0.10"/>';
+  svg += '<path d="' + path + '" fill="none" stroke="var(--s3)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>';
+  pts.forEach((p, i) => {
+    const prev = pts[i - 1];
+    const tip = '<div class="tdate">' + frDate(p.date) + '</div><div class="trow"><span>Abonnés</span><b>' + p.n.toLocaleString("fr-FR") + '</b></div>' +
+      (prev ? '<div class="trow"><span>vs ' + frDate(prev.date) + '</span><b>' + (p.n - prev.n >= 0 ? "+" : "") + (p.n - prev.n) + '</b></div>' : "");
+    svg += '<g data-tip="' + tip.replace(/"/g, "&quot;") + '"><circle cx="' + X(p).toFixed(1) + '" cy="' + Y(p.n).toFixed(1) + '" r="9" fill="transparent"/>' +
+      '<circle cx="' + X(p).toFixed(1) + '" cy="' + Y(p.n).toFixed(1) + '" r="3.5" fill="var(--card)" stroke="var(--s3)" stroke-width="2"/></g>';
+  });
+  const nLab = Math.min(pts.length, 8);
+  pts.forEach((p, i) => {
+    if (pts.length > nLab && i % Math.ceil(pts.length / nLab) !== 0 && i !== pts.length - 1) return;
+    const d = new Date(p.date + "T12:00:00");
+    svg += '<text x="' + X(p).toFixed(1) + '" y="' + (H - 6) + '" text-anchor="middle" font-size="10.5" fill="var(--muted)">' + d.getDate() + "/" + (d.getMonth() + 1) + '</text>';
+  });
+  svg += '<line x1="' + padL + '" x2="' + (W - padR) + '" y1="' + (padT + innerH) + '" y2="' + (padT + innerH) + '" stroke="var(--baseline)" stroke-width="1"/></svg>';
+  box.innerHTML = svg;
+  box.querySelectorAll("g[data-tip]").forEach(g => {
+    g.addEventListener("mousemove", e => showTip(e, g.dataset.tip));
+    g.addEventListener("mouseleave", hideTip);
+  });
+}
 /* ---------- onglet Nouveaux abonnés : data/abonnes.csv (relevé nocturne de Claude) ---------- */
 // Colonnes : Pseudo, Nom, Detecte, Profil, Cible, Message propose, Contacte (oui/non),
 // Date contact, Message envoye, Statut (envoye/vu/repondu), Conv (URL), Releve.

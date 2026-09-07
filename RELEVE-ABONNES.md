@@ -114,3 +114,19 @@ Esprit du script setting de la console (onglet Script setting) :
 
 Si Chrome, la session Insta ou GitHub sont indisponibles : logger et s'arrêter proprement. Ne jamais
 envoyer de message Instagram, ne jamais liker, ne jamais suivre/se désabonner : lecture seule.
+
+## Relevé du total d'abonnés (tâche « releve-total-abonnes-lauric », 18 h)
+
+But : chaque soir à 18 h, lire le compteur d'abonnés affiché sur le profil @lauric_sergent et l'ajouter
+à `data/abonnes_total.csv` (colonnes `Date,Abonne scrappe`, une ligne par jour, jj/mm/aaaa). La page trace
+la courbe en haut de l'onglet « Nouveaux abonnés » (KPIs : dernier relevé, delta veille, 7 j, 30 j).
+
+1. Chrome d'Alex (outils mcp__claude-in-chrome__*, un seul ToolSearch), NOUVEL onglet sur
+   `https://www.instagram.com/lauric_sergent/`, attendre 5 s.
+2. Lire le nombre : `javascript_tool` → `document.querySelector('main').innerText.match(/([\d\s  ]+)\s*followers|abonnés/i)`,
+   ou en secours l'API `/api/v1/users/77138870834/info/` (en-tête `x-ig-app-id: 936619743392459`) → `user.follower_count`.
+   Sur le HTML, le nombre est arrondi au-delà de 10 000 (« 12,3 k ») : préférer l'API dans ce cas.
+3. `python3 releve_total.py <nombre>` (remplace la ligne du jour si elle existe).
+4. `git checkout -- data/eod.csv data/.rappel-calls` (copies auto modifiées par les runs locaux) puis
+   `git add data/abonnes_total.csv && git commit -m "Abonnés du <date> : <n>" && git pull --rebase && git push` (jamais de stash).
+5. Fermer l'onglet. Si Chrome / Insta indisponible : ajouter « <date> · total indisponible » à `data/abonnes.log` et s'arrêter.
