@@ -2091,9 +2091,10 @@ function renderLeadsTab(leadsText) {
 
   /* stats A/B des accroches */
   const VAR_LABELS = { A: "🅰 Message A · long (Constant)", B: "🅱 Message B · court + vocal (Cynthia)",
-                       ancienne: "Ancien script", perso: "Perso / réseau",
-                       relance2808: "🎙️ Relance du 28/08 (vocal + texte)" };
-  const vkeys = ["A", "B", "relance2808", "ancienne", "perso"].filter(k => vstats[k]);
+                       lauric: "💬 Perso de Lauric · « Merci pour le follow, je vois que… »",
+                       ancienne: "Ancien script · « Bienvenue, j'offre… »", like: "👍 Scan après un like (non abonnés)",
+                       perso: "Perso / réseau", relance2808: "🎙️ Relance du 28/08 (vocal + texte)" };
+  const vkeys = ["A", "B", "lauric", "ancienne", "like", "perso", "relance2808"].filter(k => vstats[k]);
   el("sec-leads-ab").hidden = !vkeys.length;
   const pct = (n, d) => d ? Math.round(100 * n / d) + " %" : "–";
   el("leads-ab").innerHTML =
@@ -2105,7 +2106,7 @@ function renderLeadsTab(leadsText) {
         '</td><td class="tot">' + pct(s.rep, s.env) + '</td></tr>';
     }).join("") + '</tbody></table>';
   el("leads-ab-note").textContent =
-    "Une réaction ou une réponse compte aussi comme vue. Chiffres issus du relevé manuel des convs Insta" +
+    "Une réaction ou une réponse compte aussi comme vue. Les conversations déjà en cours (suivi) ne sont pas comptées ici. Chiffres issus du relevé des convs Insta" +
     (releve ? " du " + releve : "") + " : ils s'affinent à chaque nouveau relevé, et le verdict A vs B demandera du volume.";
 
   el("leads-list").innerHTML = leads.map(l => {
