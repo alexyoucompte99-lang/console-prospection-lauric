@@ -576,7 +576,8 @@
         </div>
       </section>
       <section>
-        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">👤 Tous les leads et leur avancée</h2>
+        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px" id="leads-list-title">👤 Tous les leads et leur avancée</h2>
+        <p class="formnote" id="leads-filter-note" hidden></p>
         <div class="rlist" id="leads-list"></div>
       </section>
       <p class="formnote" id="leads-note"></p>
@@ -2080,14 +2081,14 @@ function renderLeadsTab(leadsText) {
 
   el("leads-count").textContent = leads.length ? "(" + leads.length + ")" : "";
   el("leads-pills").innerHTML =
-    '<button class="pill fpill on" data-f="all"><b>' + leads.length + '</b>&nbsp;tous</button>' +
+    '<button class="pill fpill' + (leadsFilter.f === "all" && !leadsFilter.fv ? " on" : "") + '" data-f="all"><b>' + leads.length + '</b>&nbsp;tous</button>' +
     LEAD_STAGES.map(([k, label]) => {
       const n = leads.filter(l => l.best === k).length;
-      return n ? '<button class="pill fpill" data-f="' + k + '"><b>' + n + '</b>&nbsp;' + label + '</button>' : "";
+      return n ? '<button class="pill fpill' + (leadsFilter.f === k ? " on" : "") + '" data-f="' + k + '"><b>' + n + '</b>&nbsp;' + label + '</button>' : "";
     }).join("") +
-    ["A", "B"].filter(k => vstats[k]).map(k =>
-      '<button class="pill fpill" data-fv="' + k + '"><b>' + vstats[k].env + '</b>&nbsp;' +
-      (k === "A" ? "🅰 message A" : "🅱 message B") + '</button>').join("");
+    ["A", "B", "lauric"].filter(k => vstats[k]).map(k =>
+      '<button class="pill fpill' + (leadsFilter.fv === k ? " on" : "") + '" data-fv="' + k + '"><b>' + vstats[k].env + '</b>&nbsp;' +
+      (k === "A" ? "🅰 message A" : k === "B" ? "🅱 message B" : "💬 perso Lauric") + '</button>').join("");
 
   /* stats A/B des accroches */
   const VAR_LABELS = { A: "🅰 Message A · long (Constant)", B: "🅱 Message B · court + vocal (Cynthia)",
@@ -2114,7 +2115,7 @@ function renderLeadsTab(leadsText) {
     return '<div class="rcard deal" data-stage="' + l.best + '" data-va="' + esc(l.variante || "") + '" style="--dc:' + color + '">' +
       '<div class="rhead"><span class="rname">' + esc(l.nom || l.key) + '</span>' +
       '<span class="badge" style="color:' + color + ';border-color:' + color + '">' + label + '</span>' +
-      (l.variante === "A" || l.variante === "B" ? '<span class="badge src">' + (l.variante === "A" ? "🅰 msg A" : "🅱 msg B") + '</span>' : '') +
+      (l.variante === "A" || l.variante === "B" || l.variante === "lauric" ? '<span class="badge src">' + (l.variante === "A" ? "🅰 msg A" : l.variante === "B" ? "🅱 msg B" : "💬 perso Lauric") + '</span>' : '') +
       (l.reagi ? '<span class="badge next">❤️ a réagi</span>' : '') +
       [...l.srcs].map(s => '<span class="badge gray">' + esc(s) + '</span>').join("") +
       (l.premier ? '<span class="rmeta">1er contact : ' + esc(l.premier) + '</span>' : '') +
@@ -2133,14 +2134,37 @@ function renderLeadsTab(leadsText) {
   applySearch();
 }
 
+/* filtre de l'onglet Leads : état conservé entre les rafraîchissements, composé avec la recherche */
+let leadsFilter = { f: "all", fv: "" };
+function applyLeadsFilter() {
+  const q = el("q").value.trim().toLowerCase();
+  const active = leadsFilter.fv || leadsFilter.f !== "all";
+  let n = 0;
+  document.querySelectorAll("#leads-list .rcard").forEach(c => {
+    let hide = !!q && !c.textContent.toLowerCase().includes(q);
+    if (leadsFilter.fv) hide = hide || c.dataset.va !== leadsFilter.fv;          // filtre par variante d'accroche
+    else if (leadsFilter.f !== "all") hide = hide || c.dataset.stage !== leadsFilter.f;
+    c.hidden = hide;
+    if (!hide) n++;
+  });
+  /* avec un filtre actif, on cache les sections « priorité » et « A/B » pour voir la liste tout de suite */
+  const prioEl = el("sec-leads-prio"), abEl = el("sec-leads-ab");
+  if (active) { prioEl.hidden = true; abEl.hidden = true; }
+  else { prioEl.hidden = !el("leads-prio").children.length; abEl.hidden = !el("leads-ab").children.length; }
+  const pill = document.querySelector("#leads-pills .fpill.on");
+  const label = pill ? pill.textContent.replace(/^\d+\s*/, "").trim() : "";
+  el("leads-list-title").textContent = active ? "👤 Leads · filtre « " + label + " »" : "👤 Tous les leads et leur avancée";
+  const note = el("leads-filter-note");
+  note.hidden = !active;
+  note.textContent = active ? n + " lead" + (n > 1 ? "s" : "") + " affiché" + (n > 1 ? "s" : "") + " · cliquer sur « tous » pour revenir à la vue complète (priorités + tableau A/B)." : "";
+}
 el("leads-pills").addEventListener("click", e => {
   const b = e.target.closest(".fpill");
   if (!b) return;
+  leadsFilter = b.dataset.fv ? { f: "all", fv: b.dataset.fv } : { f: b.dataset.f, fv: "" };
   document.querySelectorAll("#leads-pills .fpill").forEach(x => x.classList.toggle("on", x === b));
-  document.querySelectorAll("#leads-list .rcard").forEach(c => {
-    if (b.dataset.fv) c.hidden = c.dataset.va !== b.dataset.fv;         // filtre par variante d'accroche
-    else c.hidden = b.dataset.f !== "all" && c.dataset.stage !== b.dataset.f;
-  });
+  applyLeadsFilter();
+  el("leads-list-title").scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
 /* vues de l'onglet Calls : À venir / À remplir / Remplis / À relancer */
@@ -2227,8 +2251,10 @@ function renderBigFunnel() {
 function applySearch() {
   const q = el("q").value.trim().toLowerCase();
   document.querySelectorAll("#app .rcard").forEach(c => {
+    if (c.closest("#leads-list")) return;                       // les cartes Leads sont gérées par applyLeadsFilter
     c.hidden = !!q && !c.textContent.toLowerCase().includes(q);
   });
+  if (typeof applyLeadsFilter === "function") applyLeadsFilter();
 }
 el("q").addEventListener("input", applySearch);
 
