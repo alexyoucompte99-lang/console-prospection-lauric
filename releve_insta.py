@@ -21,9 +21,22 @@ def dt(ts):
     ts = int(ts or 0); return datetime.datetime.fromtimestamp(ts, TZ).strftime("%d/%m/%Y %H:%M") if ts else ""
 def day(ts):
     ts = int(ts or 0); return datetime.datetime.fromtimestamp(ts, TZ).strftime("%d/%m/%Y") if ts else ""
-def txt(s): return (s or "").replace("⏎", "\n").strip()
+TEMPLATES = {
+    "{BIENV}": "Bienvenue sur mon compte {N}! 🙂\nJ’offre à tous mes abonnés qui sont dirigeants un scan qui peut leur permettre de prendre du recul et de grandement diminuer leur charge mentale.\n\nÇa prend quelques minutes et ça a énormément aidé de gros entrepreneurs, dis-moi si tu es curieux de voir ça ?\n\n(Pour gagner du temps, like ce message et je te l’envoie)",
+    "{LIKE}": "Hello {N}, merci pour ton like sur mon post. 🙂\n\nJe propose aux dirigeants qui s’intéressent à ce sujet un scan qui peut leur permettre de prendre du recul et de grandement diminuer leur charge mentale.\n\nÇa prend quelques minutes et ça a énormément aidé de gros entrepreneurs, dis-moi si tu es curieux de voir ça ?",
+    "{RELB}": "Bonsoir {N}! J’espère que tu vas bien.\n\nJe me demandais simplement si tu avais bien reçu mon message.\n\nBonne soirée!😀",
+    "{RELQ}": "Hello {N}, tu vas bien ?\n\nTu es toi même entrepreneur ?😊",
+    "{A}": "Hello {N} !\nBienvenue et merci de me suivre 🙏\n\nTu l’as sûrement vu, ici je parle aux dirigeants principalement 😊\n\nJ’ai dirigé pendant 10 ans je connais par cœur les défis :\nTout porter sur ses épaules.\nLe stress du chiffre.\nRecruter, motiver ses employés.\nPrendre une tonne de décisions.\nEtc.\n\n✅ Depuis de nombreuses années j’applique une méthode que j’ai apprise auprès des plus grands dirigeants !\n👉 + d’engagement\n👉 + de business\nC’est dingue la différence.\n\nEt puis la cerise sur le gâteau : beaucoup moins de charge mentale pour le dirigeant 😎\n\nUne question importante :\nTu es dirigeant d’une boîte ?",
+    "{B}": "Hello {N} ! Merci beaucoup pour ton abonnement, ça fait super plaisir de te voir ici ! 😁\n\n[personnalisation]\n\nJ’aime bien savoir qui se cache derrière les nouveaux profils, alors je te laisse un petit vocal pour me présenter rapidement !",
+}
+_NAME = ""
+def txt(s):
+    s = (s or "")
+    if s in TEMPLATES: s = TEMPLATES[s].replace("{N}", _NAME).replace(" !", " !").replace("  ", " ")
+    return s.replace("⏎", "\n").strip()
 
 def variant(t):
+    t = TEMPLATES.get(t, t)
     if re.search(r"sûrement vu, ici je parle|dirigé pendant 10 ans|cerise sur le gâteau", t, re.I): return "A"
     if re.search(r"Merci beaucoup pour ton abonnement, ça fait super plaisir|se cache derrière les nouveaux profils", t, re.I): return "B"
     if re.search(r"Bienvenue sur mon compte|offre (à|a) tous mes abonnés", t, re.I): return "ancienne"
@@ -54,6 +67,7 @@ def main():
         accTs, seen, lastLts, lastPts, firstAny, nItems = int(accTs), int(seen), int(lastLts), int(lastPts), int(firstAny), int(nItems)
         o = dict(byp.get(u) or {k: "" for k in FIELDS})
         o["Pseudo"] = u; o["Nom"] = o["Nom"] or nom
+        global _NAME; _NAME = prenom(nom)
         acc = txt(accText)
         va = o["Variante"] if o["Variante"] and o["Variante"] not in ("historique",) else variant(acc)
         if not o["Variante"] and firstAny < C0 and lastLts >= 1787868000 and lastLts < 1787954400 and not (firstIsAcc == "1" and accTs >= C0): va = "relance2808"
