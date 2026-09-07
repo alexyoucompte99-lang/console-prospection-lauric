@@ -156,6 +156,28 @@ def fetch_partials(key: str) -> str:
     return out.getvalue()
 
 
+def fetch_dates(key: str) -> str:
+    """CSV « Submission ID, Soumis le » des scans remplis (date absente du Sheet)."""
+    subs, page = [], 1
+    while page <= 20:
+        url = (f"https://api.tally.so/forms/{TALLY_FORM_ID}/submissions"
+               f"?filter=completed&limit=500&page={page}")
+        req = urllib.request.Request(url, headers={
+            "Authorization": "Bearer " + key, "User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=60) as r:
+            body = json.load(r)
+        subs += body.get("submissions") or []
+        if not body.get("hasMore"):
+            break
+        page += 1
+    out = io.StringIO()
+    w = csv.writer(out)
+    w.writerow(["Submission ID", "Soumis le"])
+    for s in subs:
+        w.writerow([s.get("id", ""), s.get("submittedAt") or s.get("createdAt") or ""])
+    return out.getvalue()
+
+
 def calendly_token() -> str:
     k = os.environ.get("CALENDLY_TOKEN", "").strip()
     if not k and CAL_KEY_FILE.exists():
@@ -436,6 +458,7 @@ def main():
     DATA.mkdir(exist_ok=True)
     eod_file, tally_file = DATA / "eod.csv", DATA / "tally.csv"
     partials_file, pf_file = DATA / "partielles.csv", DATA / "portefeuille.csv"
+    dates_file = DATA / "tally-dates.csv"
 
     if "--no-fetch" not in sys.argv:
         old_eod = eod_file.read_text(encoding="utf-8") if eod_file.exists() else ""
@@ -456,6 +479,10 @@ def main():
         key = tally_key()
         if key:
             partials_file.write_text(fetch_partials(key), encoding="utf-8")
+            try:
+                dates_file.write_text(fetch_dates(key), encoding="utf-8")
+            except Exception as e:
+                print("dates des scans non rafraîchies :", e)
         else:
             print("TALLY_API_KEY absent : partielles non rafraîchies")
         cal = calendly_token()
@@ -475,6 +502,7 @@ def main():
     eod_text = eod_file.read_text(encoding="utf-8")
     tally_text = tally_file.read_text(encoding="utf-8")
     partials_text = partials_file.read_text(encoding="utf-8") if partials_file.exists() else ""
+    dates_text = dates_file.read_text(encoding="utf-8") if dates_file.exists() else ""
     pf_text = pf_file.read_text(encoding="utf-8") if pf_file.exists() else ""
     cal_file = DATA / "calendly.csv"
     cal_text = cal_file.read_text(encoding="utf-8") if cal_file.exists() else ""
@@ -490,6 +518,7 @@ def main():
                 + ",eod:" + js_string(eod_text)
                 + ",tally:" + js_string(tally_text)
                 + ",partials:" + js_string(partials_text)
+                + ",tdates:" + js_string(dates_text)
                 + ",pf:" + js_string(pf_text)
                 + ",cal:" + js_string(cal_text) + "}")
     out = page.replace("/*__SNAPSHOT__*/null", snapshot, 1)

@@ -1055,6 +1055,14 @@ const FALLBACK = { eod: "data/eod.csv", tally: "data/tally.csv", pf: "data/porte
 // Les soumissions partielles Tally ne sont jamais poussées vers le Sheet :
 // un job GitHub les récupère via l'API toutes les heures dans ce fichier.
 const PARTIALS_URL = "data/partielles.csv";
+// Date de soumission des scans remplis (absente du Sheet, relevée via l'API Tally par build.py)
+const TDATES_URL = "data/tally-dates.csv";
+let TDATES = {};
+const parseTallyDates = t => {
+  const m = {};
+  parseCSV(t || "").slice(1).forEach(r => { if (r[0] && r[1]) m[String(r[0]).trim()] = String(r[1]).trim(); });
+  return m;
+};
 // RDV Calendly de Lauric, écrits par le job GitHub (le jeton reste en secret)
 const CAL_URL = "data/calendly.csv";
 
@@ -1299,6 +1307,7 @@ async function load(showSpinner) {
     setStatus("", "Actualisation…");
   }
   const partials = await get(PARTIALS_URL).catch(() => "");
+  TDATES = parseTallyDates(await get(TDATES_URL).catch(() => ""));
   const cal = await get(CAL_URL).catch(() => "");
   const leadsCsv = await get("data/leads-insta.csv").catch(() => "");
   INSTA_ACT_TEXT = await get("data/insta-activite.csv").catch(() => "");
@@ -3457,7 +3466,13 @@ function renderTallyTab(tallyText, partialsText) {
   const iPrenom = ix("votre prénom"), iWa = ix("votre numéro whatsapp"),
         iProfil = ix("avant de commencer"), iScore = ix("score"), iSource = ix("source"),
         iR1 = ix("call r1"), iR2 = ix("r2"), iIssue = ix("issue"), iCible = ix("dans la cible");
-  const done = rows.slice(1).filter(isRealTallyRow).reverse();
+  const iSub = ix("submission id");
+  const subDate = r => (iSub >= 0 && r[iSub]) ? (TDATES[String(r[iSub]).trim()] || "") : "";
+  // plus récent en haut : par date de soumission quand on l'a, sinon ordre du Sheet
+  const done = rows.slice(1).filter(isRealTallyRow).reverse()
+    .map((r, i) => ({ r, i, d: subDate(r) }))
+    .sort((a, b) => a.d && b.d ? (a.d < b.d ? 1 : -1) : a.i - b.i)
+    .map(x => x.r);
 
   // colonnes de questions à afficher au clic (Q1..Q9 + « Votre résultat arrive... »)
   const isQ = t => /^q\d\./i.test((t || "").trim()) || (t || "").trim().toLowerCase().startsWith("votre résultat arrive");
@@ -3491,6 +3506,8 @@ function renderTallyTab(tallyText, partialsText) {
   el("tally-done").innerHTML = done.map(r => {
     const v = i => (i >= 0 && r[i] ? String(r[i]).trim() : "");
     const meta = [];
+    const sd = subDate(r);
+    if (sd) meta.push("scan fait le " + esc(frDateTime(sd)));
     if (v(iSource)) meta.push("source : " + esc(v(iSource)));
     if (v(iR1)) meta.push("R1 : " + esc(v(iR1)));
     if (v(iR2)) meta.push("R2 : " + esc(v(iR2)));
@@ -3916,6 +3933,7 @@ const NTFY_TOPIC_PAGE = "scan-dirigeant-lauric-d7k4q2";
 /* ---------- démarrage ---------- */
 if (SNAPSHOT) {
   setStatus("stale", "Copie du " + SNAPSHOT.generated);
+  TDATES = parseTallyDates(SNAPSHOT.tdates || "");
   render(aggregate(SNAPSHOT.eod, SNAPSHOT.tally));
   renderExtras(SNAPSHOT.eod, SNAPSHOT.tally, SNAPSHOT.partials || "", SNAPSHOT.pf || "", SNAPSHOT.cal || "", "");
 } else {
