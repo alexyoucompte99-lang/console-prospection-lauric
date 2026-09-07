@@ -237,6 +237,12 @@
   .chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 240px; }
   .chip button { border: 0; background: none; color: inherit; cursor: pointer; font-size: 15px; padding: 0; line-height: 1; }
   .msgcard { white-space: pre-wrap; font-size: 14px; color: var(--ink); background: var(--page); border: 1px dashed var(--border); border-radius: 8px; padding: 12px 14px; margin-top: 10px; overflow-wrap: break-word; }
+  .ldet { margin-top: 8px; font-size: 13.5px; }
+  .ldet summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: 13px; list-style: none; }
+  .ldet summary::before { content: "▸ "; }
+  .ldet[open] summary::before { content: "▾ "; }
+  .ldrow { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; align-items: baseline; }
+  .ldk { color: var(--muted); font-size: 12.5px; min-width: 150px; }
   .copybtn { font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; border: 1px solid var(--accent); color: var(--accent); background: transparent; border-radius: 7px; padding: 4px 10px; margin-top: 8px; }
   .copybtn:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
   .dupbtn { border-color: var(--muted); color: var(--muted); }
@@ -441,6 +447,7 @@
       <button data-tab="tally">🎯 Scans Tally <span class="count" id="tally-count"></span></button>
       <button data-tab="leads">👤 Leads <span class="count" id="leads-count"></span></button>
       <button data-tab="datas">📈 Datas</button>
+      <button data-tab="verif">🔍 EOD vs réel</button>
       <button data-tab="calls">📞 Calls <span class="count" id="calls-count"></span></button>
       <button data-tab="ventes">💰 Ventes <span class="count" id="ventes-count"></span></button>
       <button data-tab="script">📣 Script setting <span class="count" id="script-count"></span></button>
@@ -585,6 +592,7 @@
         <button class="pill fpill" data-r="7">7 j</button>
         <button class="pill fpill" data-r="14">14 j</button>
         <button class="pill fpill" data-r="30">30 j</button>
+        <span id="leads-months" style="display:contents"></span>
         <label class="formnote" style="margin:0 0 0 8px">du <input type="date" id="leads-from" style="font:inherit;padding:3px 6px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:inherit"></label>
         <label class="formnote" style="margin:0">au <input type="date" id="leads-to" style="font:inherit;padding:3px 6px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:inherit"></label>
       </div>
@@ -603,7 +611,32 @@
           <p class="formnote" style="margin-top:10px">Un lead est rattaché au jour de son accroche (ou de la relance du 28/08 pour les anciennes conversations). « Vus » et « réponses » sont l'état au dernier relevé, pas le jour de la vue.</p>
         </div>
       </section>
+      <section>
+        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">💡 Ce qu'on peut en tirer (analyse du relevé du 07/09)</h2>
+        <div class="card" style="font-size:14.5px;line-height:1.55">
+          <ul style="margin:0;padding-left:20px">
+            <li><b>Le script A long ne marche pas</b> : 0 réponse sur 8 envois, dont Damien qui l'a vu et n'a même pas répondu à la relance. Le message court personnalisé avec une seule question fait 5 réponses sur 17.</li>
+            <li><b>Le message B n'a pas été testé</b> : 3 envois seulement (02/09, Cynthia), aucun ouvert. Il faut 20 à 30 envois par variante avant de conclure.</li>
+            <li><b>Le taux d'ouverture dépend du compte, pas du message.</b> Les messages du 06/09 au soir ont été vus dans les 2 heures, sauf les comptes vides ou privés quasi morts. Un compte mort n'ouvre rien, quel que soit le texte.</li>
+            <li><b>Les réponses arrivent vite ou jamais</b> : les 5 réponses du 05-06/09 sont tombées entre 3 minutes et 2 h 30 après l'envoi. Au-delà de 24 h sans réponse, une relance ne sert à rien (cf. Damien).</li>
+            <li><b>Perso = meilleur pour la qualité</b> : les réponses perso donnent Marion (directrice depuis 5 ans), Nesrine (manage 9 personnes) et MJ (poste à responsabilité), mais aussi une commerciale pharma et un chef de service public.</li>
+            <li><b>Le message « merci pour ton like + scan » ne sert à rien</b> : 36 envois à des non-abonnés, 0 ouvert. Il tombe dans leurs Demandes de messages.</li>
+            <li><b>La relance de masse du 28/08</b> (90 conversations, vocaux) : 59 % vues, 13 réponses (14 %), mais surtout des réponses de politesse ou des « pas maintenant ».</li>
+          </ul>
+        </div>
+      </section>
       <p class="formnote">Les datas viennent du relevé des conversations Instagram (API interne, lecture seule). La liste des leads et les priorités sont dans l'onglet 👤 Leads.</p>
+    </div>
+
+    <div id="tab-verif" hidden>
+      <section>
+        <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px">🔍 Ce que les setters déclarent dans l'EOD vs ce qu'on voit vraiment sur Instagram</h2>
+        <div class="tiles" id="verif-kpis" style="margin-bottom:14px"></div>
+        <div class="card">
+          <div class="tbl-scroll" style="margin-top:0" id="verif-table"></div>
+          <p class="formnote" style="margin-top:10px" id="verif-note"></p>
+        </div>
+      </section>
     </div>
 
     <div id="tab-calls" hidden>
@@ -1209,6 +1242,7 @@ async function load(showSpinner) {
   const partials = await get(PARTIALS_URL).catch(() => "");
   const cal = await get(CAL_URL).catch(() => "");
   const leadsCsv = await get("data/leads-insta.csv").catch(() => "");
+  INSTA_ACT_TEXT = await get("data/insta-activite.csv").catch(() => "");
   get("data/abonnes.csv").then(renderAbonnesTab).catch(() => renderAbonnesTab(""));
   get("data/abonnes_total.csv").then(renderTotalChart).catch(() => renderTotalChart(""));
   // le portefeuille a son propre fallback : un export CSV privé renvoie du HTML
@@ -1641,7 +1675,7 @@ function mini(rows30, title, f, color, untrackedNote) {
    Onglets EOD + Scans Tally
    ============================================================ */
 
-const TABS = ["dash", "eod", "tally", "leads", "datas", "calls", "ventes", "script", "abonnes"];
+const TABS = ["dash", "eod", "tally", "leads", "datas", "verif", "calls", "ventes", "script", "abonnes"];
 const TAB_ALIAS = { cav: "calls", car: "calls" };   // anciens liens #cav / #car
 function showTab(name) {
   name = TAB_ALIAS[name] || name;
@@ -1722,6 +1756,7 @@ function renderExtras(eodText, tallyText, partialsText, pfText, calText, leadsTe
   renderVentesTab(tallyText, pfText || "");
   renderCallsTabs(calText || "");
   renderLeadsTab(leadsText || "");
+  renderVerifTab();
 }
 
 /* ---------- onglet EOD : derniers reports + pilotage ---------- */
@@ -2011,7 +2046,15 @@ const LEAD_RANK = Object.fromEntries(LEAD_STAGES.map(([k], i) => [k, i]));
 function renderLeadsTab(leadsText) {
   const map = new Map();
   const norm = s => (s || "").trim().toLowerCase();
-  const keyOf = (nom, pseudo) => firstName(nom || "").toLowerCase() || norm(pseudo);
+  /* clé d'un lead : le pseudo Insta quand on l'a (évite de fusionner deux « Maxime »), sinon le prénom ;
+     une source sans pseudo (Tally, Calendly, étiquette) rejoint le lead Insta du même prénom s'il est unique */
+  const fnIndex = {};
+  const keyOf = (nom, pseudo) => {
+    const fn = firstName(nom || "").toLowerCase();
+    if (pseudo) { const k = norm(pseudo); if (fn) (fnIndex[fn] = fnIndex[fn] || new Set()).add(k); return k; }
+    if (fn && fnIndex[fn] && fnIndex[fn].size === 1) return [...fnIndex[fn]][0];
+    return fn;
+  };
   const touch = (key, patch, stage) => {
     if (!key) return;
     const o = map.get(key) || { key, stages: new Set(), srcs: new Set() };
@@ -2029,7 +2072,9 @@ function renderLeadsTab(leadsText) {
   const lx = n => lh.findIndex(c => norm(c) === n);
   const iPs = lx("pseudo"), iNo = lx("nom"), iSt = lx("statut"), iVa = lx("variante"),
         iPc = lx("premier contact"), iDm = lx("dernier message"), iDe = lx("detail"), iRe = lx("releve"),
-        iPr = lx("prio"), iRa = lx("raison"), iMg = lx("message");
+        iPr = lx("prio"), iRa = lx("raison"), iMg = lx("message"),
+        iMe = lx("message envoye"), iDen = lx("date envoi"), iDvu = lx("date vu"), iLl = lx("dernier message lauric"),
+        iDll = lx("date dernier lauric"), iRl = lx("reponse lead"), iDr = lx("date reponse"), iCv = lx("conv"), iAc = lx("action");
   let releve = "";
   const prios = [];    // leads à relancer en priorité (colonne Prio du relevé)
   const vstats = {};   // stats par variante d'accroche (toutes dates, pour les pills)
@@ -2053,7 +2098,9 @@ function renderLeadsTab(leadsText) {
     const stage = st === "repondu" ? "repondu" : (st === "vu" || st === "reagi") ? "vu" : "accroche";
     touch(keyOf(v(iNo), v(iPs)),
       { nom: v(iNo), pseudo: v(iPs), premier: v(iPc), dernier: v(iDm), d: d || "", detail: v(iDe), variante: va,
-        src: "Relevé Insta", reagi: st === "reagi" ? "1" : "" }, stage);
+        src: "Relevé Insta", reagi: st === "reagi" ? "1" : "",
+        msgSent: v(iMe), dEnvoi: v(iDen), dVu: v(iDvu), lastL: v(iLl), dLastL: v(iDll), reply: v(iRl), dReply: v(iDr),
+        conv: v(iCv), action: v(iAc), msgTo: v(iMg), raison: v(iRa) }, stage);
     if (v(iPr)) prios.push({ n: +v(iPr), nom: v(iNo), pseudo: v(iPs), raison: v(iRa), msg: v(iMg) });
   });
 
@@ -2120,7 +2167,7 @@ function renderLeadsTab(leadsText) {
   LEADS_RELEVE = releve;
   renderLeadsStats();
 
-  el("leads-list").innerHTML = leads.map(l => {
+  el("leads-list").innerHTML = leads.map((l, i) => {
     const [, label, color] = LEAD_STAGES.find(([k]) => k === l.best);
     return '<div class="rcard deal" data-stage="' + l.best + '" data-va="' + esc(l.variante || "") + '" data-d="' + esc(l.d || "") + '" style="--dc:' + color + '">' +
       '<div class="rhead"><span class="rname">' + esc(l.nom || l.key) + '</span>' +
@@ -2132,7 +2179,9 @@ function renderLeadsTab(leadsText) {
       '</div>' +
       (l.score ? '<p class="rstats">score scan : <b>' + esc(l.score) + '</b></p>' : '') +
       (l.detail ? '<p class="rnote">' + esc(l.detail) + '</p>' : '') +
-      (l.pseudo ? '<p class="rstats" style="margin-top:6px"><a class="vivlink" href="https://www.instagram.com/' + esc(l.pseudo) + '/" target="_blank" rel="noopener">@' + esc(l.pseudo) + ' ↗</a></p>' : '') +
+      (l.pseudo ? '<p class="rstats" style="margin-top:6px"><a class="vivlink" href="https://www.instagram.com/' + esc(l.pseudo) + '/" target="_blank" rel="noopener">@' + esc(l.pseudo) + ' ↗</a>' +
+        (l.conv ? ' · <a class="vivlink" href="' + esc(l.conv) + '" target="_blank" rel="noopener">ouvrir la conversation ↗</a>' : '') + '</p>' : '') +
+      (l.msgSent || l.action ? leadDetails(l, i) : '') +
       (l.wa || l.tel ? waBtn(l.wa || l.tel, null) : '') +
       '</div>';
   }).join("") || '<p class="empty-note">Aucun lead pour l\'instant.</p>';
@@ -2153,9 +2202,12 @@ const VAR_LABELS = { A: "🅰 Message A · long (Constant)", B: "🅱 Message B 
                      ancienne: "Ancien script · « Bienvenue, j'offre… »", like: "👍 Message scan après un like (non abonnés)",
                      perso: "Autre message perso / réseau", relance2808: "🎙️ Relance du 28/08 (vocal + texte)" };
 const VAR_SHORT = { A: "🅰 msg A", B: "🅱 msg B", lauric: "💬 message perso", like: "👍 like", ancienne: "ancien script", relance2808: "🎙️ relance 28/08" };
+const MONTHS_FR = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+function monthLabel(ym) { const [y, m] = ym.split("-"); return MONTHS_FR[+m - 1] + " " + y; }
 function rangeBounds() {
   if (leadsRange.key === "custom") return { from: leadsRange.from || "", to: leadsRange.to || "" };
   if (leadsRange.key === "all") return { from: "", to: "" };
+  if (leadsRange.key.startsWith("m:")) { const ym = leadsRange.key.slice(2); const [y, m] = ym.split("-").map(Number); return { from: ym + "-01", to: isoOf(y, m, new Date(y, m, 0).getDate()) }; }
   const n = +leadsRange.key, d = new Date(); d.setDate(d.getDate() - n);
   return { from: iso(d), to: "" };
 }
@@ -2169,11 +2221,15 @@ function rangeLabel() {
   const { from, to } = rangeBounds();
   const fr = d => d ? d.split("-").reverse().join("/") : "";
   if (!from && !to) return "";
+  if (leadsRange.key.startsWith("m:")) return monthLabel(leadsRange.key.slice(2));
   if (leadsRange.key !== "custom") return leadsRange.key === "0" ? "aujourd'hui" : (leadsRange.key + " derniers jours");
   return (from ? "du " + fr(from) : "") + (to ? " au " + fr(to) : "");
 }
 /* tableau A/B + activité par jour, recalculés selon la période choisie */
 function renderLeadsStats() {
+  /* pills des mois présents dans le relevé */
+  const months = [...new Set(LEAD_ROWS.filter(r => r.d).map(r => r.d.slice(0, 7)))].sort();
+  el("leads-months").innerHTML = months.map(ym => '<button class="pill fpill' + (leadsRange.key === "m:" + ym ? " on" : "") + '" data-r="m:' + ym + '">' + monthLabel(ym).split(" ")[0] + '</button>').join("");
   const rows = LEAD_ROWS.filter(r => inRange(r.d));
   const vs = {};
   rows.forEach(r => {
@@ -2230,6 +2286,52 @@ function renderLeadsStats() {
     (dk.length > 1 ? (() => { const t = dk.reduce((a, d) => ({ env: a.env + days[d].env, vu: a.vu + days[d].vu, rep: a.rep + days[d].rep }), { env: 0, vu: 0, rep: 0 });
       return '<tr><td class="tot">Total</td><td class="tot">' + t.env + '</td><td colspan="7"></td><td>' + t.vu + ' <span style="color:var(--muted)">(' + pct(t.vu, t.env) + ')</span></td><td class="tot">' + t.rep + '</td><td class="tot">' + pct(t.rep, t.env) + '</td></tr>'; })() : '') +
     '</tbody></table>' : "";
+}
+/* bloc dépliable d'une carte lead : message exact, dates, réponse, action, message à envoyer */
+function leadDetails(l, i) {
+  const row = (k, v, pre) => v ? '<div class="ldrow"><span class="ldk">' + k + '</span>' + (pre ? '<div class="msgcard" style="margin-top:4px">' + esc(v) + '</div>' : '<span>' + esc(v) + '</span>') + '</div>' : '';
+  const act = l.action || "";
+  const actCol = /^RÉPONDRE|^Priorité/.test(act) ? "var(--bad)" : /^Relancer|réagi/.test(act) ? "var(--s2)" : "var(--ink-2)";
+  return '<details class="ldet"><summary>Détails · message envoyé, dates, action à faire</summary>' +
+    row("📤 Message envoyé le", l.dEnvoi) +
+    (l.msgSent ? '<div class="msgcard" style="margin-top:4px">' + esc(l.msgSent) + '</div>' : '') +
+    row("👀 Vu par le lead", l.dVu || (l.msgSent ? "pas encore ouvert" : "")) +
+    (l.reply ? row("💬 Réponse du lead le " + l.dReply, l.reply, true) : '') +
+    (l.lastL && l.lastL !== l.msgSent ? row("↩️ Dernier message de notre côté le " + l.dLastL, l.lastL, true) : '') +
+    (act ? '<div class="ldrow"><span class="ldk">🎯 Action</span><span style="color:' + actCol + ';font-weight:600">' + esc(act) + '</span></div>' : '') +
+    (l.msgTo ? '<div class="ldrow"><span class="ldk">✍️ Message à envoyer</span></div><div class="msgcard" id="lead-msg-' + i + '">' + esc(l.msgTo) + '</div>' +
+      '<button type="button" class="copybtn" data-copy="lead-msg-' + i + '">Copier le message</button>' : '') +
+    '</details>';
+}
+
+/* onglet 🔍 EOD vs réel : déclaré par les setters vs observé sur Instagram (data/insta-activite.csv) */
+let INSTA_ACT_TEXT = "";
+function renderVerifTab() {
+  const act = {};
+  parseCSV(INSTA_ACT_TEXT || "").slice(1).forEach(r => { if (r[0]) act[r[0]] = { acc: +r[1] || 0, rel: +r[2] || 0, voc: +r[3] || 0 }; });
+  const eod = {};
+  (EOD_REPORTS || []).forEach(r => {
+    if (!r.date) return;
+    const o = eod[r.date] = eod[r.date] || { acc: 0, rel: 0, setters: new Set() };
+    o.acc += (r.mNew || 0) + (r.mOld || 0) + (r.like || 0) + (r.com || 0) + (r.oth || 0);
+    o.rel += r.rel || 0; o.setters.add(r.setter);
+  });
+  const days = [...new Set([...Object.keys(act), ...Object.keys(eod)])].filter(d => act[d]).sort().reverse();
+  if (!days.length) { el("verif-table").innerHTML = '<p class="formnote">Pas encore de relevé Instagram.</p>'; return; }
+  const fr = d => d.split("-").reverse().join("/");
+  const diff = (a, b) => { const x = a - b; return '<td style="font-weight:600;color:' + (x > 0 ? "var(--bad)" : x < 0 ? "var(--s1)" : "var(--muted)") + '">' + (x > 0 ? "+" : "") + x + '</td>'; };
+  let tE = 0, tI = 0, tEr = 0, tIr = 0;
+  el("verif-table").innerHTML = '<table><thead><tr><th>Jour</th><th>Setters ayant rempli</th><th>Accroches déclarées (EOD)</th><th>Accroches vues sur Insta</th><th>Écart</th><th>Relances déclarées</th><th>Messages de suivi vus sur Insta</th><th>Écart</th><th>Vocaux Insta</th></tr></thead><tbody>' +
+    days.map(d => { const e = eod[d] || { acc: 0, rel: 0, setters: new Set() }, a = act[d]; tE += e.acc; tI += a.acc; tEr += e.rel; tIr += a.rel;
+      return '<tr><td class="tot">' + fr(d) + '</td><td>' + ([...e.setters].join(", ") || '<span style="color:var(--bad)">aucun EOD</span>') + '</td><td>' + e.acc + '</td><td class="tot">' + a.acc + '</td>' + diff(e.acc, a.acc) +
+        '<td>' + e.rel + '</td><td class="tot">' + a.rel + '</td>' + diff(e.rel, a.rel) + '<td>' + a.voc + '</td></tr>'; }).join("") +
+    '<tr><td class="tot">Total</td><td></td><td class="tot">' + tE + '</td><td class="tot">' + tI + '</td>' + diff(tE, tI) + '<td class="tot">' + tEr + '</td><td class="tot">' + tIr + '</td>' + diff(tEr, tIr) + '<td></td></tr></tbody></table>';
+  const kpi = (label, val, sub, col) => '<div class="card tile" style="--tc:' + col + '"><div class="formnote" style="margin:0">' + label + '</div><div style="font-size:28px;font-weight:700;line-height:1.2">' + val + '</div>' + (sub ? '<div class="formnote" style="margin:4px 0 0">' + sub + '</div>' : '') + '</div>';
+  el("verif-kpis").innerHTML =
+    kpi("Accroches déclarées dans l'EOD", tE, "sur les jours relevés", "var(--accent)") +
+    kpi("Accroches réellement envoyées", tI, "comptées dans les conversations Instagram", "var(--s1)") +
+    kpi("Écart", (tE - tI > 0 ? "+" : "") + (tE - tI), tE - tI > 0 ? "déclaré en trop" : tE - tI < 0 ? "envoyé sans être déclaré" : "ça colle", tE - tI > 0 ? "var(--bad)" : "var(--good)");
+  el("verif-note").textContent = "Écart en rouge = plus déclaré dans l'EOD que vu sur Instagram. Les chiffres Instagram comptent tous les messages sortants du compte (Lauric compris), pas seulement ceux des setters : un écart négatif peut venir de Lauric. Une accroche = premier message envoyé à quelqu'un qui ne nous avait jamais écrit ; un message de suivi = tout autre message envoyé (relance, réponse, vocal). Relevé fait par Claude via l'API Instagram, lecture seule.";
 }
 function applyLeadsFilter() {
   const q = el("q").value.trim().toLowerCase();
@@ -3155,6 +3257,8 @@ el("tally-pills").addEventListener("click", e => {
 });
 
 /* ---------- onglet Scans Tally : remplis + partiels, avec WhatsApp ---------- */
+/* vraie soumission Tally = Submission ID + Respondent ID ; les lignes de synthèse ajoutées à la main dans le Sheet (« Nb R1 », « TOTAL… ») sont ignorées */
+const isRealTallyRow = r => r.length > 2 && /^[A-Za-z0-9_-]{5,}$/.test((r[0] || "").trim()) && /^[A-Za-z0-9_-]{5,}$/.test((r[1] || "").trim());
 function renderTallyTab(tallyText, partialsText) {
   const rows = parseCSV(tallyText);
   const h = rows[0] || [];
@@ -3162,7 +3266,7 @@ function renderTallyTab(tallyText, partialsText) {
   const iPrenom = ix("votre prénom"), iWa = ix("votre numéro whatsapp"),
         iProfil = ix("avant de commencer"), iScore = ix("score"), iSource = ix("source"),
         iR1 = ix("call r1"), iR2 = ix("r2"), iIssue = ix("issue"), iCible = ix("dans la cible");
-  const done = rows.slice(1).filter(r => r.length > 2).reverse();
+  const done = rows.slice(1).filter(isRealTallyRow).reverse();
 
   // colonnes de questions à afficher au clic (Q1..Q9 + « Votre résultat arrive... »)
   const isQ = t => /^q\d\./i.test((t || "").trim()) || (t || "").trim().toLowerCase().startsWith("votre résultat arrive");
@@ -3315,7 +3419,7 @@ function renderVentesTab(tallyText, pfText) {
   const qCols = h.map((t, i) => isQ(t) ? i : -1).filter(i => i >= 0);
   rows.slice(1).forEach(r => {
     const v = i => (i >= 0 && r[i] ? String(r[i]).trim() : "");
-    if (!(r[0] || "").trim()) return; // lignes de stats du Sheet (TOTAL, Nb R1...) sans Submission ID
+    if (!isRealTallyRow(r)) return; // lignes de stats du Sheet (TOTAL, Nb R1...) sans Submission/Respondent ID
     if (!v(iR1) && !v(iR2) && !v(iIssue)) return; // pas encore entré dans le pipe de vente
     const qa = [];
     if (v(iProfil)) qa.push({ q: "Profil", a: v(iProfil) });
