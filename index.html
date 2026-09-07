@@ -241,6 +241,9 @@
   .ldet summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: 13px; list-style: none; }
   .ldet summary::before { content: "▸ "; }
   .accdet { margin: 0 0 18px; } .accdet summary::before { color: var(--good); }
+  .votegrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 6px 18px; margin-top: 10px; }
+  .voterow { display: flex; align-items: center; gap: 4px; }
+  .votename { min-width: 96px; font-size: 13px; color: var(--ink-2); }
   .ldet[open] summary::before { content: "▾ "; }
   .ldrow { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; align-items: baseline; }
   .ldk { color: var(--muted); font-size: 12.5px; min-width: 150px; }
@@ -592,7 +595,7 @@
           <b>Ce que disent les 1 000 conversations</b> : ce qui fait répondre, c'est court, personnel, une seule question ouverte, envoyé le soir, et jamais de pitch en premier message (les 577 messages « je propose un scan » : 5 % ouverts, 2 % de réponses). Ce qui répond, ce sont autant des managers en poste que des dirigeants. Les 10 messages ci-dessous poussent ces leviers plus loin, parfois à contre-courant.<br>
           <b>Protocole</b> : 30 envois par message, même setter, même créneau (18h-21h), à des nouveaux abonnés uniquement. On compare le taux de réponse à 48 h dans le tableau A/B ci-dessous. Remplacer [Prénom] et le détail du profil, jamais deux messages identiques d'affilée.
         </div>
-        <p class="formnote" style="margin:0 0 8px">Chacun note chaque message de 1 à 5 (Lauric, Constant, Maximilien, Alex). La meilleure moyenne remonte en premier. Les votes sont partagés : ils passent par le même Google Form que l'EOD (ligne « Vote »).</p>
+        <p class="formnote" style="margin:0 0 8px">Chacun note chaque message de 1 à 5 sur sa propre ligne (Lauric, Constant, Maximilien, Alex). La meilleure moyenne remonte en premier. Les votes sont partagés : ils passent par le même Google Form que l'EOD (ligne « Vote »), une nouvelle note remplace la précédente.</p>
         <div class="rlist" id="new-acc-list"></div>
         </div>
       </details>
@@ -2512,37 +2515,29 @@ function parseVotes(eodText) {
 }
 function renderNewAcc() {
   const box = el("new-acc-list"); if (!box) return;
-  let voter = ""; try { voter = localStorage.getItem("accVoter") || ""; } catch (e) {}
   const avg = id => { const o = VOTES[id] || {}; const n = Object.values(o); return n.length ? n.reduce((a, b) => a + b, 0) / n.length : 0; };
   const list = NEW_ACC.slice().sort((a, b) => avg(b.id) - avg(a.id) || Object.keys(VOTES[b.id] || {}).length - Object.keys(VOTES[a.id] || {}).length);
   box.innerHTML = list.map((a, i) => {
     const o = VOTES[a.id] || {}, n = Object.keys(o).length, m = avg(a.id);
-    const mine = voter && o[voter] ? o[voter] : 0;
     return '<div class="rcard deal" style="--dc:' + (i === 0 && n ? "var(--good)" : "var(--accent)") + '">' +
       '<div class="rhead"><span class="rname">' + (n ? '#' + (i + 1) + ' · ' : '') + esc(a.titre) + '</span>' +
-      (n ? '<span class="badge win">★ ' + m.toFixed(1) + ' / 5 · ' + n + ' vote' + (n > 1 ? 's' : '') + '</span>' : '<span class="badge gray">pas encore noté</span>') +
-      VOTERS.map(w => o[w] ? '<span class="badge gray">' + esc(w) + ' ' + o[w] + '</span>' : '').join("") + '</div>' +
+      (n ? '<span class="badge win">★ ' + m.toFixed(1) + ' / 5 · ' + n + ' vote' + (n > 1 ? 's' : '') + '</span>' : '<span class="badge gray">pas encore noté</span>') + '</div>' +
       '<p class="rstats" style="margin-top:4px">' + esc(a.pourquoi) + '</p>' +
       '<div class="msgcard" id="new-' + a.id + '">' + esc(a.texte) + '</div>' +
-      '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px">' +
-      '<button type="button" class="copybtn" style="margin:0" data-copy="new-' + a.id + '">Copier</button>' +
-      '<span class="formnote" style="margin:0 0 0 6px">Ma note :</span>' +
-      [1, 2, 3, 4, 5].map(k => '<button type="button" class="pill fpill' + (mine === k ? ' on' : '') + '" data-vote="' + a.id + '" data-note="' + k + '" style="padding:2px 9px">' + k + '</button>').join("") +
-      '</div></div>';
+      '<button type="button" class="copybtn" data-copy="new-' + a.id + '">Copier</button>' +
+      '<div class="votegrid">' + VOTERS.map(w =>
+        '<div class="voterow"><span class="votename">' + esc(w) + (o[w] ? ' <b>' + o[w] + '/5</b>' : '') + '</span>' +
+        [1, 2, 3, 4, 5].map(k => '<button type="button" class="pill fpill' + (o[w] === k ? ' on' : '') + '" data-vote="' + a.id + '" data-who="' + esc(w) + '" data-note="' + k + '" style="padding:1px 8px;font-size:12px">' + k + '</button>').join("") +
+        '</div>').join("") + '</div>' +
+      '</div>';
   }).join("");
 }
 document.addEventListener("click", async e => {
   const b = e.target.closest("[data-vote]"); if (!b) return;
-  let voter = ""; try { voter = localStorage.getItem("accVoter") || ""; } catch (e2) {}
-  if (!VOTERS.includes(voter)) {
-    const pick = prompt("Qui vote ? Tape ton prénom : " + VOTERS.join(", "));
-    voter = VOTERS.find(v => v.toLowerCase() === (pick || "").trim().toLowerCase()) || "";
-    if (!voter) return;
-    try { localStorage.setItem("accVoter", voter); } catch (e2) {}
-  }
-  const id = b.dataset.vote, note = +b.dataset.note;
-  (VOTES[id] = VOTES[id] || {})[voter] = note; renderNewAcc();
-  try { await postEodRow("Vote", "— Vote accroche : " + id + " · " + voter + " · " + note); }
+  const id = b.dataset.vote, who = b.dataset.who, note = +b.dataset.note;
+  if (!VOTERS.includes(who)) return;
+  (VOTES[id] = VOTES[id] || {})[who] = note; renderNewAcc();
+  try { await postEodRow("Vote", "— Vote accroche : " + id + " · " + who + " · " + note); }
   catch (e2) { alert("Le vote n'a pas pu être envoyé, réessaie."); }
 });
 /* bloc « accroches à tester » : replié par défaut, état mémorisé dans le navigateur */
