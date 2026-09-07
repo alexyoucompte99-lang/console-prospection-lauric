@@ -202,7 +202,7 @@
   footer { font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--grid); padding-top: 14px; }
 
   /* onglets */
-  .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 22px; overflow-x: auto; }
+  .tabs { display: flex; flex-wrap: wrap; gap: 4px 2px; border-bottom: 1px solid var(--border); margin-bottom: 22px; }
   .tabs button {
     font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap;
     border: 0; background: transparent; color: var(--ink-2);
@@ -404,7 +404,7 @@
     .majline { justify-content: flex-start; }
     .wrap { padding: 18px 14px 56px; }
     h1 { font-size: 22px; }
-    .tabs { position: sticky; top: 0; background: var(--page); z-index: 5; -webkit-overflow-scrolling: touch; }
+    .tabs { position: sticky; top: 0; background: var(--page); z-index: 5; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }   /* mobile : une ligne qui défile */
     .tabs button { padding: 10px 12px 11px; font-size: 13.5px; }
     .tiles { grid-template-columns: 1fr 1fr; gap: 10px; }
     .tile .big { font-size: 24px; }
@@ -585,6 +585,95 @@
     </div>
 
     <div id="tab-datas" hidden>
+      <section>
+        <h2 class="hsec" style="--hc:var(--good);margin-bottom:10px">🧪 10 accroches à tester (objectif : le taux de réponse)</h2>
+        <div class="card" style="font-size:14px;line-height:1.5;margin-bottom:12px">
+          <b>Ce que disent les 1 000 conversations</b> : ce qui fait répondre, c'est court, personnel, une seule question ouverte, envoyé le soir, et jamais de pitch en premier message (les 577 messages « je propose un scan » : 5 % ouverts, 2 % de réponses). Ce qui répond, ce sont autant des managers en poste que des dirigeants. Les 10 messages ci-dessous poussent ces leviers plus loin, parfois à contre-courant.<br>
+          <b>Protocole</b> : 30 envois par message, même setter, même créneau (18h-21h), à des nouveaux abonnés uniquement. On compare le taux de réponse à 48 h dans le tableau A/B ci-dessous. Remplacer [Prénom] et le détail du profil, jamais deux messages identiques d'affilée.
+        </div>
+        <div class="rlist">
+          <div class="rcard deal" style="--dc:var(--accent)">
+            <div class="rhead"><span class="rname">1. La question inversée (demander un avis)</span></div>
+            <p class="rstats" style="margin-top:4px">Le lead devient l'expert, pas la cible. Répondre à une demande d'avis est flatteur et facile, et ça dit tout de sa situation.</p>
+            <div class="msgcard" id="new-acc-0">Hello [Prénom] ! Merci pour le follow.
+
+Question sincère : quand tu vois passer un contenu sur le management, qu'est-ce qui te fait t'arrêter et qu'est-ce qui te fait fuir ?
+
+Je cherche à comprendre ce qui compte vraiment pour les gens qui gèrent une équipe.</div>
+            <button type="button" class="copybtn" data-copy="new-acc-0">Copier</button>
+          </div>
+          <div class="rcard deal" style="--dc:var(--accent)">
+            <div class="rhead"><span class="rname">2. La note sur 10</span></div>
+            <p class="rstats" style="margin-top:4px">Une réponse en un chiffre, zéro effort. L'aveu personnel (« moi j'étais à 3 ») enlève le jugement et appelle une confidence.</p>
+            <div class="msgcard" id="new-acc-1">Hello [Prénom] ! Merci pour le follow.
+
+Sur 10, ton équipe tourne à combien quand tu n'es pas là ? (moi, pendant des années, j'étais à 3)</div>
+            <button type="button" class="copybtn" data-copy="new-acc-1">Copier</button>
+          </div>
+          <div class="rcard deal" style="--dc:var(--accent)">
+            <div class="rhead"><span class="rname">3. Le choix binaire</span></div>
+            <p class="rstats" style="margin-top:4px">Les données montrent que des managers salariés répondent autant que les patrons. Deux cases, tout le monde se reconnaît, réponse en un mot.</p>
+            <div class="msgcard" id="new-acc-2">Hello [Prénom] ! Merci pour le follow.
+
+Deux profils me suivent : ceux qui dirigent déjà une équipe, et ceux qui veulent y arriver. Tu es plutôt lequel ?</div>
+            <button type="button" class="copybtn" data-copy="new-acc-2">Copier</button>
+          </div>
+          <div class="rcard deal" style="--dc:var(--accent)">
+            <div class="rhead"><span class="rname">4. L'hypothèse à corriger</span></div>
+            <p class="rstats" style="margin-top:4px">Personne ne résiste à corriger une hypothèse fausse. Un détail du profil + un pari : le lead répond pour confirmer ou rectifier.</p>
+            <div class="msgcard" id="new-acc-3">Hello [Prénom] ! J'ai vu [détail du profil : tes photos de voyage / ton compte pro / ta bio].
+
+Je parie que tu bosses pour toi : personne n'a autant de liberté en étant salarié. Je me trompe ?</div>
+            <button type="button" class="copybtn" data-copy="new-acc-3">Copier</button>
+          </div>
+          <div class="rcard deal" style="--dc:var(--accent)">
+            <div class="rhead"><span class="rname">5. Zéro pitch, promis</span></div>
+            <p class="rstats" style="margin-top:4px">Contre-intuitif : annoncer qu'on ne vend rien. Les 577 messages « je propose un scan » ont eu 5 % de vues. Ici on enlève la menace commerciale.</p>
+            <div class="msgcard" id="new-acc-4">Hello [Prénom] ! Merci pour le follow.
+
+Je ne vais rien te vendre, promis. Je veux juste savoir pour qui je crée du contenu : tu es à ton compte, en poste avec une équipe, ou en transition ?</div>
+            <button type="button" class="copybtn" data-copy="new-acc-4">Copier</button>
+          </div>
+          <div class="rcard deal" style="--dc:var(--accent)">
+            <div class="rhead"><span class="rname">6. L'aveu (vulnérabilité d'abord)</span></div>
+            <p class="rstats" style="margin-top:4px">Le script A raconte 10 ans de réussite. Ici on raconte l'erreur. La confidence appelle la confidence, et la question finale est ouverte.</p>
+            <div class="msgcard" id="new-acc-5">Hello [Prénom] ! J'ai dirigé 10 ans en faisant tout moi-même, et j'ai mis des années à comprendre que c'était ça, le problème.
+
+Et toi, tu délègues ou tu portes tout ?</div>
+            <button type="button" class="copybtn" data-copy="new-acc-5">Copier</button>
+          </div>
+          <div class="rcard deal" style="--dc:var(--accent)">
+            <div class="rhead"><span class="rname">7. Le pari en 2 questions</span></div>
+            <p class="rstats" style="margin-top:4px">Un jeu. La curiosité fait répondre à la première question, et la première question est celle qui qualifie.</p>
+            <div class="msgcard" id="new-acc-6">Hello [Prénom] ! Je parie que je devine ton plus gros problème de management en 2 questions.
+
+Première : tu es à ton compte ou en poste dans une boîte ?</div>
+            <button type="button" class="copybtn" data-copy="new-acc-6">Copier</button>
+          </div>
+          <div class="rcard deal" style="--dc:var(--accent)">
+            <div class="rhead"><span class="rname">8. Trois mots</span></div>
+            <p class="rstats" style="margin-top:4px">Le message le plus court possible. Un message de 5 mots se lit dans la notification et se répond dans la seconde. À tester face aux versions longues.</p>
+            <div class="msgcard" id="new-acc-7">Hello [Prénom] ! Dirigeante ou manager ?</div>
+            <button type="button" class="copybtn" data-copy="new-acc-7">Copier</button>
+          </div>
+          <div class="rcard deal" style="--dc:var(--accent)">
+            <div class="rhead"><span class="rname">9. Le vocal-first annoncé</span></div>
+            <p class="rstats" style="margin-top:4px">Le vocal de la variante B arrivait après un texte long. Ici une seule ligne, puis un vocal de 20 secondes qui dit le prénom dès la première seconde.</p>
+            <div class="msgcard" id="new-acc-8">Hello [Prénom], 20 secondes de vocal rien que pour toi 👇
+
+[puis vocal : prénom, un détail vu sur le profil, une seule question : à ton compte ou en poste ?]</div>
+            <button type="button" class="copybtn" data-copy="new-acc-8">Copier</button>
+          </div>
+          <div class="rcard deal" style="--dc:var(--accent)">
+            <div class="rhead"><span class="rname">10. La permission (oui/non)</span></div>
+            <p class="rstats" style="margin-top:4px">Le scan proposé d'office tue la conversation. Demandé comme une permission, avec une réponse en un mot, c'est un autre message. À comparer directement à l'ancien script.</p>
+            <div class="msgcard" id="new-acc-9">Hello [Prénom] ! Merci pour le follow.
+
+J'ai un test de 2 minutes qui montre où un manager perd le plus d'énergie. Tu veux que je te l'envoie ? Réponds juste oui ou non.</div>
+            <button type="button" class="copybtn" data-copy="new-acc-9">Copier</button>
+          </div>
+        </div>
+      </section>
       <div id="leads-dates">
         <div class="tally-counts" style="align-items:center">
           <span class="formnote" style="margin:0 4px 0 0;min-width:70px">📅 Période :</span>
@@ -622,7 +711,7 @@
         <p class="formnote" style="margin-top:10px">Accroches seulement (relances et conversations en cours exclues), sur la période choisie.</p></div>
       </section>
       <section>
-        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">🧠 Analyse · la cible, ce qui marche, ce qui ne marche pas, pistes (relevé du 07/09, 520 conversations)</h2>
+        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">🧠 Analyse · la cible, ce qui marche, ce qui ne marche pas, pistes (relevé du 07/09, 1 000 conversations)</h2>
         <div class="card" style="font-size:14.5px;line-height:1.55">
           <h3 class="mini-title">Qui répond vraiment</h3>
           <ul style="margin:0 0 12px;padding-left:20px">
@@ -632,18 +721,18 @@
           </ul>
           <h3 class="mini-title">Ce qui marche</h3>
           <ul style="margin:0 0 12px;padding-left:20px">
-            <li><b>Le message court personnalisé + 1 question</b> : 12 réponses sur 29 envois (41 %), 21 vus. Même sur un compte privé, ça répond (3 réponses sur 9). Sur un profil vide, rien.</li>
+            <li><b>Le message court personnalisé + 1 question</b> : 12 réponses sur 47 envois (26 %), 32 vus, et 28 réponses sur 71 pour les messages perso hors script (39 %). Même sur un compte privé, ça répond (3 réponses sur 9). Sur un profil vide, rien.</li>
             <li><b>Éviter l'après-midi</b> : sur toutes les accroches, l'après-midi (12h-18h) est le pire créneau (8 % de réponses, 30 % de vus). Sur les envois de septembre, le soir (18h-23h) fait 13 % de réponses contre 3 % le matin, et les messages du soir sont lus dans les 2 heures. Le tableau « heure d'envoi » ci-dessus se met à jour avec la période choisie.</li>
             <li><b>Répondre vite</b> : 6 réponses sur 10 arrivent en moins de 3 heures, les autres le lendemain matin. Après 3 jours, plus rien n'arrive.</li>
           </ul>
           <h3 class="mini-title">Ce qui ne marche pas</h3>
           <ul style="margin:0 0 12px;padding-left:20px">
-            <li><b>Le message aux likers non abonnés</b> : 182 envois depuis août, 18 vus (10 %), 7 réponses. Il tombe dans les Demandes de messages. Les 36 de septembre : 0 vu.</li>
-            <li><b>L'ancien script « Bienvenue sur mon compte, j'offre un scan »</b> : 136 envois, 69 vus, 10 réponses (7 %) et surtout des likes polis. Un pitch en premier message, sans question ouverte, n'ouvre pas la conversation.</li>
+            <li><b>Le message aux likers non abonnés</b> : 577 envois depuis août, 29 vus (5 %), 13 réponses. Il tombe dans les Demandes de messages. Les 36 de septembre : 0 vu. C'est la moitié de tout le volume envoyé, pour presque rien.</li>
+            <li><b>L'ancien script « Bienvenue sur mon compte, j'offre un scan »</b> : 172 envois, 87 vus, 11 réponses (6 %) et surtout des likes polis. Un pitch en premier message, sans question ouverte, n'ouvre pas la conversation.</li>
             <li><b>Le script A long</b> : 10 envois, 2 réponses, dont aucune sur les 8 de septembre. Trop long, trop « moi », question fermée à la fin.</li>
             <li><b>Le message B</b> n'a pas été testé (3 envois). Verdict impossible avant 20 à 30 envois.</li>
             <li><b>Les relances de masse</b> (20/08 : 136 messages, 28/08 : 90 vocaux) : 59 % vus mais des réponses de politesse ou des « pas maintenant ». Elles réveillent des conversations mortes, pas des acheteurs.</li>
-            <li><b>La réactivité</b> : 36 leads ont écrit et attendent une réponse de notre côté (pill « ✋ à répondre » dans l'onglet Leads). C'est le levier le plus rentable et il est gratuit.</li>
+            <li><b>La réactivité</b> : 42 leads ont écrit et attendent une réponse de notre côté (pill « ✋ à répondre » dans l'onglet Leads). C'est le levier le plus rentable et il est gratuit.</li>
           </ul>
           <h3 class="mini-title">Pistes d'amélioration</h3>
           <ol style="margin:0;padding-left:20px">
