@@ -440,6 +440,7 @@
       <button data-tab="eod">📝 EOD <span class="count" id="eod-count"></span></button>
       <button data-tab="tally">🎯 Scans Tally <span class="count" id="tally-count"></span></button>
       <button data-tab="leads">👤 Leads <span class="count" id="leads-count"></span></button>
+      <button data-tab="datas">📈 Datas</button>
       <button data-tab="calls">📞 Calls <span class="count" id="calls-count"></span></button>
       <button data-tab="ventes">💰 Ventes <span class="count" id="ventes-count"></span></button>
       <button data-tab="script">📣 Script setting <span class="count" id="script-count"></span></button>
@@ -564,6 +565,19 @@
 
     <div id="tab-leads" hidden>
       <div class="tally-counts" id="leads-pills"></div>
+      <section id="sec-leads-prio" hidden>
+        <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px">🔥 À relancer en priorité (analyse du relevé)</h2>
+        <div class="rlist" id="leads-prio"></div>
+      </section>
+      <section>
+        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px" id="leads-list-title">👤 Tous les leads et leur avancée</h2>
+        <p class="formnote" id="leads-filter-note" hidden></p>
+        <div class="rlist" id="leads-list"></div>
+      </section>
+      <p class="formnote" id="leads-note"></p>
+    </div>
+
+    <div id="tab-datas" hidden>
       <div class="tally-counts" id="leads-dates" style="margin-top:6px;align-items:center">
         <span class="formnote" style="margin:0 4px 0 0">📅 Période :</span>
         <button class="pill fpill on" data-r="all">toutes dates</button>
@@ -574,10 +588,7 @@
         <label class="formnote" style="margin:0 0 0 8px">du <input type="date" id="leads-from" style="font:inherit;padding:3px 6px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:inherit"></label>
         <label class="formnote" style="margin:0">au <input type="date" id="leads-to" style="font:inherit;padding:3px 6px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:inherit"></label>
       </div>
-      <section id="sec-leads-prio" hidden>
-        <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px">🔥 À relancer en priorité (analyse du relevé)</h2>
-        <div class="rlist" id="leads-prio"></div>
-      </section>
+      <div class="tiles" id="datas-kpis" style="margin:14px 0 18px"></div>
       <section id="sec-leads-ab" hidden>
         <h2 class="hsec" style="--hc:var(--s1);margin-bottom:10px" id="leads-ab-title">🧪 A/B des accroches (relevé Insta)</h2>
         <div class="card">
@@ -592,12 +603,7 @@
           <p class="formnote" style="margin-top:10px">Un lead est rattaché au jour de son accroche (ou de la relance du 28/08 pour les anciennes conversations). « Vus » et « réponses » sont l'état au dernier relevé, pas le jour de la vue.</p>
         </div>
       </section>
-      <section>
-        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px" id="leads-list-title">👤 Tous les leads et leur avancée</h2>
-        <p class="formnote" id="leads-filter-note" hidden></p>
-        <div class="rlist" id="leads-list"></div>
-      </section>
-      <p class="formnote" id="leads-note"></p>
+      <p class="formnote">Les datas viennent du relevé des conversations Instagram (API interne, lecture seule). La liste des leads et les priorités sont dans l'onglet 👤 Leads.</p>
     </div>
 
     <div id="tab-calls" hidden>
@@ -1635,7 +1641,7 @@ function mini(rows30, title, f, color, untrackedNote) {
    Onglets EOD + Scans Tally
    ============================================================ */
 
-const TABS = ["dash", "eod", "tally", "leads", "calls", "ventes", "script", "abonnes"];
+const TABS = ["dash", "eod", "tally", "leads", "datas", "calls", "ventes", "script", "abonnes"];
 const TAB_ALIAS = { cav: "calls", car: "calls" };   // anciens liens #cav / #car
 function showTab(name) {
   name = TAB_ALIAS[name] || name;
@@ -2109,7 +2115,7 @@ function renderLeadsTab(leadsText) {
     }).join("") +
     ["A", "B", "lauric", "like"].filter(k => vstats[k]).map(k =>
       '<button class="pill fpill' + (leadsFilter.fv === k ? " on" : "") + '" data-fv="' + k + '"><b>' + vstats[k].env + '</b>&nbsp;' +
-      ({ A: "🅰 message A", B: "🅱 message B", lauric: "💬 perso Lauric", like: "👍 message aux likes" })[k] + '</button>').join("");
+      ({ A: "🅰 message A", B: "🅱 message B", lauric: "💬 message perso", like: "👍 message aux likes" })[k] + '</button>').join("");
 
   LEADS_RELEVE = releve;
   renderLeadsStats();
@@ -2143,10 +2149,10 @@ let leadsFilter = { f: "all", fv: "" };
 let LEAD_ROWS = [], LEADS_RELEVE = "";
 let leadsRange = { key: "all", from: "", to: "" };   // période : key = all | 0 | 7 | 14 | 30 | custom
 const VAR_LABELS = { A: "🅰 Message A · long (Constant)", B: "🅱 Message B · court + vocal (Cynthia)",
-                     lauric: "💬 Perso de Lauric · « Merci pour le follow, je vois que… »",
+                     lauric: "💬 Message personnalisé · court, 1 détail vu sur le profil + 1 question (« Merci pour le follow, je vois que… »)",
                      ancienne: "Ancien script · « Bienvenue, j'offre… »", like: "👍 Message scan après un like (non abonnés)",
-                     perso: "Perso / réseau", relance2808: "🎙️ Relance du 28/08 (vocal + texte)" };
-const VAR_SHORT = { A: "🅰 msg A", B: "🅱 msg B", lauric: "💬 perso Lauric", like: "👍 like", ancienne: "ancien script", relance2808: "🎙️ relance 28/08" };
+                     perso: "Autre message perso / réseau", relance2808: "🎙️ Relance du 28/08 (vocal + texte)" };
+const VAR_SHORT = { A: "🅰 msg A", B: "🅱 msg B", lauric: "💬 message perso", like: "👍 like", ancienne: "ancien script", relance2808: "🎙️ relance 28/08" };
 function rangeBounds() {
   if (leadsRange.key === "custom") return { from: leadsRange.from || "", to: leadsRange.to || "" };
   if (leadsRange.key === "all") return { from: "", to: "" };
@@ -2194,6 +2200,13 @@ function renderLeadsStats() {
     }).join("") +
     (vkeys.length > 1 ? '<tr><td class="tot">Total</td><td class="tot">' + tot.env + '</td><td class="tot">' + tot.vu + '</td><td>' + pct(tot.vu, tot.env) + '</td><td>' + tot.reagi + '</td><td class="tot">' + tot.rep + '</td><td class="tot">' + pct(tot.rep, tot.env) + '</td></tr>' : '') +
     '</tbody></table>';
+  const kpi = (label, val, sub, col) => '<div class="card tile" style="--tc:' + col + '"><div class="formnote" style="margin:0">' + label + '</div><div style="font-size:28px;font-weight:700;line-height:1.2">' + val + '</div>' + (sub ? '<div class="formnote" style="margin:4px 0 0">' + sub + '</div>' : '') + '</div>';
+  const nbRep = rows.filter(r => r.st === "repondu").length, nbSuivi = rows.filter(r => r.va === "suivi").length;
+  el("datas-kpis").innerHTML =
+    kpi("Messages d'accroche envoyés", tot.env, lab ? "sur la période · " + lab : "toutes dates", "var(--accent)") +
+    kpi("Vus", tot.vu, pct(tot.vu, tot.env) + " des envoyés", "var(--s1)") +
+    kpi("Réponses", tot.rep, pct(tot.rep, tot.env) + " des envoyés", "var(--good)") +
+    kpi("Conversations actives", nbRep, nbSuivi ? "dont " + nbSuivi + " conv déjà en cours" : "leads qui ont répondu", "var(--s2)");
   el("leads-ab-note").textContent =
     "Une réaction ou une réponse compte aussi comme vue. Les conversations déjà en cours (suivi) ne sont pas comptées ici. Chiffres issus du relevé des convs Insta" +
     (LEADS_RELEVE ? " du " + LEADS_RELEVE : "") + " : ils s'affinent à chaque nouveau relevé, et le verdict A vs B demandera du volume.";
@@ -2210,37 +2223,33 @@ function renderLeadsStats() {
   const dk = Object.keys(days).sort().reverse();
   el("sec-leads-daily").hidden = !dk.length;
   const cell = n => n ? '<td>' + n + '</td>' : '<td style="color:var(--muted)">·</td>';
-  el("leads-daily").innerHTML = dk.length ? '<table><thead><tr><th>Jour</th><th>Envoyés</th><th>🅰 A</th><th>🅱 B</th><th>💬 Lauric</th><th>Ancien</th><th>👍 Likes</th><th>🎙️ Relance</th><th>Perso</th><th>Vus</th><th>Réponses</th></tr></thead><tbody>' +
+  el("leads-daily").innerHTML = dk.length ? '<table><thead><tr><th>Jour</th><th>Envoyés</th><th>🅰 A</th><th>🅱 B</th><th>💬 Perso</th><th>Ancien</th><th>👍 Likes</th><th>🎙️ Relance</th><th>Autre</th><th>Vus</th><th>Réponses</th><th>Taux de réponse</th></tr></thead><tbody>' +
     dk.map(d => { const o = days[d];
       return '<tr><td class="tot">' + d.split("-").reverse().join("/") + '</td><td class="tot">' + o.env + '</td>' + cell(o.A) + cell(o.B) + cell(o.lauric) + cell(o.ancienne) + cell(o.like) + cell(o.relance2808) + cell(o.perso) +
-        '<td>' + o.vu + ' <span style="color:var(--muted)">(' + pct(o.vu, o.env) + ')</span></td><td class="tot">' + o.rep + '</td></tr>'; }).join("") +
+        '<td>' + o.vu + ' <span style="color:var(--muted)">(' + pct(o.vu, o.env) + ')</span></td><td class="tot">' + o.rep + '</td><td class="tot">' + pct(o.rep, o.env) + '</td></tr>'; }).join("") +
+    (dk.length > 1 ? (() => { const t = dk.reduce((a, d) => ({ env: a.env + days[d].env, vu: a.vu + days[d].vu, rep: a.rep + days[d].rep }), { env: 0, vu: 0, rep: 0 });
+      return '<tr><td class="tot">Total</td><td class="tot">' + t.env + '</td><td colspan="7"></td><td>' + t.vu + ' <span style="color:var(--muted)">(' + pct(t.vu, t.env) + ')</span></td><td class="tot">' + t.rep + '</td><td class="tot">' + pct(t.rep, t.env) + '</td></tr>'; })() : '') +
     '</tbody></table>' : "";
 }
 function applyLeadsFilter() {
   const q = el("q").value.trim().toLowerCase();
-  const active = leadsFilter.fv || leadsFilter.f !== "all" || leadsRange.key !== "all";
+  const active = leadsFilter.fv || leadsFilter.f !== "all";
   let n = 0;
   document.querySelectorAll("#leads-list .rcard").forEach(c => {
     let hide = !!q && !c.textContent.toLowerCase().includes(q);
     if (leadsFilter.fv) hide = hide || c.dataset.va !== leadsFilter.fv;          // filtre par variante d'accroche
     else if (leadsFilter.f !== "all") hide = hide || c.dataset.stage !== leadsFilter.f;
-    if (leadsRange.key !== "all") hide = hide || !inRange(c.dataset.d);           // filtre par période
     c.hidden = hide;
     if (!hide) n++;
   });
   /* avec un filtre actif, on cache les sections « priorité » et « A/B » pour voir la liste tout de suite */
-  const prioEl = el("sec-leads-prio"), abEl = el("sec-leads-ab"), dailyEl = el("sec-leads-daily");
-  const stageActive = leadsFilter.fv || leadsFilter.f !== "all";
-  prioEl.hidden = active || !el("leads-prio").children.length;
-  abEl.hidden = stageActive || !el("leads-ab").children.length;
-  dailyEl.hidden = stageActive || !el("leads-daily").children.length;
+  el("sec-leads-prio").hidden = active || !el("leads-prio").children.length;
   const pill = document.querySelector("#leads-pills .fpill.on");
   const label = pill ? pill.textContent.replace(/^\d+\s*/, "").trim() : "";
-  const rl = rangeLabel();
-  el("leads-list-title").textContent = active ? "👤 Leads" + (stageActive ? " · filtre « " + label + " »" : "") + (rl ? " · " + rl : "") : "👤 Tous les leads et leur avancée";
+  el("leads-list-title").textContent = active ? "👤 Leads · filtre « " + label + " »" : "👤 Tous les leads et leur avancée";
   const note = el("leads-filter-note");
   note.hidden = !active;
-  note.textContent = active ? n + " lead" + (n > 1 ? "s" : "") + " affiché" + (n > 1 ? "s" : "") + " · « tous » et « toutes dates » ramènent la vue complète." : "";
+  note.textContent = active ? n + " lead" + (n > 1 ? "s" : "") + " affiché" + (n > 1 ? "s" : "") + " · cliquer sur « tous » pour revenir à la vue complète." : "";
 }
 el("leads-dates").addEventListener("click", e => {
   const b = e.target.closest(".fpill");
@@ -2248,13 +2257,13 @@ el("leads-dates").addEventListener("click", e => {
   leadsRange = { key: b.dataset.r, from: "", to: "" };
   el("leads-from").value = ""; el("leads-to").value = "";
   document.querySelectorAll("#leads-dates .fpill").forEach(x => x.classList.toggle("on", x === b));
-  renderLeadsStats(); applyLeadsFilter();
+  renderLeadsStats();
 });
 ["leads-from", "leads-to"].forEach(id => el(id).addEventListener("change", () => {
   const from = el("leads-from").value, to = el("leads-to").value;
   leadsRange = (from || to) ? { key: "custom", from, to } : { key: "all", from: "", to: "" };
   document.querySelectorAll("#leads-dates .fpill").forEach(x => x.classList.toggle("on", leadsRange.key === "all" && x.dataset.r === "all"));
-  renderLeadsStats(); applyLeadsFilter();
+  renderLeadsStats();
 }));
 el("leads-pills").addEventListener("click", e => {
   const b = e.target.closest(".fpill");
