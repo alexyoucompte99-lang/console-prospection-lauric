@@ -240,6 +240,7 @@
   .ldet { margin-top: 8px; font-size: 13.5px; }
   .ldet summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: 13px; list-style: none; }
   .ldet summary::before { content: "▸ "; }
+  .accdet { margin: 0 0 18px; } .accdet summary::before { color: var(--good); }
   .ldet[open] summary::before { content: "▾ "; }
   .ldrow { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; align-items: baseline; }
   .ldk { color: var(--muted); font-size: 12.5px; min-width: 150px; }
@@ -585,9 +586,9 @@
     </div>
 
     <div id="tab-datas" hidden>
-      <section>
-        <h2 class="hsec" style="--hc:var(--good);margin-bottom:10px">🧪 10 accroches à tester (objectif : le taux de réponse)</h2>
-        <div class="card" style="font-size:14px;line-height:1.5;margin-bottom:12px">
+      <details class="ldet accdet" id="new-acc-details">
+        <summary style="font-size:inherit"><h2 class="hsec" style="--hc:var(--good);margin:0;display:inline">🧪 10 accroches à tester (objectif : le taux de réponse)</h2> <span class="formnote" style="margin:0 0 0 8px">cliquer pour déplier / replier</span></summary>
+        <div class="card" style="font-size:14px;line-height:1.5;margin:10px 0 12px">
           <b>Ce que disent les 1 000 conversations</b> : ce qui fait répondre, c'est court, personnel, une seule question ouverte, envoyé le soir, et jamais de pitch en premier message (les 577 messages « je propose un scan » : 5 % ouverts, 2 % de réponses). Ce qui répond, ce sont autant des managers en poste que des dirigeants. Les 10 messages ci-dessous poussent ces leviers plus loin, parfois à contre-courant.<br>
           <b>Protocole</b> : 30 envois par message, même setter, même créneau (18h-21h), à des nouveaux abonnés uniquement. On compare le taux de réponse à 48 h dans le tableau A/B ci-dessous. Remplacer [Prénom] et le détail du profil, jamais deux messages identiques d'affilée.
         </div>
@@ -673,7 +674,7 @@ J'ai un test de 2 minutes qui montre où un manager perd le plus d'énergie. Tu 
             <button type="button" class="copybtn" data-copy="new-acc-9">Copier</button>
           </div>
         </div>
-      </section>
+      </details>
       <div id="leads-dates">
         <div class="tally-counts" style="align-items:center">
           <span class="formnote" style="margin:0 4px 0 0;min-width:70px">📅 Période :</span>
@@ -2508,6 +2509,11 @@ function applyLeadsFilter() {
   note.hidden = !active;
   note.textContent = active ? n + " lead" + (n > 1 ? "s" : "") + " affiché" + (n > 1 ? "s" : "") + " · cliquer sur « tous » pour revenir à la vue complète." : "";
 }
+/* bloc « accroches à tester » : replié par défaut, état mémorisé dans le navigateur */
+(() => { const d = el("new-acc-details"); if (!d) return;
+  try { d.open = localStorage.getItem("newAccOpen") === "1"; } catch (e) {}
+  d.addEventListener("toggle", () => { try { localStorage.setItem("newAccOpen", d.open ? "1" : "0"); } catch (e) {} });
+})();
 el("leads-dates").addEventListener("click", e => {
   const b = e.target.closest(".fpill");
   if (!b) return;
