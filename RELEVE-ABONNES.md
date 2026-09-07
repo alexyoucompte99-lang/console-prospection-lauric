@@ -46,6 +46,15 @@ en GET avec `credentials:'include'` et les en-têtes `x-ig-app-id: 9366197433924
 
 Si l'API répond en HTML ou 4xx, revenir à la méthode visuelle ci-dessous.
 
+
+## Prudence (ajouté le 07/09/2026 au soir)
+Le 07/09, une lecture de 189 abonnés en 8 pages (7 s entre pages) a fait passer Instagram de 1 s à 50 s de réponse par page :
+signal de limitation douce. Règles depuis :
+- pause complète le 08/09/2026 ;
+- puis **4 pages maximum par nuit**, **12 s entre deux appels** à la liste des abonnés, 4 s entre deux fiches de profil, 15 profils max ;
+- si une réponse dépasse 20 s ou renvoie 429 : arrêter, noter « ralentissement Instagram » dans data/abonnes.log, reprendre la nuit suivante ;
+- un abonné dont le pseudo figure déjà dans data/leads-insta.csv a déjà une conversation : ne pas le retraiter.
+
 ## Étape 1 : nouveaux abonnés (Chrome d'Alex, compte lauric_sergent connecté)
 
 Outils : `mcp__claude-in-chrome__*` chargés en UN SEUL appel ToolSearch
