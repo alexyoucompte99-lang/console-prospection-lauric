@@ -2086,7 +2086,7 @@ function renderLeadsTab(leadsText) {
     const st = v(iSt);
     const va = v(iVa);
     /* jour de l'action : l'accroche, ou la relance / le dernier échange pour une conversation déjà existante */
-    const d = va === "relance2808" ? "2026-08-28" : va === "suivi" ? (parseDate(v(iDm)) || parseDate(v(iPc))) : (parseDate(v(iPc)) || parseDate(v(iDm)));
+    const d = va === "relance2808" ? "2026-08-28" : (va === "suivi" || va === "historique") ? (parseDate(v(iDm)) || parseDate(v(iPc))) : (parseDate(v(iPc)) || parseDate(v(iDm)));
     if (va) {
       const s = vstats[va] = vstats[va] || { env: 0, vu: 0, reagi: 0, rep: 0 };
       s.env++;
@@ -2200,8 +2200,9 @@ let leadsRange = { key: "all", from: "", to: "" };   // période : key = all | 0
 const VAR_LABELS = { A: "🅰 Message A · long (Constant)", B: "🅱 Message B · court + vocal (Cynthia)",
                      lauric: "💬 Message personnalisé · court, 1 détail vu sur le profil + 1 question (« Merci pour le follow, je vois que… »)",
                      ancienne: "Ancien script · « Bienvenue, j'offre… »", like: "👍 Message scan après un like (non abonnés)",
-                     perso: "Autre message perso / réseau", relance2808: "🎙️ Relance du 28/08 (vocal + texte)" };
-const VAR_SHORT = { A: "🅰 msg A", B: "🅱 msg B", lauric: "💬 message perso", like: "👍 like", ancienne: "ancien script", relance2808: "🎙️ relance 28/08" };
+                     perso: "Autre message perso / réseau", relance2808: "🎙️ Relance du 28/08 (vocal + texte)",
+                     historique: "Ancienne conversation (avant le 27/08)" };
+const VAR_SHORT = { A: "🅰 msg A", B: "🅱 msg B", lauric: "💬 message perso", like: "👍 like", ancienne: "ancien script", relance2808: "🎙️ relance 28/08", historique: "🗂️ ancienne conv" };
 const MONTHS_FR = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
 function monthLabel(ym) { const [y, m] = ym.split("-"); return MONTHS_FR[+m - 1] + " " + y; }
 function rangeBounds() {
@@ -2233,7 +2234,7 @@ function renderLeadsStats() {
   const rows = LEAD_ROWS.filter(r => inRange(r.d));
   const vs = {};
   rows.forEach(r => {
-    if (r.va === "suivi") return;
+    if (r.va === "suivi" || r.va === "historique") return;
     const s = vs[r.va] = vs[r.va] || { env: 0, vu: 0, reagi: 0, rep: 0 };
     s.env++;
     if (r.st === "vu" || r.st === "reagi" || r.st === "repondu") s.vu++;
@@ -2257,7 +2258,7 @@ function renderLeadsStats() {
     (vkeys.length > 1 ? '<tr><td class="tot">Total</td><td class="tot">' + tot.env + '</td><td class="tot">' + tot.vu + '</td><td>' + pct(tot.vu, tot.env) + '</td><td>' + tot.reagi + '</td><td class="tot">' + tot.rep + '</td><td class="tot">' + pct(tot.rep, tot.env) + '</td></tr>' : '') +
     '</tbody></table>';
   const kpi = (label, val, sub, col) => '<div class="card tile" style="--tc:' + col + '"><div class="formnote" style="margin:0">' + label + '</div><div style="font-size:28px;font-weight:700;line-height:1.2">' + val + '</div>' + (sub ? '<div class="formnote" style="margin:4px 0 0">' + sub + '</div>' : '') + '</div>';
-  const nbRep = rows.filter(r => r.st === "repondu").length, nbSuivi = rows.filter(r => r.va === "suivi").length;
+  const nbRep = rows.filter(r => r.st === "repondu").length, nbSuivi = rows.filter(r => r.va === "suivi" || r.va === "historique").length;
   el("datas-kpis").innerHTML =
     kpi("Messages d'accroche envoyés", tot.env, lab ? "sur la période · " + lab : "toutes dates", "var(--accent)") +
     kpi("Vus", tot.vu, pct(tot.vu, tot.env) + " des envoyés", "var(--s1)") +
@@ -2270,7 +2271,7 @@ function renderLeadsStats() {
   /* activité par jour */
   const days = {};
   rows.forEach(r => {
-    if (!r.d || r.va === "suivi") return;
+    if (!r.d || r.va === "suivi" || r.va === "historique") return;
     const o = days[r.d] = days[r.d] || { env: 0, vu: 0, rep: 0, A: 0, B: 0, lauric: 0, ancienne: 0, like: 0, relance2808: 0, perso: 0 };
     o.env++; o[r.va] = (o[r.va] || 0) + 1;
     if (r.st === "vu" || r.st === "reagi" || r.st === "repondu") o.vu++;
@@ -2316,7 +2317,9 @@ function renderVerifTab() {
     o.acc += (r.mNew || 0) + (r.mOld || 0) + (r.like || 0) + (r.com || 0) + (r.oth || 0);
     o.rel += r.rel || 0; o.setters.add(r.setter);
   });
-  const days = [...new Set([...Object.keys(act), ...Object.keys(eod)])].filter(d => act[d]).sort().reverse();
+  /* le relevé Instagram remonte par dernière activité : avant cette date, des conversations sans suite manquent, la comparaison serait fausse */
+  const INSTA_COVERAGE_FROM = "2026-08-20";
+  const days = [...new Set([...Object.keys(act), ...Object.keys(eod)])].filter(d => act[d] && d >= INSTA_COVERAGE_FROM).sort().reverse();
   if (!days.length) { el("verif-table").innerHTML = '<p class="formnote">Pas encore de relevé Instagram.</p>'; return; }
   const fr = d => d.split("-").reverse().join("/");
   const diff = (a, b) => { const x = a - b; return '<td style="font-weight:600;color:' + (x > 0 ? "var(--bad)" : x < 0 ? "var(--s1)" : "var(--muted)") + '">' + (x > 0 ? "+" : "") + x + '</td>'; };
@@ -2331,7 +2334,7 @@ function renderVerifTab() {
     kpi("Accroches déclarées dans l'EOD", tE, "sur les jours relevés", "var(--accent)") +
     kpi("Accroches réellement envoyées", tI, "comptées dans les conversations Instagram", "var(--s1)") +
     kpi("Écart", (tE - tI > 0 ? "+" : "") + (tE - tI), tE - tI > 0 ? "déclaré en trop" : tE - tI < 0 ? "envoyé sans être déclaré" : "ça colle", tE - tI > 0 ? "var(--bad)" : "var(--good)");
-  el("verif-note").textContent = "Écart en rouge = plus déclaré dans l'EOD que vu sur Instagram. Les chiffres Instagram comptent tous les messages sortants du compte (Lauric compris), pas seulement ceux des setters : un écart négatif peut venir de Lauric. Une accroche = premier message envoyé à quelqu'un qui ne nous avait jamais écrit ; un message de suivi = tout autre message envoyé (relance, réponse, vocal). Relevé fait par Claude via l'API Instagram, lecture seule.";
+  el("verif-note").textContent = "Comparaison à partir du 20/08/2026 (couverture complète du relevé Instagram). Écart en rouge = plus déclaré dans l'EOD que vu sur Instagram. Les chiffres Instagram comptent tous les messages sortants du compte (Lauric compris), pas seulement ceux des setters : un écart négatif peut venir de Lauric. Une accroche = premier message envoyé à quelqu'un qui ne nous avait jamais écrit ; un message de suivi = tout autre message envoyé (relance, réponse, vocal). Relevé fait par Claude via l'API Instagram, lecture seule.";
 }
 function applyLeadsFilter() {
   const q = el("q").value.trim().toLowerCase();
