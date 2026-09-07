@@ -585,16 +585,21 @@
     </div>
 
     <div id="tab-datas" hidden>
-      <div class="tally-counts" id="leads-dates" style="margin-top:6px;align-items:center">
-        <span class="formnote" style="margin:0 4px 0 0">📅 Période :</span>
-        <button class="pill fpill on" data-r="all">toutes dates</button>
-        <button class="pill fpill" data-r="0">aujourd'hui</button>
-        <button class="pill fpill" data-r="7">7 j</button>
-        <button class="pill fpill" data-r="14">14 j</button>
-        <button class="pill fpill" data-r="30">30 j</button>
-        <span id="leads-months" style="display:contents"></span>
-        <label class="formnote" style="margin:0 0 0 8px">du <input type="date" id="leads-from" style="font:inherit;padding:3px 6px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:inherit"></label>
-        <label class="formnote" style="margin:0">au <input type="date" id="leads-to" style="font:inherit;padding:3px 6px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:inherit"></label>
+      <div id="leads-dates">
+        <div class="tally-counts" style="align-items:center">
+          <span class="formnote" style="margin:0 4px 0 0;min-width:70px">📅 Période :</span>
+          <button class="pill fpill on" data-r="all">toutes dates</button>
+          <button class="pill fpill" data-r="0">aujourd'hui</button>
+          <button class="pill fpill" data-r="7">7 j</button>
+          <button class="pill fpill" data-r="14">14 j</button>
+          <button class="pill fpill" data-r="30">30 j</button>
+          <label class="formnote" style="margin:0 0 0 8px">du <input type="date" id="leads-from" style="font:inherit;padding:3px 6px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:inherit"></label>
+          <label class="formnote" style="margin:0">au <input type="date" id="leads-to" style="font:inherit;padding:3px 6px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:inherit"></label>
+        </div>
+        <div class="tally-counts" style="align-items:center;margin-top:6px">
+          <span class="formnote" style="margin:0 4px 0 0;min-width:70px">🗓️ Mois :</span>
+          <span id="leads-months" style="display:contents"></span>
+        </div>
       </div>
       <div class="tiles" id="datas-kpis" style="margin:14px 0 18px"></div>
       <section id="sec-leads-ab" hidden>
@@ -2274,7 +2279,7 @@ function rangeLabel() {
 /* tableau A/B + activité par jour, recalculés selon la période choisie */
 function renderLeadsStats() {
   /* pills des mois présents dans le relevé */
-  const months = [...new Set(LEAD_ROWS.filter(r => r.d).map(r => r.d.slice(0, 7)))].sort();
+  const months = [...new Set(LEAD_ROWS.filter(r => r.d).map(r => r.d.slice(0, 7)))].sort().reverse();   // le plus récent en premier
   el("leads-months").innerHTML = months.map(ym => '<button class="pill fpill' + (leadsRange.key === "m:" + ym ? " on" : "") + '" data-r="m:' + ym + '">' + monthLabel(ym).split(" ")[0] + '</button>').join("");
   const rows = LEAD_ROWS.filter(r => inRange(r.d));
   const vs = {};
