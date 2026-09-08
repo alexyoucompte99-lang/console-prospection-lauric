@@ -8,7 +8,7 @@ préparer un premier message personnalisé pour ceux qui ne l'ont pas été, et 
 ## Fichier de sortie : data/abonnes.csv
 
 Colonnes (en-tête exact, ordre exact) :
-`Pseudo,Nom,Detecte,Profil,Cible,Message propose,Contacte,Date contact,Message envoye,Statut,Conv,Releve`
+`Pseudo,Nom,Detecte,Profil,Cible,Message propose,Contacte,Date contact,Message envoye,Statut,Conv,Releve,Type`
 
 - Pseudo : identifiant Insta sans @. Clé unique : ne jamais dupliquer une ligne.
 - Nom : nom affiché (sinon le pseudo).
@@ -54,6 +54,10 @@ signal de limitation douce. Règles depuis :
 - puis **4 pages maximum par nuit**, **12 s entre deux appels** à la liste des abonnés, 4 s entre deux fiches de profil, 15 profils max ;
 - si une réponse dépasse 20 s ou renvoie 429 : arrêter, noter « ralentissement Instagram » dans data/abonnes.log, reprendre la nuit suivante ;
 - un abonné dont le pseudo figure déjà dans data/leads-insta.csv a déjà une conversation : ne pas le retraiter.
+- Relevé rétroactif du 08/09 (session Alex) : 16 pages à 15 s (la liste renvoie ~24 abonnés par page malgré `count=50`),
+  384 abonnés lus, latence 0,3 à 0,8 s, aucun ralentissement ; 49 fiches `/users/<pk>/info/` à 5 s d'écart (1 à 10 s de latence).
+  Les anciens abonnés jamais contactés sont ajoutés avec la colonne `Type=ancien` : la page les range dans une section
+  repliable « Anciens abonnés jamais contactés » et ne les compte pas dans « À contacter ». Le relevé nocturne laisse `Type` vide.
 
 ## Étape 1 : nouveaux abonnés (Chrome d'Alex, compte lauric_sergent connecté)
 

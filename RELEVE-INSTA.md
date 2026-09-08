@@ -11,6 +11,11 @@ mettre à jour `data/leads-insta.csv` (statuts vu / répondu, textes, dates, act
   dans `data/insta-coverage.txt`, format `YYYY-MM-DD` de la plus ancienne activité relevée). Quand le plancher est
   antérieur au 01/01/2026, ne plus étendre : 300 conversations par jour suffisent.
 - Si une réponse est 429 ou non-200 : arrêter, noter dans `data/insta-releve.log`, réessayer le lendemain.
+- Garde-fou de latence (ajouté le 08/09) : mesurer la durée de chaque fetch ; au-delà de 20 s, arrêter la boucle
+  (Instagram ralentit avant de bloquer : le 08/09, la page 17 a mis 87 s après 16 pages à 12 s). Attendre 5 min puis
+  reprendre depuis `window.__cursor` avec 30 s entre les pages : la reprise s'est faite à 2-4 s de latence sans incident.
+- Relevé rétroactif du 08/09 : 35 pages, 1 395 conversations, plancher 01/07/2026 (`data/insta-coverage.txt`).
+  La boîte est triée par dernière activité : ce qui manque encore, ce sont les conversations sans aucune activité depuis juillet.
 - Chrome ouvert, extension Claude connectée, compte lauric_sergent. Si indisponible : logger et s'arrêter.
 
 ## Étape 1 : Chrome
@@ -44,8 +49,8 @@ Construire `window.__out3` : une ligne par conversation ayant au moins un messag
 texte, read_state, thread_id, nb L, nb P, ts des relances, 1er message = Lauric 0/1, récent 0/1, ts 1er item, nb items, réagi 0/1),
 puis les lignes `ACT┃YYYY-MM-DD┃accroches┃suivi┃vocaux`. Retours à la ligne → `⏎`. **Compresser les templates** :
 remplacer le texte par `{BIENV}` `{LIKE}` `{RELB}` `{RELQ}` `{A}` `{B}` quand il correspond (regex dans `releve_insta.py`,
-même liste), ça divise la taille par 3 et `releve_insta.py` les ré-expanse. Le code complet est dans la mémoire de la
-session du 07/09 (fonction `code()` + construction des `rows`).
+même liste), ça divise la taille par 3 et `releve_insta.py` les ré-expanse. Le code complet (extraction, mise en forme, `__part`) est dans
+`scripts-releve/` (fichiers `extract.js`, `step3.js`, `save_part.py`, `glue.py`), copiés depuis la session du 08/09.
 
 ## Étape 4 : sortie vers le disque (le point délicat)
 `javascript_tool` coupe à ~1 000 caractères. Le canal fiable : écrire le texte dans un `<pre>` qui remplace le contenu de

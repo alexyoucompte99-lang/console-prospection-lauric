@@ -671,7 +671,7 @@
         </div>
       </section>
       <section hidden>
-        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">💡 Ce qu'on peut en tirer (analyse du relevé du 07/09)</h2>
+        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">💡 Ce qu'on peut en tirer (analyse des relevés du 07 et 08/09)</h2>
         <div class="card" style="font-size:14.5px;line-height:1.55">
           <ul style="margin:0;padding-left:20px">
             <li><b>Le script A long ne marche pas</b> : 0 réponse sur 8 envois, dont Damien qui l'a vu et n'a même pas répondu à la relance. Le message court personnalisé avec une seule question fait 5 réponses sur 17.</li>
@@ -681,6 +681,8 @@
             <li><b>Perso = meilleur pour la qualité</b> : les réponses perso donnent Marion (directrice depuis 5 ans), Nesrine (manage 9 personnes) et MJ (poste à responsabilité), mais aussi une commerciale pharma et un chef de service public.</li>
             <li><b>Le message « merci pour ton like + scan » ne sert à rien</b> : 36 envois à des non-abonnés, 0 ouvert. Il tombe dans leurs Demandes de messages.</li>
             <li><b>La relance de masse du 28/08</b> (90 conversations, vocaux) : 59 % vues, 13 réponses (14 %), mais surtout des réponses de politesse ou des « pas maintenant ».</li>
+            <li><b>Relevé rétroactif du 08/09 : 400 anciennes conversations retrouvées</b> (boîte relue jusqu'au 1er juillet, 1 395 conversations au total). Parmi les conversations d'avant le 11/08 : 97 leads avaient répondu, dont <b>49 dont le dernier message est resté sans réponse de notre côté</b> (pill « ✋ à répondre ») et 43 à réactiver après un échange retombé (pill « 🔁 à réactiver »). C'est du lead déjà chaud qui ne coûte aucun nouveau message d'accroche.</li>
+            <li><b>Le volume d'accroches s'est effondré depuis le 27/08</b> : 1 064 accroches en août (dont 216 le 11/08 et 129 le 15/08) contre 54 sur les 8 premiers jours de septembre. Les messages de suivi tiennent (76), pas la prospection froide.</li>
           </ul>
         </div>
       </section>
@@ -875,6 +877,13 @@ J'aime bien savoir qui se cache derrière les nouveaux profils. Je te laisse un 
       <section id="sec-nf-local" hidden>
         <h2 class="hsec" style="--hc:var(--s4);margin-bottom:10px">☑️ Cochés « contacté » à la main · vérification au prochain relevé</h2>
         <div id="nf-local"></div>
+      </section>
+      <section id="sec-nf-ancien" hidden>
+        <details class="addeal">
+          <summary>🗂️ Anciens abonnés jamais contactés · relevé rétroactif <b id="nf-ancien-count"></b> · message perso prêt à envoyer</summary>
+          <p class="formnote" style="margin:10px 0 12px">Abonnés plus anciens que le suivi quotidien (ils suivent le compte depuis un moment) et qui n'ont aucune conversation dans la messagerie. À traiter au rythme de Lauric, ils ne comptent pas dans « À contacter ».</p>
+          <div id="nf-ancien"></div>
+        </details>
       </section>
       <section>
         <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">🗂 Data · tous les nouveaux abonnés relevés</h2>
@@ -2184,6 +2193,7 @@ function renderLeadsTab(leadsText) {
         src: "Relevé Insta", reagi: st === "reagi" ? "1" : "",
         msgSent: v(iMe), dEnvoi: v(iDen), dVu: v(iDvu), lastL: v(iLl), dLastL: v(iDll), reply: v(iRl), dReply: v(iDr),
         conv: v(iCv), action: v(iAc), msgTo: v(iMg), raison: v(iRa),
+        reac: /^À réactiver/.test(v(iAc)) ? "1" : "",
         arep: /^RÉPONDRE/.test(v(iAc)) || /RÉPONSE NON LUE/.test(v(iDe)) ? "1" : "" }, stage);
     if (v(iPr)) prios.push({ n: +v(iPr), nom: v(iNo), pseudo: v(iPs), raison: v(iRa), msg: v(iMg) });
   });
@@ -2241,6 +2251,7 @@ function renderLeadsTab(leadsText) {
   el("leads-pills").innerHTML =
     '<button class="pill fpill' + (leadsFilter.f === "all" && !leadsFilter.fv ? " on" : "") + '" data-f="all"><b>' + leads.length + '</b>&nbsp;tous</button>' +
     (leads.some(l => l.arep) ? '<button class="pill fpill' + (leadsFilter.f === "arep" ? " on" : "") + '" data-f="arep" style="border-color:var(--bad);color:var(--bad)"><b>' + leads.filter(l => l.arep).length + '</b>&nbsp;✋ à répondre</button>' : "") +
+    (leads.some(l => l.reac) ? '<button class="pill fpill' + (leadsFilter.f === "reac" ? " on" : "") + '" data-f="reac" style="border-color:var(--s3);color:var(--s3)"><b>' + leads.filter(l => l.reac).length + '</b>&nbsp;🔁 à réactiver</button>' : "") +
     LEAD_STAGES.map(([k, label]) => {
       const n = leads.filter(l => l.best === k).length;
       return n ? '<button class="pill fpill' + (leadsFilter.f === k ? " on" : "") + '" data-f="' + k + '"><b>' + n + '</b>&nbsp;' + label + '</button>' : "";
@@ -2254,9 +2265,10 @@ function renderLeadsTab(leadsText) {
 
   el("leads-list").innerHTML = leads.map((l, i) => {
     const [, label, color] = LEAD_STAGES.find(([k]) => k === l.best);
-    return '<div class="rcard deal" data-stage="' + l.best + '" data-va="' + esc(l.variante || "") + '" data-d="' + esc(l.d || "") + '" data-arep="' + (l.arep ? "1" : "") + '" style="--dc:' + (l.arep ? "var(--bad)" : color) + '">' +
+    return '<div class="rcard deal" data-stage="' + l.best + '" data-va="' + esc(l.variante || "") + '" data-d="' + esc(l.d || "") + '" data-arep="' + (l.arep ? "1" : "") + '" data-reac="' + (l.reac ? "1" : "") + '" style="--dc:' + (l.arep ? "var(--bad)" : color) + '">' +
       '<div class="rhead"><span class="rname">' + esc(l.nom || l.key) + '</span>' +
       (l.arep ? '<span class="badge lose">✋ à répondre</span>' : '') +
+      (l.reac ? '<span class="badge">🔁 à réactiver</span>' : '') +
       '<span class="badge" style="color:' + color + ';border-color:' + color + '">' + label + '</span>' +
       (VAR_SHORT[l.variante] ? '<span class="badge src">' + VAR_SHORT[l.variante] + '</span>' : '') +
       (l.reagi ? '<span class="badge next">❤️ a réagi</span>' : '') +
@@ -2419,7 +2431,7 @@ function renderVerifTab() {
     o.rel += r.rel || 0; o.setters.add(r.setter);
   });
   /* le relevé Instagram remonte par dernière activité : avant cette date, des conversations sans suite manquent, la comparaison serait fausse */
-  const INSTA_COVERAGE_FROM = "2026-08-20";
+  const INSTA_COVERAGE_FROM = "2026-07-01";   // relevé rétroactif du 08/09 : boîte relue jusqu'au 01/07/2026
   const days = [...new Set([...Object.keys(act), ...Object.keys(eod)])].filter(d => act[d] && d >= INSTA_COVERAGE_FROM).sort().reverse();
   if (!days.length) { el("verif-table").innerHTML = '<p class="formnote">Pas encore de relevé Instagram.</p>'; return; }
   const fr = d => d.split("-").reverse().join("/");
@@ -2445,6 +2457,7 @@ function applyLeadsFilter() {
     let hide = !!q && !c.textContent.toLowerCase().includes(q);
     if (leadsFilter.fv) hide = hide || c.dataset.va !== leadsFilter.fv;          // filtre par variante d'accroche
     else if (leadsFilter.f === "arep") hide = hide || c.dataset.arep !== "1";
+    else if (leadsFilter.f === "reac") hide = hide || c.dataset.reac !== "1";
     else if (leadsFilter.f !== "all") hide = hide || c.dataset.stage !== leadsFilter.f;
     c.hidden = hide;
     if (!hide) n++;
@@ -3383,19 +3396,20 @@ function parseAbonnes(text) {
   const ix = n => h.findIndex(c => (c || "").trim().toLowerCase() === n);
   const I = { pseudo: ix("pseudo"), nom: ix("nom"), detecte: ix("detecte"), profil: ix("profil"), cible: ix("cible"),
               msg: ix("message propose"), contacte: ix("contacte"), date: ix("date contact"), envoye: ix("message envoye"),
-              statut: ix("statut"), conv: ix("conv"), releve: ix("releve") };
+              statut: ix("statut"), conv: ix("conv"), releve: ix("releve"), type: ix("type") };
   const g = (r, k) => I[k] < 0 ? "" : (r[I[k]] || "").trim();
   return rows.slice(1).map(r => ({
     pseudo: g(r, "pseudo"), nom: g(r, "nom") || g(r, "pseudo"), detecte: g(r, "detecte"), profil: g(r, "profil"),
     cible: g(r, "cible"), message: g(r, "msg"), contacte: /^(oui|yes|1|true)/i.test(g(r, "contacte")),
-    date: g(r, "date"), envoye: g(r, "envoye"), statut: g(r, "statut").toLowerCase(), conv: g(r, "conv"), releve: g(r, "releve")
+    date: g(r, "date"), envoye: g(r, "envoye"), statut: g(r, "statut").toLowerCase(), conv: g(r, "conv"), releve: g(r, "releve"),
+    ancien: /^ancien/i.test(g(r, "type"))
   })).filter(f => f.pseudo);
 }
 const NF_STATUT = { envoye: "📨 envoyé, pas vu", vu: "👁 vu, pas de réponse", repondu: "💬 a répondu", reagi: "❤️ a réagi" };
 function nfCard(f, i, local) {
   return '<div class="card" style="margin-bottom:14px">' +
     '<div class="rhead"><span class="rname" style="font-size:17px">' + esc(f.nom) + ' <span style="font-weight:500;color:var(--muted)">@' + esc(f.pseudo) + '</span></span>' +
-    '<span class="badge">abonné le ' + esc(f.detecte) + (parseDate(f.detecte) ? " · " + relFr(parseDate(f.detecte)) : "") + '</span></div>' +
+    '<span class="badge">' + (f.ancien ? 'abonné ancien · relevé le ' + esc(f.detecte) : 'abonné le ' + esc(f.detecte) + (parseDate(f.detecte) ? " · " + relFr(parseDate(f.detecte)) : "")) + '</span></div>' +
     '<p class="rstats" style="margin:8px 0 2px"><b>' + esc(f.cible) + '</b>' + (f.profil ? ' · ' + esc(f.profil) : '') + '</p>' +
     (f.message ? '<div class="msgcard" id="nf-msg-' + i + '">' + esc(f.message) + '</div>' : '<p class="formnote">Pas de message proposé (profil pas encore analysé).</p>') +
     '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px">' +
@@ -3411,7 +3425,8 @@ function renderAbonnesTab(text) {
   const box = el("nf-todo");
   if (!box) return;
   const seen = nfSeen();
-  const todo = NF_LIST.filter(f => !f.contacte && !seen[f.pseudo]);
+  const todo = NF_LIST.filter(f => !f.contacte && !seen[f.pseudo] && !f.ancien);
+  const ancien = NF_LIST.filter(f => !f.contacte && !seen[f.pseudo] && f.ancien);
   const local = NF_LIST.filter(f => !f.contacte && seen[f.pseudo]);
   const done = NF_LIST.filter(f => f.contacte);
   const cnt = el("abonnes-count");
@@ -3420,15 +3435,18 @@ function renderAbonnesTab(text) {
     '<div class="card"><p class="rstats" style="margin:0">✅ Tout le monde a été contacté.</p></div>';
   el("sec-nf-local").hidden = !local.length;
   el("nf-local").innerHTML = local.map((f, i) => nfCard(f, 1000 + i, true)).join("");
-  const pills = [["all", "Tous", NF_LIST.length], ["todo", "🚨 À contacter", todo.length], ["done", "✅ Contactés", done.length],
+  el("sec-nf-ancien").hidden = !ancien.length;
+  el("nf-ancien-count").textContent = ancien.length ? "· " + ancien.length : "";
+  el("nf-ancien").innerHTML = ancien.map((f, i) => nfCard(f, 2000 + i, false)).join("");
+  const pills = [["all", "Tous", NF_LIST.length], ["todo", "🚨 À contacter", todo.length], ["ancien", "🗂️ Anciens jamais contactés", ancien.length], ["done", "✅ Contactés", done.length],
                  ["rep", "💬 Ont répondu", done.filter(f => /repondu|reagi/.test(f.statut)).length]];
   el("nf-pills").innerHTML = pills.map(p => '<button type="button" class="fpill' + (NF_FILTER === p[0] ? " on" : "") + '" data-f="' + p[0] + '">' + p[1] + ' <b>' + p[2] + '</b></button>').join("");
-  const shown = NF_LIST.filter(f => NF_FILTER === "all" || (NF_FILTER === "todo" && !f.contacte) || (NF_FILTER === "done" && f.contacte) || (NF_FILTER === "rep" && /repondu|reagi/.test(f.statut)));
+  const shown = NF_LIST.filter(f => NF_FILTER === "all" || (NF_FILTER === "todo" && !f.contacte && !f.ancien) || (NF_FILTER === "ancien" && f.ancien) || (NF_FILTER === "done" && f.contacte) || (NF_FILTER === "rep" && /repondu|reagi/.test(f.statut)));
   el("nf-data").innerHTML = shown.length ?
     '<table><thead><tr><th>Abonné</th><th>Abonné le</th><th>Cible</th><th>Contacté</th><th>Date</th><th>Statut</th><th>Message envoyé</th><th>Conv</th></tr></thead><tbody>' +
     shown.map(f => '<tr' + (!f.contacte ? ' style="background:color-mix(in srgb,var(--bad) 8%,transparent)"' : '') + '>' +
       '<td><a href="https://www.instagram.com/' + esc(f.pseudo) + '/" target="_blank" rel="noopener"><b>' + esc(f.nom) + '</b></a><br><span style="color:var(--muted)">@' + esc(f.pseudo) + '</span></td>' +
-      '<td>' + esc(f.detecte) + '</td><td>' + esc(f.cible) + '</td>' +
+      '<td>' + (f.ancien ? '<span style="color:var(--muted)">ancien · ' + esc(f.detecte) + '</span>' : esc(f.detecte)) + '</td><td>' + esc(f.cible) + '</td>' +
       '<td>' + (f.contacte ? "✅ oui" : (seen[f.pseudo] ? "☑️ coché, à vérifier" : "❌ non")) + '</td>' +
       '<td>' + esc(f.date) + '</td><td>' + (NF_STATUT[f.statut] || esc(f.statut)) + '</td>' +
       '<td style="max-width:360px;white-space:pre-wrap;font-size:12.5px">' + esc(f.envoye) + '</td>' +
@@ -3436,7 +3454,7 @@ function renderAbonnesTab(text) {
     '</tbody></table>' : '<p class="rstats" style="margin:0">Aucun abonné relevé pour ce filtre.</p>';
   const lastRel = NF_LIST.map(f => parseDate(f.releve)).filter(Boolean).sort().reverse()[0];
   el("nf-note").textContent = NF_LIST.length + " abonné" + (NF_LIST.length > 1 ? "s" : "") + " relevé" + (NF_LIST.length > 1 ? "s" : "") +
-    " · " + done.length + " contacté" + (done.length > 1 ? "s" : "") + " · " + todo.length + " à contacter" +
+    " · " + done.length + " contacté" + (done.length > 1 ? "s" : "") + " · " + todo.length + " à contacter" + (ancien.length ? " · " + ancien.length + " anciens jamais contactés" : "") +
     (lastRel ? " · dernier relevé " + relFr(lastRel) : "") + ". Statut = ce que montre la messagerie (les conversations avec une réponse non lue ne sont jamais ouvertes par le relevé).";
 }
 document.addEventListener("click", e => {
