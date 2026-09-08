@@ -1449,6 +1449,8 @@ function render(DATA) {
   }
 
   /* ---------- EOD non faits, par setter actif (14 j) sur les 7 derniers jours ---------- */
+  const isWeekend = d => { const w = new Date(d + "T12:00:00").getDay(); return w === 0 || w === 6; };
+  const isWeekendOff = s => (s || "").trim().toLowerCase() === "cynthia";
   const missBox = el("eod-missing");
   const activeSet14 = [...new Set(lastNDays(14).flatMap(r => Object.keys(r.bySetter)))].sort();
   // un setter n'est en retard qu'à partir de son premier EOD (Cynthia a rejoint le 3/09)
@@ -1459,7 +1461,8 @@ function render(DATA) {
   if (activeSet14.length) {
     const rows7 = lastNDays(7);
     const perSetter = activeSet14
-      .map(s => ({ s, miss: rows7.filter(r => !(s in r.bySetter) && r.date >= (firstSeen[s] || "")).map(r => r.date) }))
+      // Cynthia est off le week-end : samedi et dimanche ne comptent pas comme EOD manquants pour elle
+      .map(s => ({ s, miss: rows7.filter(r => !(s in r.bySetter) && r.date >= (firstSeen[s] || "") && !(isWeekendOff(s) && isWeekend(r.date))).map(r => r.date) }))
       .filter(x => x.miss.length);
     missBox.hidden = false;
     missBox.innerHTML = '<h3 class="mini-title" style="margin-bottom:8px">EOD non faits · 7 derniers jours</h3>' +
