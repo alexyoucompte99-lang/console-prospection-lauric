@@ -1115,6 +1115,15 @@ const iso = d => isoOf(d.getFullYear(), d.getMonth() + 1, d.getDate());
 
 /* ---------- agrégation (miroir de l'ancien build.py) ---------- */
 
+// Étiquettes retirées : pseudos Insta à ne plus compter comme leads chauds
+// (retirés par Alex après un « pas intéressé » du lead). L'URL reste dans le
+// Sheet EOD, la page l'ignore partout (vivier, onglet Leads, compteur EOD).
+const ETQ_RETIREES = new Set([
+  "alexandre.lsz", // 08/09/2026 : venu chercher la ressource, pas d'intérêt
+  "dams69320",     // 08/09/2026 : pas intéressé
+  "banibani_j",    // 08/09/2026 : « pas intéressé à ce stade »
+]);
+
 // lignes à ignorer dans les stats : tests techniques + soumissions de la
 // boîte à idées (onglet Script setting), qui passent par le même Google Form
 const isTestRow = r => /test console|bo[iî]te\s*[aà]\s*id[ée]es|^\s*doublon\s*$|^\s*tracking\s*$|^\s*vente\s*$|^\s*callsuivi\s*$|^\s*vote\s*$/i.test(r[COL.SETTER] || "");
@@ -1866,7 +1875,8 @@ function renderEodTab(eodText) {
     const detail = parseDetail(joined);
     const mDrap = /[ÉE]tiquette drapeau\s*:?\s*(\d+)/i.exec(joined);
     const drapeau = mDrap ? +mDrap[1] : null;
-    const urls = [...joined.matchAll(/[ÉE]tiquette URL\s*:\s*(\S+)/gi)].map(m => m[1]);
+    const urls = [...joined.matchAll(/[ÉE]tiquette URL\s*:\s*(\S+)/gi)].map(m => m[1])
+      .filter(u => !ETQ_RETIREES.has(instaName(u).replace(/^@/, "").toLowerCase()));
     const mTot = /—\s*Abonn[ée]s total\s*:\s*(\d+)/i.exec(joined);
     const mImpr = /—\s*Impressions\s*:\s*(\d+)/i.exec(joined);
     const mMc = /—\s*ManyChat Clart[ée]\s*:\s*(\d+)/i.exec(joined);
