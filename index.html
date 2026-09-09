@@ -615,6 +615,7 @@
           <span class="formnote" style="margin:0 4px 0 0;min-width:70px">📅 Période :</span>
           <button class="pill fpill on" data-r="all">toutes dates</button>
           <button class="pill fpill" data-r="0">aujourd'hui</button>
+          <button class="pill fpill" data-r="week">semaine en cours</button>
           <button class="pill fpill" data-r="7">7 j</button>
           <button class="pill fpill" data-r="14">14 j</button>
           <button class="pill fpill" data-r="30">30 j</button>
@@ -2331,7 +2332,7 @@ function renderLeadsTab(leadsText) {
 /* filtre de l'onglet Leads : état conservé entre les rafraîchissements, composé avec la recherche et la période */
 let leadsFilter = { f: "all", fv: "" };
 let LEAD_ROWS = [], LEADS_RELEVE = "";
-let leadsRange = { key: "all", from: "", to: "" };   // période : key = all | 0 | 7 | 14 | 30 | custom
+let leadsRange = { key: "all", from: "", to: "" };   // période : key = all | 0 | week | 7 | 14 | 30 | m:AAAA-MM | custom
 const VAR_LABELS = { A: "🅰 Message A · long (Constant)", B: "🅱 Message B · court + vocal (Cynthia)",
                      lauric: "💬 Message personnalisé · court + 1 question",
                      ancienne: "Ancien script · « Bienvenue, j'offre… »", like: "👍 Scan après un like (non abonnés)",
@@ -2344,6 +2345,7 @@ function rangeBounds() {
   if (leadsRange.key === "custom") return { from: leadsRange.from || "", to: leadsRange.to || "" };
   if (leadsRange.key === "all") return { from: "", to: "" };
   if (leadsRange.key.startsWith("m:")) { const ym = leadsRange.key.slice(2); const [y, m] = ym.split("-").map(Number); return { from: ym + "-01", to: isoOf(y, m, new Date(y, m, 0).getDate()) }; }
+  if (leadsRange.key === "week") { const d = new Date(); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return { from: iso(d), to: "" }; }   // depuis lundi
   const n = +leadsRange.key, d = new Date(); d.setDate(d.getDate() - n);
   return { from: iso(d), to: "" };
 }
@@ -2358,6 +2360,7 @@ function rangeLabel() {
   const fr = d => d ? d.split("-").reverse().join("/") : "";
   if (!from && !to) return "";
   if (leadsRange.key.startsWith("m:")) return monthLabel(leadsRange.key.slice(2));
+  if (leadsRange.key === "week") return "semaine en cours (depuis lundi " + fr(from) + ")";
   if (leadsRange.key !== "custom") return leadsRange.key === "0" ? "aujourd'hui" : (leadsRange.key + " derniers jours");
   return (from ? "du " + fr(from) : "") + (to ? " au " + fr(to) : "");
 }
