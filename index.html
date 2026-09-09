@@ -247,6 +247,13 @@
   .ldet[open] summary::before { content: "▾ "; }
   .ldrow { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; align-items: baseline; }
   .ldk { color: var(--muted); font-size: 12.5px; min-width: 150px; }
+  .chat { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+  .bub { max-width: 86%; padding: 7px 11px; border-radius: 12px; font-size: 13.5px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .bub.L { align-self: flex-end; background: color-mix(in srgb, var(--accent) 14%, var(--card)); border-bottom-right-radius: 3px; }
+  .bub.P { align-self: flex-start; background: var(--page); border: 1px solid var(--border); border-bottom-left-radius: 3px; }
+  .bub.hit { outline: 2px solid var(--good); }
+  .bub .bt { display: block; font-size: 11px; color: var(--muted); margin-top: 3px; }
+  .msgcard.prop { border: 1px solid var(--good); border-left-width: 4px; }
   .copybtn { font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; border: 1px solid var(--accent); color: var(--accent); background: transparent; border-radius: 7px; padding: 4px 10px; margin-top: 8px; }
   .copybtn:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
   .dupbtn { border-color: var(--muted); color: var(--muted); }
@@ -589,6 +596,11 @@
     </div>
 
     <div id="tab-datas" hidden>
+      <div class="tally-counts" id="datas-sub" style="margin-bottom:14px">
+        <button class="pill fpill on" data-s="main">📊 Chiffres et accroches</button>
+        <button class="pill fpill" data-s="appels">📞 Appels proposés <b id="appels-count"></b></button>
+      </div>
+      <div id="datas-main">
       <details class="ldet accdet" id="new-acc-details">
         <summary style="font-size:inherit"><h2 class="hsec" style="--hc:var(--good);margin:0;display:inline">🧪 10 accroches à tester (objectif : le taux de réponse)</h2> <span class="formnote" style="margin:0 0 0 8px">cliquer pour déplier / replier</span></summary>
         <div class="card" style="font-size:14px;line-height:1.5;margin:10px 0 12px">
@@ -687,6 +699,30 @@
         </div>
       </section>
       <p class="formnote">Les datas viennent du relevé des conversations Instagram (API interne, lecture seule). La liste des leads et les priorités sont dans l'onglet 👤 Leads.</p>
+      </div>
+      <div id="datas-appels" hidden>
+        <div class="tiles" id="appels-kpis" style="margin-bottom:16px"></div>
+        <section id="sec-appels-analyse" hidden>
+          <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">🧠 Ce qui fait accepter un appel, ce qui le fait rater, et à qui on le propose</h2>
+          <div class="card" style="font-size:14.5px;line-height:1.55" id="appels-analyse"></div>
+        </section>
+        <section>
+          <h2 class="hsec" style="--hc:var(--s1);margin-bottom:10px">🧪 Selon l'accroche de départ</h2>
+          <div class="card"><div class="tbl-scroll" style="margin-top:0" id="appels-by-var"></div>
+          <p class="formnote" style="margin-top:10px">Premier message de la conversation (variante du relevé). « Réponse » = le lead a écrit après la proposition ; « accepté » = il a dit oui, donné un créneau ou booké sur Calendly.</p></div>
+        </section>
+        <section>
+          <h2 class="hsec" style="--hc:var(--s2);margin-bottom:10px">⏱️ Selon le moment où l'appel est proposé</h2>
+          <div class="card"><div class="tbl-scroll" style="margin-top:0" id="appels-by-timing"></div>
+          <p class="formnote" style="margin-top:10px">Nombre de messages écrits par le lead avant qu'on lui propose l'appel, et délai depuis le premier message de la conversation. Vocal = la proposition est accompagnée d'un vocal.</p></div>
+        </section>
+        <section>
+          <h2 class="hsec" style="--hc:var(--good);margin-bottom:10px" id="appels-title">📞 Les conversations où l'appel a été proposé</h2>
+          <div class="tally-counts" id="appels-pills"></div>
+          <div class="rlist" id="appels-list"></div>
+        </section>
+        <p class="formnote" id="appels-note"></p>
+      </div>
     </div>
 
     <div id="tab-verif" hidden>
@@ -1329,6 +1365,7 @@ async function load(showSpinner) {
   const cal = await get(CAL_URL).catch(() => "");
   const leadsCsv = await get("data/leads-insta.csv").catch(() => "");
   INSTA_ACT_TEXT = await get("data/insta-activite.csv").catch(() => "");
+  get("data/insta-appels.json").then(t => renderAppelsTab(JSON.parse(t))).catch(() => renderAppelsTab(null));
   get("data/abonnes.csv").then(renderAbonnesTab).catch(() => renderAbonnesTab(""));
   get("data/abonnes_total.csv").then(renderTotalChart).catch(() => renderTotalChart(""));
   // le portefeuille a son propre fallback : un export CSV privé renvoie du HTML
@@ -2417,6 +2454,113 @@ function leadDetails(l, i) {
       '<button type="button" class="copybtn" data-copy="lead-msg-' + i + '">Copier le message</button>' : '') +
     '</details>';
 }
+
+/* ---------- Datas › sous-onglet 📞 Appels proposés (data/insta-appels.json, produit par appels_insta.py) ---------- */
+const ISSUE_LABELS = {
+  vente: ["💰 devenue cliente", "var(--good)"], fait: ["☎️ call fait", "var(--good)"], booke: ["📅 call booké", "var(--good)"], accepte: ["✅ a accepté", "var(--good)"],
+  discussion: ["💬 a répondu, pas de date", "var(--accent)"], reporte: ["⏳ reporté ou refusé", "var(--s4)"], vu: ["👀 vu, pas de réponse", "var(--bad)"], nonvu: ["⬜ pas encore vu", "var(--muted)"] };
+const ISSUE_ORDER = ["vente", "fait", "booke", "accepte", "discussion", "reporte", "vu", "nonvu"];
+let APPELS = { convs: [] }, appelsFilter = "all";
+let datasSub = "main";
+try { datasSub = localStorage.getItem("datasSub") || "main"; } catch (e) {}
+function showDatasSub(name) {
+  datasSub = name === "appels" ? "appels" : "main";
+  el("datas-main").hidden = datasSub !== "main";
+  el("datas-appels").hidden = datasSub !== "appels";
+  document.querySelectorAll("#datas-sub .fpill").forEach(x => x.classList.toggle("on", x.dataset.s === datasSub));
+  try { localStorage.setItem("datasSub", datasSub); } catch (e) {}
+}
+el("datas-sub").addEventListener("click", e => { const b = e.target.closest(".fpill"); if (b) showDatasSub(b.dataset.s); });
+showDatasSub(datasSub);
+
+function renderAppelsTab(json) {
+  APPELS = json && json.convs ? json : { convs: [] };
+  const convs = APPELS.convs;
+  el("appels-count").textContent = convs.length ? "(" + convs.length + ")" : "";
+  const isPos = c => ["vente", "fait", "booke", "accepte"].includes(c.issue);
+  const isRep = c => isPos(c) || c.issue === "discussion" || c.issue === "reporte";
+  const pct = (n, d) => d ? Math.round(100 * n / d) + " %" : "–";
+  const kpi = (label, val, sub, col) => '<div class="card tile" style="--tc:' + col + '"><div class="formnote" style="margin:0">' + label + '</div><div style="font-size:28px;font-weight:700;line-height:1.2">' + val + '</div>' + (sub ? '<div class="formnote" style="margin:4px 0 0">' + sub + '</div>' : '') + '</div>';
+  const nRep = convs.filter(isRep).length, nPos = convs.filter(isPos).length, nBook = convs.filter(c => c.issue === "booke").length;
+  el("appels-kpis").innerHTML =
+    kpi("Appels proposés", convs.length, "conversations où on a proposé un appel / une visio", "var(--accent)") +
+    kpi("Réponses après la proposition", nRep, pct(nRep, convs.length) + " des propositions", "var(--s1)") +
+    kpi("Appels obtenus", nPos, pct(nPos, convs.length) + " des propositions · " + convs.filter(c => c.issue === "fait" || c.issue === "vente").length + " faits, " + nBook + " booké" + (nBook > 1 ? "s" : "") + " Calendly, " + convs.filter(c => c.issue === "vente").length + " vente", "var(--good)") +
+    kpi("Sans réponse", convs.length - nRep, convs.filter(c => c.issue === "vu").length + " vus sans réponse · " + convs.filter(c => c.issue === "nonvu").length + " pas encore vus", "var(--bad)");
+
+  /* tableau générique : lignes = groupes, colonnes = proposés / réponses / acceptés */
+  const table = (rows, head) => {
+    const rk = rows.filter(r => r.items.length);
+    if (!rk.length) return '<p class="empty-note" style="margin:0">Pas encore de données.</p>';
+    return '<table><thead><tr><th>' + head + '</th><th>Proposés</th><th>Réponses</th><th>% rép.</th><th>Acceptés</th><th>% acceptés</th></tr></thead><tbody>' +
+      rk.map(r => { const n = r.items.length, rep = r.items.filter(isRep).length, pos = r.items.filter(isPos).length;
+        return '<tr><td class="tot" style="white-space:normal;max-width:300px">' + r.label + '</td><td>' + n + '</td><td>' + rep + '</td><td>' + pct(rep, n) + '</td><td class="tot">' + pos + '</td><td class="tot">' + pct(pos, n) + '</td></tr>'; }).join("") +
+      '</tbody></table>';
+  };
+  const vkeys = [...new Set(convs.map(c => c.variante || "?"))].sort((a, b) => convs.filter(c => (c.variante || "?") === b).length - convs.filter(c => (c.variante || "?") === a).length);
+  el("appels-by-var").innerHTML = table(vkeys.map(k => ({ label: VAR_LABELS[k] || (k === "suivi" ? "Conversation déjà en cours (suivi)" : k === "?" ? "Accroche inconnue" : k), items: convs.filter(c => (c.variante || "?") === k) })), "Accroche de départ");
+  const bMsg = n => n === 0 ? "0 message du lead (proposition directe)" : n <= 2 ? "1 à 2 messages du lead" : n <= 5 ? "3 à 5 messages du lead" : "6 messages du lead et plus";
+  const bDay = j => j < 1 ? "le jour même" : j <= 3 ? "entre 1 et 3 jours" : j <= 14 ? "entre 4 et 14 jours" : "plus de 14 jours après";
+  const groupBy = (f, labels) => labels.map(l => ({ label: l, items: convs.filter(c => f(c) === l) }));
+  el("appels-by-timing").innerHTML =
+    '<h3 class="mini-title">Messages du lead avant la proposition</h3>' + table(groupBy(c => bMsg(c.avant.msgsLead), ["0 message du lead (proposition directe)", "1 à 2 messages du lead", "3 à 5 messages du lead", "6 messages du lead et plus"]), "Avant la proposition") +
+    '<h3 class="mini-title" style="margin-top:16px">Délai depuis le début de la conversation</h3>' + table(groupBy(c => bDay(c.avant.jours), ["le jour même", "entre 1 et 3 jours", "entre 4 et 14 jours", "plus de 14 jours après"]), "Délai") +
+    '<h3 class="mini-title" style="margin-top:16px">Forme de la proposition</h3>' + table([{ label: "🎙️ avec un vocal", items: convs.filter(c => c.propose.vocal) }, { label: "✍️ écrit seul", items: convs.filter(c => !c.propose.vocal) }].concat(
+      [...new Set(convs.map(c => c.type).filter(Boolean))].map(t => ({ label: "Formulation : " + t, items: convs.filter(c => c.type === t) }))), "Forme");
+
+  /* analyse rédigée (notes du relevé) */
+  const an = APPELS.analyse || [];
+  el("sec-appels-analyse").hidden = !an.length;
+  el("appels-analyse").innerHTML = an.map(sec => '<h3 class="mini-title">' + esc(sec.titre) + '</h3><ul style="margin:0 0 12px;padding-left:20px">' + (sec.points || []).map(p => '<li>' + p + '</li>').join("") + '</ul>').join("");
+
+  /* pills de filtre par issue */
+  el("appels-pills").innerHTML =
+    '<button class="pill fpill' + (appelsFilter === "all" ? " on" : "") + '" data-i="all"><b>' + convs.length + '</b>&nbsp;toutes</button>' +
+    ISSUE_ORDER.filter(k => convs.some(c => c.issue === k)).map(k =>
+      '<button class="pill fpill' + (appelsFilter === k ? " on" : "") + '" data-i="' + k + '" style="border-color:' + ISSUE_LABELS[k][1] + ';color:' + ISSUE_LABELS[k][1] + '"><b>' + convs.filter(c => c.issue === k).length + '</b>&nbsp;' + ISSUE_LABELS[k][0] + '</button>').join("");
+
+  const jours = j => j < 1 ? "le jour même" : "J+" + Math.round(j);
+  el("appels-list").innerHTML = convs.map((c, i) => {
+    const [ilab, icol] = ISSUE_LABELS[c.issue] || ["?", "var(--muted)"];
+    const chat = (c.msgs || []).map(m => '<div class="bub ' + m.w + (m.t === c.propose.t && m.w === "L" && m.x === c.propose.text ? " hit" : "") + '">' +
+      esc(m.x || (m.ty === "voice_media" ? "🎙️ vocal" : m.ty === "action_log" ? "❤️ a réagi" : m.ty === "media" || m.ty === "raven_media" ? "📷 photo / vidéo" : m.ty === "link" ? "🔗 lien" : "[" + m.ty + "]")) +
+      '<span class="bt">' + (m.w === "L" ? "Lauric" : esc(firstName(c.nom) || c.pseudo)) + ' · ' + esc(m.t) + '</span></div>').join("");
+    return '<div class="rcard deal" data-i="' + esc(c.issue) + '" style="--dc:' + icol + '">' +
+      '<div class="rhead"><span class="rname">' + esc(c.nom || c.pseudo) + '</span>' +
+      '<span class="badge" style="color:' + icol + ';border-color:' + icol + '">' + ilab + '</span>' +
+      (VAR_SHORT[c.variante] ? '<span class="badge src">' + VAR_SHORT[c.variante] + '</span>' : c.variante === "suivi" ? '<span class="badge src">conv déjà en cours</span>' : '') +
+      (c.cible ? '<span class="badge next">🎯 ' + esc(c.cible) + '</span>' : '') +
+      (c.propose.vocal ? '<span class="badge gray">🎙️ vocal</span>' : '') +
+      (c.booked && c.booked.length ? '<span class="badge win">📅 Calendly ' + esc(c.booked.map(b => b.date.split("-").reverse().join("/") + (b.statut !== "active" ? " (annulé)" : "")).join(", ")) + '</span>' : '') +
+      '<span class="rmeta">proposé le ' + esc(c.propose.t) + ' · ' + jours(c.avant.jours) + ' · après ' + c.avant.msgsLead + ' message' + (c.avant.msgsLead > 1 ? "s" : "") + ' du lead' + (c.propose.n > 1 ? ' · relancé ' + c.propose.n + ' fois' : '') + '</span>' +
+      '</div>' +
+      (c.recap ? '<p class="rnote">' + esc(c.recap) + '</p>' : '') +
+      (c.verdict ? '<p class="rstats">💡 ' + esc(c.verdict) + '</p>' : '') +
+      '<div class="ldrow" style="margin-top:10px"><span class="ldk">📤 1er message envoyé' + (c.premier.t ? " le " + esc(c.premier.t) : "") + (c.premier.partial ? " (début de conv non relevé, 20 derniers messages)" : "") + '</span></div>' +
+      (c.premier.text ? '<div class="msgcard" style="margin-top:4px">' + esc(c.premier.text) + '</div>' : '<p class="formnote" style="margin:2px 0 0">inconnu</p>') +
+      '<div class="ldrow" style="margin-top:10px"><span class="ldk">📞 Proposition d\'appel le ' + esc(c.propose.t) + '</span></div>' +
+      '<div class="msgcard prop" style="margin-top:4px">' + esc(c.propose.text) + '</div>' +
+      (c.apres.repondu ? '<div class="ldrow" style="margin-top:10px"><span class="ldk">💬 Réponse du lead le ' + esc(c.apres.t) + '</span></div><div class="msgcard" style="margin-top:4px">' + esc(c.apres.texte) + '</div>'
+        : '<p class="rstats" style="margin-top:8px">' + (c.apres.vu ? "👀 vu par le lead, aucune réponse depuis" : "⬜ pas encore ouvert par le lead") + '</p>') +
+      '<details class="ldet"><summary>Toute la conversation (' + (c.msgs || []).length + ' messages' + (c.complet ? "" : ", 20 derniers seulement") + ')</summary><div class="chat">' + chat + '</div></details>' +
+      '<p class="rstats" style="margin-top:8px"><a class="vivlink" href="https://www.instagram.com/' + esc(c.pseudo) + '/" target="_blank" rel="noopener">@' + esc(c.pseudo) + ' ↗</a> · <a class="vivlink" href="' + esc(c.conv) + '" target="_blank" rel="noopener">ouvrir la conversation ↗</a></p>' +
+      '</div>';
+  }).join("") || '<p class="empty-note">Aucune conversation avec un appel proposé dans le relevé.</p>';
+  applyAppelsFilter();
+  el("appels-note").textContent = "Détection automatique dans les messages de Lauric (appel, call, visio, créneau, dispo ?, rendez-vous, Calendly) sur les 20 derniers messages de chaque conversation" +
+    (APPELS.releve ? ", relevé du " + APPELS.releve : "") + ". Un appel proposé uniquement en vocal n'est pas détecté. « Booké » = le prénom et le nom correspondent à un RDV Calendly. Récaps et cibles rédigés à la main dans data/insta-appels-notes.json.";
+}
+function applyAppelsFilter() {
+  let n = 0;
+  document.querySelectorAll("#appels-list .rcard").forEach(c => { const hide = appelsFilter !== "all" && c.dataset.i !== appelsFilter; c.hidden = hide; if (!hide) n++; });
+  el("appels-title").textContent = appelsFilter === "all" ? "📞 Les conversations où l'appel a été proposé" : "📞 " + n + " conversation" + (n > 1 ? "s" : "") + " · " + (ISSUE_LABELS[appelsFilter] || ["?"])[0];
+}
+el("appels-pills").addEventListener("click", e => {
+  const b = e.target.closest(".fpill"); if (!b) return;
+  appelsFilter = b.dataset.i;
+  document.querySelectorAll("#appels-pills .fpill").forEach(x => x.classList.toggle("on", x === b));
+  applyAppelsFilter();
+});
 
 /* onglet 🔍 EOD vs réel : déclaré par les setters vs observé sur Instagram (data/insta-activite.csv) */
 let INSTA_ACT_TEXT = "";

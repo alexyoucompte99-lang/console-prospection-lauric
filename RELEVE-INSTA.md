@@ -71,3 +71,19 @@ git commit -m "Relevé Insta du JJ/MM" && git pull --rebase && git push
 ```
 Ligne de log : `<date heure> · <n> convs relues · plancher <YYYY-MM-DD> · <n> à répondre`.
 Ne jamais republier l'artifact claude.ai, ne rien envoyer sur Instagram.
+
+## Export complet des conversations (sous-onglet « 📞 Appels proposés » de l'onglet Datas, ajouté le 09/09)
+Le dump `┃` ne garde qu'un résumé par conversation. Pour le sous-onglet Appels proposés il faut les messages complets
+(les 20 derniers de chaque conv). **Ce qui ne marche pas (testé le 09/09)** : `window.name` + navigation vers un serveur
+local (Instagram envoie COOP, le nom est effacé), `fetch`/`sendBeacon`/`<form>` vers 127.0.0.1 (CSP connect-src et
+form-action), `/api/v1/direct_v2/threads/<id>/` (refusé par le classifieur de l'outil Chrome). `scripts-releve/relay.py`
+reste utile pour une page sans CSP, pas pour Instagram.
+**Ce qui marche** : réduire côté JS aux conversations utiles (au moins un message du lead, ou un message de Lauric qui
+propose un appel), sérialiser en JSON une conv par ligne (`window.__out5`), puis le canal `<pre>` + `get_page_text` par
+tranches de 47 000 caractères avec recouvrement (voir Étape 4), 4 tranches par `browser_batch` → un fichier tool-results
+par lot, recollé par `scripts-releve/glue_json.py` → `dump.json`.
+Puis `python3 appels_insta.py dump.json --date JJ/MM/AAAA` → `data/insta-appels.json`
+(détection regex des propositions d'appel dans les messages de Lauric, issue auto : booké Calendly / accepté / répondu /
+reporté / vu / non vu ; récaps, cibles et analyse rédigés à la main dans `data/insta-appels-notes.json`, clé = pseudo,
+champs `recap`, `cible`, `type`, `verdict`, `issue` (force l'issue), `exclude`, `force` ; `_analyse` = blocs du haut).
+Le dump JSON brut n'est pas commité (conversations complètes) : seul `insta-appels.json` l'est.

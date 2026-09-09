@@ -94,3 +94,13 @@ commit + push. Pré-requis côté Mac : branché, en veille (pas éteint), app C
 réveil auto `pmset repeat wakeorpoweron MTWRFSU 03:55:00`, agent launchd
 `com.alex.caffeinate-releve-4h` (caffeinate 3h56 → 5h26) pour empêcher la veille pendant le relevé.
 Journal : `data/abonnes.log`.
+
+## Datas › sous-onglet « 📞 Appels proposés » (09/09)
+L'onglet 📈 Datas a deux sous-onglets (pills en tête, état `datasSub` en localStorage) : « Chiffres et accroches » (contenu
+d'origine) et « Appels proposés » : toutes les conversations où Lauric a proposé un appel / une visio, avec KPI, tableau par
+accroche de départ, tableau selon le moment de la proposition (messages du lead avant, délai, vocal ou écrit, formulation),
+bloc d'analyse rédigé, puis une carte par conversation (issue, cible, récap, 1er message envoyé, message de proposition,
+réponse du lead, conversation complète dépliable en bulles). Source : `data/insta-appels.json`, produit par `appels_insta.py`
+depuis l'export complet des conversations (voir RELEVE-INSTA.md « Export complet ») ; notes manuelles dans
+`data/insta-appels-notes.json`. Pills = filtre par issue.
+
