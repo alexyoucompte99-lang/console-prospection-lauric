@@ -240,7 +240,23 @@
   .ldet { margin-top: 8px; font-size: 13.5px; }
   .ldet summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: 13px; list-style: none; }
   .ldet summary::before { content: "▸ "; }
-  .accdet { margin: 0 0 18px; } .accdet summary::before { color: var(--good); }
+  .accdet { margin: 0 0 18px; }
+  .accdet > .accsum { display: flex; align-items: center; gap: 16px; padding: 16px 20px; border-radius: 14px; list-style: none; cursor: pointer; color: var(--ink); font-size: inherit;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--good) 16%, var(--card)), color-mix(in srgb, var(--good) 5%, var(--card)));
+    border: 2px solid color-mix(in srgb, var(--good) 45%, transparent); box-shadow: 0 4px 16px color-mix(in srgb, var(--good) 14%, transparent); transition: transform .12s, box-shadow .12s; }
+  .accdet > .accsum::before, .accdet > .accsum::-webkit-details-marker { content: none; display: none; }
+  .accdet > .accsum:hover { transform: translateY(-1px); box-shadow: 0 8px 22px color-mix(in srgb, var(--good) 22%, transparent); }
+  .accdet[open] > .accsum { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+  .accsum-ico { flex: none; width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; font-size: 28px; background: var(--card); border: 1px solid color-mix(in srgb, var(--good) 35%, transparent); }
+  .accsum-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+  .accsum-title { font-size: 22px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.15; color: var(--good); }
+  .accsum-sub { font-size: 14px; color: var(--ink-2); line-height: 1.35; }
+  .accsum-cta { flex: none; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: #fff; background: var(--good); padding: 10px 16px; border-radius: 999px; white-space: nowrap; }
+  .accsum-chev { display: inline-block; font-size: 16px; transition: transform .2s; }
+  .accdet[open] .accsum-chev { transform: rotate(180deg); }
+  .accsum-close, .accdet[open] .accsum-open { display: none; } .accdet[open] .accsum-close { display: inline; }
+  .accdet > .card:first-of-type { border-top-left-radius: 0; border-top-right-radius: 0; border-top: 0; margin-top: 0 !important; }
+  @media (max-width: 640px) { .accdet > .accsum { flex-wrap: wrap; padding: 14px; gap: 12px; } .accsum-title { font-size: 19px; } .accsum-cta { width: 100%; justify-content: center; } }
   .votegrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 6px 18px; margin-top: 10px; }
   .voterow { display: flex; align-items: center; gap: 4px; }
   .votename { min-width: 96px; font-size: 13px; color: var(--ink-2); }
@@ -602,7 +618,14 @@
       </div>
       <div id="datas-main">
       <details class="ldet accdet" id="new-acc-details">
-        <summary style="font-size:inherit"><h2 class="hsec" style="--hc:var(--good);margin:0;display:inline">🧪 10 accroches à tester (objectif : le taux de réponse)</h2> <span class="formnote" style="margin:0 0 0 8px">cliquer pour déplier / replier</span></summary>
+        <summary class="accsum">
+          <span class="accsum-ico">🧪</span>
+          <span class="accsum-txt">
+            <span class="accsum-title">10 accroches à tester</span>
+            <span class="accsum-sub">Objectif : le taux de réponse · chacun note de 1 à 5 · <b id="accsum-votes">pas encore de vote</b></span>
+          </span>
+          <span class="accsum-cta"><span class="accsum-open">Voir les 10 messages</span><span class="accsum-close">Replier</span><span class="accsum-chev">▾</span></span>
+        </summary>
         <div class="card" style="font-size:14px;line-height:1.5;margin:10px 0 12px">
           <b>Ce que disent les 1 000 conversations</b> : ce qui fait répondre, c'est court, personnel, une seule question ouverte, envoyé le soir, et jamais de pitch en premier message (les 577 messages « je propose un scan » : 5 % ouverts, 2 % de réponses). Ce qui répond, ce sont autant des managers en poste que des dirigeants. Les 10 messages ci-dessous poussent ces leviers plus loin, parfois à contre-courant.<br>
           <b>Protocole</b> : 30 envois par message, même setter, même créneau (18h-21h), à des nouveaux abonnés uniquement. On compare le taux de réponse à 48 h dans le tableau A/B ci-dessous. Remplacer [Prénom] et le détail du profil, jamais deux messages identiques d'affilée.
@@ -2696,6 +2719,8 @@ function parseVotes(eodText) {
 }
 function renderNewAcc() {
   const box = el("new-acc-list"); if (!box) return;
+  const nv = Object.values(VOTES).reduce((a, o) => a + Object.keys(o).length, 0), vs = el("accsum-votes");
+  if (vs) vs.textContent = nv ? nv + " vote" + (nv > 1 ? "s" : "") + " de l'équipe" : "pas encore de vote";
   const avg = id => { const o = VOTES[id] || {}; const n = Object.values(o); return n.length ? n.reduce((a, b) => a + b, 0) / n.length : 0; };
   const list = NEW_ACC.slice().sort((a, b) => avg(b.id) - avg(a.id) || Object.keys(VOTES[b.id] || {}).length - Object.keys(VOTES[a.id] || {}).length);
   box.innerHTML = list.map((a, i) => {
