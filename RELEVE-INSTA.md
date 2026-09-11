@@ -17,6 +17,11 @@ mettre à jour `data/leads-insta.csv` (statuts vu / répondu, textes, dates, act
 - Relevé rétroactif du 08/09 : 35 pages, 1 395 conversations, plancher 01/07/2026 (`data/insta-coverage.txt`).
   La boîte est triée par dernière activité : ce qui manque encore, ce sont les conversations sans aucune activité depuis juillet.
 - Chrome ouvert, extension Claude connectée, compte lauric_sergent. Si indisponible : logger et s'arrêter.
+- **Une seule session Claude sur Instagram à la fois** (11/09) : deux sessions relevaient en même temps le soir,
+  Instagram a répondu en 26 s sur une fiche profil puis en 30 s dès la 2e page d'inbox. Vérifier `data/insta-releve.log`
+  et `data/abonnes.log` avant de lancer : si une ligne a moins de 2 h, ne rien lancer.
+- Après `releve_insta.py`, lancer `python3 scripts-releve/maj_abonnes.py [nouveaux.json] --date JJ/MM/AAAA` : les abonnés
+  qui ont une conversation passent « contacté » (date, message, statut vu/répondu, lien) dans `data/abonnes.csv`.
 
 ## Étape 1 : Chrome
 Outils `mcp__claude-in-chrome__*` (un seul ToolSearch : tabs_context_mcp, navigate, javascript_tool, get_page_text, tabs_close_mcp).

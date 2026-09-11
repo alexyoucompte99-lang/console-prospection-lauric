@@ -1,5 +1,5 @@
 {
-"releve": "09/09/2026",
+"releve": "11/09/2026",
 "analyse": [
 {
 "titre": "Les chiffres (relevé du 09/09, conversations depuis mars)",
@@ -238,9 +238,9 @@
 "vocal": false
 },
 "avant": {
-"msgsLead": 2,
+"msgsLead": 1,
 "msgsLauric": 7,
-"jours": 35.7
+"jours": 35.6
 },
 "apres": {
 "repondu": 4,
@@ -252,12 +252,6 @@
 "booked": [],
 "conv": "https://www.instagram.com/direct/t/340282366841710301244285445757659694845/",
 "msgs": [
-{
-"w": "P",
-"t": "03/08/2026 14:36",
-"ty": "text",
-"x": "Et dans 3 ans ce serait de vraiment pouvoir travailler sur le développement de l’entreprise, ou d’autres branches dans le nettoyage ou autres services"
-},
 {
 "w": "L",
 "t": "03/08/2026 16:23",
@@ -377,6 +371,12 @@
 "t": "08/09/2026 14:08",
 "ty": "text",
 "x": "Ravi d'avoir échangé avec toi Paul André. \n\nComme convenu je clos la discussion ici et on reste en contact sur WhatsApp. \n\nBelle journée"
+},
+{
+"w": "L",
+"t": "11/09/2026 18:50",
+"ty": "link",
+"x": "Hello Paul André, \n\nAfin de t'aider dans ta démarche entrepreneuriale, je te partage une ressource 100% maison. \n\nhttps://youtu.be/edgg977QObk?is=ONKd7xn1DIJh6dqp\n\nHâte d'avoir ton retour si ça t'a aidé !\n\nBon week-end"
 }
 ],
 "recap": "Paul André, société de nettoyage (shampouineuses). Conversation de 35 jours : vocaux, lien du scan, 4 relances sans réponse. Le 08/09 à 7h52, une question simple (« êtes-vous ouvert à parler de votre entreprise et des sujets qui vous bloquent ? ») : oui en 4 minutes, créneau fixé pour 13h le jour même, appel passé sur son numéro perso, suite sur WhatsApp.",
@@ -1291,7 +1291,7 @@
 },
 "avant": {
 "msgsLead": 2,
-"msgsLauric": 4,
+"msgsLauric": 3,
 "jours": 2.5
 },
 "apres": {
@@ -1309,12 +1309,6 @@
 ],
 "conv": "https://www.instagram.com/direct/t/340282366841710301244259208870429806598/",
 "msgs": [
-{
-"w": "L",
-"t": "08/08/2026 09:40",
-"ty": "text",
-"x": "Un beau projet en cours ! \n\nTu bosses déjà avec un cabinet qui accompagne les entreprises ? \n\nC'est hyper précieux et gage de réussite. \n\nSi ce n'est pas le cas on pourra en discuter avec plaisir, le projet a l'air vraiment top et innovant. \nÇa me tante bien 😅\n\nEn attendant je t'offre le scan dirigeant qu'on utilise au sein de notre cabinet. \n\n3 min et tu verras c'est hyper puissant et... surprenant pour celui qui le réalise !\n\nBelle journée"
-},
 {
 "w": "L",
 "t": "08/08/2026 09:40",
@@ -1434,6 +1428,12 @@
 "t": "08/09/2026 07:44",
 "ty": "text",
 "x": "J'ai bien eu ton vocal Morgane, je t'ai répondu sur WhatsApp directement. \n\nJ'entends la \"frustration\" de ne pas avoir défini une roadmap chiffrée dès le premier call. \nEt en même temps cela démontre le sérieux de mon cabinet. \n\nJe n'avance jamais de chiffres à l'aveugle juste pour faire plaisir à mon client. \n\nLes fausses promesses ce n'est pas le style du cabinet. \n\nIl fallait le temps de la compréhension et de la découverte. \n\nPour autant si tu souhaites avoir un audit 360 pour définir ta roadmap chiffrée pour ton projet, c'est une vraie prestation. \n\nFacturée 890€ ht. \n\nSuite à nos échanges, cette roadmap chiffrée t'amènera beaucoup plus de clarté dans ton développement. \n\nLes rares questions \"chiffres\" que je vous ai posé (coût d'acquisition client, Life Time value, etc..) sont restées sans réponse et démontre qu'il y a une nécessité à travaillé plus en profondeur ta roadmap. \n\nL'audit 360 permet de repartir également avec des actions à mener pour tenir l'engagement de la roadmap"
+},
+{
+"w": "L",
+"t": "11/09/2026 18:52",
+"ty": "link",
+"x": "Hello Morgane, \n\nAfin de t'aider dans ta démarche entrepreneuriale, je te partage une ressource 100% maison. \n\nhttps://youtu.be/edgg977QObk?is=ONKd7xn1DIJh6dqp\n\nHâte d'avoir ton retour si ça t'a aidé !\n\nBon week-end"
 }
 ],
 "recap": "Morgane (Everybodyfit, société avec son conjoint). Scan rempli le jour même. Le 10/08, un message long (« 1h de strat, vision et plan d'actions, en aucun cas un appel de vente ») + Calendly. Vocaux échangés pendant deux semaines, réservation le 27/08 pour le 03/09 à 14h, call fait à deux. Le 08/09, elle exprime sa frustration de ne pas avoir de roadmap chiffrée ; Lauric propose un audit 360 à 890 € HT.",
@@ -2929,7 +2929,7 @@
 "t": "29/06/2026 22:10"
 },
 "complet": true,
-"nItems": 12,
+"nItems": 13,
 "propose": {
 "text": "Hello Maximilien, j’espère que tu vas bien ! \n\nTout simplement pour t’informer que j’offre 1h de coaching aux entrepreneurs de ma communauté. \n\nAu vu de notre conversation, et de ce que j’ai vu de ton profil je suis certain que je peux t’apporter beaucoup de valeur.\n\nAttention, ce n’est en aucun cas un appel de vente déguisé.\n\nEst-ce que tu as une heure de libre la semaine prochaine ?😀",
 "t": "23/07/2026 21:11",
@@ -3023,6 +3023,12 @@
 "t": "28/08/2026 11:34",
 "ty": "voice_media",
 "x": ""
+},
+{
+"w": "L",
+"t": "09/09/2026 10:28",
+"ty": "text",
+"x": "⏰C'est la rentrée Maximilien \n\nEt si on prenait du temps pour parler de toi ? \n\nOui, de TOI. \n\nLes dirigeants sont trop souvent les grands oubliés. \nTout le monde parle \"clients\" ou encore \"chiffre d'affaires\" etc... \n\nOn en parle ensemble pour rompre avec l'isolement ?"
 }
 ],
 "recap": "Maximilien, ex-ingénieur, auto-entrepreneur en rénovation, réfléchit à passer en EURL et prendre un apprenti à la fin de l'été. Le message de masse du 23/07 puis une relance : « overbooked, 8h-21h tous les jours, relance-moi en septembre ». Vocal le 30/07 et le 28/08.",
@@ -3453,7 +3459,7 @@
 },
 "avant": {
 "msgsLead": 1,
-"msgsLauric": 5,
+"msgsLauric": 4,
 "jours": 0.2
 },
 "apres": {
@@ -3466,12 +3472,6 @@
 "booked": [],
 "conv": "https://www.instagram.com/direct/t/340282366841710301244259175667296614077/",
 "msgs": [
-{
-"w": "L",
-"t": "07/07/2026 16:27",
-"ty": "voice_media",
-"x": ""
-},
 {
 "w": "L",
 "t": "07/07/2026 16:29",
@@ -3591,6 +3591,12 @@
 "t": "08/09/2026 08:25",
 "ty": "text",
 "x": "Bjr Anouck, \n\nOn se fixe une visio ensemble cette semaine ou semaine prochaine ?"
+},
+{
+"w": "L",
+"t": "11/09/2026 18:51",
+"ty": "link",
+"x": "Hello Anouck, \n\nAfin de t'aider dans ta démarche entrepreneuriale, je te partage une ressource 100% maison. \n\nhttps://youtu.be/edgg977QObk?is=ONKd7xn1DIJh6dqp\n\nHâte d'avoir ton retour si ça t'a aidé !\n\nBon week-end"
 }
 ],
 "recap": "Anouck reprend la boutique de sa patronne (qui reste 6 mois), une salariée à l'atelier, financement en cours, signature du sous-seing le 15/09. Le 07/07 : « j'offre 30 min en visio », pas vu. Le 13/08 : coaching offert, « tu es partante ? ». Elle répond le 21/08 (vacances), reçoit le Calendly : « je regarde quand je peux ». Puis « dispo lundi ? » → non (notaire), « mardi ? », « demain ou mercredi ? », « cette semaine ou la semaine prochaine ? » le 08/09. Aucun créneau validé.",
