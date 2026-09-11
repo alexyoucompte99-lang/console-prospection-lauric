@@ -104,3 +104,11 @@ réponse du lead, conversation complète dépliable en bulles). Source : `data/i
 depuis l'export complet des conversations (voir RELEVE-INSTA.md « Export complet ») ; notes manuelles dans
 `data/insta-appels-notes.json`. Pills = filtre par issue.
 
+## Onglet ✅ To do (11/09)
+Une liste par personne (pills Lauric, Constant, Maximilien, Cynthia, Alex, tout le monde ; choix mémorisé en localStorage
+`todoWho`). Tâches de base dans `data/todo.json` (écrites par Claude : relances issues de l'analyse des appels, mises à jour
+par la tâche du matin `releve-insta-lauric`). Tâches ajoutées, cochées ou supprimées depuis la page : lignes du Google Form
+EOD avec le setter réservé `Todo` (exclu des stats par `isTestRow`) : `— Todo : <id> · <qui> · <aaaa-mm-jj|-> · <texte> [· <lien>]`,
+`— TodoFait : <id> · 1|0`, `— TodoSuppr : <id>`, la dernière ligne gagne. Les lignes envoyées depuis un navigateur y restent
+30 min en attente (localStorage `todoPending`) le temps que le Sheet publié se mette à jour.
+

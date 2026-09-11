@@ -270,6 +270,15 @@
   .bub.hit { outline: 2px solid var(--good); }
   .bub .bt { display: block; font-size: 11px; color: var(--muted); margin-top: 3px; }
   .msgcard.prop { border: 1px solid var(--good); border-left-width: 4px; }
+  .todo-card { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; align-items: start; }
+  .todo-check { font: inherit; font-size: 20px; line-height: 1; width: 34px; height: 34px; border-radius: 9px; border: 2px solid var(--border); background: var(--card); cursor: pointer; color: var(--good); }
+  .todo-check:hover { border-color: var(--good); }
+  .todo-check.on { background: color-mix(in srgb, var(--good) 14%, var(--card)); border-color: var(--good); }
+  .todo-card.done .rname { text-decoration: line-through; color: var(--muted); }
+  .todo-body { min-width: 0; }
+  .todo-del { font: inherit; font-size: 12px; color: var(--muted); background: none; border: none; cursor: pointer; padding: 0; margin-left: auto; }
+  .todo-del:hover { color: var(--bad); }
+  .eodform select.todo-sel { font: inherit; font-size: 15px; color: var(--ink); background: var(--page); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; width: 100%; }
   .copybtn { font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; border: 1px solid var(--accent); color: var(--accent); background: transparent; border-radius: 7px; padding: 4px 10px; margin-top: 8px; }
   .copybtn:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
   .dupbtn { border-color: var(--muted); color: var(--muted); }
@@ -470,6 +479,7 @@
   <div id="app" hidden>
     <div class="tabs" role="tablist" id="tabbar">
       <button data-tab="dash" class="on">📊 Vue d'ensemble</button>
+      <button data-tab="todo">✅ To do <span class="count" id="todo-count"></span></button>
       <button data-tab="eod">📝 EOD <span class="count" id="eod-count"></span></button>
       <button data-tab="tally">🎯 Scans Tally <span class="count" id="tally-count"></span></button>
       <button data-tab="leads">👤 Leads <span class="count" id="leads-count"></span></button>
@@ -481,6 +491,35 @@
       <button data-tab="abonnes">🆕 Nouveaux abonnés <span class="count" id="abonnes-count"></span></button>
     </div>
     <input type="search" id="q" class="search" placeholder="🔍 Rechercher un prénom…" autocomplete="off">
+
+    <div id="tab-todo" hidden>
+      <div class="tally-counts" id="todo-pills"></div>
+      <section>
+        <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px" id="todo-title">✅ À faire</h2>
+        <div class="rlist" id="todo-list"></div>
+      </section>
+      <details class="ldet" id="todo-done-details" style="margin:4px 0 22px">
+        <summary id="todo-done-sum">Tâches faites</summary>
+        <div class="rlist" id="todo-done" style="margin-top:10px"></div>
+      </details>
+      <section>
+        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">➕ Ajouter une tâche</h2>
+        <form class="card eodform" id="todo-form">
+          <div class="frow2">
+            <div><label class="flab" for="td-qui">Pour qui</label><select id="td-qui" class="todo-sel"></select></div>
+            <div><label class="flab" for="td-date">Échéance (facultatif)</label><input type="date" id="td-date"></div>
+          </div>
+          <div><label class="flab" for="td-texte">La tâche</label><input type="text" id="td-texte" required placeholder="Ex. relancer Loïc avec deux créneaux le matin"></div>
+          <div><label class="flab" for="td-lien">Lien (facultatif : conversation Insta, fiche, doc)</label><input type="text" id="td-lien" placeholder="https://"></div>
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+            <button type="submit" class="send" id="td-send">Ajouter</button>
+            <p class="sendmsg" id="td-msg" hidden></p>
+          </div>
+          <p class="formnote">Partagé avec toute l'équipe : la tâche passe par le même Google Form que l'EOD (ligne « Todo »), comme les votes. Cocher « fait » est partagé aussi.</p>
+        </form>
+      </section>
+      <p class="formnote" id="todo-note"></p>
+    </div>
 
     <div id="tab-eod" hidden>
       <section>
@@ -1195,7 +1234,7 @@ const ETQ_RETIREES = new Set([
 
 // lignes à ignorer dans les stats : tests techniques + soumissions de la
 // boîte à idées (onglet Script setting), qui passent par le même Google Form
-const isTestRow = r => /test console|bo[iî]te\s*[aà]\s*id[ée]es|^\s*doublon\s*$|^\s*tracking\s*$|^\s*vente\s*$|^\s*callsuivi\s*$|^\s*vote\s*$/i.test(r[COL.SETTER] || "");
+const isTestRow = r => /test console|bo[iî]te\s*[aà]\s*id[ée]es|^\s*doublon\s*$|^\s*tracking\s*$|^\s*vente\s*$|^\s*callsuivi\s*$|^\s*vote\s*$|^\s*todo\s*$/i.test(r[COL.SETTER] || "");
 const isIdeaRow = r => /bo[iî]te\s*[aà]\s*id[ée]es/i.test(r[COL.SETTER] || "");
 const isTrackRow = r => /^\s*tracking\s*$/i.test(r[COL.SETTER] || "");
 
@@ -1390,6 +1429,7 @@ async function load(showSpinner) {
   const leadsCsv = await get("data/leads-insta.csv").catch(() => "");
   INSTA_ACT_TEXT = await get("data/insta-activite.csv").catch(() => "");
   get("data/insta-appels.json").then(t => renderAppelsTab(JSON.parse(t))).catch(() => renderAppelsTab(null));
+  get("data/todo.json").then(t => { TODO_SEED = JSON.parse(t); renderTodoTab(); }).catch(() => renderTodoTab());
   get("data/abonnes.csv").then(renderAbonnesTab).catch(() => renderAbonnesTab(""));
   get("data/abonnes_total.csv").then(renderTotalChart).catch(() => renderTotalChart(""));
   // le portefeuille a son propre fallback : un export CSV privé renvoie du HTML
@@ -1825,7 +1865,7 @@ function mini(rows30, title, f, color, untrackedNote) {
    Onglets EOD + Scans Tally
    ============================================================ */
 
-const TABS = ["dash", "eod", "tally", "leads", "datas", "verif", "calls", "ventes", "script", "abonnes"];
+const TABS = ["dash", "todo", "eod", "tally", "leads", "datas", "verif", "calls", "ventes", "script", "abonnes"];
 const TAB_ALIAS = { cav: "calls", car: "calls" };   // anciens liens #cav / #car
 function showTab(name) {
   name = TAB_ALIAS[name] || name;
@@ -1897,6 +1937,7 @@ const frDateTime = s => {
 function renderExtras(eodText, tallyText, partialsText, pfText, calText, leadsText) {
   DUP_KEYS = parseDupKeys(eodText);
   VOTES = parseVotes(eodText); renderNewAcc();
+  TODO_EOD_TEXT = eodText || ""; renderTodoTab();
   DEAL_EDITS = parseDealEdits(eodText);
   CALL_EDITS = parseCallEdits(eodText);
   STAGE_EDITS = parseStages(eodText);
@@ -2480,6 +2521,110 @@ function leadDetails(l, i) {
       '<button type="button" class="copybtn" data-copy="lead-msg-' + i + '">Copier le message</button>' : '') +
     '</details>';
 }
+
+/* ---------- onglet ✅ To do : une liste par personne ----------
+   Tâches de base : data/todo.json (écrites par Claude, ex. relances issues de l'analyse des appels).
+   Tâches ajoutées et cases cochées depuis la page : lignes « Todo » du Google Form EOD
+     — Todo : <id> · <qui> · <aaaa-mm-jj ou -> · <texte> [· <lien>]
+     — TodoFait : <id> · 1|0         — TodoSuppr : <id>
+   La dernière ligne gagne. Les lignes envoyées depuis ce navigateur sont gardées 30 min en attente
+   (localStorage todoPending) le temps que le Sheet publié se mette à jour. */
+const TODO_PEOPLE = ["Lauric", "Constant", "Maximilien", "Cynthia", "Alex"];
+let TODO_SEED = [], TODO_EOD_TEXT = "", todoWho = "all";
+try { todoWho = localStorage.getItem("todoWho") || "all"; } catch (e) {}
+function todoPending() {
+  try { return JSON.parse(localStorage.getItem("todoPending") || "[]").filter(p => Date.now() - p.ts < 30 * 60000); } catch (e) { return []; }
+}
+function todoState() {
+  const tasks = new Map(), done = {}, del = new Set();
+  TODO_SEED.forEach(t => tasks.set(t.id, { ...t, src: "seed" }));
+  const lines = [];
+  parseCSV(TODO_EOD_TEXT || "").slice(1).forEach(r => {
+    [r[5], r[6], r[12]].map(x => (x || "").trim()).filter(Boolean).join("\n").split("\n").forEach(l => lines.push(l));
+  });
+  todoPending().forEach(p => lines.push(p.line));
+  lines.forEach(l => {
+    let m;
+    if ((m = /—\s*TodoFait\s*:\s*([\w-]+)\s*·\s*([01])/.exec(l))) done[m[1]] = m[2] === "1";
+    else if ((m = /—\s*TodoSuppr\s*:\s*([\w-]+)/.exec(l))) del.add(m[1]);
+    else if ((m = /—\s*Todo\s*:\s*([\w-]+)\s*·\s*([^·]+?)\s*·\s*(\d{4}-\d{2}-\d{2}|-)\s*·\s*([^·]+?)(?:\s*·\s*(\S+))?\s*$/.exec(l))) {
+      const old = tasks.get(m[1]) || {};
+      tasks.set(m[1], { ...old, id: m[1], qui: m[2].trim(), echeance: m[3] === "-" ? "" : m[3], texte: m[4].trim(), lien: m[5] || old.lien || "", src: old.src || "page" });
+    }
+  });
+  return [...tasks.values()].filter(t => !del.has(t.id)).map(t => ({ ...t, fait: done[t.id] != null ? done[t.id] : !!t.fait }));
+}
+function todoPost(line) {
+  try { const p = todoPending(); p.push({ line, ts: Date.now() }); localStorage.setItem("todoPending", JSON.stringify(p)); } catch (e) {}
+  renderTodoTab();
+  return postEodRow("Todo", line).catch(() => alert("La modification n'a pas pu être envoyée, réessaie."));
+}
+function renderTodoTab() {
+  if (!el("todo-list")) return;
+  const all = todoState();
+  const today = iso(new Date());
+  const open = all.filter(t => !t.fait);
+  el("todo-count").textContent = open.length ? "(" + open.length + ")" : "";
+  const nb = who => open.filter(t => who === "all" || t.qui === who).length;
+  el("todo-pills").innerHTML =
+    '<button class="pill fpill' + (todoWho === "all" ? " on" : "") + '" data-who="all"><b>' + nb("all") + '</b>&nbsp;tout le monde</button>' +
+    TODO_PEOPLE.map(p => '<button class="pill fpill' + (todoWho === p ? " on" : "") + '" data-who="' + p + '"><b>' + nb(p) + '</b>&nbsp;' + p + '</button>').join("");
+  const mine = all.filter(t => todoWho === "all" || t.qui === todoWho);
+  const sortKey = t => (t.echeance || "9999") + t.texte;
+  const due = t => {
+    if (!t.echeance) return "";
+    const d = Math.round((new Date(t.echeance + "T12:00:00") - new Date(today + "T12:00:00")) / 86400000);
+    const lab = d < 0 ? "en retard de " + (-d) + " j" : d === 0 ? "aujourd'hui" : d === 1 ? "demain" : "d'ici le " + t.echeance.split("-").reverse().slice(0, 2).join("/");
+    const cls = d < 0 ? "lose" : d <= 1 ? "warn2" : "gray";
+    return '<span class="badge ' + (t.fait ? "gray" : cls) + '">📅 ' + lab + '</span>';
+  };
+  const card = (t, i) =>
+    '<div class="rcard todo-card' + (t.fait ? " done" : "") + '">' +
+    '<button type="button" class="todo-check' + (t.fait ? " on" : "") + '" data-todo="' + esc(t.id) + '" title="' + (t.fait ? "Remettre à faire" : "Marquer comme fait") + '">' + (t.fait ? "✓" : "") + '</button>' +
+    '<div class="todo-body"><div class="rhead"><span class="rname">' + esc(t.texte) + '</span>' +
+    (todoWho === "all" ? '<span class="badge src">' + esc(t.qui) + '</span>' : '') + due(t) +
+    (t.tag ? '<span class="badge next">' + esc(t.tag) + '</span>' : '') +
+    '<button type="button" class="todo-del" data-tododel="' + esc(t.id) + '">supprimer</button></div>' +
+    (t.detail ? '<p class="rnote">' + esc(t.detail) + '</p>' : '') +
+    (t.message ? '<div class="msgcard" id="todo-msg-' + i + '">' + esc(t.message) + '</div><button type="button" class="copybtn" data-copy="todo-msg-' + i + '">Copier le message</button>' : '') +
+    (t.lien ? '<p class="rstats" style="margin-top:8px"><a class="vivlink" href="' + esc(t.lien) + '" target="_blank" rel="noopener">' + (/instagram\.com\/direct/.test(t.lien) ? "ouvrir la conversation ↗" : /wa\.me/.test(t.lien) ? "ouvrir WhatsApp ↗" : "ouvrir le lien ↗") + '</a>' +
+      (t.pseudo ? ' · <a class="vivlink" href="https://www.instagram.com/' + esc(t.pseudo) + '/" target="_blank" rel="noopener">@' + esc(t.pseudo) + ' ↗</a>' : '') + '</p>' : '') +
+    '</div></div>';
+  const todo = mine.filter(t => !t.fait).sort((a, b) => sortKey(a) < sortKey(b) ? -1 : 1);
+  const fait = mine.filter(t => t.fait);
+  el("todo-title").textContent = "✅ À faire" + (todoWho === "all" ? "" : " · " + todoWho) + " (" + todo.length + ")";
+  el("todo-list").innerHTML = todo.map(card).join("") || '<p class="empty-note">Rien à faire pour l\'instant' + (todoWho === "all" ? "" : " pour " + esc(todoWho)) + '.</p>';
+  el("todo-done-sum").textContent = "Tâches faites (" + fait.length + ")";
+  el("todo-done-details").hidden = !fait.length;
+  el("todo-done").innerHTML = fait.map((t, i) => card(t, "f" + i)).join("");
+  const sel = el("td-qui");
+  if (!sel.options.length) sel.innerHTML = TODO_PEOPLE.map(p => '<option>' + p + '</option>').join("");
+  if (todoWho !== "all" && document.activeElement !== sel) sel.value = todoWho;
+  el("todo-note").textContent = "Les relances marquées « analyse appels » viennent du sous-onglet Datas › Appels proposés (relevé des conversations Instagram). Une tâche cochée reste visible dans « Tâches faites ».";
+}
+el("todo-pills").addEventListener("click", e => {
+  const b = e.target.closest(".fpill"); if (!b) return;
+  todoWho = b.dataset.who; try { localStorage.setItem("todoWho", todoWho); } catch (e2) {}
+  renderTodoTab();
+});
+document.addEventListener("click", e => {
+  const c = e.target.closest("[data-todo]");
+  if (c) { const t = todoState().find(x => x.id === c.dataset.todo); if (t) todoPost("— TodoFait : " + t.id + " · " + (t.fait ? 0 : 1)); return; }
+  const d = e.target.closest("[data-tododel]");
+  if (d && confirm("Supprimer cette tâche pour tout le monde ?")) todoPost("— TodoSuppr : " + d.dataset.tododel);
+});
+el("todo-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const clean = s => (s || "").replace(/[·\n\r]+/g, " ").trim();
+  const texte = clean(el("td-texte").value), qui = el("td-qui").value, date = el("td-date").value || "-", lien = clean(el("td-lien").value).replace(/\s/g, "");
+  if (!texte) return;
+  const id = "t" + Date.now().toString(36);
+  el("td-send").disabled = true;
+  await todoPost("— Todo : " + id + " · " + qui + " · " + date + " · " + texte + (lien ? " · " + lien : ""));
+  el("td-send").disabled = false;
+  el("td-texte").value = ""; el("td-lien").value = ""; el("td-date").value = "";
+  const m = el("td-msg"); m.hidden = false; m.textContent = "Ajoutée pour " + qui + " ✅"; setTimeout(() => { m.hidden = true; }, 2500);
+});
 
 /* ---------- Datas › sous-onglet 📞 Appels proposés (data/insta-appels.json, produit par appels_insta.py) ---------- */
 const ISSUE_LABELS = {

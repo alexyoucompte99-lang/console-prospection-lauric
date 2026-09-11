@@ -3,7 +3,8 @@
 
 Entrée : le dump complet des conversations (JSON produit par scripts-releve/extract.js, relayé via window.name,
 voir RELEVE-INSTA.md « Export complet ») : liste de {id,u,n,rs,seen,la,items:[{w,t,ty,x,re}],nItems}.
-Usage : python3 appels_insta.py dump.json [--date 09/09/2026]
+Usage : python3 appels_insta.py dump.json [--date 09/09/2026] [--reset]
+Fusion : les convs du fichier précédent absentes du dump sont conservées (--reset pour repartir de zéro).
 Les notes manuelles (récap, cible, verdict) sont lues dans data/insta-appels-notes.json (clé = pseudo) et fusionnées.
 """
 import json, sys, re, csv, datetime, pathlib, unicodedata
@@ -83,11 +84,25 @@ def main():
             "msgs": [{"w": i["w"], "t": dt(i["t"]), "ty": i.get("ty"), "x": i.get("x") or ""} for i in items],
             "recap": n.get("recap", ""), "cible": n.get("cible", ""), "type": n.get("type", ""), "verdict": n.get("verdict", ""),
         })
+    # fusion avec le fichier précédent : le relevé quotidien ne relit que les convs récentes,
+    # les anciennes restent telles quelles (notes manuelles réappliquées)
+    seenNow = {o["pseudo"] for o in out} | {t.get("u") for t in T}
+    if OUT.exists() and "--reset" not in sys.argv:
+        for o in json.load(open(OUT, encoding="utf-8")).get("convs", []):
+            if o["pseudo"] in seenNow: continue
+            n = notes.get(o["pseudo"]) or {}
+            if n.get("exclude"): continue
+            for k in ("recap", "cible", "type", "verdict"):
+                o[k] = n.get(k, o.get(k, ""))
+            if n.get("issue"): o["issue"] = n["issue"]
+            out.append(o)
     out.sort(key=lambda o: -o["propose"]["ts"])
+    sansNote = [o["pseudo"] for o in out if not o.get("recap")]
     json.dump({"releve": releve, "analyse": notes.get("_analyse", []), "convs": out}, open(OUT, "w", encoding="utf-8"), ensure_ascii=False, indent=0)
     from collections import Counter
     print(len(out), "conversations avec appel proposé ;", dict(Counter(o["issue"] for o in out)))
     for o in out: print(" ", o["pseudo"], "|", o["issue"], "|", o["propose"]["t"], "|", o["propose"]["text"][:70].replace("\n", " "))
+    print("SANS NOTE (récap/cible/verdict à écrire dans data/insta-appels-notes.json) :", ", ".join(sansNote) or "aucune")
 
 if __name__ == "__main__":
     main()

@@ -81,7 +81,12 @@ reste utile pour une page sans CSP, pas pour Instagram.
 **Ce qui marche** : réduire côté JS aux conversations utiles (au moins un message du lead, ou un message de Lauric qui
 propose un appel), sérialiser en JSON une conv par ligne (`window.__out5`), puis le canal `<pre>` + `get_page_text` par
 tranches de 47 000 caractères avec recouvrement (voir Étape 4), 4 tranches par `browser_batch` → un fichier tool-results
-par lot, recollé par `scripts-releve/glue_json.py` → `dump.json`.
+par lot, recollé par `scripts-releve/glue_json.py <scratchpad>/dump.json` → `dump.json`.
+Code prêt : `scripts-releve/export_appels.js` (tranches marquées `J<k>` / `ENDJPART` via `window.__jpart(k)`, pour ne pas
+les confondre avec les tranches `P<k>` du relevé ┃). `glue_json.py` cherche seul les tranches des 3 dernières heures dans
+tous les dossiers tool-results. `appels_insta.py` fusionne avec le fichier de la veille (le relevé du jour ne relit que les
+convs récentes) et liste les conversations « SANS NOTE » à rédiger. Tourne chaque matin dans la tâche `releve-insta-lauric`
+(depuis le 11/09), qui met aussi à jour la To do de Lauric (`data/todo.json`).
 Puis `python3 appels_insta.py dump.json --date JJ/MM/AAAA` → `data/insta-appels.json`
 (détection regex des propositions d'appel dans les messages de Lauric, issue auto : booké Calendly / accepté / répondu /
 reporté / vu / non vu ; récaps, cibles et analyse rédigés à la main dans `data/insta-appels-notes.json`, clé = pseudo,
