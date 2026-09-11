@@ -3,10 +3,10 @@
   {
    "titre": "Les chiffres (relevé du 09/09, conversations depuis mars)",
    "points": [
-    "<b>32 conversations</b> où Lauric a proposé un appel, une visio ou un créneau (6 fausses détections retirées : clients en cours, échanges entre pairs, appel passé).",
-    "<b>8 appels obtenus</b> : 5 faits par téléphone ou visio (Paul André, Laurianne, Véronique, Amélie, Clément) et 3 bookés sur Calendly (Lisa &amp; Nicolas devenus clients, Morgane, Lamia). Soit 1 appel pour 4 propositions.",
-    "<b>Une seule vente</b> issue de ces appels : Lisa et Nicolas (3 laveries en SAS, 2 associés). Les 4 autres appels faits sont des solos à petit budget : aucun n'a signé (Clément 5 000 € sans suite, Véronique « oui mais le mois prochain », Laurianne cherche un salariat).",
-    "<b>13 sans réponse</b> après la proposition (6 vus, 7 jamais ouverts), <b>7 reportés</b> (« septembre », « après la rentrée », « je reviens vers toi ») et 4 qui répondent sans jamais donner de date."
+    "<b>33 conversations</b> où Lauric a proposé un appel, une visio ou un créneau (6 fausses détections retirées : clients en cours, échanges entre pairs, appel passé).",
+    "<b>9 appels obtenus</b> : 5 faits par téléphone ou visio (Paul André, Laurianne, Véronique, Amélie, Clément) et 4 rendez-vous pris (Lisa et Nicolas devenus clients, Morgane, Lamia, Marie le 17/09). Soit 1 appel pour 3,7 propositions.",
+    "<b>Une seule vente</b> issue de ces appels : Lisa et Nicolas (3 laveries en SAS, 2 associés). Véronique a dit oui sur le principe et repoussé le paiement au mois prochain. Les 3 autres appels faits sont des solos à petit budget, aucun n'a signé.",
+    "<b>13 sans réponse</b> après la proposition (6 vus, 7 jamais ouverts), <b>7 reportés</b> (« septembre », « après la rentrée ») et 4 qui répondent sans jamais donner de date."
    ]
   },
   {
@@ -22,6 +22,7 @@
    "titre": "Ce qui fait rater l'appel",
    "points": [
     "<b>Le message de masse « j'offre 1h de coaching aux entrepreneurs de ma communauté » (23 au 27/07)</b> : 9 envois, 0 appel. 3 réponses polies (vacances, septembre, « j'en parle à mon bras droit »), 6 silences. Le même texte pour un menuisier solo, un commercial salarié et une responsable en burn-out.",
+    "<b>Les relances de masse continuent</b> : le 09/09, le même texte « C'est la rentrée, et si on parlait de toi ? » est parti à Maximilien, Stéphane et Virginia, sans créneau et sans reprendre leur situation. Le 11/09, un partage de vidéo YouTube identique est parti à Anouck, Paul André et Morgane. Aucune réponse à ce jour. Les leads qui avaient donné une date (« relance-moi en septembre ») méritaient un message personnel avec deux créneaux.",
     "<b>« Quelles sont tes dispos ? » en boucle</b> : Loïc (6 relances sur 7 semaines, jamais de créneau), Anouck (5 « tu as une dispo ? », elle ne répond qu'aux questions fermées : « lundi ? » → « non, notaire »). Une question ouverte demande un effort, une date se valide en un mot.",
     "<b>Le pavé avant la question</b> : Dimitri écrit 6 messages à minuit sur ses difficultés, la réponse est 8 lignes sur le cabinet et « avec plaisir pour en parler de vive voix », sans créneau : vu, pas de réponse. Même schéma avec Nerry (« débordé » deux fois, puis un pavé).",
     "<b>Proposer trop tard</b> : Jessica (15 jours après sa dernière réponse), Yannick (5 semaines), Sarra (6 jours après un échange très actif avec LinkedIn échangés), Stéphane (1 mois). Le fil est froid, la proposition tombe à plat.",
@@ -99,8 +100,8 @@
   "issue": "fait",
   "cible": "indépendante B2B, veut 10 clients",
   "type": "vocal",
-  "recap": "Véronique, activité B2B en développement. Proposition d'échange par vocal le 25/08 ; elle propose elle-même deux créneaux (lundi 31 ou vendredi 4, 11h), décale une fois, visio faite le 03/09 à 11h. Proposition d'accompagnement envoyée par mail le jour même (objectif 10 clients en 4 mois). Le 09/09 : « je réponds oui, mais légèrement plus tard, je le prévois dans ma compta le mois prochain ».",
-  "verdict": "Appel obtenu parce qu'elle a choisi les créneaux. Visio faite, proposition acceptée sur le principe avec un délai budget : à sécuriser avec un acompte comme proposé."
+  "recap": "Véronique, activité B2B en développement. Proposition d'échange par vocal le 25/08 ; elle propose elle-même deux créneaux, décale une fois, visio faite le 03/09 à 11h. Proposition d'accompagnement envoyée par mail (objectif 10 clients B2B en 4 mois). Le 09/09 : « je réponds oui, mais légèrement plus tard, je le prévois dans ma compta d'ici le mois prochain, je reviens vers toi ». Lauric a proposé un acompte pour bloquer et démarrer plus tôt, sans réponse depuis.",
+  "verdict": "Le seul oui sur le principe en attente. Elle a donné sa date (le mois prochain) : caler maintenant un point début octobre pour la date de démarrage, sinon le sujet se dilue."
  },
  "bdd_ben": {
   "cible": "inconnue (n'a jamais dit son activité)",
@@ -162,8 +163,8 @@
  "camelia_by_loic": {
   "cible": "maison de thé, 4 salariés, ouvre une 2e boutique",
   "type": "quelles sont tes dispos ?",
-  "recap": "Loïc, créé en 2019 seul, aujourd'hui 4 collaborateurs et une 2e boutique pour la rentrée. Vocaux échangés en juillet. Le 14/07, « quels sont les moments où tu peux prendre 30 min ? ». Puis 27/07 « tes prochaines dispos ? », 11/08 « le matin avant 9h30 ou en soirée ? », vocaux les 13 et 28/08, relance le 17/08. Un vocal de sa part le 11/08, puis « Aucune vacances » le 03/09. Jamais de créneau.",
-  "verdict": "Six relances en sept semaines pour un créneau jamais donné. Cœur de cible avec un enjeu daté (ouverture) : envoyer deux créneaux fermes tôt le matin, en lien avec sa 2e boutique."
+  "recap": "Loïc, créé en 2019 seul, aujourd'hui 4 collaborateurs et une 2e boutique pour la rentrée. Vocaux échangés en juillet. Six demandes de créneau entre le 14/07 et le 28/08, jamais de date donnée. Son dernier message, « Aucune vacances » le 03/09, est resté sans réponse de notre côté depuis.",
+  "verdict": "Cœur de cible laissé en plan : il a écrit le dernier et personne n'a répondu depuis 8 jours. Répondre sur sa charge (aucune vacances, 2e boutique) et proposer deux créneaux tôt le matin, avant l'ouverture de 9h30."
  },
  "m_erwan_": {
   "cible": "commercial salarié, sans équipe (hors cible)",
@@ -202,15 +203,15 @@
   "issue": "reporte",
   "cible": "auto-entrepreneur BTP, passage en EURL, futur apprenti",
   "type": "message de masse 1h offerte",
-  "recap": "Maximilien, ex-ingénieur, auto-entrepreneur en rénovation, réfléchit à passer en EURL et prendre un apprenti à la fin de l'été. Le message de masse du 23/07 puis une relance : « overbooked, 8h-21h tous les jours, relance-moi en septembre ». Vocal le 30/07 et le 28/08.",
-  "verdict": "Il a donné la date lui-même : septembre. Relancer par écrit maintenant avec deux créneaux en soirée, sur sa décision EURL + apprenti."
+  "recap": "Maximilien, ex-ingénieur, auto-entrepreneur en rénovation, réfléchit à passer en EURL et à prendre un apprenti à la fin de l'été. Le message de masse du 23/07 puis une relance : « overbooked, 8h-21h tous les jours, relance-moi en septembre ». Vocal le 30/07 et le 28/08. Le 09/09, il reçoit le message de masse « C'est la rentrée, et si on parlait de toi ? » : ni créneau, ni référence à l'EURL, pas ouvert.",
+  "verdict": "Il avait donné la date lui-même (septembre) et la relance de rentrée est partie en message de masse. Reprendre en direct sur l'EURL et l'apprenti, avec deux créneaux en soirée."
  },
  "fseg.37": {
   "issue": "reporte",
   "cible": "artisan rénovation avec un bras droit",
   "type": "message de masse 1h offerte",
-  "recap": "Stéphane (FSEG, rénovation). Message de masse du 23/07, réactions sans réponse, « tout va bien ? » → « assez occupé ». Lauric : « un créneau cette semaine ? je suis flexible » → « j'en discute avec mon bras droit et je te redis ». Vocal de 3 min, relances le 18/08 et le 24/08, rien. Étiquette Lead posée sur la conversation.",
-  "verdict": "« Je te redis » sans date = non poli. Proposer un appel à deux avec le bras droit, créneau précis, plutôt qu'un vocal de 3 minutes."
+  "recap": "Stéphane (FSEG, rénovation). Message de masse du 23/07, réactions sans réponse, « tout va bien ? » → « assez occupé ». Lauric : « un créneau cette semaine ? je suis flexible » → « j'en discute avec mon bras droit et je te redis ». Vocal de 3 min, relances le 18/08 et le 24/08, puis le même message de masse de rentrée le 09/09, sans réponse. Étiquette Lead posée sur la conversation.",
+  "verdict": "« Je te redis » sans date = non poli, et la relance de rentrée était un message de masse. Proposer un appel de 20 min à trois avec le bras droit, créneau précis."
  },
  "fran_swas": {
   "cible": "menuisier indépendant solo (Liège)",
@@ -234,15 +235,15 @@
   "issue": "discussion",
   "cible": "repreneuse d'une bijouterie avec atelier, signe le 15/09",
   "type": "quelles sont tes dispos ?",
-  "recap": "Anouck reprend la boutique de sa patronne (qui reste 6 mois), une salariée à l'atelier, financement en cours, signature du sous-seing le 15/09. Le 07/07 : « j'offre 30 min en visio », pas vu. Le 13/08 : coaching offert, « tu es partante ? ». Elle répond le 21/08 (vacances), reçoit le Calendly : « je regarde quand je peux ». Puis « dispo lundi ? » → non (notaire), « mardi ? », « demain ou mercredi ? », « cette semaine ou la semaine prochaine ? » le 08/09. Aucun créneau validé.",
-  "verdict": "Elle ne répond qu'aux questions fermées. Avant le 15/09, envoyer deux créneaux en soirée liés à sa signature (« 20 min pour sécuriser ta reprise avant le notaire »)."
+  "recap": "Anouck reprend la boutique de sa patronne (qui reste 6 mois), une salariée à l'atelier, financement en cours, signature du sous-seing le 15/09. Le 07/07 : « j'offre 30 min en visio », pas vu. Le 13/08 : coaching offert, « tu es partante ? ». Elle répond le 21/08 (vacances), reçoit le Calendly : « je regarde quand je peux ». Puis « dispo lundi ? » → non (notaire), « mardi ? », « demain ou mercredi ? », « cette semaine ou la semaine prochaine ? » le 08/09, et le 11/09 un partage de vidéo. Aucun créneau validé.",
+  "verdict": "Elle ne répond qu'aux questions fermées, et la signature du 15/09 est le seul vrai levier. Deux créneaux en soirée, tout de suite, en parlant de sa reprise et pas d'accompagnement."
  },
  "linstitut.stquentin": {
   "issue": "vu",
   "cible": "gérante d'institut de beauté seule (a eu des salariées)",
   "type": "audit 45 min + dispos ?",
-  "recap": "Virginia, institut (head spa, minceur), a perdu des salariées « pas professionnelles, pas motivées ». Chaque message de Lauric reçoit le répondeur automatique de l'institut. Elle a envoyé un vrai vocal le 01/07. Le 07/07 : « je reprends des appels de valeur, audit 45 min, quand as-tu une dispo ? », relance le 21/07, vocal le 24/08 : uniquement des réponses automatiques.",
-  "verdict": "Le DM tombe sur un robot. Le répondeur donne le numéro de l'institut : appeler ou écrire sur WhatsApp, et reprendre son vocal du 01/07 comme point de départ."
+  "recap": "Virginia, institut (head spa, minceur), a perdu des salariées « pas professionnelles, pas motivées ». Chaque message de Lauric reçoit le répondeur automatique de l'institut, qui donne le 07 88 51 23 02. Elle a envoyé un vrai vocal le 01/07. Audit de 45 min proposé le 07/07, relance le 21/07, vocal le 24/08, message de rentrée le 09/09 : à chaque fois, la réponse automatique.",
+  "verdict": "Cinq messages, cinq réponses automatiques : le DM est un cul-de-sac. Appeler ou écrire sur WhatsApp au numéro de l'institut, en repartant de son vocal du 01/07."
  },
  "sybaelcreations": {
   "issue": "fait",
@@ -276,5 +277,12 @@
   "type": "« on se call » sans créneau",
   "recap": "Dav, rencontré à un événement Investisseurs 3.0, commercial chez Verisure, pas d'équipe, prêt étudiant. Intéressé (« content de bosser avec toi ») mais fins de mois rudes. « Si ça te dit on se call dans la semaine » le 08/03, puis vocaux échangés le 19/03, relance vocale le 28/08.",
   "verdict": "Intérêt sincère mais pas de budget ni d'équipe. « On se call dans la semaine » sans jour ni heure n'a rien fixé."
+ },
+ "thineymarie": {
+  "issue": "booke",
+  "cible": "dirigeante (activité à préciser), visio du 17/09",
+  "type": "rendez-vous confirmé en direct",
+  "recap": "Marie a liké l'ancien script le 14/08, scan envoyé le 18/08. Un premier rendez-vous était calé le 27/08 à 14h30, puis la visio a été refixée au 17/09. Le 09/09 Lauric confirme la visio et demande ses sujets prioritaires pour la fin d'année : message pas encore ouvert.",
+  "verdict": "Visio du 17/09 à préparer. Elle n'a pas donné ses sujets prioritaires : relancer par une question courte 48 h avant, sinon l'appel démarre à froid."
  }
 }

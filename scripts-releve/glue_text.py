@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
-"""Recolle les tranches J<k> de l'export complet (window.__jpart, pas de 47 000, longueur 49 000) → dump.json.
-Usage : python3 scripts-releve/glue_json.py <out.json> [--prefix J] [--hours 3]
-Cherche dans tous les ~/.claude/projects/*/*/tool-results/*.txt modifiés depuis moins de --hours heures (la plus récente
-occurrence de chaque tranche gagne). get_page_text altère quelques caractères : on recolle par ancre dans le
-recouvrement, jamais par position."""
+"""Recolle les tranches P<k> du relevé ┃ (window.__part) → dump.txt, par ancre dans le recouvrement.
+Usage : python3 scripts-releve/glue_text.py <out.txt> [--prefix P] [--hours 3]"""
 import json, sys, glob, os, re, time
 out = sys.argv[1]
-pre = sys.argv[sys.argv.index("--prefix") + 1] if "--prefix" in sys.argv else "J"
+pre = sys.argv[sys.argv.index("--prefix") + 1] if "--prefix" in sys.argv else "P"
 hours = float(sys.argv[sys.argv.index("--hours") + 1]) if "--hours" in sys.argv else 3
 lim = time.time() - hours * 3600
 files = sorted([p for p in glob.glob(os.path.expanduser('~/.claude/projects/*/*/tool-results/*.txt')) if os.path.getmtime(p) >= lim], key=os.path.getmtime)
@@ -27,11 +24,5 @@ for k in ks[1:]:
     t = parts[k]; anchor = t[200:500]; i = txt.rfind(anchor)
     if i < 0: sys.exit(f'ancre introuvable pour la tranche {k}')
     txt = txt[:i] + t[200:]
-convs, bad = [], 0
-for line in txt.split('\n'):
-    line = line.strip()
-    if not line or line == 'ENDDUMP': continue
-    try: convs.append(json.loads(line))
-    except Exception as e: bad += 1; print('ligne illisible :', line[:80], e)
-json.dump(convs, open(out, 'w', encoding='utf-8'), ensure_ascii=False)
-print(len(ks), 'tranches,', len(txt), 'caractères,', len(convs), 'conversations,', bad, 'illisibles →', out, '| fin OK' if 'ENDDUMP' in txt else '| ENDDUMP ABSENT')
+open(out, 'w', encoding='utf-8').write(txt)
+print(len(ks), 'tranches,', len(txt), 'caractères,', txt.count('\n') + 1, 'lignes →', out, '| fin OK' if 'ENDDUMP' in txt else '| ENDDUMP ABSENT')
