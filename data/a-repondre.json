@@ -1,5 +1,5 @@
 {
- "genere": "12/09/2026",
+ "genere": "12/09/2026 (relevé du matin intégré)",
  "fenetre": "du 05 au 12/09",
  "convs": [
   {
@@ -708,7 +708,11 @@
     "Retirer l'étiquette lead chaud posée par le setter : quatre mots en réponse à une accroche like ne sont pas un signal d'intérêt, et la laisser va faire remonter ce lead au-dessus de vrais dirigeants"
    ],
    "chances": "basse",
-   "quand": "samedi matin"
+   "quand": "samedi matin",
+   "repondu": {
+    "t": "sam. 12/09 08:17",
+    "x": "Le développement de ta boîte est à quel niveau ?"
+   }
   },
   {
    "pseudo": "papyrus.pa",
@@ -958,7 +962,11 @@
     "Passer au vouvoiement maintenant ou écrire un pavé : le fil est au tu depuis le premier message de Lauric, on compense par le prénom et un registre doux"
    ],
    "chances": "basse",
-   "quand": "Lundi, en fin de session"
+   "quand": "Lundi, en fin de session",
+   "repondu": {
+    "t": "sam. 12/09 08:17",
+    "x": "Totalement d'accord avec toi Sandrine. \n\nC'est ma vision également de prendre le temps des \"rencontres\" qui donneront une vraie collaboration fructueuse.\nAh oui ??! 😅"
+   }
   },
   {
    "pseudo": "banibani_j",

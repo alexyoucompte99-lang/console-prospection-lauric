@@ -2710,17 +2710,20 @@ function arepCard(c, i, fait) {
     '<div class="rhead"><span class="rname">' + esc(c.nom || c.pseudo) + '</span>' +
     '<span class="rmeta">@' + esc(c.pseudo) + '</span>' +
     '<span class="badge ' + cat[1] + '">' + cat[0] + '</span>' +
-    (attente ? '<span class="badge ' + attCls + '">' + attente + '</span>' : '') +
+    (attente && !c.repondu ? '<span class="badge ' + attCls + '">' + attente + '</span>' : '') +
     (c.non_lu ? '<span class="badge lose">👀 jamais ouverte</span>' : '') +
     (c.cat === "reac" ? '<span class="badge gray">❤️ a réagi sans écrire</span>' : '') +
     (c.chances ? '<span class="badge gray">réponse ' + esc(c.chances) + '</span>' : '') +
-    (c.lauric_seul ? '<span class="badge src">👤 Lauric lui-même</span>' : '') + '</div>' +
+    (c.lauric_seul && !c.repondu ? '<span class="badge src">👤 Lauric lui-même</span>' : '') +
+    (c.repondu ? '<span class="badge win">✅ déjà répondu</span>' : '') + '</div>' +
     '<p class="rstats">' + esc(c.cible || "") + (c.profil_info ? ' · ' + esc(c.profil_info) : '') + '</p>' +
     (c.resume ? '<p class="rnote">' + esc(c.resume) + '</p>' : '') +
     '<p class="rstats" style="margin-top:8px"><b>Il attend</b> : ' + esc(c.attend || "") + '<br><b>Objectif du message</b> : ' + esc(c.objectif || "") + '</p>' +
     (c.dernier ? '<p class="arep-lab" style="margin-top:12px">Son dernier message · ' + esc(c.dernier.t || "") + '</p>' + msg(c.dernier.x, "lead") : '') +
     (c.vocaux ? '<p class="rstats" style="color:var(--bad)">🎧 ' + esc(c.vocaux) + '</p>' : '') +
     (fil ? '<details class="ldet"><summary>Voir l\'échange (' + (c.fil || []).length + ' derniers messages)</summary><div class="arep-thread">' + fil + '</div></details>' : '') +
+    (c.repondu ? '<p class="arep-lab" style="margin-top:14px">✅ Lauric a déjà répondu · ' + esc(c.repondu.t || "") + '</p>' +
+      msg(c.repondu.x, "") + '<p class="rstats">Le message proposé ci-dessous n\'a plus lieu d\'être, la carte est gardée pour l\'historique.</p>' : '') +
     '<p class="arep-lab" style="margin-top:14px">' + (c.format === "rien" ? "📌 Rien à envoyer maintenant, le message est prêt pour la reprise" : "✍️ La réponse à envoyer") +
       ' <span class="badge ' + (c.format === "rien" ? "gray" : "next") + '">' + (AREP_FMT[c.format] || "") + '</span></p>' +
     (c.reponse ? msg(c.reponse, "prop", id + "-msg") + copy(id + "-msg", "Copier la réponse") : '<p class="rstats">Rien à envoyer pour l\'instant.</p>') +
@@ -2744,7 +2747,9 @@ function arepCard(c, i, fait) {
 function renderArepTab() {
   if (!el("arep-list")) return;
   const convs = (AREP && AREP.convs) || [];
-  const done = arepDoneMap();
+  const map = arepDoneMap();
+  const done = {};
+  convs.forEach(c => { done[c.pseudo] = map[c.pseudo] != null ? map[c.pseudo] : !!c.repondu; });
   const open = convs.filter(c => !done[c.pseudo]);
   el("arep-count").textContent = open.length ? "(" + open.length + ")" : "";
   const sets = {
