@@ -179,6 +179,107 @@
    "lauric_seul": true
   },
   {
+   "pseudo": "myshampouineuse",
+   "nom": "Paul André · Spécialistes de la Shampouineuse",
+   "conv": "https://www.instagram.com/direct/t/340282366841710301244285445757659694845/",
+   "cat": "rep",
+   "non_lu": false,
+   "attente_jours": 0.62,
+   "profil_info": "Profil Instagram pas relevé aujourd'hui (aucun appel à Instagram, le compte a ralenti) · compte pro « 🥇 Spécialistes de la Shampouineuse » · appel téléphonique déjà fait le mardi 08/09 à 13h",
+   "dernier": {
+    "t": "sam. 12/09 08:33",
+    "x": "Salut Lauric ! \n\nJe prends le temps de regarder quand je suis au calme, merci beaucoup ! \n\nTrès bon week-end à toi aussi"
+   },
+   "fil": [
+    {
+     "w": "L",
+     "t": "mar. 08/09 10:55",
+     "x": "Est-ce que midi vous convient ?"
+    },
+    {
+     "w": "L",
+     "t": "mar. 08/09 10:55",
+     "x": "À quel numéro puis-je vous appeler ?"
+    },
+    {
+     "w": "L",
+     "t": "mar. 08/09 11:38",
+     "x": "J'ai trouvé ce numéro sur votre page Google [numéro]\n\nEst-ce le bon ?"
+    },
+    {
+     "w": "P",
+     "t": "mar. 08/09 11:39",
+     "x": "Oui parfait ! Par contre serait-il possible juste après manger du coup pour 13h ?"
+    },
+    {
+     "w": "L",
+     "t": "mar. 08/09 11:39",
+     "x": "Ok je m'arrange pour être disponible à 13h 😊"
+    },
+    {
+     "w": "P",
+     "t": "mar. 08/09 11:44",
+     "x": "Vous êtes au top ! Appelez-moi plutôt sur mon numéro perso : [numéro]"
+    },
+    {
+     "w": "L",
+     "t": "mar. 08/09 11:46",
+     "x": "Allez parfait à tte à l'heure !"
+    },
+    {
+     "w": "L",
+     "t": "mar. 08/09 14:08",
+     "x": "Ravi d'avoir échangé avec toi Paul André. \n\nComme convenu je clos la discussion ici et on reste en contact sur WhatsApp. \n\nBelle journée"
+    },
+    {
+     "w": "L",
+     "t": "ven. 11/09 18:50",
+     "x": "Hello Paul André, \n\nAfin de t'aider dans ta démarche entrepreneuriale, je te partage une ressource 100% maison. \n\nhttps://youtu.be/edgg977QObk\n\nHâte d'avoir ton retour si ça t'a aidé !\n\nBon week-end"
+    },
+    {
+     "w": "P",
+     "t": "sam. 12/09 08:33",
+     "x": "Salut Lauric ! \n\nJe prends le temps de regarder quand je suis au calme, merci beaucoup ! \n\nTrès bon week-end à toi aussi"
+    }
+   ],
+   "categorie": "prospect_chaud",
+   "priorite": 1,
+   "cible": "Dirigeant d'une petite structure de services (compte pro « Spécialistes de la Shampouineuse »), déjà qualifié par un vrai appel : il a accepté de parler de son entreprise et des sujets qui le bloquent, a donné son numéro personnel, et répond à chaque message en moins de 24 h. Ce qu'on ignore encore du côté console : s'il a des salariés, ce qu'il a nommé comme enjeu pendant l'appel du 08/09, et où en est la discussion sur WhatsApp.",
+   "resume": "Lauric relance ce compte depuis le 06/08 : une première relance sans réponse, puis Paul André demande le 07/08 quel type d'accompagnement il propose, Lauric répond en vocal et envoie le Scan Dirigeant Tally, qui reste sans retour malgré une relance le 17/08 et un vocal le 28/08. Le 08/09 au matin Lauric change d'angle et demande s'il est ouvert à parler de son entreprise et des sujets qui le bloquent : Paul André accepte dans les quatre minutes, le créneau se cale dans la matinée, il donne son numéro personnel, et l'appel a bien eu lieu le mardi 08/09 à 13h. Le contenu de cet appel n'est pas connu de la console, on sait seulement qu'il s'est bien passé : à 14h08 Lauric écrit qu'il est ravi d'avoir échangé, passe au tutoiement, et annonce qu'il clôt la discussion Instagram pour rester en contact sur WhatsApp. Toute la suite s'est donc jouée sur WhatsApp, hors de portée de la console. Le 11/09 à 18h50 Lauric revient malgré tout sur Instagram avec le lien d'une vidéo YouTube présentée comme une ressource 100 % maison, en disant avoir hâte d'un retour ; le contenu de cette vidéo n'est pas connu non plus. Le 12/09 à 08h33 Paul André répond chaleureusement qu'il prendra le temps de la regarder quand il sera au calme et souhaite un bon week-end. C'est ce message qui attend une réponse : pas une prise de contact, un suivi d'après-appel.",
+   "attend": "Rien, concrètement, et c'est tout le problème. Il a fermé le sujet proprement ce matin avec un message poli et chaleureux : il s'attend à ce que la balle soit dans son camp et à revenir vers Lauric quand il aura regardé. Tout message qui lui redemande un retour le met en dette et le fait basculer dans le rôle du gars qui doit quelque chose. La seule chose qu'il peut recevoir sans effort : un raccourci pour la vidéo, et une question sur sa propre boîte.",
+   "objectif": "Obtenir une phrase de Paul André sur l'état réel de son sujet, sans lui réclamer quoi que ce soit sur la vidéo, pour rouvrir la conversation de fond là où l'appel de mardi s'était arrêté et pouvoir enchaîner sur un deuxième échange.",
+   "format": "ecrit",
+   "reponse": "Pas besoin de tout regarder Paul André 🙂\n\nLe passage qui compte pour toi est à [minute exacte], c'est celui sur [son sujet]. Le reste attendra que tu sois au calme.\n\nEt [son sujet], ça a bougé cette semaine ou c'est toujours pareil ?",
+   "pourquoi": "Le message ne lui demande rien sur la vidéo, donc il ne peut pas le braquer, et il ne dit pas non plus \"prends ton temps\", ce qui aurait poliment clôturé le fil. La première ligne lui enlève la charge qu'il vient de s'imposer en lui apprenant quelque chose qu'il ignore (il n'a pas besoin de tout regarder) au lieu de le féliciter pour sa façon de regarder une vidéo, ce qui sonnerait paternaliste et reprendrait le mécanisme déjà utilisé chez @douceur_d_ame. La deuxième ligne est la seule chose du message qui lui rend vraiment service : un timecode précis fait passer la tâche de plusieurs minutes floues à un geste de trente secondes, et le fait de la rattacher à \"mardi au téléphone\", hors crochet, affiche que c'est un suivi d'après-appel et pas une prise de contact. \"Le reste attendra que tu sois au calme\" reprend ses mots exacts et lui donne la permission de ne pas tout regarder, sans rien affirmer sur la longueur ni dévaloriser sa propre ressource. La question finale ne porte ni sur la vidéo ni sur le canal mais sur sa boîte : il peut y répondre en trois mots depuis son téléphone sans avoir rien regardé, donc la conversation avance même s'il ne clique jamais, et \"ou c'est toujours pareil\" lui donne une sortie sans avoir à avouer qu'il n'a rien fait. Une seule question, à la fin, aucun pitch, aucun créneau, aucun mot sur WhatsApp.",
+   "alternatives": [
+    {
+     "angle": "Le pont appel → vidéo : assumer que la vidéo sort de leur échange de mardi, donner le seul moment qui le concerne, puis relancer sur son sujet à lui.",
+     "texte": "Si je te l'ai envoyée, c'est à cause de mardi Paul André 🙂\n\n[Son sujet] revient à [minute exacte] de la vidéo, c'est le seul moment qui te concerne vraiment.\n\nEt de ton côté, [son sujet] ça a bougé cette semaine ?",
+     "pourquoi": "Cette version requalifie l'envoi : ce n'est plus un contenu diffusé à tout le monde mais quelque chose qui sort de leur heure au téléphone, ce qui est le statut que Lauric a déjà gagné mardi. Elle est plus forte que la principale si Lauric a un souvenir très net d'une phrase de Paul André, parce que le pont devient évident. Corrections appliquées par rapport au brouillon d'origine : la première ligne ne se justifie plus d'un reproche que Paul André n'a pas fait, la question finale ne demande plus de rapport d'avancement avec un compteur (\"depuis mardi, tu en es où\") mais un simple état, et le crochet de consigne a été remplacé par un crochet court à remplir. Risque résiduel : si le souvenir de l'appel est flou, la ligne 1 sonne fabriquée et abîme rétroactivement l'appel de mardi."
+    },
+    {
+     "angle": "Remettre la conversation sur WhatsApp comme Lauric l'avait lui-même décidé mardi, mais en l'affirmant au lieu de le demander, et garder la question pour son business.",
+     "texte": "Au calme, elle ne part pas Paul André 🙂\n\nQuand tu y seras, va direct à [minute exacte], c'est le moment sur [son sujet].\n\nJe te remets la suite sur WhatsApp, comme convenu mardi.\n\nEt [son sujet], ça a bougé cette semaine ?",
+     "pourquoi": "Utile seulement si le fil WhatsApp dort et que Lauric veut y ramener la conversation proprement. La correction majeure par rapport au brouillon : le canal n'est plus une question (\"je t'écris où la prochaine fois ?\"), parce qu'une question sur la logistique se paie d'un \"comme tu veux\" et brûle l'unique question du message. Ici c'est une phrase affirmative, Lauric décide, et la question reste pour le business. La confession \"c'est moi qui ai mélangé les deux\" a été supprimée : elle attire l'attention sur le fait qu'il avait dit clore ici puis est revenu avec un lien, ce qui fait exactement penser à une séquence de suivi. À ne pas envoyer si Lauric lui parle déjà tous les jours sur WhatsApp, ça sonnerait distrait."
+    }
+   ],
+   "si_silence": {
+    "delai": "Jeudi 18/09 au matin, si aucune réponse au message du lundi 14/09 (et rien non plus côté WhatsApp)",
+    "texte": "Hello Paul André 🙂\n\n[Son sujet], tu veux qu'on en reparle dix minutes cette semaine ?"
+   },
+   "eviter": [
+    "Ne jamais écrire \"prends ton temps\" ou \"pas d'urgence\" : personne n'a parlé d'urgence, l'introduire pour la nier la lui met dans la tête et confirme qu'on attend un retour.",
+    "Ne pas demander où en est la vidéo, même habillé en \"tu as pu y jeter un oeil ?\". Il a répondu il y a quelques heures sur ce point exact, le rouvrir dit \"je surveille si tu as cliqué\".",
+    "Pas de \"depuis mardi, tu en es où\" : quatre jours dont un week-end, la seule réponse possible est \"nulle part\", et ça met un compteur sur son inaction. On demande un état, pas un avancement.",
+    "Ne pas poser la question du canal (\"je t'écris ici ou sur WhatsApp ?\"). Lauric avait tranché mardi, redemander l'autorisation montre qu'il n'est pas sûr d'être bienvenu et gaspille l'unique question.",
+    "Ne pas coller le prénom en milieu de phrase. Paul André en fin de première ligne, une seule fois, et pas une deuxième fois dans le message.",
+    "Ne pas envoyer avec les crochets, et ne pas les remplir avec une reformulation propre de son problème : ses mots de mardi, sinon il se sent diagnostiqué."
+   ],
+   "chances": "haute",
+   "quand": "Lundi 14/09 entre 9h et 10h. Il a écrit ce matin même à 8h33 pour dire qu'il regarderait au calme et souhaiter un bon week-end : répondre ce soir, douze heures plus tard, c'est lui montrer qu'on guette, et surtout poser une question sur l'état de son entreprise un samedi soir, ça tombe mal et ça aura une réponse molle ou aucune. Dimanche soir n'est pas mieux, c'est le créneau où on repousse tout au lendemain. Lundi matin, la question sur sa boîte arrive pile au moment où il rouvre son agenda, elle est naturelle, et les deux jours de silence font que le message n'est plus une réaction à son message mais une reprise de contact de plein droit. Seul cas où il faut envoyer avant : si Lauric sait par WhatsApp qu'il va la regarder ce week-end, alors la ligne du timecode n'a de valeur qu'avant visionnage et il envoie dimanche en fin d'après-midi, vers 18h.",
+   "lauric_seul": true
+  },
+  {
    "pseudo": "7020md",
    "nom": "md",
    "conv": "https://www.instagram.com/direct/t/340282366841710301244261018910263081563/",
