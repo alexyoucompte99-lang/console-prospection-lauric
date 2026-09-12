@@ -97,3 +97,39 @@ Puis `python3 appels_insta.py dump.json --date JJ/MM/AAAA` → `data/insta-appel
 reporté / vu / non vu ; récaps, cibles et analyse rédigés à la main dans `data/insta-appels-notes.json`, clé = pseudo,
 champs `recap`, `cible`, `type`, `verdict`, `issue` (force l'issue), `exclude`, `force` ; `_analyse` = blocs du haut).
 Le dump JSON brut n'est pas commité (conversations complètes) : seul `insta-appels.json` l'est.
+
+## Onglet « 💬 À répondre » (ajouté le 12/09/2026)
+
+But : chaque matin, lister les conversations où **le lead a écrit (ou réagi) en dernier sur les 7 derniers
+jours et où personne n'a répondu**, et proposer pour chacune un message prêt à envoyer, écrit pour cette
+personne. La page lit `data/a-repondre.json` ; l'état « Répondu » est partagé par le Google Form EOD
+(setter réservé `RepInsta`, marqueur `— RepIG : <pseudo> · 1|0`, dernière ligne gagne).
+
+1. **Extraction** : même boucle qu'à l'étape 2, mais on s'arrête dès que la plus ancienne activité de la page
+   dépasse 7 jours (4 pages suffisent en général, 160 conversations) et on prend `thread_message_limit=40`
+   pour avoir le contexte. Ajouter au passage les champs utiles à la personnalisation : `label_items`
+   (étiquettes Instagram), `replied_to_message`, les réactions par emoji, la durée des vocaux, la légende
+   des réels partagés.
+2. **Tri** : garder les conversations où le dernier message hors `action_log` vient du lead et date de moins
+   de 7 jours (catégorie `rep`), plus celles où le lead a **réagi** à notre dernier message sans écrire
+   (catégorie `reac`). Exclure l'équipe et les proches : `constant_blt`, `majorel_alex`, `juliensergent_`,
+   `lrtemmanuelle`, `damienrealise`. Le dossier General (`folder=1`) et les demandes de message
+   (`/api/v1/direct_v2/pending_inbox/`) se vérifient aussi, ils sont presque toujours vides côté prospection.
+3. **Profils** : `/api/v1/users/<pk>/info/` pour chaque lead retenu, 10 s entre deux appels (bio, catégorie,
+   abonnés, lien). **Ne pas utiliser** `/api/v1/users/web_profile_info/` (429 immédiat) ni
+   `/api/v1/feed/user/<pk>/` (renvoie du HTML).
+4. **Dossiers** : un fichier par conversation (profil, ce que la console sait déjà via `leads-insta.csv`,
+   `abonnes.csv`, `insta-appels-notes.json`, `todo.json`, étiquettes EOD, puis le fil complet en heure de
+   Paris), plus `brief.md` (positionnement de Lauric, cible, leçons de l'analyse des appels, règles
+   d'écriture) et `style.txt` (une trentaine de vraies réponses de Lauric des 14 derniers jours, pour le ton).
+5. **Rédaction** : workflow `reponses-insta-lauric` (un rédacteur par conversation, deux critiques
+   indépendantes — le lead lui-même et le directeur commercial gardien des règles — puis un éditeur final,
+   et un contrôle croisé anti copié-collé). Sortie : `finals.json`.
+6. **Fabrication du fichier** : `python3 a_repondre.py <convs.json> <finals.json> --date "JJ/MM/AAAA HHhMM" --fenetre "du JJ/MM au JJ/MM" [--synthese <synthese.json>]`
+   → `data/a-repondre.json` (ajoute l'attente en jours, le fil des 10 derniers messages, le dernier message
+   du lead, les vocaux à écouter, le lien WhatsApp quand le DM tombe sur un répondeur).
+7. **Commit** : `git add data/a-repondre.json` (le dump brut des conversations n'est jamais commité).
+
+Pièges : ne jamais ouvrir une conversation dans l'interface Instagram pendant le relevé (ça envoie le « vu ») ;
+les vocaux du lead ne sont pas transcrits, la carte dit de les écouter avant d'envoyer ; un message de masse
+envoyé après la réponse du lead compte comme une réponse, vérifier à la main si la liste paraît trop courte.

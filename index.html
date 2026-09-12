@@ -270,7 +270,15 @@
   .bub.hit { outline: 2px solid var(--good); }
   .bub .bt { display: block; font-size: 11px; color: var(--muted); margin-top: 3px; }
   .msgcard.prop { border: 1px solid var(--good); border-left-width: 4px; }
-  .todo-card { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; align-items: start; }
+  .arep-card .msgcard.lead { border-style: solid; border-color: var(--grid); background: color-mix(in srgb, var(--muted) 6%, transparent); }
+  .arep-lab { margin: 0; font-size: 12.5px; font-weight: 700; color: var(--ink-2); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .arep-thread { display: grid; gap: 6px; margin-top: 8px; }
+  .arep-fil { font-size: 13px; border-radius: 8px; padding: 6px 10px; white-space: pre-wrap; border: 1px solid var(--border); }
+  .arep-fil .arep-who { display: block; font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 2px; }
+  .arep-fil.us { background: color-mix(in srgb, var(--accent) 7%, transparent); border-color: color-mix(in srgb, var(--accent) 25%, var(--border)); }
+  .arep-card.done { opacity: .62; }
+  .alist { margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.55; display: grid; gap: 6px; }
+    .todo-card { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; align-items: start; }
   .todo-check { font: inherit; font-size: 20px; line-height: 1; width: 34px; height: 34px; border-radius: 9px; border: 2px solid var(--border); background: var(--card); cursor: pointer; color: var(--good); }
   .todo-check:hover { border-color: var(--good); }
   .todo-check.on { background: color-mix(in srgb, var(--good) 14%, var(--card)); border-color: var(--good); }
@@ -480,6 +488,7 @@
     <div class="tabs" role="tablist" id="tabbar">
       <button data-tab="dash" class="on">📊 Vue d'ensemble</button>
       <button data-tab="todo">✅ To do <span class="count" id="todo-count"></span></button>
+      <button data-tab="arep">💬 À répondre <span class="count" id="arep-count"></span></button>
       <button data-tab="eod">📝 EOD <span class="count" id="eod-count"></span></button>
       <button data-tab="tally">🎯 Scans Tally <span class="count" id="tally-count"></span></button>
       <button data-tab="leads">👤 Leads <span class="count" id="leads-count"></span></button>
@@ -519,6 +528,24 @@
         </form>
       </section>
       <p class="formnote" id="todo-note"></p>
+    </div>
+
+    <div id="tab-arep" hidden>
+      <div class="tally-counts" id="arep-pills"></div>
+      <section>
+        <h2 class="hsec" style="--hc:var(--bad);margin-bottom:6px" id="arep-title">💬 Conversations qui attendent une réponse</h2>
+        <p class="formnote" id="arep-intro"></p>
+        <div class="rlist" id="arep-list" style="margin-top:12px"></div>
+      </section>
+      <details class="ldet" id="arep-done-details" style="margin:4px 0 22px">
+        <summary id="arep-done-sum">Déjà traitées</summary>
+        <div class="rlist" id="arep-done" style="margin-top:10px"></div>
+      </details>
+      <section id="arep-sec-syn" hidden>
+        <h2 class="hsec" style="--hc:var(--s5);margin-bottom:10px">🧠 Ce que ces conversations disent</h2>
+        <div class="card"><ul class="alist" id="arep-syn"></ul></div>
+      </section>
+      <p class="formnote" id="arep-note"></p>
     </div>
 
     <div id="tab-eod" hidden>
@@ -1234,7 +1261,7 @@ const ETQ_RETIREES = new Set([
 
 // lignes à ignorer dans les stats : tests techniques + soumissions de la
 // boîte à idées (onglet Script setting), qui passent par le même Google Form
-const isTestRow = r => /test console|bo[iî]te\s*[aà]\s*id[ée]es|^\s*doublon\s*$|^\s*tracking\s*$|^\s*vente\s*$|^\s*callsuivi\s*$|^\s*vote\s*$|^\s*todo\s*$/i.test(r[COL.SETTER] || "");
+const isTestRow = r => /test console|bo[iî]te\s*[aà]\s*id[ée]es|^\s*doublon\s*$|^\s*tracking\s*$|^\s*vente\s*$|^\s*callsuivi\s*$|^\s*vote\s*$|^\s*todo\s*$|^\s*repinsta\s*$/i.test(r[COL.SETTER] || "");
 const isIdeaRow = r => /bo[iî]te\s*[aà]\s*id[ée]es/i.test(r[COL.SETTER] || "");
 const isTrackRow = r => /^\s*tracking\s*$/i.test(r[COL.SETTER] || "");
 
@@ -1430,6 +1457,7 @@ async function load(showSpinner) {
   INSTA_ACT_TEXT = await get("data/insta-activite.csv").catch(() => "");
   get("data/insta-appels.json").then(t => renderAppelsTab(JSON.parse(t))).catch(() => renderAppelsTab(null));
   get("data/todo.json").then(t => { TODO_SEED = JSON.parse(t); renderTodoTab(); }).catch(() => renderTodoTab());
+  get("data/a-repondre.json").then(t => { AREP = JSON.parse(t); renderArepTab(); }).catch(() => renderArepTab());
   get("data/abonnes.csv").then(renderAbonnesTab).catch(() => renderAbonnesTab(""));
   get("data/abonnes_total.csv").then(renderTotalChart).catch(() => renderTotalChart(""));
   // le portefeuille a son propre fallback : un export CSV privé renvoie du HTML
@@ -1865,7 +1893,7 @@ function mini(rows30, title, f, color, untrackedNote) {
    Onglets EOD + Scans Tally
    ============================================================ */
 
-const TABS = ["dash", "todo", "eod", "tally", "leads", "datas", "verif", "calls", "ventes", "script", "abonnes"];
+const TABS = ["dash", "todo", "arep", "eod", "tally", "leads", "datas", "verif", "calls", "ventes", "script", "abonnes"];
 const TAB_ALIAS = { cav: "calls", car: "calls" };   // anciens liens #cav / #car
 function showTab(name) {
   name = TAB_ALIAS[name] || name;
@@ -1937,7 +1965,7 @@ const frDateTime = s => {
 function renderExtras(eodText, tallyText, partialsText, pfText, calText, leadsText) {
   DUP_KEYS = parseDupKeys(eodText);
   VOTES = parseVotes(eodText); renderNewAcc();
-  TODO_EOD_TEXT = eodText || ""; renderTodoTab();
+  TODO_EOD_TEXT = eodText || ""; renderTodoTab(); renderArepTab();
   DEAL_EDITS = parseDealEdits(eodText);
   CALL_EDITS = parseCallEdits(eodText);
   STAGE_EDITS = parseStages(eodText);
@@ -2626,6 +2654,142 @@ el("todo-form").addEventListener("submit", async e => {
   const m = el("td-msg"); m.hidden = false; m.textContent = "Ajoutée pour " + qui + " ✅"; setTimeout(() => { m.hidden = true; }, 2500);
 });
 
+/* ---------- onglet 💬 À répondre : les conversations Instagram où le lead attend ----------
+   Source : data/a-repondre.json, écrit au relevé (une entrée par conversation où le lead a écrit
+   ou réagi en dernier sur les 7 derniers jours, avec l'analyse du profil et le message à envoyer).
+   L'état « répondu » est partagé avec toute l'équipe via le Google Form EOD, setter réservé
+   « RepInsta » : « — RepIG : <pseudo> · 1|0 » (la dernière ligne gagne). Les lignes envoyées depuis
+   ce navigateur sont gardées 30 min en attente (localStorage arepPending), le temps que le Sheet suive. */
+let AREP = null, arepFilter = "todo";
+try { arepFilter = localStorage.getItem("arepFilter") || "todo"; } catch (e) {}
+const AREP_CAT = {
+  prospect_chaud: ["🔥 prospect chaud", "lose"],
+  a_qualifier: ["🎯 à qualifier", "next"],
+  manager_salarie: ["👔 manager avec équipe", "next"],
+  hors_cible: ["🙂 hors cible", "gray"],
+  partenaire: ["🤝 partenaire", "src"],
+  vendeur: ["💼 il prospecte Lauric", "gray"],
+  deja_clos: ["✅ échange terminé", "gray"],
+  repondeur_auto: ["🤖 répondeur automatique", "warn2"],
+  a_reactiver: ["🧊 à réactiver plus tard", "warn2"],
+};
+const AREP_FMT = { ecrit: "✍️ à écrire", vocal: "🎙️ en vocal", ecrit_et_vocal: "✍️ écrit puis 🎙️ vocal", reaction: "❤️ une réaction suffit", whatsapp: "📱 par WhatsApp", rien: "⏸️ ne rien envoyer" };
+const AREP_CIBLE = ["prospect_chaud", "a_qualifier", "manager_salarie"];
+function arepPending() {
+  try { return JSON.parse(localStorage.getItem("arepPending") || "[]").filter(p => Date.now() - p.ts < 30 * 60000); } catch (e) { return []; }
+}
+function arepDoneMap() {
+  const done = {}, lines = [];
+  parseCSV(TODO_EOD_TEXT || "").slice(1).forEach(r => {
+    [r[5], r[6], r[12]].map(x => (x || "").trim()).filter(Boolean).join("\n").split("\n").forEach(l => lines.push(l));
+  });
+  arepPending().forEach(p => lines.push(p.line));
+  lines.forEach(l => { const m = /—\s*RepIG\s*:\s*([^\s·]+)\s*·\s*([01])/.exec(l); if (m) done[m[1]] = m[2] === "1"; });
+  return done;
+}
+function arepPost(line) {
+  try { const p = arepPending(); p.push({ line, ts: Date.now() }); localStorage.setItem("arepPending", JSON.stringify(p)); } catch (e) {}
+  renderArepTab();
+  return postEodRow("RepInsta", line).catch(() => alert("La coche n'a pas pu être envoyée, réessaie."));
+}
+function arepCard(c, i, fait) {
+  const cat = AREP_CAT[c.categorie] || ["", "gray"];
+  const attente = c.attente_jours == null ? "" : c.attente_jours < 1 ? "⏳ depuis quelques heures" :
+    "⏳ attend depuis " + Math.round(c.attente_jours) + " j";
+  const attCls = (c.attente_jours || 0) >= 3 ? "lose" : (c.attente_jours || 0) >= 1 ? "warn2" : "gray";
+  const id = "arep-" + i;
+  const msg = (txt, cls, mid) => '<div class="msgcard' + (cls ? " " + cls : "") + '"' + (mid ? ' id="' + mid + '"' : '') + '>' + esc(txt) + '</div>';
+  const copy = (mid, lab) => '<button type="button" class="copybtn" data-copy="' + mid + '">' + lab + '</button>';
+  const fil = (c.fil || []).map(m => '<div class="arep-fil ' + (m.w === "L" ? "us" : "them") + '"><span class="arep-who">' +
+    (m.w === "L" ? "nous" : "@" + esc(c.pseudo)) + ' · ' + esc(m.t) + '</span>' + esc(m.x) + '</div>').join("");
+  const alts = (c.alternatives || []).map((a, k) =>
+    '<p class="arep-lab" style="margin-top:12px">Angle ' + (k + 1) + ' · ' + esc(a.angle) + '</p>' +
+    msg(a.texte, "", id + "-alt" + k) + copy(id + "-alt" + k, "Copier cette version") +
+    '<p class="rstats">' + esc(a.pourquoi) + '</p>').join("");
+  return '<div class="rcard arep-card' + (fait ? " done" : "") + '">' +
+    '<div class="rhead"><span class="rname">' + esc(c.nom || c.pseudo) + '</span>' +
+    '<span class="rmeta">@' + esc(c.pseudo) + '</span>' +
+    '<span class="badge ' + cat[1] + '">' + cat[0] + '</span>' +
+    (attente ? '<span class="badge ' + attCls + '">' + attente + '</span>' : '') +
+    (c.non_lu ? '<span class="badge lose">👀 jamais ouverte</span>' : '') +
+    (c.cat === "reac" ? '<span class="badge gray">❤️ a réagi sans écrire</span>' : '') +
+    (c.chances ? '<span class="badge gray">réponse ' + esc(c.chances) + '</span>' : '') +
+    (c.lauric_seul ? '<span class="badge src">👤 Lauric lui-même</span>' : '') + '</div>' +
+    '<p class="rstats">' + esc(c.cible || "") + (c.profil_info ? ' · ' + esc(c.profil_info) : '') + '</p>' +
+    (c.resume ? '<p class="rnote">' + esc(c.resume) + '</p>' : '') +
+    '<p class="rstats" style="margin-top:8px"><b>Il attend</b> : ' + esc(c.attend || "") + '<br><b>Objectif du message</b> : ' + esc(c.objectif || "") + '</p>' +
+    (c.dernier ? '<p class="arep-lab" style="margin-top:12px">Son dernier message · ' + esc(c.dernier.t || "") + '</p>' + msg(c.dernier.x, "lead") : '') +
+    (c.vocaux ? '<p class="rstats" style="color:var(--bad)">🎧 ' + esc(c.vocaux) + '</p>' : '') +
+    (fil ? '<details class="ldet"><summary>Voir l\'échange (' + (c.fil || []).length + ' derniers messages)</summary><div class="arep-thread">' + fil + '</div></details>' : '') +
+    '<p class="arep-lab" style="margin-top:14px">' + (c.format === "rien" ? "📌 Rien à envoyer maintenant, le message est prêt pour la reprise" : "✍️ La réponse à envoyer") +
+      ' <span class="badge ' + (c.format === "rien" ? "gray" : "next") + '">' + (AREP_FMT[c.format] || "") + '</span></p>' +
+    (c.reponse ? msg(c.reponse, "prop", id + "-msg") + copy(id + "-msg", "Copier la réponse") : '<p class="rstats">Rien à envoyer pour l\'instant.</p>') +
+    (c.pourquoi ? '<p class="rstats" style="margin-top:6px">💡 ' + esc(c.pourquoi) + '</p>' : '') +
+    (c.quand ? '<p class="rstats" style="margin-top:6px">⏰ <b>Quand l\'envoyer</b> : ' + esc(c.quand) + '</p>' : '') +
+    (c.vocal ? '<details class="ldet"><summary>🎙️ Trame du vocal</summary>' + msg(c.vocal) + '</details>' : '') +
+    (alts ? '<details class="ldet"><summary>Deux autres angles si celui-ci ne te ressemble pas</summary>' + alts + '</details>' : '') +
+    (c.si_silence && c.si_silence.texte ? '<details class="ldet"><summary>Relance si pas de réponse (' + esc(c.si_silence.delai || "") + ')</summary>' +
+      msg(c.si_silence.texte, "", id + "-rel") + copy(id + "-rel", "Copier la relance") + '</details>' : '') +
+    ((c.eviter || []).length ? '<details class="ldet"><summary>À éviter avec ce lead</summary><ul class="alist">' +
+      c.eviter.map(x => '<li>' + esc(x) + '</li>').join("") + '</ul></details>' : '') +
+    '<p class="rstats" style="margin-top:10px">' +
+    '<a class="vivlink" href="' + esc(c.conv) + '" target="_blank" rel="noopener">ouvrir la conversation ↗</a>' +
+    ' · <a class="vivlink" href="https://www.instagram.com/' + esc(c.pseudo) + '/" target="_blank" rel="noopener">@' + esc(c.pseudo) + ' ↗</a>' +
+    (c.whatsapp ? ' · <a class="vivlink" href="' + esc(c.whatsapp) + '" target="_blank" rel="noopener">WhatsApp ↗</a>' : '') + '</p>' +
+    '<div class="edbtns" style="margin-top:10px">' +
+    '<button type="button" class="copybtn" data-arepdone="' + esc(c.pseudo) + '" data-arepval="' + (fait ? 0 : 1) + '">' + (fait ? "Remettre à répondre" : "✓ Répondu") + '</button>' +
+    (fait ? '' : '<button type="button" class="copybtn" data-areptodo="' + i + '">→ Mettre dans la To do de Lauric</button>') +
+    '</div></div>';
+}
+function renderArepTab() {
+  if (!el("arep-list")) return;
+  const convs = (AREP && AREP.convs) || [];
+  const done = arepDoneMap();
+  const open = convs.filter(c => !done[c.pseudo]);
+  el("arep-count").textContent = open.length ? "(" + open.length + ")" : "";
+  const sets = {
+    todo: open,
+    prio: open.filter(c => (c.priorite || 9) <= 2),
+    cible: open.filter(c => AREP_CIBLE.includes(c.categorie)),
+    autres: open.filter(c => !AREP_CIBLE.includes(c.categorie)),
+    fait: convs.filter(c => done[c.pseudo]),
+  };
+  const pills = [["todo", "à répondre"], ["prio", "🔥 en premier"], ["cible", "🎯 dans la cible"], ["autres", "🤝 relation et politesse"], ["fait", "✅ traitées"]];
+  el("arep-pills").innerHTML = pills.map(([k, lab]) =>
+    '<button class="pill fpill' + (arepFilter === k ? " on" : "") + '" data-arep="' + k + '"><b>' + sets[k].length + '</b>&nbsp;' + lab + '</button>').join("");
+  const list = (sets[arepFilter] || sets.todo).slice().sort((a, b) =>
+    (a.priorite || 9) - (b.priorite || 9) || (b.attente_jours || 0) - (a.attente_jours || 0));
+  el("arep-title").textContent = "💬 " + (arepFilter === "fait" ? "Conversations déjà traitées" : "Conversations qui attendent une réponse") + " (" + list.length + ")";
+  el("arep-list").innerHTML = list.map((c, i) => arepCard(c, i, !!done[c.pseudo])).join("") ||
+    '<p class="empty-note">Rien ici pour l\'instant.</p>';
+  el("arep-done-details").hidden = true;
+  el("arep-intro").textContent = AREP ? ("Relevé du " + (AREP.genere || "") + " · toutes les conversations Instagram où le lead a écrit ou réagi en dernier " +
+    (AREP.fenetre ? "(" + AREP.fenetre + ")" : "") + " et où personne n'a répondu depuis. Chaque message est écrit pour cette personne : il reprend ses mots, son format et la bonne étape suivante. Cocher « Répondu » enlève la carte pour toute l'équipe.")
+    : "Pas encore de relevé des conversations à répondre.";
+  const syn = (AREP && AREP.synthese) || [];
+  el("arep-sec-syn").hidden = !syn.length || arepFilter === "fait";
+  el("arep-syn").innerHTML = syn.map(s => '<li>' + esc(s) + '</li>').join("");
+  el("arep-note").textContent = AREP && AREP.note ? AREP.note : "";
+  AREP_LIST = list;
+}
+let AREP_LIST = [];
+el("arep-pills").addEventListener("click", e => {
+  const b = e.target.closest(".fpill"); if (!b) return;
+  arepFilter = b.dataset.arep; try { localStorage.setItem("arepFilter", arepFilter); } catch (e2) {}
+  renderArepTab();
+});
+document.addEventListener("click", e => {
+  const d = e.target.closest("[data-arepdone]");
+  if (d) { arepPost("— RepIG : " + d.dataset.arepdone + " · " + d.dataset.arepval); return; }
+  const t = e.target.closest("[data-areptodo]");
+  if (t) {
+    const c = AREP_LIST[+t.dataset.areptodo]; if (!c) return;
+    const clean = s => (s || "").replace(/[·\n\r]+/g, " ").trim();
+    todoPost("— Todo : a" + Date.now().toString(36) + " · Lauric · - · " + clean("Répondre à " + (c.nom || c.pseudo) + " sur Instagram") + " · " + c.conv);
+    t.textContent = "ajoutée à la To do ✅"; t.disabled = true;
+  }
+});
+
 /* ---------- Datas › sous-onglet 📞 Appels proposés (data/insta-appels.json, produit par appels_insta.py) ---------- */
 const ISSUE_LABELS = {
   vente: ["💰 devenue cliente", "var(--good)"], fait: ["☎️ call fait", "var(--good)"], booke: ["📅 call booké", "var(--good)"], accepte: ["✅ a accepté", "var(--good)"],
@@ -2656,7 +2820,7 @@ function renderAppelsTab(json) {
   el("appels-kpis").innerHTML =
     kpi("Appels proposés", convs.length, "conversations où on a proposé un appel / une visio", "var(--accent)") +
     kpi("Réponses après la proposition", nRep, pct(nRep, convs.length) + " des propositions", "var(--s1)") +
-    kpi("Appels obtenus", nPos, pct(nPos, convs.length) + " des propositions · " + convs.filter(c => c.issue === "fait" || c.issue === "vente").length + " faits, " + nBook + " booké" + (nBook > 1 ? "s" : "") + " Calendly, " + convs.filter(c => c.issue === "vente").length + " vente", "var(--good)") +
+    kpi("Appels obtenus", nPos, pct(nPos, convs.length) + " des propositions · " + convs.filter(c => c.issue === "fait" || c.issue === "vente").length + " faits, " + nBook + " rendez-vous pris, " + convs.filter(c => c.issue === "vente").length + " vente", "var(--good)") +
     kpi("Sans réponse", convs.length - nRep, convs.filter(c => c.issue === "vu").length + " vus sans réponse · " + convs.filter(c => c.issue === "nonvu").length + " pas encore vus", "var(--bad)");
 
   /* tableau générique : lignes = groupes, colonnes = proposés / réponses / acceptés */
