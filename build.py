@@ -56,6 +56,16 @@ COL_DATE, COL_SETTER = 1, 2
 COL_MSG_NEW, COL_MSG_OLD, COL_MSG_OTHER, COL_RELANCE = 3, 4, 5, 7
 COL_SUBS, COL_MSG_LIKE, COL_MSG_COM, COL_SCAN_OK, COL_SCAN_FILLED = 13, 15, 16, 17, 18
 
+# Rappel du matin (Telegram Alex) quand un setter actif n'a pas rempli l'EOD de
+# la veille. Mêmes règles que le panneau « EOD non faits » de la page (isTestRow,
+# actif = un EOD sur 14 jours, pas de retard avant le premier EOD, Cynthia off le
+# week-end). Une fois par jour à partir de 8h Paris : jeton data/.rappel-eod.
+TECH_SETTER_RE = re.compile(
+    r"test console|bo[iî]te\s*[aà]\s*id[ée]es|^\s*doublon\s*$|^\s*tracking\s*$|^\s*vente\s*$"
+    r"|^\s*callsuivi\s*$|^\s*vote\s*$|^\s*todo\s*$|^\s*repinsta\s*$", re.I)
+WEEKEND_OFF = {"cynthia"}
+EOD_REMIND_HOUR = 8
+
 
 def fetch(url: str) -> str:
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
@@ -274,13 +284,13 @@ def notify_new_tally(old_text: str, new_text: str) -> None:
             print("notif ntfy échouée :", e)
 
 
-def send_telegram(text: str) -> None:
+def send_telegram(text: str) -> bool:
     """Envoie un message sur le Telegram d'Alex. N'échoue jamais le job."""
     token = os.environ.get("TG_TOKEN", "").strip()
     chat = os.environ.get("TG_CHAT", "").strip()
     if not token or not chat:
         print("TG_TOKEN/TG_CHAT absents : notif Telegram ignorée")
-        return
+        return False
     data = urllib.parse.urlencode({
         "chat_id": chat, "text": text, "disable_web_page_preview": "true",
     }).encode("utf-8")
@@ -290,8 +300,10 @@ def send_telegram(text: str) -> None:
             headers={"Content-Type": "application/x-www-form-urlencoded"})
         urllib.request.urlopen(req, timeout=30).read()
         print("notif Telegram envoyée")
+        return True
     except Exception as e:
         print("notif Telegram échouée :", e)
+        return False
 
 
 def idea_rows(text: str):
@@ -415,6 +427,61 @@ def notify_today_calls(cal_text: str) -> None:
         print("rappel calls du jour échoué :", e)
 
 
+def missing_eod_message(eod_text: str, today) -> str:
+    """Texte du rappel si un setter actif n'a pas rempli l'EOD d'hier, sinon ""."""
+    from datetime import timedelta
+    seen = {}
+    for r in list(csv.reader(io.StringIO(eod_text)))[1:]:
+        if len(r) < 8 or TECH_SETTER_RE.search(r[COL_SETTER] or ""):
+            continue
+        d = parse_date(r[COL_DATE]) or parse_date(r[0])
+        s = (r[COL_SETTER] or "").strip()
+        if d and s:
+            seen.setdefault(s, set()).add(d)
+    yday = today - timedelta(days=1)
+    week = [yday - timedelta(days=i) for i in range(6, -1, -1)]
+    lines = []
+    for s, dates in sorted(seen.items()):
+        if not any(yday - timedelta(days=13) <= d <= yday for d in dates):
+            continue    # pas d'EOD depuis 14 jours : plus actif
+        first = min(dates)
+        owed = [d for d in week if d >= first and d not in dates
+                and not (s.lower() in WEEKEND_OFF and d.weekday() >= 5)]
+        if yday not in owed:
+            continue
+        lines.append("• " + s + (f" ({len(owed)} manqués sur les 7 derniers jours : "
+                                 + ", ".join(f"{d:%d/%m}" for d in owed) + ")"
+                                 if len(owed) > 1 else ""))
+    if not lines:
+        return ""
+    jours = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
+    return (("⏰ EOD non fait hier" if len(lines) == 1 else "⏰ EOD non faits hier")
+            + f" ({jours[yday.weekday()]} {yday:%d/%m})\n\n" + "\n".join(lines)
+            + "\n\nhttps://alexyoucompte99-lang.github.io/console-prospection-lauric/#eod")
+
+
+def notify_missing_eod(eod_text: str) -> None:
+    """À partir de 8h Paris, un Telegram à Alex si un setter actif n'a pas fait
+    l'EOD d'hier. Une fois par jour : jeton data/.rappel-eod, commité avec data/.
+    Hors GitHub Actions (pas de TG_TOKEN), on ne touche pas au jeton."""
+    if not os.environ.get("TG_TOKEN", "").strip():
+        return
+    try:
+        from zoneinfo import ZoneInfo
+        now = datetime.now(ZoneInfo("Europe/Paris"))
+    except Exception:
+        return
+    stamp = DATA / ".rappel-eod"
+    today = now.strftime("%Y-%m-%d")
+    if now.hour < EOD_REMIND_HOUR or (stamp.exists() and stamp.read_text().strip() == today):
+        return
+    text = missing_eod_message(eod_text, now.date())
+    if text and not send_telegram(text):
+        return      # envoi raté : on retente au run suivant (15 min)
+    print("rappel EOD :", text.splitlines()[0] if text else "tous les EOD d'hier sont faits")
+    stamp.write_text(today)
+
+
 def js_string(s: str) -> str:
     """JSON sûr à l'intérieur d'un <script> (pas de </script> ni de <!-- qui s'échappe)."""
     return json.dumps(s, ensure_ascii=False).replace("<", "\\u003c").replace("\u2028", "\\u2028")
@@ -465,6 +532,7 @@ def main():
         new_eod = fetch(EOD_URL)
         notify_new_ideas(old_eod, new_eod)
         eod_file.write_text(new_eod, encoding="utf-8")
+        notify_missing_eod(new_eod)
         old_tally = tally_file.read_text(encoding="utf-8") if tally_file.exists() else ""
         new_tally = fetch(TALLY_URL)
         notify_new_tally(old_tally, new_tally)
