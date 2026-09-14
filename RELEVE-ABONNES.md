@@ -143,3 +143,10 @@ la courbe en haut de l'onglet « Nouveaux abonnés » (KPIs : dernier relevé, d
 4. `git checkout -- data/eod.csv data/.rappel-calls` (copies auto modifiées par les runs locaux) puis
    `git add data/abonnes_total.csv && git commit -m "Abonnés du <date> : <n>" && git pull --rebase && git push` (jamais de stash).
 5. Fermer l'onglet. Si Chrome / Insta indisponible : ajouter « <date> · total indisponible » à `data/abonnes.log` et s'arrêter.
+
+### Tableau de bord professionnel (ajouté le 14/09/2026)
+Dans la même tâche de 18 h : ouvrir `https://www.instagram.com/accounts/insights/?timeframe=30` (lecture seule, 1 seule page),
+`get_page_text`, écrire le texte dans un fichier puis `python3 releve_contenu.py <fichier>` → `data/contenu-insta.csv`
+(Date, Vues 30j, Spectateurs 30j, Interactions 30j, Comptes ayant interagi 30j, Visites profil 30j, Liens externes 30j, Followers).
+Chiffres glissants sur 30 jours, une ligne par jour. Lus par l'onglet Contenu et la ligne « Impressions » de la Vue d'ensemble
+(la saisie manuelle de Lauric ne sert plus qu'en secours, la valeur la plus récente gagne). Premier relevé : 14/09/2026, 146 356 vues.

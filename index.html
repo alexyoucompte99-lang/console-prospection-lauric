@@ -581,9 +581,9 @@
           </div>
         </section>
         <section>
-          <h2 class="hsec" style="--hc:var(--s3);margin-bottom:10px">✍️ Impressions et abonnés · saisie</h2>
+          <h2 class="hsec" style="--hc:var(--s3);margin-bottom:10px">✍️ Saisie manuelle (secours)</h2>
           <div class="vkpis" id="track-tiles"></div>
-          <p class="formnote">Les abonnés sont relevés tout seuls chaque soir et via l'EOD de Cynthia. Les impressions ne remontent pas toutes seules : une fois par semaine, lire le chiffre « vues sur 30 jours » dans le tableau de bord professionnel Instagram et le saisir ici. Il alimente l'entonnoir de la Vue d'ensemble.</p>
+          <p class="formnote">Les abonnés sont relevés tout seuls chaque soir et via l'EOD de Cynthia. Les vues, comptes touchés, interactions et visites du profil sont relevés tout seuls chaque soir dans le tableau de bord professionnel Instagram. La saisie des vues ici ne sert qu'en secours : la valeur la plus récente gagne.</p>
           <form class="card eodform" id="track-form" style="margin-top:14px">
             <h3 class="mini-title">Saisie directe (Lauric)</h3>
             <div class="frow2">
@@ -597,7 +597,7 @@
               </div>
             </div>
             <div>
-              <label class="flab" for="t-impr">👁 Vues / impressions sur les 30 derniers jours (tableau de bord professionnel Instagram)</label>
+              <label class="flab" for="t-impr">👁 Vues sur les 30 derniers jours (en secours, si le relevé automatique n'a pas tourné)</label>
               <input type="number" min="0" inputmode="numeric" id="t-impr" placeholder="ex : 48000">
             </div>
             <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
@@ -1594,6 +1594,7 @@ async function load(showSpinner) {
   get("data/a-repondre.json").then(t => { AREP = JSON.parse(t); renderArepTab(); }).catch(() => renderArepTab());
   get("data/abonnes.csv").then(renderAbonnesTab).catch(() => renderAbonnesTab(""));
   get("data/abonnes_total.csv").then(renderTotalChart).catch(() => renderTotalChart(""));
+  get("data/contenu-insta.csv").then(t => { CT_ROWS = parseCSV(t).slice(1).map(r => ({ date: parseDate(r[0]), vues: +r[1] || 0, spect: +r[2] || 0, inter: +r[3] || 0, comptes: +r[4] || 0, visites: +r[5] || 0, liens: +r[6] || 0, followers: +r[7] || 0 })).filter(r => r.date && r.vues).sort((a, b) => a.date < b.date ? -1 : 1); renderContenu(); scheduleOverview(); }).catch(() => {});
   get("data/lead-magnets.json").then(t => { LM_DATA = JSON.parse(t); renderLmTab(); renderChauds(); scheduleOverview(); }).catch(() => renderLmTab());
   // le portefeuille a son propre fallback : un export CSV privé renvoie du HTML
   const pf = await get(SHEETS.pf)
@@ -4666,6 +4667,14 @@ const NTFY_TOPIC_PAGE = "scan-dirigeant-lauric-d7k4q2";
 /* ============================================================
    Vue d'ensemble, Contenu, Lead magnet
    ============================================================ */
+let CT_ROWS = [];   // tableau de bord professionnel Instagram, relevé chaque soir (data/contenu-insta.csv, 30 derniers jours glissants)
+/* vues sur 30 jours : relevé automatique, ou saisie de Lauric si elle est plus récente */
+function lastImpr() {
+  const a = CT_ROWS.length ? CT_ROWS[CT_ROWS.length - 1] : null;
+  const m = LAST_IMPR;
+  if (a && (!m || a.date >= m.date)) return { n: a.vues, date: a.date, auto: true };
+  return m ? { n: m.n, date: m.date, auto: false } : null;
+}
 let LM_DATA = null, LAST_IMPR = null, NT_POINTS = [], AREP_OPEN = null, NF_TODO_N = null;
 const pctTxt = (n, d) => d ? Math.round(100 * n / d) + " %" : "–";
 const dfr = d => d ? d.slice(8, 10) + "/" + d.slice(5, 7) : "";
@@ -4690,14 +4699,19 @@ function subsGain(n) {
 function renderContenu() {
   const box = el("ct-kpis");
   if (!box) return;
-  const g30 = subsGain(30), g7 = subsGain(7);
+  const g30 = subsGain(30), g7 = subsGain(7), im = lastImpr();
+  const ct = CT_ROWS.length ? CT_ROWS[CT_ROWS.length - 1] : null;
   const k = (kc, n, l) => '<div class="vkpi" style="--kc:' + kc + '"><div class="n">' + n + '</div><div class="l">' + l + '</div></div>';
   box.innerHTML =
-    k("var(--s5)", LAST_IMPR ? fmt(LAST_IMPR.n) : "–", "👁 vues sur 30 jours" + (LAST_IMPR ? " · saisi le " + dfr(LAST_IMPR.date) : " · à saisir")) +
+    k("var(--s5)", im ? fmt(im.n) : "–", "👁 vues · 30 j" + (im ? (im.auto ? "" : " · saisi le " + dfr(im.date)) : " · pas encore relevé")) +
+    k("var(--s4)", ct ? fmt(ct.spect) : "–", "👤 comptes touchés · 30 j") +
+    k("var(--s2)", ct ? fmt(ct.inter) : "–", "❤️ interactions · 30 j") +
+    k("var(--accent)", ct ? fmt(ct.visites) : "–", "🔎 visites du profil · 30 j") +
     k("var(--s3)", g30 ? "+" + fmt(g30.v) : "–", "🆕 nouveaux abonnés · 30 j" + (g30 && g30.since ? " (depuis le " + dfr(g30.since) + ")" : "")) +
-    k("var(--s1)", g7 ? "+" + fmt(g7.v) : "–", "🆕 nouveaux abonnés · 7 j") +
-    k("var(--accent)", LAST_IMPR && g30 && LAST_IMPR.n ? (100 * g30.v / LAST_IMPR.n).toLocaleString("fr-FR", { maximumFractionDigits: 2 }) + " %" : "–", "vues → abonnés");
-  el("ct-note").textContent = "Les vues se saisissent en bas de cette page (chiffre du tableau de bord professionnel Instagram, 30 derniers jours). Les abonnés sont relevés automatiquement chaque soir à 18 h.";
+    k("var(--s1)", g7 ? "+" + fmt(g7.v) : "–", "🆕 nouveaux abonnés · 7 j");
+  el("ct-note").textContent = ct
+    ? "Tableau de bord professionnel Instagram relevé le " + frDate(ct.date) + " (30 derniers jours glissants) : " + (ct.spect ? pctTxt(ct.visites, ct.spect) + " des comptes touchés visitent le profil, " : "") + (ct.comptes ? fmt(ct.comptes) + " comptes ont interagi, " : "") + fmt(ct.liens) + " clics sur le lien en bio. Relevé automatique chaque soir à 18 h avec les abonnés."
+    : "Les chiffres du tableau de bord professionnel Instagram se relèvent chaque soir à 18 h. En secours, la saisie manuelle en bas de page reste possible.";
 }
 
 let OV_T = null;
@@ -4711,7 +4725,7 @@ function renderOverview() {
   el("ov-period").textContent = "du " + dfr(d30) + " au " + dfr(today);
 
   /* contenu */
-  const g30 = subsGain(30);
+  const g30 = subsGain(30), LAST_IMPR_ = lastImpr(), CT = CT_ROWS.length ? CT_ROWS[CT_ROWS.length - 1] : null;
   /* setting · premier message : accroches réelles relevées sur Instagram */
   const acc = LEAD_ROWS.filter(r => r.va && !["suivi", "historique", "relance2808"].includes(r.va) && in30(r.d));
   const env = acc.length, likes = acc.filter(r => r.va === "like").length;
@@ -4734,10 +4748,12 @@ function renderOverview() {
 
   const G = [
     { color: "var(--s5)", title: "🎬 Contenu", sub: "ce qui fait venir les gens", go: "audience", rows: [
-      { lab: "Impressions", small: "vues du compte sur 30 jours", v: LAST_IMPR ? LAST_IMPR.n : null,
-        miss: 'pas encore saisi · <a data-go="audience">saisir dans Contenu</a>', extra: LAST_IMPR ? "saisi le " + dfr(LAST_IMPR.date) : "" },
+      { lab: "Impressions", small: "vues du compte sur 30 jours", v: LAST_IMPR_ ? LAST_IMPR_.n : null,
+        miss: 'pas encore relevé · <a data-go="audience">voir Contenu</a>',
+        extra: CT ? fmt(CT.spect) + " comptes touchés · " + fmt(CT.visites) + " visites du profil" : (LAST_IMPR_ && !LAST_IMPR_.auto ? "saisi le " + dfr(LAST_IMPR_.date) : "") },
       { lab: "Nouveaux abonnés", small: "gain du compte", v: g30 ? g30.v : null, miss: "relevé des abonnés indisponible",
-        extra: g30 && g30.since ? "depuis le 1er relevé du " + dfr(g30.since) : (LAST_IMPR && g30 && LAST_IMPR.n ? pctTxt(g30.v, LAST_IMPR.n).replace(" %", " %") + " des vues" : "") } ] },
+        rate: CT && CT.visites && g30 && !g30.since ? pctTxt(g30.v, CT.visites) + " des visites du profil" : "",
+        extra: g30 && g30.since ? "depuis le 1er relevé du " + dfr(g30.since) : "" } ] },
     { color: "var(--accent)", title: "✉️ Setting · premier message", sub: "les setters, relevé réel Instagram", go: "datas", rows: [
       { lab: "Messages envoyés", small: "premiers messages (accroches)", v: env, extra: (env - likes) + " aux abonnés · " + likes + " aux likes" },
       { lab: "Vus", small: "le lead a ouvert", v: vus, rate: pctTxt(vus, env) + " de taux de vu" },
@@ -4768,7 +4784,7 @@ function renderOverview() {
   const g7 = subsGain(7);
   const acc7 = LEAD_ROWS.filter(r => r.va && !["suivi", "historique", "relance2808"].includes(r.va) && r.d && r.d >= isoDaysAgo(7));
   const rep7 = acc7.filter(r => r.st === "repondu").length;
-  const imprOld = !LAST_IMPR || LAST_IMPR.date < isoDaysAgo(7);
+  const imprOld = !LAST_IMPR_ || LAST_IMPR_.date < isoDaysAgo(3);
   const lmNoLink = P.filter(p => p.lm === "scan" && p.offre && p.offre.rep && !p.lien).length;
   const todoL = typeof todoState === "function" ? todoState().filter(t => !t.fait && t.qui === "Lauric").length : 0;
   const chaudsActifs = VIVIER.filter(v => !ret[v.key]).length;
@@ -4779,8 +4795,8 @@ function renderOverview() {
   el("ov-poles").innerHTML =
     card("var(--s5)", "🎬 Contenu", "audience",
       kv("Abonnés au total", g30 ? fmt(g30.total) : "–") + kv("Gagnés sur 7 jours", g7 ? "+" + fmt(g7.v) : "–") +
-      kv("Vues sur 30 jours", LAST_IMPR ? fmt(LAST_IMPR.n) : "à saisir") +
-      (imprOld ? todoLine("Saisir les vues de la semaine", "audience") : "")) +
+      kv("Vues sur 30 jours", LAST_IMPR_ ? fmt(LAST_IMPR_.n) : "–") + kv("Visites du profil 30 j", CT ? fmt(CT.visites) : "–") +
+      (imprOld ? todoLine("Relevé des vues en retard (tâche de 18 h)", "audience") : "")) +
     card("var(--accent)", "✉️ Setting · 1er message", "eod",
       kv("Accroches sur 7 jours", fmt(acc7.length)) + kv("Taux de réponse 7 j", pctTxt(rep7, acc7.length)) +
       kv("Nouveaux abonnés à contacter", NF_TODO_N == null ? "–" : NF_TODO_N) +
