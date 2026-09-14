@@ -68,8 +68,14 @@ tranche avec un petit script (voir `scratchpad/save_part.py` de la session du 07
 Si une tranche revient quand même en clair (contenu trop répétitif), la relire en compressant les templates.
 
 ## Étape 5 : traitement, commit, log
+`--act-from` (14/09) : sans lui, un relevé court réécrit les jours anciens de `insta-activite.csv` avec des comptes partiels.
+
+Piège du 14/09 : après avoir vidé `<main>` de l'onglet messagerie pour le canal `<pre>`, l'onglet Instagram s'est figé
+(« renderer frozen ») quelques minutes plus tard, et tout nouvel onglet instagram.com restait figé aussi (même processus) tant
+que l'onglet figé n'était pas fermé. Pour les appels API qui suivent (abonnés, fiches profil), ouvrir un onglet léger sur
+`https://www.instagram.com/robots.txt` : même origine, cookies envoyés, pas d'application React, et le `<pre>` s'écrit dans `body`.
 ```
-python3 releve_insta.py <dump.txt> --date JJ/MM/AAAA
+python3 releve_insta.py <dump.txt> --date JJ/MM/AAAA --act-from <AAAA-MM-JJ de la plus ancienne activité lue>
 git checkout -- data/eod.csv data/.rappel-calls   # copies modifiées par les runs locaux (jamais de stash)
 git add data/leads-insta.csv data/insta-activite.csv data/insta-coverage.txt data/insta-releve.log
 git commit -m "Relevé Insta du JJ/MM" && git pull --rebase && git push

@@ -3,7 +3,7 @@
 
 Entrée : un fichier texte produit par le script JS du runbook RELEVE-INSTA.md (une conversation par ligne,
 champs séparés par ┃, retours à la ligne encodés ⏎), plus les lignes ACT┃date┃accroches┃suivi┃vocaux.
-Usage : python3 releve_insta.py dump.txt [--date 07/09/2026]
+Usage : python3 releve_insta.py dump.txt [--date 07/09/2026] [--act-from 2026-08-30]
 Les lignes existantes du CSV sont conservées (Prio, Raison, Message rédigés à la main) et mises à jour
 avec les nouveaux statuts ; les conversations inconnues sont ajoutées.
 """
@@ -127,7 +127,11 @@ def main():
         prev = {}
         if ACT.exists():
             for r in csv.DictReader(open(ACT, encoding="utf-8")): prev[r["Date"]] = [r["Accroches"], r["Messages de suivi"], r["Vocaux"]]
-        for d, a, s, v in acts: prev[d] = [a, s, v]
+        # --act-from AAAA-MM-JJ : ne réécrire que les jours couverts par le relevé (plus vieille activité lue),
+        # sinon un relevé court écrase les jours anciens avec des comptes partiels
+        act_from = sys.argv[sys.argv.index("--act-from") + 1] if "--act-from" in sys.argv else ""
+        for d, a, s, v in acts:
+            if d >= act_from or d not in prev: prev[d] = [a, s, v]
         with open(ACT, "w", newline="", encoding="utf-8") as f:
             w = csv.writer(f); w.writerow(["Date", "Accroches", "Messages de suivi", "Vocaux", "Releve"])
             for d in sorted(prev): w.writerow([d] + prev[d] + [releve])

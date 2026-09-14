@@ -18,8 +18,9 @@
   "tag": "analyse appels",
   "echeance": "2026-09-14",
   "texte": "Maximilien : relance de septembre (il l'a demandée)",
-  "detail": "Auto-entrepreneur en rénovation, réfléchit à passer en EURL et à prendre un apprenti. En juillet : « overbooked, relance-moi en septembre ». Relevé du 12/09 : le 09/09 il a reçu le message de masse « C'est la rentrée », sans créneau et sans parler de l'EURL, pas ouvert. Reprendre en direct.",
-  "message": "Salut Maximilien, comme convenu je reviens vers toi en septembre. Tu en es où sur l'EURL et l'apprenti ? Je te propose 20 minutes au téléphone pour en parler : mardi 19h30 ou jeudi 19h30 ?"
+  "detail": "Auto-entrepreneur en rénovation, réfléchit à passer en EURL et à prendre un apprenti. En juillet : « overbooked, relance-moi en septembre ». Relevé du 12/09 : le 09/09 il a reçu le message de masse « C'est la rentrée », sans créneau et sans parler de l'EURL, pas ouvert. Reprendre en direct. 13/09 : relance envoyée, appel accepté le lundi 21/09 à 19h30.",
+  "message": "Salut Maximilien, comme convenu je reviens vers toi en septembre. Tu en es où sur l'EURL et l'apprenti ? Je te propose 20 minutes au téléphone pour en parler : mardi 19h30 ou jeudi 19h30 ?",
+  "fait": true
  },
  {
   "id": "rel-jessicacannas",
@@ -29,8 +30,9 @@
   "tag": "analyse appels",
   "echeance": "2026-09-15",
   "texte": "Jessica : proposer une date ferme après la rentrée",
-  "detail": "Entreprise de travaux du couple, clients via les assurances, veut travailler avec des bailleurs sociaux et des syndics. A repoussé deux fois (« après la rentrée »). Relevé du 12/09 : la relance du 08/09 (« une dispo cette semaine ? ») est restée sans réponse. Passer à une date ferme.",
-  "message": "Bonjour Jessica, la rentrée est passée. On se cale 30 minutes pour parler de votre objectif bailleurs et syndics ? Je te propose mardi 22/09 à 20h ou jeudi 24/09 à 20h."
+  "detail": "Entreprise de travaux du couple, clients via les assurances, veut travailler avec des bailleurs sociaux et des syndics. A repoussé deux fois (« après la rentrée »). Relevé du 12/09 : la relance du 08/09 (« une dispo cette semaine ? ») est restée sans réponse. Passer à une date ferme. 13/09 : relance envoyée (question sur les clients), pas encore de réponse.",
+  "message": "Bonjour Jessica, la rentrée est passée. On se cale 30 minutes pour parler de votre objectif bailleurs et syndics ? Je te propose mardi 22/09 à 20h ou jeudi 24/09 à 20h.",
+  "fait": true
  },
  {
   "id": "rel-fseg37",
@@ -51,8 +53,9 @@
   "tag": "analyse appels",
   "echeance": "2026-09-18",
   "texte": "Camille : prendre des nouvelles, en douceur",
-  "detail": "Responsable de magasin, arrêt pour épuisement en juillet, remise en question pendant les vacances. Elle a dit septembre. Relevé du 12/09 : dernier message de notre côté le 28/08 (« une disponibilité la semaine prochaine ? »), sans réponse. Une seule relance, sans créneau imposé.",
-  "message": "Hello Camille, comment s'est passée ta reprise ? Aucune pression, je voulais simplement prendre de tes nouvelles. Si tu as envie de faire le point sur ta situation, je suis là."
+  "detail": "Responsable de magasin, arrêt pour épuisement en juillet, remise en question pendant les vacances. Elle a dit septembre. Relevé du 12/09 : dernier message de notre côté le 28/08 (« une disponibilité la semaine prochaine ? »), sans réponse. Une seule relance, sans créneau imposé. 13/09 : message envoyé, pas encore de réponse.",
+  "message": "Hello Camille, comment s'est passée ta reprise ? Aucune pression, je voulais simplement prendre de tes nouvelles. Si tu as envie de faire le point sur ta situation, je suis là.",
+  "fait": true
  },
  {
   "id": "rel-linstitut",
@@ -95,8 +98,9 @@
   "tag": "analyse appels",
   "echeance": "2026-09-15",
   "texte": "Marie : préparer la visio du 17/09 (elle n'a pas donné ses sujets)",
-  "detail": "Visio calée le 17/09, après un premier rendez-vous décalé le 27/08. La demande de sujets prioritaires du 09/09 n'a pas été ouverte. Relancer par une question courte 48 h avant, sinon l'appel démarre à froid.",
-  "message": "Hello Marie, on se voit mercredi 17. Une question rapide pour préparer : c'est quoi le sujet numéro un que tu veux régler d'ici la fin de l'année ?"
+  "detail": "Visio calée le 17/09, après un premier rendez-vous décalé le 27/08. La demande de sujets prioritaires du 09/09 n'a pas été ouverte. Relancer par une question courte 48 h avant, sinon l'appel démarre à froid. 13/09 : question de préparation envoyée, pas encore de réponse.",
+  "message": "Hello Marie, on se voit mercredi 17. Une question rapide pour préparer : c'est quoi le sujet numéro un que tu veux régler d'ici la fin de l'année ?",
+  "fait": true
  },
  {
   "id": "rel-veroniquevaramo",
@@ -106,7 +110,19 @@
   "tag": "analyse appels",
   "echeance": "2026-10-01",
   "texte": "Véronique : fixer la date de démarrage (elle a dit oui pour le mois prochain)",
-  "detail": "Visio faite le 03/09, proposition envoyée par mail (10 clients B2B en 4 mois). Le 09/09 : « je réponds oui, mais légèrement plus tard, je le prévois dans ma compta d'ici le mois prochain ». L'acompte proposé pour démarrer plus tôt est resté sans réponse. Le seul oui en attente.",
-  "message": "Bonjour Véronique, on avait dit le mois prochain pour le budget. Je te propose de bloquer la date de démarrage maintenant : première séance la semaine du 6 octobre, mardi ou jeudi ? Ça te laisse le temps côté compta."
+  "detail": "Visio faite le 03/09, proposition envoyée par mail (10 clients B2B en 4 mois). Le 09/09 : « je réponds oui, mais légèrement plus tard, je le prévois dans ma compta d'ici le mois prochain ». L'acompte proposé pour démarrer plus tôt est resté sans réponse. Le seul oui en attente. 13/09 : relance envoyée pour bloquer la date, pas encore de réponse.",
+  "message": "Bonjour Véronique, on avait dit le mois prochain pour le budget. Je te propose de bloquer la date de démarrage maintenant : première séance la semaine du 6 octobre, mardi ou jeudi ? Ça te laisse le temps côté compta.",
+  "fait": true
+ },
+ {
+  "id": "call-maximiliencausse-2109",
+  "qui": "Lauric",
+  "pseudo": "maximiliencausse",
+  "lien": "https://www.instagram.com/direct/t/340282366841710301244260146071271376480/",
+  "tag": "appel booké",
+  "echeance": "2026-09-20",
+  "texte": "Maximilien : confirmer l'appel du lundi 21/09 à 19h30 la veille",
+  "detail": "Il vient de passer en EURL et a signé le contrat de son apprenti. Il a dit « oui ça pourrait le faire je pense » : confirmer le dimanche 20 et récupérer son plus gros défi de lancement s'il n'a pas répondu.",
+  "message": "Salut Maximilien, on est bon pour demain lundi 19h30 ? Je t'appelle sur quel numéro ?"
  }
 ]

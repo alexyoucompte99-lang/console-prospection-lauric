@@ -200,11 +200,11 @@
   "verdict": "Réactive mais sans créneau possible ; trois tentatives en 3 minutes ont mis la pression. Elle a repris en vocal le 24/08 : lui proposer un appel de 20 min un lundi (jour de fermeture des salons)."
  },
  "maximiliencausse": {
-  "issue": "reporte",
+  "issue": "booke",
   "cible": "auto-entrepreneur BTP, passage en EURL, futur apprenti",
   "type": "message de masse 1h offerte",
-  "recap": "Maximilien, ex-ingénieur, auto-entrepreneur en rénovation, réfléchit à passer en EURL et à prendre un apprenti à la fin de l'été. Le message de masse du 23/07 puis une relance : « overbooked, 8h-21h tous les jours, relance-moi en septembre ». Vocal le 30/07 et le 28/08. Le 09/09, il reçoit le message de masse « C'est la rentrée, et si on parlait de toi ? » : ni créneau, ni référence à l'EURL, pas ouvert.",
-  "verdict": "Il avait donné la date lui-même (septembre) et la relance de rentrée est partie en message de masse. Reprendre en direct sur l'EURL et l'apprenti, avec deux créneaux en soirée."
+  "recap": "Maximilien, ex-ingénieur, auto-entrepreneur en rénovation, réfléchit à passer en EURL et à prendre un apprenti à la fin de l'été. Le message de masse du 23/07 puis une relance : « overbooked, 8h-21h tous les jours, relance-moi en septembre ». Vocal le 30/07 et le 28/08. Le 09/09, il reçoit le message de masse « C'est la rentrée, et si on parlait de toi ? » : ni créneau, ni référence à l'EURL, pas ouvert. Le 13/09 au soir, Lauric reprend en direct (EURL, apprenti) avec une proposition de 20 minutes au téléphone : Maximilien répond qu'il est passé en EURL et que le contrat de l'apprenti est signé, les créneaux s'enchaînent en direct et il accepte le lundi 21/09 à 19h30. Lauric lui demande son plus gros défi pour le lancement de l'EURL.",
+  "verdict": "La relance personnalisée (sa demande de septembre, l'EURL, l'apprenti, un créneau précis) a débloqué l'appel en une soirée, là où le message de masse du 09/09 n'avait rien donné. Appel du lundi 21/09 à 19h30 à confirmer la veille."
  },
  "fseg.37": {
   "issue": "reporte",
@@ -282,7 +282,7 @@
   "issue": "booke",
   "cible": "dirigeante (activité à préciser), visio du 17/09",
   "type": "rendez-vous confirmé en direct",
-  "recap": "Marie a liké l'ancien script le 14/08, scan envoyé le 18/08. Un premier rendez-vous était calé le 27/08 à 14h30, puis la visio a été refixée au 17/09. Le 09/09 Lauric confirme la visio et demande ses sujets prioritaires pour la fin d'année : message pas encore ouvert.",
+  "recap": "Marie a liké l'ancien script le 14/08, scan envoyé le 18/08. Un premier rendez-vous était calé le 27/08 à 14h30, puis la visio a été refixée au 17/09. Le 09/09 Lauric confirme la visio et demande ses sujets prioritaires pour la fin d'année : message pas encore ouvert. Le 13/09, Lauric relance avec une question courte sur son sujet prioritaire pour le jeudi 17 : pas encore de réponse.",
   "verdict": "Visio du 17/09 à préparer. Elle n'a pas donné ses sujets prioritaires : relancer par une question courte 48 h avant, sinon l'appel démarre à froid."
  }
 }

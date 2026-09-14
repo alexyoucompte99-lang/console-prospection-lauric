@@ -1,5 +1,5 @@
 {
-"releve": "12/09/2026",
+"releve": "14/09/2026",
 "analyse": [
 {
 "titre": "Les chiffres (relevé du 09/09, conversations depuis mars)",
@@ -54,6 +54,172 @@
 ],
 "convs": [
 {
+"pseudo": "maximiliencausse",
+"nom": "Maximilien Causse",
+"thread": "340282366841710301244260146071271376480",
+"variante": "relance2808",
+"premier": {
+"text": "[vocal]",
+"t": "28/08/2026 11:34",
+"partial": true
+},
+"complet": false,
+"nItems": 21,
+"propose": {
+"text": "Salut Maximilien, comme convenu je reviens vers toi en septembre. Tu en es où sur l'EURL et l'apprenti ? Je te propose 20 minutes au téléphone pour en parler : mardi 19h30 ou jeudi 19h30 ?",
+"t": "13/09/2026 20:09",
+"ts": 1789322982,
+"n": 2,
+"vocal": false
+},
+"avant": {
+"msgsLead": 1,
+"msgsLauric": 4,
+"jours": 48.4
+},
+"apres": {
+"repondu": 6,
+"texte": "Hello 👋 je suis passé en eurl avant hier. Le contrat avec l’apprenti est fait ✅. \nÇa va on peut programmer cela jeudi soir ce sera plus simple. causse.maximilien@omnitech-renovation.fr pour l’invitation comme ça je l’enregistre dans l’agenda \nPour être transparent je ne me souviens plus ce que tu proposes, il faudra que tu me refasses une présentation. Je n’ai meme pas encore écouté tes vocaux… vraiment je suis toujours en train de courir et en manque de temps même les week-ends. Non le reste cette semaine c’est overbooké j’ai 4 énormes projets en même temps et ça va être super chaud. Semaine ",
+"t": "13/09/2026 20:13",
+"vu": true
+},
+"issue": "booke",
+"booked": [],
+"conv": "https://www.instagram.com/direct/t/340282366841710301244260146071271376480/",
+"msgs": [
+{
+"w": "L",
+"t": "27/07/2026 09:27",
+"ty": "text",
+"x": "Bonjour Maximilien, j’espère que tu vas bien.\n\nAs-tu bien reçu mon message?"
+},
+{
+"w": "P",
+"t": "30/07/2026 12:56",
+"ty": "text",
+"x": "Désolé pour l’absence de réponse je suis absolument overbooked en ce moment je fais des jours de 8hoo à 21h quasiment tous les jours. Si ça te va relance moi en septembre."
+},
+{
+"w": "L",
+"t": "30/07/2026 15:06",
+"ty": "voice_media",
+"x": ""
+},
+{
+"w": "L",
+"t": "28/08/2026 11:34",
+"ty": "voice_media",
+"x": ""
+},
+{
+"w": "L",
+"t": "09/09/2026 10:28",
+"ty": "text",
+"x": "⏰C'est la rentrée Maximilien \n\nEt si on prenait du temps pour parler de toi ? \n\nOui, de TOI. \n\nLes dirigeants sont trop souvent les grands oubliés. \nTout le monde parle \"clients\" ou encore \"chiffre d'affaires\" etc... \n\nOn en parle ensemble pour rompre avec l'isolement ?"
+},
+{
+"w": "L",
+"t": "13/09/2026 20:09",
+"ty": "text",
+"x": "Salut Maximilien, comme convenu je reviens vers toi en septembre. Tu en es où sur l'EURL et l'apprenti ? Je te propose 20 minutes au téléphone pour en parler : mardi 19h30 ou jeudi 19h30 ?"
+},
+{
+"w": "P",
+"t": "13/09/2026 20:13",
+"ty": "text",
+"x": "Hello 👋 je suis passé en eurl avant hier. Le contrat avec l’apprenti est fait ✅. \nÇa va on peut programmer cela jeudi soir ce sera plus simple. causse.maximilien@omnitech-renovation.fr pour l’invitation comme ça je l’enregistre dans l’agenda \nPour être transparent je ne me souviens plus ce que tu proposes, il faudra que tu me refasses une présentation."
+},
+{
+"w": "P",
+"t": "13/09/2026 20:14",
+"ty": "text",
+"x": "Je n’ai meme pas encore écouté tes vocaux… vraiment je suis toujours en train de courir et en manque de temps même les week-ends."
+},
+{
+"w": "L",
+"t": "13/09/2026 20:20",
+"ty": "text",
+"x": "Félicitations Maximilien, une sacrée étape symbolique !\n\nJ'aide des jeunes dirigeants comme toi à structurer leur boîte pour qu'elle soit rentable d'abord... et la plus autonome ensuite. \n\nTon timing est juste parfait ✅"
+},
+{
+"w": "L",
+"t": "13/09/2026 20:20",
+"ty": "text",
+"x": "Je viens de regarder, le temps de te répondre le créneau de jeudi vient de partir à l'instant."
+},
+{
+"w": "L",
+"t": "13/09/2026 20:20",
+"ty": "text",
+"x": "Un autre moment dans la semaine ? \nDemain ?"
+},
+{
+"w": "P",
+"t": "13/09/2026 20:21",
+"ty": "text",
+"x": "Non le reste cette semaine c’est overbooké j’ai 4 énormes projets en même temps et ça va être super chaud. Semaine pro je pense que ça pourrait le faire."
+},
+{
+"w": "L",
+"t": "13/09/2026 20:22",
+"ty": "text",
+"x": "Jeudi 18h30 ?"
+},
+{
+"w": "L",
+"t": "13/09/2026 20:22",
+"ty": "text",
+"x": "Juste avant ?"
+},
+{
+"w": "L",
+"t": "13/09/2026 20:22",
+"ty": "text",
+"x": "Sinon on se cale tranquillement semaine d'après si c'est mieux pour toi"
+},
+{
+"w": "P",
+"t": "13/09/2026 20:23",
+"ty": "text",
+"x": "Non ça fera trop juste faut que je ramène les gars au point de rdv etc…"
+},
+{
+"w": "P",
+"t": "13/09/2026 20:23",
+"ty": "text",
+"x": "Oui"
+},
+{
+"w": "L",
+"t": "13/09/2026 20:24",
+"ty": "text",
+"x": "Lundi soir 21 septembre"
+},
+{
+"w": "L",
+"t": "13/09/2026 20:29",
+"ty": "text",
+"x": "Lundi 21/09 à 19h30 ça peut le faire pour toi ? \n\nAprès je monte sur Paris pour un événement et des tournages"
+},
+{
+"w": "P",
+"t": "13/09/2026 20:30",
+"ty": "text",
+"x": "Oui ça pourrait le faire je pense"
+},
+{
+"w": "L",
+"t": "13/09/2026 20:37",
+"ty": "text",
+"x": "Pour rendre ce moment à grande valeur ajoutée, quels sujets je peux préparer ? \n\nC'est quoi ton plus gros défi pour le lancement de l'eurl ?"
+}
+],
+"recap": "Maximilien, ex-ingénieur, auto-entrepreneur en rénovation, réfléchit à passer en EURL et à prendre un apprenti à la fin de l'été. Le message de masse du 23/07 puis une relance : « overbooked, 8h-21h tous les jours, relance-moi en septembre ». Vocal le 30/07 et le 28/08. Le 09/09, il reçoit le message de masse « C'est la rentrée, et si on parlait de toi ? » : ni créneau, ni référence à l'EURL, pas ouvert. Le 13/09 au soir, Lauric reprend en direct (EURL, apprenti) avec une proposition de 20 minutes au téléphone : Maximilien répond qu'il est passé en EURL et que le contrat de l'apprenti est signé, les créneaux s'enchaînent en direct et il accepte le lundi 21/09 à 19h30. Lauric lui demande son plus gros défi pour le lancement de l'EURL.",
+"cible": "auto-entrepreneur BTP, passage en EURL, futur apprenti",
+"type": "message de masse 1h offerte",
+"verdict": "La relance personnalisée (sa demande de septembre, l'EURL, l'apprenti, un créneau précis) a débloqué l'appel en une soirée, là où le message de masse du 09/09 n'avait rien donné. Appel du lundi 21/09 à 19h30 à confirmer la veille."
+},
+{
 "pseudo": "thineymarie",
 "nom": "Marie Thiney",
 "thread": "340282366841710301244260417967296917140",
@@ -63,7 +229,7 @@
 "t": "12/08/2026 15:34"
 },
 "complet": true,
-"nItems": 5,
+"nItems": 6,
 "propose": {
 "text": "Bjr Marie, \n\nJe te confirme notre visio du 17/09 ! \n\nAfin de rendre ce moment à grande valeur, pourrais-tu me donner les sujets prioritaires pour toi sur cette fin d'année ? \n\nBelle journée",
 "t": "09/09/2026 10:20",
@@ -115,9 +281,15 @@
 "t": "09/09/2026 10:20",
 "ty": "text",
 "x": "Bjr Marie, \n\nJe te confirme notre visio du 17/09 ! \n\nAfin de rendre ce moment à grande valeur, pourrais-tu me donner les sujets prioritaires pour toi sur cette fin d'année ? \n\nBelle journée"
+},
+{
+"w": "L",
+"t": "13/09/2026 20:26",
+"ty": "text",
+"x": "Hello Marie, on se voit jeudi 17. \n\nUne question rapide pour préparer : c'est quoi le sujet numéro un que tu veux régler d'ici la fin de l'année ?"
 }
 ],
-"recap": "Marie a liké l'ancien script le 14/08, scan envoyé le 18/08. Un premier rendez-vous était calé le 27/08 à 14h30, puis la visio a été refixée au 17/09. Le 09/09 Lauric confirme la visio et demande ses sujets prioritaires pour la fin d'année : message pas encore ouvert.",
+"recap": "Marie a liké l'ancien script le 14/08, scan envoyé le 18/08. Un premier rendez-vous était calé le 27/08 à 14h30, puis la visio a été refixée au 17/09. Le 09/09 Lauric confirme la visio et demande ses sujets prioritaires pour la fin d'année : message pas encore ouvert. Le 13/09, Lauric relance avec une question courte sur son sujet prioritaire pour le jeudi 17 : pas encore de réponse.",
 "cible": "dirigeante (activité à préciser), visio du 17/09",
 "type": "rendez-vous confirmé en direct",
 "verdict": "Visio du 17/09 à préparer. Elle n'a pas donné ses sujets prioritaires : relancer par une question courte 48 h avant, sinon l'appel démarre à froid."
@@ -309,8 +481,8 @@
 },
 "avant": {
 "msgsLead": 1,
-"msgsLauric": 6,
-"jours": 32.7
+"msgsLauric": 5,
+"jours": 32.0
 },
 "apres": {
 "repondu": 5,
@@ -322,12 +494,6 @@
 "booked": [],
 "conv": "https://www.instagram.com/direct/t/340282366841710301244285445757659694845/",
 "msgs": [
-{
-"w": "L",
-"t": "06/08/2026 15:39",
-"ty": "text",
-"x": "Bonjour! J’espère que vous allez bien.\n\nVous avez bien reçu mon message? :)"
-},
 {
 "w": "P",
 "t": "07/08/2026 07:46",
@@ -447,6 +613,12 @@
 "t": "12/09/2026 08:33",
 "ty": "text",
 "x": "Salut Lauric ! \n\nJe prends le temps de regarder quand je suis au calme, merci beaucoup ! \n\nTrès bon week-end à toi aussi"
+},
+{
+"w": "L",
+"t": "12/09/2026 11:06",
+"ty": "text",
+"x": "Super ça, on se tient au courant et n’hésite pas si t’as des questions ou des points sur lesquels tu veux échanger"
 }
 ],
 "recap": "Paul André, société de nettoyage (shampouineuses). Conversation de 35 jours : vocaux, lien du scan, 4 relances sans réponse. Le 08/09 à 7h52, une question simple (« êtes-vous ouvert à parler de votre entreprise et des sujets qui vous bloquent ? ») : oui en 4 minutes, créneau fixé pour 13h le jour même, appel passé sur son numéro perso, suite sur WhatsApp.",
@@ -942,7 +1114,7 @@
 },
 "avant": {
 "msgsLead": 1,
-"msgsLauric": 1,
+"msgsLauric": 0,
 "jours": 0.0
 },
 "apres": {
@@ -955,12 +1127,6 @@
 "booked": [],
 "conv": "https://www.instagram.com/direct/t/340282366841710301244259222036911677174/",
 "msgs": [
-{
-"w": "L",
-"t": "25/08/2026 13:52",
-"ty": "voice_media",
-"x": ""
-},
 {
 "w": "P",
 "t": "25/08/2026 13:58",
@@ -1080,6 +1246,12 @@
 "t": "09/09/2026 09:50",
 "ty": "text",
 "x": "C'est une super nouvelle, je suis ravie de pouvoir travailler avec toi dans ton développement d'activité 😊\n\nAucun souci pour le délai. Et même si tu veux juste verser un acompte pour \"bloquer\" et démarrer au plus vite, je peux le faire aussi. \n\nToutes les solutions envisageables pour servir notre collaboration sont les bienvenues. \n\nBelle journée à toi"
+},
+{
+"w": "L",
+"t": "13/09/2026 20:31",
+"ty": "text",
+"x": "Bonjour Véronique, on a dit le mois prochain pour le budget. \n\nJe te propose de bloquer la date de démarrage maintenant : première séance la semaine du 6 octobre, mardi ou jeudi ? \n\nÇa te laisse le temps côté compta."
 }
 ],
 "recap": "Véronique, activité B2B en développement. Proposition d'échange par vocal le 25/08 ; elle propose elle-même deux créneaux, décale une fois, visio faite le 03/09 à 11h. Proposition d'accompagnement envoyée par mail (objectif 10 clients B2B en 4 mois). Le 09/09 : « je réponds oui, mais légèrement plus tard, je le prévois dans ma compta d'ici le mois prochain, je reviens vers toi ». Lauric a proposé un acompte pour bloquer et démarrer plus tôt, sans réponse depuis.",
@@ -2364,7 +2536,7 @@
 "vocal": false
 },
 "avant": {
-"msgsLead": 3,
+"msgsLead": 2,
 "msgsLauric": 6,
 "jours": 24.8
 },
@@ -2378,12 +2550,6 @@
 "booked": [],
 "conv": "https://www.instagram.com/direct/t/340282366841710301244260685071769835259/",
 "msgs": [
-{
-"w": "P",
-"t": "02/07/2026 14:07",
-"ty": "text",
-"x": "Bonjour \nOui bien reçu \nDans le contenu pourquoi pas aide au management motivation d’équipe ! Trouver du temps une recette de potion magique pour avoir plus de temps ? Blague à part mis à part la vidéo de l’opticien le reste est sympa de ce que je vois"
-},
 {
 "w": "P",
 "t": "02/07/2026 14:07",
@@ -2503,6 +2669,12 @@
 "t": "28/08/2026 11:42",
 "ty": "text",
 "x": "Hello Camille! Tu vas bien ?\n\nAs-tu une disponibilité pour la semaine prochaine ?😊"
+},
+{
+"w": "L",
+"t": "13/09/2026 20:30",
+"ty": "text",
+"x": "Hello Camille, comment s'est passée ta reprise ? \n\nAucune pression, je voulais simplement prendre de tes nouvelles. \n\nSi tu as envie de faire le point sur ta situation, je suis là."
 }
 ],
 "recap": "Camille, responsable de magasin (marge, concurrence, fidéliser l'équipe). Le message de masse du 27/07 tombe pendant son arrêt maladie : elle répond qu'elle a été arrêtée 2 semaines, épuisée, malaises, et propose septembre. Lauric compatit, puis relance le 18/08 (« un point sur ta situation ? »), le 19/08 (jeudi ou vendredi ?), le 28/08. Elle décline (vacances en famille).",
@@ -2678,7 +2850,7 @@
 },
 "avant": {
 "msgsLead": 5,
-"msgsLauric": 8,
+"msgsLauric": 7,
 "jours": 20.9
 },
 "apres": {
@@ -2691,12 +2863,6 @@
 "booked": [],
 "conv": "https://www.instagram.com/direct/t/340282366841710301244259075195929477901/",
 "msgs": [
-{
-"w": "L",
-"t": "04/07/2026 16:17",
-"ty": "voice_media",
-"x": ""
-},
 {
 "w": "L",
 "t": "04/07/2026 16:18",
@@ -2816,6 +2982,12 @@
 "t": "08/09/2026 08:19",
 "ty": "text",
 "x": "Bonjour Jessica, \n\nLa rentrée des enfants s'est bien passée ? \n\nAs-tu une dispo cette semaine pour faire une visio avec moi ?"
+},
+{
+"w": "L",
+"t": "13/09/2026 20:14",
+"ty": "text",
+"x": "Bonsoir Jessica, \n\nQu'avez vous mis en place avec ton mari pour développer les clients ?"
 }
 ],
 "recap": "Jessica, entreprise de travaux du couple (clients via assurances, voudrait bailleurs et syndics). Questions précises sur le coaching les 8-10/07. Le 25/07, quinze jours après sa dernière réponse : « 1h d'accompagnement offert, tes dispos la semaine prochaine ? ». Silence, vacances, « je verrai à mon retour », puis le 29/08 « j'attends que la rentrée se passe ». Relance visio le 08/09.",
@@ -2988,123 +3160,6 @@
 "cible": "gérante de salon de coiffure, 1 salariée, 8h-19h sans pause",
 "type": "message de masse 1h offerte",
 "verdict": "Réactive mais sans créneau possible ; trois tentatives en 3 minutes ont mis la pression. Elle a repris en vocal le 24/08 : lui proposer un appel de 20 min un lundi (jour de fermeture des salons)."
-},
-{
-"pseudo": "maximiliencausse",
-"nom": "Maximilien Causse",
-"thread": "340282366841710301244260146071271376480",
-"variante": "relance2808",
-"premier": {
-"text": "Hello Maximilien, merci pour ton like sur mon post! Je suis toujours curieux de savoir qui résonne avec ce que je partage.\n\nQue fais-tu dans la vie?🙂",
-"t": "29/06/2026 22:10"
-},
-"complet": true,
-"nItems": 13,
-"propose": {
-"text": "Hello Maximilien, j’espère que tu vas bien ! \n\nTout simplement pour t’informer que j’offre 1h de coaching aux entrepreneurs de ma communauté. \n\nAu vu de notre conversation, et de ce que j’ai vu de ton profil je suis certain que je peux t’apporter beaucoup de valeur.\n\nAttention, ce n’est en aucun cas un appel de vente déguisé.\n\nEst-ce que tu as une heure de libre la semaine prochaine ?😀",
-"t": "23/07/2026 21:11",
-"ts": 1784833897,
-"n": 1,
-"vocal": false
-},
-"avant": {
-"msgsLead": 2,
-"msgsLauric": 5,
-"jours": 24.0
-},
-"apres": {
-"repondu": 1,
-"texte": "Désolé pour l’absence de réponse je suis absolument overbooked en ce moment je fais des jours de 8hoo à 21h quasiment tous les jours. Si ça te va relance moi en septembre.",
-"t": "30/07/2026 12:56",
-"vu": true
-},
-"issue": "reporte",
-"booked": [],
-"conv": "https://www.instagram.com/direct/t/340282366841710301244260146071271376480/",
-"msgs": [
-{
-"w": "L",
-"t": "29/06/2026 22:10",
-"ty": "text",
-"x": "Hello Maximilien, merci pour ton like sur mon post! Je suis toujours curieux de savoir qui résonne avec ce que je partage.\n\nQue fais-tu dans la vie?🙂"
-},
-{
-"w": "P",
-"t": "29/06/2026 22:13",
-"ty": "text",
-"x": "Bonsoir Lauric, j’ai commencé auto entrepreneur il y a quelques mois dans le btp après quelques années en ingénierie électrique optoélectronique et gestion d’affaires. Je pense passer dans peu de temps en eurl mais j’attends la fin de l’été pour prendre ma décision et peut être prendre un apprenti"
-},
-{
-"w": "L",
-"t": "30/06/2026 10:06",
-"ty": "text",
-"x": "Hello Maximilien !\n\nC’est top ce sont des choses auxquelles il faut bien réfléchir.\n\nTu as un sacré passé en tous cas visiblement, qu’est ce qui t’as donné envie de te reconvertir ?🙂"
-},
-{
-"w": "L",
-"t": "01/07/2026 15:01",
-"ty": "text",
-"x": "Hello Maximilien! Tu as bien reçu mon message?\n\nBon après-midi !😊"
-},
-{
-"w": "P",
-"t": "01/07/2026 19:20",
-"ty": "text",
-"x": "Le salariat ne paie pas et les perspectives d’évolution salariale sont inexistantes. Et puis je trouve ça plus sympa la rénovation."
-},
-{
-"w": "L",
-"t": "02/07/2026 14:16",
-"ty": "text",
-"x": "Super! Le principal c’est d’aimer son travail tant que celui-ci paie les factures."
-},
-{
-"w": "L",
-"t": "02/07/2026 14:16",
-"ty": "text",
-"x": "Aujourd’hui quels sont tes objectifs dans les prochains mois?"
-},
-{
-"w": "L",
-"t": "23/07/2026 21:11",
-"ty": "text",
-"x": "Hello Maximilien, j’espère que tu vas bien ! \n\nTout simplement pour t’informer que j’offre 1h de coaching aux entrepreneurs de ma communauté. \n\nAu vu de notre conversation, et de ce que j’ai vu de ton profil je suis certain que je peux t’apporter beaucoup de valeur.\n\nAttention, ce n’est en aucun cas un appel de vente déguisé.\n\nEst-ce que tu as une heure de libre la semaine prochaine ?😀"
-},
-{
-"w": "L",
-"t": "27/07/2026 09:27",
-"ty": "text",
-"x": "Bonjour Maximilien, j’espère que tu vas bien.\n\nAs-tu bien reçu mon message?"
-},
-{
-"w": "P",
-"t": "30/07/2026 12:56",
-"ty": "text",
-"x": "Désolé pour l’absence de réponse je suis absolument overbooked en ce moment je fais des jours de 8hoo à 21h quasiment tous les jours. Si ça te va relance moi en septembre."
-},
-{
-"w": "L",
-"t": "30/07/2026 15:06",
-"ty": "voice_media",
-"x": ""
-},
-{
-"w": "L",
-"t": "28/08/2026 11:34",
-"ty": "voice_media",
-"x": ""
-},
-{
-"w": "L",
-"t": "09/09/2026 10:28",
-"ty": "text",
-"x": "⏰C'est la rentrée Maximilien \n\nEt si on prenait du temps pour parler de toi ? \n\nOui, de TOI. \n\nLes dirigeants sont trop souvent les grands oubliés. \nTout le monde parle \"clients\" ou encore \"chiffre d'affaires\" etc... \n\nOn en parle ensemble pour rompre avec l'isolement ?"
-}
-],
-"recap": "Maximilien, ex-ingénieur, auto-entrepreneur en rénovation, réfléchit à passer en EURL et à prendre un apprenti à la fin de l'été. Le message de masse du 23/07 puis une relance : « overbooked, 8h-21h tous les jours, relance-moi en septembre ». Vocal le 30/07 et le 28/08. Le 09/09, il reçoit le message de masse « C'est la rentrée, et si on parlait de toi ? » : ni créneau, ni référence à l'EURL, pas ouvert.",
-"cible": "auto-entrepreneur BTP, passage en EURL, futur apprenti",
-"type": "message de masse 1h offerte",
-"verdict": "Il avait donné la date lui-même (septembre) et la relance de rentrée est partie en message de masse. Reprendre en direct sur l'EURL et l'apprenti, avec deux créneaux en soirée."
 },
 {
 "pseudo": "fseg.37",
