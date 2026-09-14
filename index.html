@@ -437,6 +437,53 @@
   .bigstat { font-size: 30px; font-weight: 700; margin: 2px 0 0; }
   .bigstat small { font-size: 13px; font-weight: 500; color: var(--muted); }
 
+  /* sous-onglets d'un pôle (Setting) */
+  .subnav { display: flex; flex-wrap: wrap; gap: 10px 22px; margin: -8px 0 22px; padding: 12px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+  .subgrp { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  .subgl { width: 100%; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+  .subnav button { font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; white-space: nowrap; border: 1px solid var(--border); background: var(--page); color: var(--ink-2); border-radius: 999px; padding: 5px 12px; }
+  .subnav button:hover { border-color: var(--accent); color: var(--accent); }
+  .subnav button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .subnav button .count { font-weight: 500; font-size: 12px; opacity: .8; }
+  .subnav button.on .count { color: #fff; }
+
+  /* Vue d'ensemble : entonnoir par pôle */
+  .ovfun { padding: 8px 18px 14px; }
+  .ovgrp { border-left: 4px solid var(--pc); padding: 10px 0 8px 14px; margin-top: 10px; }
+  .ovgrp-h { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--pc); margin-bottom: 6px; cursor: pointer; background: none; border: 0; padding: 0; font-family: inherit; }
+  .ovgrp-h:hover { text-decoration: underline; }
+  .ovgrp-h small { text-transform: none; letter-spacing: 0; font-weight: 500; color: var(--muted); font-size: 12px; }
+  .ovrow { display: grid; grid-template-columns: 210px 1fr; gap: 12px; align-items: center; padding: 4px 0; }
+  .ovlab { font-size: 13.5px; font-weight: 600; color: var(--ink); text-align: right; line-height: 1.2; }
+  .ovlab small { display: block; font-weight: 500; color: var(--muted); font-size: 11.5px; }
+  .ovbar-zone { display: flex; align-items: center; gap: 10px; min-height: 30px; flex-wrap: wrap; }
+  .ovbar { height: 26px; border-radius: 4px; min-width: 4px; background: var(--pc); opacity: .85; }
+  .ovval { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ovrate { font-size: 12.5px; font-weight: 600; color: var(--ink-2); background: color-mix(in srgb, var(--pc) 12%, transparent); border-radius: 999px; padding: 1px 8px; white-space: nowrap; }
+  .ovsub { font-size: 12px; color: var(--muted); }
+  .ovmiss { font-size: 12.5px; color: var(--muted); font-style: italic; }
+  .ovmiss a, .ovgo { color: var(--accent); font-weight: 600; cursor: pointer; text-decoration: none; }
+  .ovpoles { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+  .ovpole { border-top: 3px solid var(--pc); background: color-mix(in srgb, var(--pc) 5%, var(--card)); display: flex; flex-direction: column; gap: 6px; }
+  .ovpole h3 { margin: 0 0 4px; font-size: 13px; letter-spacing: .05em; text-transform: uppercase; color: var(--pc); }
+  .ovkv { display: flex; justify-content: space-between; gap: 8px; font-size: 13.5px; color: var(--ink-2); }
+  .ovkv b { color: var(--ink); font-variant-numeric: tabular-nums; }
+  .ovtodo { font-size: 13px; color: var(--bad); font-weight: 600; cursor: pointer; }
+  .ovtodo:hover { text-decoration: underline; }
+  .ovpole .ovgo { margin-top: auto; padding-top: 6px; font-size: 13px; }
+  @media (max-width: 640px) { .ovrow { grid-template-columns: 1fr; gap: 2px; } .ovlab { text-align: left; } }
+
+  /* lead magnet */
+  .lmcard { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+  .lmcard h3 { margin: 0 0 6px; font-size: 17px; }
+  .lmcard .yt { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: #000; }
+  .lmcard .yt iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  @media (max-width: 720px) { .lmcard { grid-template-columns: 1fr; } }
+  td.tdw { white-space: normal; min-width: 160px; max-width: 320px; text-align: left; }
+  .etqbtn { border-color: var(--bad); color: var(--bad); }
+  .etqbtn:hover { background: color-mix(in srgb, var(--bad) 10%, transparent); }
+
+  #v-kpis { grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); }
   #boot { padding: 60px 0; text-align: center; color: var(--muted); font-size: 14px; }
   [hidden] { display: none !important; }
 
@@ -487,19 +534,737 @@
   <div id="app" hidden>
     <div class="tabs" role="tablist" id="tabbar">
       <button data-tab="dash" class="on">📊 Vue d'ensemble</button>
+      <button data-tab="contenu">🎬 Contenu</button>
+      <button data-tab="setting">💬 Setting <span class="count" id="pole-setting-count"></span></button>
+      <button data-tab="closing">🤝 Closing <span class="count" id="pole-closing-count"></span></button>
       <button data-tab="todo">✅ To do <span class="count" id="todo-count"></span></button>
-      <button data-tab="arep">💬 À répondre <span class="count" id="arep-count"></span></button>
-      <button data-tab="eod">📝 EOD <span class="count" id="eod-count"></span></button>
-      <button data-tab="tally">🎯 Scans Tally <span class="count" id="tally-count"></span></button>
-      <button data-tab="leads">👤 Leads <span class="count" id="leads-count"></span></button>
-      <button data-tab="datas">📈 Datas</button>
-      <button data-tab="verif">🔍 EOD vs réel</button>
-      <button data-tab="calls">📞 Calls <span class="count" id="calls-count"></span></button>
-      <button data-tab="ventes">💰 Ventes <span class="count" id="ventes-count"></span></button>
-      <button data-tab="script">📣 Script setting <span class="count" id="script-count"></span></button>
-      <button data-tab="abonnes">🆕 Nouveaux abonnés <span class="count" id="abonnes-count"></span></button>
     </div>
     <input type="search" id="q" class="search" placeholder="🔍 Rechercher un prénom…" autocomplete="off">
+
+    <div id="tab-dash">
+    <div class="vkpis" id="cockpit" hidden style="margin-bottom:18px"></div>
+    <div class="alert" id="alert" hidden>
+      <span aria-hidden="true">&#9888;</span>
+      <span id="alert-text"></span>
+    </div>
+
+    <section>
+      <div class="sec-head">
+        <h2>L'entonnoir complet · 30 derniers jours</h2>
+        <span class="formnote" id="ov-period"></span>
+      </div>
+      <div class="card ovfun" id="ov-funnel"><p class="empty-note">Chargement…</p></div>
+      <p class="formnote" style="margin-top:8px" id="ov-funnel-note"></p>
+    </section>
+
+    <section>
+      <h2 style="margin-bottom:10px">Récap par pôle · ce qui compte aujourd'hui</h2>
+      <div class="ovpoles" id="ov-poles"></div>
+    </section>
+
+    <div class="card" id="eod-missing" hidden style="margin-bottom:24px"></div>
+    </div><!-- /tab-dash -->
+
+    <div id="tab-contenu" hidden>
+      <div id="tab-audience" class="pane">
+  <section>
+    <h2 class="hsec" style="--hc:var(--s5);margin-bottom:10px">👁 Portée du contenu · 30 jours</h2>
+    <div class="vkpis" id="ct-kpis"></div>
+    <p class="formnote" id="ct-note"></p>
+  </section>
+  <section>
+          <h2 class="hsec" style="--hc:var(--s3);margin-bottom:10px">📈 Abonnés du compte · relevé automatique 18 h</h2>
+          <div class="vkpis" id="nt-kpis"></div>
+          <div class="card">
+            <div id="nt-chart"></div>
+            <p class="formnote" style="margin-top:8px" id="nt-note"></p>
+          </div>
+        </section>
+        <section>
+          <h2 class="hsec" style="--hc:var(--s3);margin-bottom:10px">✍️ Impressions et abonnés · saisie</h2>
+          <div class="vkpis" id="track-tiles"></div>
+          <p class="formnote">Les abonnés sont relevés tout seuls chaque soir et via l'EOD de Cynthia. Les impressions ne remontent pas toutes seules : une fois par semaine, lire le chiffre « vues sur 30 jours » dans le tableau de bord professionnel Instagram et le saisir ici. Il alimente l'entonnoir de la Vue d'ensemble.</p>
+          <form class="card eodform" id="track-form" style="margin-top:14px">
+            <h3 class="mini-title">Saisie directe (Lauric)</h3>
+            <div class="frow2">
+              <div>
+                <label class="flab" for="t-date">Jour concerné</label>
+                <input type="date" id="t-date" required>
+              </div>
+              <div>
+                <label class="flab" for="t-subs">👥 Abonnés au total (optionnel)</label>
+                <input type="number" min="0" inputmode="numeric" id="t-subs">
+              </div>
+            </div>
+            <div>
+              <label class="flab" for="t-impr">👁 Vues / impressions sur les 30 derniers jours (tableau de bord professionnel Instagram)</label>
+              <input type="number" min="0" inputmode="numeric" id="t-impr" placeholder="ex : 48000">
+            </div>
+            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+              <button type="submit" class="send" id="t-send">Enregistrer le tracking</button>
+              <p class="sendmsg" id="t-msg" hidden></p>
+            </div>
+            <p class="formnote">Ces lignes alimentent seulement les compteurs ci-dessus : elles ne comptent pas comme un EOD et n'entrent dans aucune stat de setter.</p>
+          </form>
+        </section>
+      </div>
+    </div>
+
+    <div id="tab-setting" hidden>
+      <div class="subnav" id="subnav-setting">
+        <div class="subgrp"><span class="subgl">✉️ Premier message · setters</span>
+          <button data-pane="eod">📝 EOD <span class="count" id="eod-count"></span></button>
+          <button data-pane="abonnes">🆕 Nouveaux abonnés <span class="count" id="abonnes-count"></span></button>
+          <button data-pane="script">📣 Script et A/B</button>
+          <button data-pane="datas">📈 Chiffres des accroches</button>
+          <button data-pane="eodstats">📊 Chiffres EOD</button>
+          <button data-pane="verif">🔍 EOD vs réel</button>
+        </div>
+        <div class="subgrp"><span class="subgl">🎯 Lauric · dès que le lead répond</span>
+          <button data-pane="arep">💬 À répondre <span class="count" id="arep-count"></span></button>
+          <button data-pane="chauds">🔥 Leads chauds <span class="count" id="chauds-count"></span></button>
+          <button data-pane="lm">🎁 Lead magnet <span class="count" id="tally-count"></span></button>
+          <button data-pane="appels">📞 Appels proposés <span class="count" id="appels-count"></span></button>
+          <button data-pane="leads">👤 Tous les leads <span class="count" id="leads-count"></span></button>
+        </div>
+      </div>
+      <div id="tab-eod" class="pane" hidden>
+        <section>
+          <h2 style="margin-bottom:10px">Remplir l'EOD du jour</h2>
+          <form class="card eodform" id="eod-form">
+            <div class="frow2">
+              <div>
+                <label class="flab" for="f-date">Date du jour</label>
+                <input type="date" id="f-date" required>
+              </div>
+              <div>
+                <label class="flab">Setter</label>
+                <div class="setterpick" id="f-setters"></div>
+              </div>
+            </div>
+
+            <div>
+              <label class="flab">Accroches envoyées (proposant le scan)</label>
+              <div class="srcgrid">
+                <span></span><span class="gh">Vocaux</span><span class="gh">Écrits</span>
+                <span class="gl">Nouveaux abonnés</span>
+                <input type="number" min="0" inputmode="numeric" data-src="nouveaux" data-mode="vocal">
+                <input type="number" min="0" inputmode="numeric" data-src="nouveaux" data-mode="écrit">
+                <span class="gl">Anciens abonnés</span>
+                <input type="number" min="0" inputmode="numeric" data-src="anciens" data-mode="vocal">
+                <input type="number" min="0" inputmode="numeric" data-src="anciens" data-mode="écrit">
+                <span class="gl">Likes</span>
+                <input type="number" min="0" inputmode="numeric" data-src="likes" data-mode="vocal">
+                <input type="number" min="0" inputmode="numeric" data-src="likes" data-mode="écrit">
+                <span class="gl">Commentaires</span>
+                <input type="number" min="0" inputmode="numeric" data-src="commentaires" data-mode="vocal">
+                <input type="number" min="0" inputmode="numeric" data-src="commentaires" data-mode="écrit">
+                <span class="gl">Relances</span>
+                <input type="number" min="0" inputmode="numeric" data-src="relances" data-mode="vocal">
+                <input type="number" min="0" inputmode="numeric" data-src="relances" data-mode="écrit">
+              </div>
+              <p class="formnote" style="margin-top:6px">Laisse vide ce qui est à zéro. Vocal + écrit = total envoyé dans l'EOD.</p>
+            </div>
+
+            <div class="frow2">
+              <div>
+                <label class="flab" for="f-taux">Taux de réponses estimé (%)</label>
+                <input type="number" min="0" max="100" inputmode="numeric" id="f-taux">
+              </div>
+              <div>
+                <label class="flab" for="f-scanok">Leads ayant accepté le scan</label>
+                <input type="number" min="0" inputmode="numeric" id="f-scanok">
+              </div>
+            </div>
+            <div class="frow2">
+              <div>
+                <label class="flab" for="f-totinsta">Scans envoyés au total · Instagram</label>
+                <input type="number" min="0" inputmode="numeric" id="f-totinsta">
+              </div>
+              <div>
+                <label class="flab" for="f-totfb">Scans envoyés au total · Facebook</label>
+                <input type="number" min="0" inputmode="numeric" id="f-totfb">
+              </div>
+            </div>
+            <div id="f-subs-wrap" hidden>
+              <label class="flab" for="f-total-subs">👥 Nombre total d'abonnés du compte (relevé en fin de journée)</label>
+              <input type="number" min="0" inputmode="numeric" id="f-total-subs">
+              <p class="formnote" style="margin-top:4px" id="f-subs-hint">Le chiffre affiché dans le profil Insta, pas le gain du jour : la console calcule le gain toute seule.</p>
+            </div>
+            <div id="f-drapeau-wrap" hidden>
+              <label class="flab" for="f-drapeau">🚩 Nombre de personnes sur Insta qui ont l'étiquette drapeau (bien descendre et actualiser toutes les conversations)</label>
+              <input type="number" min="0" inputmode="numeric" id="f-drapeau">
+              <p class="formnote" style="margin-top:4px">C'est le nombre de leads qui ont l'étiquette drapeau.</p>
+            </div>
+            <div id="f-etq-wrap" hidden>
+              <label class="flab" for="f-etq-url">🏷️ URL des personnes mises en étiquette (leads chauds)</label>
+              <div style="display:flex;gap:8px">
+                <input type="url" id="f-etq-url" placeholder="https://www.instagram.com/pseudo" style="flex:1">
+                <button type="button" class="send" id="f-etq-add" style="padding:8px 16px;font-size:14px">Ajouter</button>
+              </div>
+              <div class="chiplist" id="f-etq-list"></div>
+              <p class="formnote" style="margin-top:4px">Colle une URL puis « Ajouter » : tu peux en mettre plusieurs d'affilée avant d'envoyer l'EOD. Elles vont dans Setting › 🔥 Leads chauds.</p>
+            </div>
+            <div>
+              <label class="flab" for="f-notes">Idées d'amélioration ou retours / questions</label>
+              <textarea id="f-notes"></textarea>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+              <button type="submit" class="send" id="f-send">Envoyer l'EOD</button>
+              <p class="sendmsg" id="f-msg" hidden></p>
+            </div>
+            <p class="formnote">Envoyé dans le même Google Form que d'habitude : le Sheet et la console se mettent à jour pareil.</p>
+          </form>
+        </section>
+
+        <section>
+          <div class="sec-head">
+            <h2>Pilotage · quoi améliorer pour booker plus de calls</h2>
+            <div class="tally-counts" id="pilot-pills" style="margin:0"></div>
+          </div>
+          <div class="pilot" id="pilot"></div>
+        </section>
+
+        <section>
+          <h2 style="margin-bottom:10px">Derniers EOD reçus</h2>
+          <div class="rlist" id="eod-list"></div>
+        </section>
+    
+      </div>
+      <div id="tab-abonnes" class="pane" hidden>
+        <div class="tally-counts" id="nf-pills"></div>
+        <section id="sec-nf-todo">
+          <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px">🚨 Pas encore contactés · message perso prêt à envoyer</h2>
+          <div id="nf-todo"></div>
+        </section>
+        <section id="sec-nf-local" hidden>
+          <h2 class="hsec" style="--hc:var(--s4);margin-bottom:10px">☑️ Cochés « contacté » à la main · vérification au prochain relevé</h2>
+          <div id="nf-local"></div>
+        </section>
+        <section id="sec-nf-ancien" hidden>
+          <details class="addeal">
+            <summary>🗂️ Anciens abonnés jamais contactés · relevé rétroactif <b id="nf-ancien-count"></b> · message perso prêt à envoyer</summary>
+            <p class="formnote" style="margin:10px 0 12px">Abonnés plus anciens que le suivi quotidien (ils suivent le compte depuis un moment) et qui n'ont aucune conversation dans la messagerie. À traiter au rythme de Lauric, ils ne comptent pas dans « À contacter ».</p>
+            <div id="nf-ancien"></div>
+          </details>
+        </section>
+        <section>
+          <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">🗂 Data · tous les nouveaux abonnés relevés</h2>
+          <div class="card">
+            <div class="tbl-scroll" style="margin-top:0" id="nf-data"></div>
+            <p class="formnote" style="margin-top:10px" id="nf-note"></p>
+          </div>
+        </section>
+        <div class="card" style="margin-top:14px">
+          <p class="rstats" style="margin:0">Chaque nuit vers 4 h, Claude relève les nouveaux abonnés du compte, vérifie dans la messagerie qui a déjà reçu un message (avec le texte envoyé, la date et le lien de la conversation) et prépare un premier message personnalisé pour les autres. <b>L'envoi reste 100% manuel</b> : ouvrir le profil, relire, adapter, envoyer, puis cocher « Contacté ». La coche est confirmée par le relevé suivant.</p>
+        </div>
+    
+      </div>
+      <div id="tab-script" class="pane" hidden>
+        <section>
+          <h2 class="hsec" style="--hc:var(--s2);margin-bottom:10px">Le process étiquette (leads chauds)</h2>
+          <div class="card">
+            <ol class="steps">
+              <li><span>Premier message <b>hyper personnalisé</b> (variante A ou B selon le setter) : au moins <b>1 élément de personnalisation</b> vu sur le profil (« J'ai vu que... »), <b>jamais deux messages identiques</b>. On fait de l'humain, pas du ManyChat. Et on <b>se relit avant d'envoyer</b>.</span></li>
+              <li><span>Le prospect répond → on vérifie s'il est <b>dans la cible</b> (dirigeant, manager ou futur manager).</span></li>
+              <li><span>Dans la cible <b>et il semble chaud</b> (vrai intérêt montré) → on met l'<b>étiquette drapeau</b> sur la conversation Insta et on <b>envoie l'URL du profil sur le groupe WhatsApp</b>.</span></li>
+              <li><span>Dès que l'étiquette est posée, <b>Lauric prend le relais direct</b> sur la conversation.</span></li>
+              <li><span><b>Cynthia, tous les soirs</b> : reporte les URLs du groupe dans l'EOD de la console (champ « URL des personnes mises en étiquette »). Elles atterrissent dans Setting › 🔥 Leads chauds.</span></li>
+              <li><span>Un setter ne sait pas comment personnaliser ? → il <b>envoie l'URL du profil sur le groupe</b> et on lui dit comment faire.</span></li>
+            </ol>
+            <p class="formnote" style="margin-top:12px">Le lead magnet (scan) s'envoie plus tard dans la conversation, jamais dans le premier message. Le report des étiquettes par l'EOD est la V1 : on testera des méthodes plus simples à l'usage.</p>
+          </div>
+        </section>
+
+
+        <section>
+          <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">A/B testing du premier message</h2>
+          <div class="pilot">
+            <div class="card" style="--tc:var(--s1);border-top:3px solid var(--s1)">
+              <div class="rhead"><span class="rname">Message A</span><span class="badge next">Constant</span><span class="badge">écrit long</span></div>
+              <div class="msgcard" id="msg-a">Hello [Prénom] !
+  Bienvenue et merci de me suivre 🙏
+  [Personnalisation « J'ai vu que... »]
+
+  Tu l'as sûrement vu, ici je parle aux dirigeants principalement 😊
+
+  J'ai dirigé pendant 10 ans je connais par cœur les défis :
+  Tout porter sur ses épaules.
+  Le stress du chiffre.
+  Recruter, motiver ses employés.
+  Prendre une tonne de décisions.
+  Etc.
+
+  ✅ Depuis de nombreuses années j'applique une méthode que j'ai apprise auprès des plus grands dirigeants !
+  👉 + d'engagement
+  👉 + de business
+  C'est dingue la différence.
+
+  Et puis la cerise sur le gâteau : beaucoup moins de charge mentale pour le dirigeant 😎
+
+  Une question importante :
+  Tu es dirigeant d'une boîte ?</div>
+              <button type="button" class="copybtn" data-copy="msg-a">Copier le message A</button>
+              <p class="formnote" style="margin-top:8px">Remplacer [Prénom] et la ligne [Personnalisation] par un vrai détail du profil avant d'envoyer.</p>
+            </div>
+            <div class="card" style="--tc:var(--s5);border-top:3px solid var(--s5)">
+              <div class="rhead"><span class="rname">Message B</span><span class="badge src">Cynthia</span><span class="badge">écrit court + vocal</span></div>
+              <div class="msgcard" id="msg-b">Hello [Prénom] ! Merci beaucoup pour ton abonnement, ça fait super plaisir de te voir ici ! 😁
+
+  [Personnalisation « J'ai vu que... »]
+
+  J'aime bien savoir qui se cache derrière les nouveaux profils. Je te laisse un petit vocal pour me présenter rapidement !</div>
+              <button type="button" class="copybtn" data-copy="msg-b">Copier le message B</button>
+              <p class="formnote" style="margin-top:8px">Puis envoyer le vocal « VOCAL VARIANTE A » (dispo dans la conversation Insta avec Alex MAJOREL). Remplacer [Prénom] et la ligne [Personnalisation].</p>
+            </div>
+          </div>
+          <div class="card" style="margin-top:14px">
+            <h3 class="mini-title">Résultats par variante · 30 jours (via l'EOD)</h3>
+            <div class="tbl-scroll" style="margin-top:0" id="ab-stats"></div>
+          </div>
+        </section>
+
+
+        <section>
+          <h2 class="hsec" style="--hc:var(--s4);margin-bottom:10px">À tester ensuite</h2>
+          <div class="pilot">
+            <div class="card">
+              <h3 class="mini-title">Profil muet → vocal de Lauric</h3>
+              <p class="rstats" style="margin:0 0 6px">Si le profil ne donne aucune info à personnaliser : « Hello [Prénom] ! » + un vocal de Lauric.</p>
+              <div class="msgcard" id="msg-vocal">Trame du vocal : « Finalement je te fais un vocal. Je suis allé voir ton profil et je n'ai pas vu si tu étais à ton compte ou pas. Par contre j'ai vu que tu avais réagi à plusieurs de mes vidéos, j'imagine que tu es quelqu'un que ces sujets travaillent... »</div>
+            </div>
+            <div class="card">
+              <h3 class="mini-title">Proposition IA n°1 · la curieuse</h3>
+              <div class="msgcard" id="msg-p1">Hello [Prénom] ! Petite habitude ici : je vais voir le profil de chaque personne qui s'abonne. [J'ai vu que...] Du coup je suis curieux : tu diriges quoi en ce moment ?</div>
+              <button type="button" class="copybtn" data-copy="msg-p1">Copier</button>
+            </div>
+            <div class="card">
+              <h3 class="mini-title">Proposition IA n°2 · la question unique</h3>
+              <div class="msgcard" id="msg-p2">Bienvenue [Prénom] 🙏 Une seule question, promis : c'est quoi le sujet qui te prend le plus la tête dans ta boîte en ce moment ? Je lis tout et je réponds en vocal.</div>
+              <button type="button" class="copybtn" data-copy="msg-p2">Copier</button>
+            </div>
+            <div class="card">
+              <h3 class="mini-title">Proposition IA n°3 · la franche</h3>
+              <div class="msgcard" id="msg-p3">Hello [Prénom], merci pour l'abonnement ! Je ne vais pas te faire le message copié-collé habituel. [J'ai vu que...] Ça m'a donné envie de te poser la question en vrai : tu es à ton compte ou tu diriges une équipe ?</div>
+              <button type="button" class="copybtn" data-copy="msg-p3">Copier</button>
+            </div>
+          </div>
+          <p class="formnote" style="margin-top:10px">Les propositions IA sont à valider avec Lauric avant de partir en test. L'esprit recherché : un message qui sort de l'ordinaire, authentique sans chercher à prouver, franc, direct et gentil.</p>
+        </section>
+
+        <section>
+          <h2 class="hsec" style="--hc:var(--s5);margin-bottom:10px">💡 Boîte à idées</h2>
+          <form class="card eodform" id="idea-form">
+            <div>
+              <label class="flab" for="idea-text">Une idée de message, d'angle, d'amélioration du process ?</label>
+              <textarea id="idea-text" required></textarea>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+              <button type="submit" class="send">Envoyer l'idée</button>
+              <p class="sendmsg" id="idea-msg" hidden></p>
+            </div>
+          </form>
+          <div class="rlist" id="ideas-list" style="margin-top:14px"></div>
+        </section>
+    
+      </div>
+      <div id="tab-datas" class="pane" hidden>
+        <div id="datas-main">
+        <details class="ldet accdet" id="new-acc-details">
+          <summary class="accsum">
+            <span class="accsum-ico">🧪</span>
+            <span class="accsum-txt">
+              <span class="accsum-title">10 accroches à tester</span>
+              <span class="accsum-sub">Objectif : le taux de réponse · chacun note de 1 à 5 · <b id="accsum-votes">pas encore de vote</b></span>
+            </span>
+            <span class="accsum-cta"><span class="accsum-open">Voir les 10 messages</span><span class="accsum-close">Replier</span><span class="accsum-chev">▾</span></span>
+          </summary>
+          <div class="card" style="font-size:14px;line-height:1.5;margin:10px 0 12px">
+            <b>Ce que disent les 1 000 conversations</b> : ce qui fait répondre, c'est court, personnel, une seule question ouverte, envoyé le soir, et jamais de pitch en premier message (les 577 messages « je propose un scan » : 5 % ouverts, 2 % de réponses). Ce qui répond, ce sont autant des managers en poste que des dirigeants. Les 10 messages ci-dessous poussent ces leviers plus loin, parfois à contre-courant.<br>
+            <b>Protocole</b> : 30 envois par message, même setter, même créneau (18h-21h), à des nouveaux abonnés uniquement. On compare le taux de réponse à 48 h dans le tableau A/B ci-dessous. Remplacer [Prénom] et le détail du profil, jamais deux messages identiques d'affilée.
+          </div>
+          <p class="formnote" style="margin:0 0 8px">Chacun note chaque message de 1 à 5 sur sa propre ligne (Lauric, Constant, Maximilien, Alex). La meilleure moyenne remonte en premier. Les votes sont partagés : ils passent par le même Google Form que l'EOD (ligne « Vote »), une nouvelle note remplace la précédente.</p>
+          <div class="rlist" id="new-acc-list"></div>
+        </details>
+        <div id="leads-dates">
+          <div class="tally-counts" style="align-items:center">
+            <span class="formnote" style="margin:0 4px 0 0;min-width:70px">📅 Période :</span>
+            <button class="pill fpill on" data-r="all">toutes dates</button>
+            <button class="pill fpill" data-r="0">aujourd'hui</button>
+            <button class="pill fpill" data-r="week">semaine en cours</button>
+            <button class="pill fpill" data-r="7">7 j</button>
+            <button class="pill fpill" data-r="14">14 j</button>
+            <button class="pill fpill" data-r="30">30 j</button>
+            <label class="formnote" style="margin:0 0 0 8px">du <input type="date" id="leads-from" style="font:inherit;padding:3px 6px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:inherit"></label>
+            <label class="formnote" style="margin:0">au <input type="date" id="leads-to" style="font:inherit;padding:3px 6px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:inherit"></label>
+          </div>
+          <div class="tally-counts" style="align-items:center;margin-top:6px">
+            <span class="formnote" style="margin:0 4px 0 0;min-width:70px">🗓️ Mois :</span>
+            <span id="leads-months" style="display:contents"></span>
+          </div>
+        </div>
+        <div class="tiles" id="datas-kpis" style="margin:14px 0 18px"></div>
+        <section id="sec-leads-ab" hidden>
+          <h2 class="hsec" style="--hc:var(--s1);margin-bottom:10px" id="leads-ab-title">🧪 A/B des accroches (relevé Insta)</h2>
+          <div class="card">
+            <div class="tbl-scroll" style="margin-top:0" id="leads-ab"></div>
+            <p class="formnote" style="margin-top:10px" id="leads-ab-note"></p>
+          </div>
+        </section>
+        <section id="sec-leads-daily" hidden>
+          <h2 class="hsec" style="--hc:var(--s2);margin-bottom:10px">📅 Activité par jour (messages envoyés, vus, réponses)</h2>
+          <div class="card">
+            <div class="tbl-scroll" style="margin-top:0" id="leads-daily"></div>
+            <p class="formnote" style="margin-top:10px">Un lead est rattaché au jour de son accroche (ou de la relance du 28/08 pour les anciennes conversations). « Vus » et « réponses » sont l'état au dernier relevé, pas le jour de la vue.</p>
+          </div>
+        </section>
+        <section id="sec-leads-hours" hidden>
+          <h2 class="hsec" style="--hc:var(--s3);margin-bottom:10px">🕐 Réponses selon l'heure d'envoi de l'accroche</h2>
+          <div class="card"><div class="tbl-scroll" style="margin-top:0" id="leads-hours"></div>
+          <p class="formnote" style="margin-top:10px">Accroches seulement (relances et conversations en cours exclues), sur la période choisie.</p></div>
+        </section>
+        <section>
+          <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">🧠 Analyse · la cible, ce qui marche, ce qui ne marche pas, pistes (relevé du 07/09, 1 000 conversations)</h2>
+          <div class="card" style="font-size:14.5px;line-height:1.55">
+            <h3 class="mini-title">Qui répond vraiment</h3>
+            <ul style="margin:0 0 12px;padding-left:20px">
+              <li><b>Des managers en poste plus que des patrons</b> : Marion (directrice depuis 5 ans dans un groupe), Nesrine (9 personnes), Jean-Robert (« j'ai des responsabilités »), Sidi (responsable d'association), un chef de service public. Ils répondent à la question « tu diriges une équipe ? », pas à « tu es dirigeant d'une boîte ? ».</li>
+              <li><b>Des repreneurs et de très petites boîtes</b> : Thomas (reprise familiale), Anouck (signature le 15/09), Yannick (3 employés), Loïc (4 collaborateurs, 2e boutique), Mike (salle de CrossFit). C'est le cœur de cible et il est chaud : besoin de cadre, de recul et de décisions.</li>
+              <li><b>Beaucoup de hors cible qui suivent quand même</b> : commerciale pharma, cadre opérationnel, « simple employé », étudiants, comptes vides. Le contenu attire large, le tri se fait au premier message : d'où l'intérêt d'une question ouverte plutôt qu'un pitch.</li>
+            </ul>
+            <h3 class="mini-title">Ce qui marche</h3>
+            <ul style="margin:0 0 12px;padding-left:20px">
+              <li><b>Le message court personnalisé + 1 question</b> : 12 réponses sur 47 envois (26 %), 32 vus, et 28 réponses sur 71 pour les messages perso hors script (39 %). Même sur un compte privé, ça répond (3 réponses sur 9). Sur un profil vide, rien.</li>
+              <li><b>Éviter l'après-midi</b> : sur toutes les accroches, l'après-midi (12h-18h) est le pire créneau (8 % de réponses, 30 % de vus). Sur les envois de septembre, le soir (18h-23h) fait 13 % de réponses contre 3 % le matin, et les messages du soir sont lus dans les 2 heures. Le tableau « heure d'envoi » ci-dessus se met à jour avec la période choisie.</li>
+              <li><b>Répondre vite</b> : 6 réponses sur 10 arrivent en moins de 3 heures, les autres le lendemain matin. Après 3 jours, plus rien n'arrive.</li>
+            </ul>
+            <h3 class="mini-title">Ce qui ne marche pas</h3>
+            <ul style="margin:0 0 12px;padding-left:20px">
+              <li><b>Le message aux likers non abonnés</b> : 577 envois depuis août, 29 vus (5 %), 13 réponses. Il tombe dans les Demandes de messages. Les 36 de septembre : 0 vu. C'est la moitié de tout le volume envoyé, pour presque rien.</li>
+              <li><b>L'ancien script « Bienvenue sur mon compte, j'offre un scan »</b> : 172 envois, 87 vus, 11 réponses (6 %) et surtout des likes polis. Un pitch en premier message, sans question ouverte, n'ouvre pas la conversation.</li>
+              <li><b>Le script A long</b> : 10 envois, 2 réponses, dont aucune sur les 8 de septembre. Trop long, trop « moi », question fermée à la fin.</li>
+              <li><b>Le message B</b> n'a pas été testé (3 envois). Verdict impossible avant 20 à 30 envois.</li>
+              <li><b>Les relances de masse</b> (20/08 : 136 messages, 28/08 : 90 vocaux) : 59 % vus mais des réponses de politesse ou des « pas maintenant ». Elles réveillent des conversations mortes, pas des acheteurs.</li>
+              <li><b>La réactivité</b> : 42 leads ont écrit et attendent une réponse de notre côté (Setting › 💬 À répondre et 👤 Tous les leads). C'est le levier le plus rentable et il est gratuit.</li>
+            </ul>
+            <h3 class="mini-title">Pistes d'amélioration</h3>
+            <ol style="margin:0;padding-left:20px">
+              <li><b>Une seule accroche pour tous les setters</b> : « Merci pour le follow » + un détail vu sur le profil + une question ouverte (« tu es à ton compte ou tu diriges une équipe ? »). Le scan arrive après la première réponse, jamais avant.</li>
+              <li><b>Arrêter les messages aux likers non abonnés</b>, ou les réserver aux likers qui suivent déjà le compte.</li>
+              <li><b>Créneau d'envoi 18h-21h</b>, et bloc de réponses le matin pour traiter ce qui est arrivé la nuit.</li>
+              <li><b>Règle des 24 h</b> : répondre dans la journée, une seule relance à J+2, puis on passe. Pas de relance au-delà de 3 jours (cf. Damien).</li>
+              <li><b>Élargir la cible aux managers salariés</b> : ils répondent déjà, il faut une proposition adaptée (le scan parle « dirigeant », une version « manager » ferait la différence).</li>
+              <li><b>Tester le B pour de vrai</b> : 30 envois le soir, même semaine, puis comparer aux 30 perso.</li>
+              <li><b>Fiabiliser l'EOD</b> : l'onglet EOD vs réel montre l'écart entre déclaré et réel. Piloter sur les vrais chiffres, sinon on optimise du vent.</li>
+            </ol>
+          </div>
+        </section>
+        <section hidden>
+          <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">💡 Ce qu'on peut en tirer (analyse des relevés du 07 et 08/09)</h2>
+          <div class="card" style="font-size:14.5px;line-height:1.55">
+            <ul style="margin:0;padding-left:20px">
+              <li><b>Le script A long ne marche pas</b> : 0 réponse sur 8 envois, dont Damien qui l'a vu et n'a même pas répondu à la relance. Le message court personnalisé avec une seule question fait 5 réponses sur 17.</li>
+              <li><b>Le message B n'a pas été testé</b> : 3 envois seulement (02/09, Cynthia), aucun ouvert. Il faut 20 à 30 envois par variante avant de conclure.</li>
+              <li><b>Le taux d'ouverture dépend du compte, pas du message.</b> Les messages du 06/09 au soir ont été vus dans les 2 heures, sauf les comptes vides ou privés quasi morts. Un compte mort n'ouvre rien, quel que soit le texte.</li>
+              <li><b>Les réponses arrivent vite ou jamais</b> : les 5 réponses du 05-06/09 sont tombées entre 3 minutes et 2 h 30 après l'envoi. Au-delà de 24 h sans réponse, une relance ne sert à rien (cf. Damien).</li>
+              <li><b>Perso = meilleur pour la qualité</b> : les réponses perso donnent Marion (directrice depuis 5 ans), Nesrine (manage 9 personnes) et MJ (poste à responsabilité), mais aussi une commerciale pharma et un chef de service public.</li>
+              <li><b>Le message « merci pour ton like + scan » ne sert à rien</b> : 36 envois à des non-abonnés, 0 ouvert. Il tombe dans leurs Demandes de messages.</li>
+              <li><b>La relance de masse du 28/08</b> (90 conversations, vocaux) : 59 % vues, 13 réponses (14 %), mais surtout des réponses de politesse ou des « pas maintenant ».</li>
+              <li><b>Relevé rétroactif du 08/09 : 400 anciennes conversations retrouvées</b> (boîte relue jusqu'au 1er juillet, 1 395 conversations au total). Parmi les conversations d'avant le 11/08 : 97 leads avaient répondu, dont <b>49 dont le dernier message est resté sans réponse de notre côté</b> (pill « ✋ à répondre ») et 43 à réactiver après un échange retombé (pill « 🔁 à réactiver »). C'est du lead déjà chaud qui ne coûte aucun nouveau message d'accroche.</li>
+              <li><b>Le volume d'accroches s'est effondré depuis le 27/08</b> : 1 064 accroches en août (dont 216 le 11/08 et 129 le 15/08) contre 54 sur les 8 premiers jours de septembre. Les messages de suivi tiennent (76), pas la prospection froide.</li>
+            </ul>
+          </div>
+        </section>
+        <p class="formnote">Les datas viennent du relevé des conversations Instagram (API interne, lecture seule). La liste des leads et les priorités sont dans l'onglet 👤 Leads.</p>
+        </div>
+      </div>
+      <div id="tab-eodstats" class="pane" hidden>
+      <section>
+        <div class="sec-head">
+          <h2>Entonnoir</h2>
+          <div class="seg" id="seg" role="group" aria-label="Période">
+            <button data-w="1" id="btn-w1">Hier</button>
+            <button data-w="3">3 jours</button>
+            <button data-w="7" class="on">7 jours</button>
+            <button data-w="30">30 jours</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="funnel" id="funnel"></div>
+          <p class="fcover" id="fcover"></p>
+        </div>
+      </section>
+
+      <section id="sec-funnel2" hidden>
+        <h2 style="margin-bottom:10px">Du message à la vente · 30 jours</h2>
+        <div class="card">
+          <div class="funnel" id="funnel2"></div>
+          <p class="fcover" id="funnel2-note"></p>
+        </div>
+      </section>
+
+      <section>
+        <h2 style="margin-bottom:10px">Chiffres clés</h2>
+        <div class="tiles" id="tiles"></div>
+      </section>
+
+      <section>
+        <h2 style="margin-bottom:10px">Messages par catégorie</h2>
+        <div class="tiles" id="cat-tiles"></div>
+      </section>
+
+      <section>
+        <h2 style="margin-bottom:10px">Par setter</h2>
+        <div class="card">
+          <div class="tbl-scroll" style="margin-top:0" id="setter-tbl"></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="sec-head">
+          <h2>Messages par jour et par catégorie · 30 jours</h2>
+          <div class="legend" id="legend"></div>
+        </div>
+        <div class="card chart-scroll">
+          <div id="chart"></div>
+        </div>
+      </section>
+
+      <section>
+        <h2 style="margin-bottom:10px">Abonnés et scans par jour · 30 jours</h2>
+        <div class="minis" id="minis"></div>
+      </section>
+
+      <section class="card">
+        <details>
+          <summary>Détail jour par jour (30 derniers jours)</summary>
+          <div class="tbl-scroll" id="tbl"></div>
+        </details>
+      </section>
+      </div>
+      <div id="tab-verif" class="pane" hidden>
+        <section>
+          <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px">🔍 Ce que les setters déclarent dans l'EOD vs ce qu'on voit vraiment sur Instagram</h2>
+          <div class="tiles" id="verif-kpis" style="margin-bottom:14px"></div>
+          <div class="card">
+            <div class="tbl-scroll" style="margin-top:0" id="verif-table"></div>
+            <p class="formnote" style="margin-top:10px" id="verif-note"></p>
+          </div>
+        </section>
+    
+      </div>
+      <div id="tab-arep" class="pane" hidden>
+        <div class="tally-counts" id="arep-pills"></div>
+        <section>
+          <h2 class="hsec" style="--hc:var(--bad);margin-bottom:6px" id="arep-title">💬 Conversations qui attendent une réponse</h2>
+          <p class="formnote" id="arep-intro"></p>
+          <div class="rlist" id="arep-list" style="margin-top:12px"></div>
+        </section>
+        <details class="ldet" id="arep-done-details" style="margin:4px 0 22px">
+          <summary id="arep-done-sum">Déjà traitées</summary>
+          <div class="rlist" id="arep-done" style="margin-top:10px"></div>
+        </details>
+        <section id="arep-sec-syn" hidden>
+          <h2 class="hsec" style="--hc:var(--s5);margin-bottom:10px">🧠 Ce que ces conversations disent</h2>
+          <div class="card"><ul class="alist" id="arep-syn"></ul></div>
+        </section>
+        <p class="formnote" id="arep-note"></p>
+    
+      </div>
+      <div id="tab-chauds" class="pane" hidden>
+  <p class="formnote" style="margin:0 0 14px">Les leads marqués avec l'étiquette drapeau par les setters (URLs reportées dans l'EOD). Lauric a le relais. Un lead qui n'est plus chaud : « Retirer l'étiquette », il part dans les étiquettes anciennes (rien n'est supprimé, on peut le remettre).</p>
+  <section>
+    <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px" id="chauds-title">🔥 Leads chauds actifs</h2>
+    <div class="rlist" id="vivier-list"></div>
+  </section>
+  <details class="addeal" id="chauds-old-details">
+    <summary id="chauds-old-sum">🗂️ Étiquettes anciennes</summary>
+    <div class="rlist" id="vivier-old" style="margin-top:12px"></div>
+  </details>
+      </div>
+      <div id="tab-lm" class="pane" hidden>
+  <div class="tally-counts" id="lm-sub" style="margin-bottom:16px">
+    <button class="pill fpill on" data-lm="pilotage">📊 Pilotage</button>
+    <button class="pill fpill" data-lm="scan">🎯 Scan Dirigeant</button>
+    <button class="pill fpill" data-lm="yt">▶️ Vidéo YouTube</button>
+    <button class="pill fpill" data-lm="envois">📋 Tous les envois <b id="lm-envois-count"></b></button>
+  </div>
+  <div id="lm-pilotage">
+    <div class="vkpis" id="lm-kpis"></div>
+    <section>
+      <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">🏆 Quel lead magnet fonctionne le mieux</h2>
+      <div class="card"><div class="tbl-scroll" style="margin-top:0" id="lm-table"></div>
+      <p class="formnote" style="margin-top:10px" id="lm-table-note"></p></div>
+    </section>
+    <section>
+      <h2 class="hsec" style="--hc:var(--s2);margin-bottom:10px">✍️ Les messages d'envoi et leurs résultats</h2>
+      <div class="card"><div class="tbl-scroll" style="margin-top:0" id="lm-msgs"></div></div>
+      <div class="pilot" id="lm-msg-cards" style="margin-top:14px"></div>
+    </section>
+    <section id="lm-sec-todo" hidden>
+      <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px" id="lm-todo-title">📨 Ont dit oui au scan mais n'ont jamais reçu le lien</h2>
+      <div class="card"><div class="tbl-scroll" style="margin-top:0" id="lm-todo"></div></div>
+    </section>
+    <section id="lm-sec-analyse" hidden>
+      <h2 class="hsec" style="--hc:var(--good);margin-bottom:10px">🧠 Pourquoi, et quoi changer</h2>
+      <div class="card" style="font-size:14.5px;line-height:1.55" id="lm-analyse"></div>
+    </section>
+  </div>
+  <div id="lm-scan" hidden>
+    <div class="card lmcard" id="lm-card-scan"></div>
+        <div class="tally-counts" id="tally-pills"></div>
+        <section id="sec-done">
+          <h2 style="margin-bottom:10px">Scans remplis</h2>
+          <div class="rlist" id="tally-done"></div>
+        </section>
+        <section id="sec-partial">
+          <h2 style="margin-bottom:10px">Scans en cours (partiels, non validés)</h2>
+          <div class="rlist" id="tally-partial"></div>
+        </section>
+    
+  </div>
+  <div id="lm-yt" hidden>
+    <div class="card lmcard" id="lm-card-yt"></div>
+    <section style="margin-top:18px">
+      <h2 class="hsec" style="--hc:var(--s2);margin-bottom:10px" id="lm-yt-title">Les personnes qui ont reçu la vidéo</h2>
+      <div class="card"><div class="tbl-scroll" style="margin-top:0" id="lm-yt-list"></div></div>
+    </section>
+  </div>
+  <div id="lm-envois" hidden>
+    <div class="tally-counts" id="lm-env-pills"></div>
+    <div class="card"><div class="tbl-scroll" style="margin-top:0" id="lm-env-table"></div>
+    <p class="formnote" style="margin-top:10px" id="lm-env-note"></p></div>
+  </div>
+  <p class="formnote" style="margin-top:14px" id="lm-note"></p>
+      </div>
+      <div id="tab-appels" class="pane" hidden>
+        <div id="datas-appels">
+          <div class="tiles" id="appels-kpis" style="margin-bottom:16px"></div>
+          <section id="sec-appels-analyse" hidden>
+            <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">🧠 Ce qui fait accepter un appel, ce qui le fait rater, et à qui on le propose</h2>
+            <div class="card" style="font-size:14.5px;line-height:1.55" id="appels-analyse"></div>
+          </section>
+          <section>
+            <h2 class="hsec" style="--hc:var(--s1);margin-bottom:10px">🧪 Selon l'accroche de départ</h2>
+            <div class="card"><div class="tbl-scroll" style="margin-top:0" id="appels-by-var"></div>
+            <p class="formnote" style="margin-top:10px">Premier message de la conversation (variante du relevé). « Réponse » = le lead a écrit après la proposition ; « accepté » = il a dit oui, donné un créneau ou booké sur Calendly.</p></div>
+          </section>
+          <section>
+            <h2 class="hsec" style="--hc:var(--s2);margin-bottom:10px">⏱️ Selon le moment où l'appel est proposé</h2>
+            <div class="card"><div class="tbl-scroll" style="margin-top:0" id="appels-by-timing"></div>
+            <p class="formnote" style="margin-top:10px">Nombre de messages écrits par le lead avant qu'on lui propose l'appel, et délai depuis le premier message de la conversation. Vocal = la proposition est accompagnée d'un vocal.</p></div>
+          </section>
+          <section>
+            <h2 class="hsec" style="--hc:var(--good);margin-bottom:10px" id="appels-title">📞 Les conversations où l'appel a été proposé</h2>
+            <div class="tally-counts" id="appels-pills"></div>
+            <div class="rlist" id="appels-list"></div>
+          </section>
+          <p class="formnote" id="appels-note"></p>
+        </div>
+    
+      </div>
+      <div id="tab-leads" class="pane" hidden>
+        <div class="tally-counts" id="leads-pills"></div>
+        <section id="sec-leads-prio" hidden>
+          <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px">🔥 À relancer en priorité (analyse du relevé)</h2>
+          <div class="rlist" id="leads-prio"></div>
+        </section>
+        <section>
+          <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px" id="leads-list-title">👤 Tous les leads et leur avancée</h2>
+          <p class="formnote" id="leads-filter-note" hidden></p>
+          <div class="rlist" id="leads-list"></div>
+        </section>
+        <p class="formnote" id="leads-note"></p>
+    
+      </div>
+    </div>
+
+    <div id="tab-closing" hidden>
+      <div id="tab-ventes" class="pane">
+        <div class="vkpis" id="v-kpis"></div>
+        <details class="addeal">
+          <summary>➕ Ajouter un deal (lead qui n'est ni dans le scan ni dans le portefeuille)</summary>
+          <form class="eodform" id="v-add-form" style="margin-top:12px">
+            <div>
+              <label class="flab" for="va-name">Nom</label>
+              <input type="text" id="va-name" required placeholder="Prénom Nom" autocomplete="off">
+            </div>
+            <div class="frow2">
+              <div>
+                <label class="flab" for="va-st">Statut</label>
+                <select id="va-st">
+                  <option value="avenir">🗓 Call ou relance à venir</option>
+                  <option value="encours" selected>⏳ En cours</option>
+                  <option value="gagne">✅ Vente signée</option>
+                  <option value="perdu">❌ Perdu / KO</option>
+                </select>
+              </div>
+              <div>
+                <label class="flab" for="va-when">Date du prochain call</label>
+                <input type="date" id="va-when">
+              </div>
+            </div>
+            <div>
+              <label class="flab" for="va-offre">Proposition d'offre / montant</label>
+              <input type="text" id="va-offre" placeholder="ex : 3000 € / 3 mois" autocomplete="off">
+            </div>
+            <div>
+              <label class="flab" for="va-note">Note</label>
+              <textarea id="va-note" placeholder="D'où vient le lead, ce qui s'est dit…"></textarea>
+            </div>
+            <div class="edbtns">
+              <button type="submit" class="send" id="va-send">Ajouter le deal</button>
+              <p class="sendmsg" id="va-msg" hidden></p>
+            </div>
+          </form>
+          <p class="formnote" style="margin-top:10px">Le deal apparaît dans les listes du dessous et compte dans les compteurs, exactement comme ceux qui viennent des Sheets. Modifiable et retirable ensuite avec « ✏️ Modifier ».</p>
+        </details>
+        <section id="sec-v-avenir">
+          <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px" id="v-avenir-title">🗓 Calls et relances à venir</h2>
+          <p class="formnote" style="margin:0 0 8px" id="cav-sub">Réservés sur Calendly</p>
+          <div class="rlist" id="cav-list"></div>
+          <p class="formnote" style="margin:14px 0 8px" id="v-avenir-sub">Datés dans le suivi, hors Calendly</p>
+          <div class="rlist" id="v-avenir"></div>
+          <p class="formnote" style="margin-top:10px">RDV Calendly rafraîchis toutes les 15 min (~7h-22h), avec le message WhatsApp de confirmation. Les autres viennent d'une date dans le suivi (R1, R2, propo) ou d'un deal modifié à la main.</p>
+        </section>
+        <section id="sec-car-todo">
+          <h2 class="hsec" style="--hc:var(--s4);margin-bottom:10px">📋 Calls passés à remplir</h2>
+          <div class="rlist" id="car-todo"></div>
+        </section>
+        <section id="sec-v-encours">
+          <h2 class="hsec" style="--hc:var(--s4);margin-bottom:10px">⏳ En cours (call fait, pas encore conclu)</h2>
+          <div class="rlist" id="v-encours"></div>
+        </section>
+        <section id="sec-relance">
+          <h2 class="hsec" style="--hc:var(--s2);margin-bottom:10px">🔁 À relancer (follow-up et pas de vente)</h2>
+          <div class="rlist" id="relance-list"></div>
+        </section>
+        <section id="sec-v-gagnes">
+          <h2 class="hsec" style="--hc:var(--good);margin-bottom:10px">✅ Ventes conclues</h2>
+          <div class="rlist" id="v-gagnes"></div>
+        </section>
+        <section id="sec-v-perdus">
+          <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px">❌ Perdus / KO</h2>
+          <div class="rlist" id="v-perdus"></div>
+        </section>
+        <section id="sec-car-done">
+          <details class="addeal" style="margin-bottom:0">
+          <summary id="car-done-sum">📞 Historique des calls Calendly remplis</summary>
+          <div class="rlist" id="car-done" style="margin-top:12px"></div>
+          </details>
+        </section>
+        <section id="sec-v-mois" hidden>
+          <h2 class="hsec" style="--hc:var(--s3);margin-bottom:10px">📆 Résultats par mois (calls Calendly)</h2>
+          <div class="card"><div class="tbl-scroll" style="margin-top:0" id="v-mois"></div></div>
+        </section>
+        <section id="sec-v-dup">
+          <h2 class="hsec" style="--hc:var(--muted);margin-bottom:10px">🗂️ Doublons mis de côté <span class="count" id="v-dup-count"></span></h2>
+          <div class="rlist" id="v-doublons"></div>
+          <p class="formnote">Sortis des compteurs et des listes du dessus. Ils restent ici, rien n'est supprimé : « Remettre dans le suivi » les fait revenir.</p>
+        </section>
+        <p class="formnote" id="v-note"></p>
+      </div>
+    </div>
 
     <div id="tab-todo" hidden>
       <div class="tally-counts" id="todo-pills"></div>
@@ -528,640 +1293,8 @@
         </form>
       </section>
       <p class="formnote" id="todo-note"></p>
+    
     </div>
-
-    <div id="tab-arep" hidden>
-      <div class="tally-counts" id="arep-pills"></div>
-      <section>
-        <h2 class="hsec" style="--hc:var(--bad);margin-bottom:6px" id="arep-title">💬 Conversations qui attendent une réponse</h2>
-        <p class="formnote" id="arep-intro"></p>
-        <div class="rlist" id="arep-list" style="margin-top:12px"></div>
-      </section>
-      <details class="ldet" id="arep-done-details" style="margin:4px 0 22px">
-        <summary id="arep-done-sum">Déjà traitées</summary>
-        <div class="rlist" id="arep-done" style="margin-top:10px"></div>
-      </details>
-      <section id="arep-sec-syn" hidden>
-        <h2 class="hsec" style="--hc:var(--s5);margin-bottom:10px">🧠 Ce que ces conversations disent</h2>
-        <div class="card"><ul class="alist" id="arep-syn"></ul></div>
-      </section>
-      <p class="formnote" id="arep-note"></p>
-    </div>
-
-    <div id="tab-eod" hidden>
-      <section>
-        <h2 style="margin-bottom:10px">Remplir l'EOD du jour</h2>
-        <form class="card eodform" id="eod-form">
-          <div class="frow2">
-            <div>
-              <label class="flab" for="f-date">Date du jour</label>
-              <input type="date" id="f-date" required>
-            </div>
-            <div>
-              <label class="flab">Setter</label>
-              <div class="setterpick" id="f-setters"></div>
-            </div>
-          </div>
-
-          <div>
-            <label class="flab">Accroches envoyées (proposant le scan)</label>
-            <div class="srcgrid">
-              <span></span><span class="gh">Vocaux</span><span class="gh">Écrits</span>
-              <span class="gl">Nouveaux abonnés</span>
-              <input type="number" min="0" inputmode="numeric" data-src="nouveaux" data-mode="vocal">
-              <input type="number" min="0" inputmode="numeric" data-src="nouveaux" data-mode="écrit">
-              <span class="gl">Anciens abonnés</span>
-              <input type="number" min="0" inputmode="numeric" data-src="anciens" data-mode="vocal">
-              <input type="number" min="0" inputmode="numeric" data-src="anciens" data-mode="écrit">
-              <span class="gl">Likes</span>
-              <input type="number" min="0" inputmode="numeric" data-src="likes" data-mode="vocal">
-              <input type="number" min="0" inputmode="numeric" data-src="likes" data-mode="écrit">
-              <span class="gl">Commentaires</span>
-              <input type="number" min="0" inputmode="numeric" data-src="commentaires" data-mode="vocal">
-              <input type="number" min="0" inputmode="numeric" data-src="commentaires" data-mode="écrit">
-              <span class="gl">Relances</span>
-              <input type="number" min="0" inputmode="numeric" data-src="relances" data-mode="vocal">
-              <input type="number" min="0" inputmode="numeric" data-src="relances" data-mode="écrit">
-            </div>
-            <p class="formnote" style="margin-top:6px">Laisse vide ce qui est à zéro. Vocal + écrit = total envoyé dans l'EOD.</p>
-          </div>
-
-          <div class="frow2">
-            <div>
-              <label class="flab" for="f-taux">Taux de réponses estimé (%)</label>
-              <input type="number" min="0" max="100" inputmode="numeric" id="f-taux">
-            </div>
-            <div>
-              <label class="flab" for="f-scanok">Leads ayant accepté le scan</label>
-              <input type="number" min="0" inputmode="numeric" id="f-scanok">
-            </div>
-          </div>
-          <div class="frow2">
-            <div>
-              <label class="flab" for="f-totinsta">Scans envoyés au total · Instagram</label>
-              <input type="number" min="0" inputmode="numeric" id="f-totinsta">
-            </div>
-            <div>
-              <label class="flab" for="f-totfb">Scans envoyés au total · Facebook</label>
-              <input type="number" min="0" inputmode="numeric" id="f-totfb">
-            </div>
-          </div>
-          <div id="f-subs-wrap" hidden>
-            <label class="flab" for="f-total-subs">👥 Nombre total d'abonnés du compte (relevé en fin de journée)</label>
-            <input type="number" min="0" inputmode="numeric" id="f-total-subs">
-            <p class="formnote" style="margin-top:4px" id="f-subs-hint">Le chiffre affiché dans le profil Insta, pas le gain du jour : la console calcule le gain toute seule.</p>
-          </div>
-          <div id="f-drapeau-wrap" hidden>
-            <label class="flab" for="f-drapeau">🚩 Nombre de personnes sur Insta qui ont l'étiquette drapeau (bien descendre et actualiser toutes les conversations)</label>
-            <input type="number" min="0" inputmode="numeric" id="f-drapeau">
-            <p class="formnote" style="margin-top:4px">C'est le nombre de leads qui ont l'étiquette drapeau.</p>
-          </div>
-          <div id="f-etq-wrap" hidden>
-            <label class="flab" for="f-etq-url">🏷️ URL des personnes mises en étiquette (leads chauds)</label>
-            <div style="display:flex;gap:8px">
-              <input type="url" id="f-etq-url" placeholder="https://www.instagram.com/pseudo" style="flex:1">
-              <button type="button" class="send" id="f-etq-add" style="padding:8px 16px;font-size:14px">Ajouter</button>
-            </div>
-            <div class="chiplist" id="f-etq-list"></div>
-            <p class="formnote" style="margin-top:4px">Colle une URL puis « Ajouter » : tu peux en mettre plusieurs d'affilée avant d'envoyer l'EOD. Elles vont dans le vivier leads chauds (onglet Script setting).</p>
-          </div>
-          <div>
-            <label class="flab" for="f-notes">Idées d'amélioration ou retours / questions</label>
-            <textarea id="f-notes"></textarea>
-          </div>
-          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-            <button type="submit" class="send" id="f-send">Envoyer l'EOD</button>
-            <p class="sendmsg" id="f-msg" hidden></p>
-          </div>
-          <p class="formnote">Envoyé dans le même Google Form que d'habitude : le Sheet et la console se mettent à jour pareil.</p>
-        </form>
-      </section>
-
-      <section>
-        <div class="sec-head">
-          <h2>Pilotage · quoi améliorer pour booker plus de calls</h2>
-          <div class="tally-counts" id="pilot-pills" style="margin:0"></div>
-        </div>
-        <div class="pilot" id="pilot"></div>
-      </section>
-
-      <section>
-        <h2 style="margin-bottom:10px">Derniers EOD reçus</h2>
-        <div class="rlist" id="eod-list"></div>
-      </section>
-    </div>
-
-    <div id="tab-tally" hidden>
-      <div class="tally-counts" id="tally-pills"></div>
-      <section id="sec-done">
-        <h2 style="margin-bottom:10px">Scans remplis</h2>
-        <div class="rlist" id="tally-done"></div>
-      </section>
-      <section id="sec-partial">
-        <h2 style="margin-bottom:10px">Scans en cours (partiels, non validés)</h2>
-        <div class="rlist" id="tally-partial"></div>
-      </section>
-    </div>
-
-    <div id="tab-leads" hidden>
-      <div class="tally-counts" id="leads-pills"></div>
-      <section id="sec-leads-prio" hidden>
-        <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px">🔥 À relancer en priorité (analyse du relevé)</h2>
-        <div class="rlist" id="leads-prio"></div>
-      </section>
-      <section>
-        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px" id="leads-list-title">👤 Tous les leads et leur avancée</h2>
-        <p class="formnote" id="leads-filter-note" hidden></p>
-        <div class="rlist" id="leads-list"></div>
-      </section>
-      <p class="formnote" id="leads-note"></p>
-    </div>
-
-    <div id="tab-datas" hidden>
-      <div class="tally-counts" id="datas-sub" style="margin-bottom:14px">
-        <button class="pill fpill on" data-s="main">📊 Chiffres et accroches</button>
-        <button class="pill fpill" data-s="appels">📞 Appels proposés <b id="appels-count"></b></button>
-      </div>
-      <div id="datas-main">
-      <details class="ldet accdet" id="new-acc-details">
-        <summary class="accsum">
-          <span class="accsum-ico">🧪</span>
-          <span class="accsum-txt">
-            <span class="accsum-title">10 accroches à tester</span>
-            <span class="accsum-sub">Objectif : le taux de réponse · chacun note de 1 à 5 · <b id="accsum-votes">pas encore de vote</b></span>
-          </span>
-          <span class="accsum-cta"><span class="accsum-open">Voir les 10 messages</span><span class="accsum-close">Replier</span><span class="accsum-chev">▾</span></span>
-        </summary>
-        <div class="card" style="font-size:14px;line-height:1.5;margin:10px 0 12px">
-          <b>Ce que disent les 1 000 conversations</b> : ce qui fait répondre, c'est court, personnel, une seule question ouverte, envoyé le soir, et jamais de pitch en premier message (les 577 messages « je propose un scan » : 5 % ouverts, 2 % de réponses). Ce qui répond, ce sont autant des managers en poste que des dirigeants. Les 10 messages ci-dessous poussent ces leviers plus loin, parfois à contre-courant.<br>
-          <b>Protocole</b> : 30 envois par message, même setter, même créneau (18h-21h), à des nouveaux abonnés uniquement. On compare le taux de réponse à 48 h dans le tableau A/B ci-dessous. Remplacer [Prénom] et le détail du profil, jamais deux messages identiques d'affilée.
-        </div>
-        <p class="formnote" style="margin:0 0 8px">Chacun note chaque message de 1 à 5 sur sa propre ligne (Lauric, Constant, Maximilien, Alex). La meilleure moyenne remonte en premier. Les votes sont partagés : ils passent par le même Google Form que l'EOD (ligne « Vote »), une nouvelle note remplace la précédente.</p>
-        <div class="rlist" id="new-acc-list"></div>
-      </details>
-      <div id="leads-dates">
-        <div class="tally-counts" style="align-items:center">
-          <span class="formnote" style="margin:0 4px 0 0;min-width:70px">📅 Période :</span>
-          <button class="pill fpill on" data-r="all">toutes dates</button>
-          <button class="pill fpill" data-r="0">aujourd'hui</button>
-          <button class="pill fpill" data-r="week">semaine en cours</button>
-          <button class="pill fpill" data-r="7">7 j</button>
-          <button class="pill fpill" data-r="14">14 j</button>
-          <button class="pill fpill" data-r="30">30 j</button>
-          <label class="formnote" style="margin:0 0 0 8px">du <input type="date" id="leads-from" style="font:inherit;padding:3px 6px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:inherit"></label>
-          <label class="formnote" style="margin:0">au <input type="date" id="leads-to" style="font:inherit;padding:3px 6px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:inherit"></label>
-        </div>
-        <div class="tally-counts" style="align-items:center;margin-top:6px">
-          <span class="formnote" style="margin:0 4px 0 0;min-width:70px">🗓️ Mois :</span>
-          <span id="leads-months" style="display:contents"></span>
-        </div>
-      </div>
-      <div class="tiles" id="datas-kpis" style="margin:14px 0 18px"></div>
-      <section id="sec-leads-ab" hidden>
-        <h2 class="hsec" style="--hc:var(--s1);margin-bottom:10px" id="leads-ab-title">🧪 A/B des accroches (relevé Insta)</h2>
-        <div class="card">
-          <div class="tbl-scroll" style="margin-top:0" id="leads-ab"></div>
-          <p class="formnote" style="margin-top:10px" id="leads-ab-note"></p>
-        </div>
-      </section>
-      <section id="sec-leads-daily" hidden>
-        <h2 class="hsec" style="--hc:var(--s2);margin-bottom:10px">📅 Activité par jour (messages envoyés, vus, réponses)</h2>
-        <div class="card">
-          <div class="tbl-scroll" style="margin-top:0" id="leads-daily"></div>
-          <p class="formnote" style="margin-top:10px">Un lead est rattaché au jour de son accroche (ou de la relance du 28/08 pour les anciennes conversations). « Vus » et « réponses » sont l'état au dernier relevé, pas le jour de la vue.</p>
-        </div>
-      </section>
-      <section id="sec-leads-hours" hidden>
-        <h2 class="hsec" style="--hc:var(--s3);margin-bottom:10px">🕐 Réponses selon l'heure d'envoi de l'accroche</h2>
-        <div class="card"><div class="tbl-scroll" style="margin-top:0" id="leads-hours"></div>
-        <p class="formnote" style="margin-top:10px">Accroches seulement (relances et conversations en cours exclues), sur la période choisie.</p></div>
-      </section>
-      <section>
-        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">🧠 Analyse · la cible, ce qui marche, ce qui ne marche pas, pistes (relevé du 07/09, 1 000 conversations)</h2>
-        <div class="card" style="font-size:14.5px;line-height:1.55">
-          <h3 class="mini-title">Qui répond vraiment</h3>
-          <ul style="margin:0 0 12px;padding-left:20px">
-            <li><b>Des managers en poste plus que des patrons</b> : Marion (directrice depuis 5 ans dans un groupe), Nesrine (9 personnes), Jean-Robert (« j'ai des responsabilités »), Sidi (responsable d'association), un chef de service public. Ils répondent à la question « tu diriges une équipe ? », pas à « tu es dirigeant d'une boîte ? ».</li>
-            <li><b>Des repreneurs et de très petites boîtes</b> : Thomas (reprise familiale), Anouck (signature le 15/09), Yannick (3 employés), Loïc (4 collaborateurs, 2e boutique), Mike (salle de CrossFit). C'est le cœur de cible et il est chaud : besoin de cadre, de recul et de décisions.</li>
-            <li><b>Beaucoup de hors cible qui suivent quand même</b> : commerciale pharma, cadre opérationnel, « simple employé », étudiants, comptes vides. Le contenu attire large, le tri se fait au premier message : d'où l'intérêt d'une question ouverte plutôt qu'un pitch.</li>
-          </ul>
-          <h3 class="mini-title">Ce qui marche</h3>
-          <ul style="margin:0 0 12px;padding-left:20px">
-            <li><b>Le message court personnalisé + 1 question</b> : 12 réponses sur 47 envois (26 %), 32 vus, et 28 réponses sur 71 pour les messages perso hors script (39 %). Même sur un compte privé, ça répond (3 réponses sur 9). Sur un profil vide, rien.</li>
-            <li><b>Éviter l'après-midi</b> : sur toutes les accroches, l'après-midi (12h-18h) est le pire créneau (8 % de réponses, 30 % de vus). Sur les envois de septembre, le soir (18h-23h) fait 13 % de réponses contre 3 % le matin, et les messages du soir sont lus dans les 2 heures. Le tableau « heure d'envoi » ci-dessus se met à jour avec la période choisie.</li>
-            <li><b>Répondre vite</b> : 6 réponses sur 10 arrivent en moins de 3 heures, les autres le lendemain matin. Après 3 jours, plus rien n'arrive.</li>
-          </ul>
-          <h3 class="mini-title">Ce qui ne marche pas</h3>
-          <ul style="margin:0 0 12px;padding-left:20px">
-            <li><b>Le message aux likers non abonnés</b> : 577 envois depuis août, 29 vus (5 %), 13 réponses. Il tombe dans les Demandes de messages. Les 36 de septembre : 0 vu. C'est la moitié de tout le volume envoyé, pour presque rien.</li>
-            <li><b>L'ancien script « Bienvenue sur mon compte, j'offre un scan »</b> : 172 envois, 87 vus, 11 réponses (6 %) et surtout des likes polis. Un pitch en premier message, sans question ouverte, n'ouvre pas la conversation.</li>
-            <li><b>Le script A long</b> : 10 envois, 2 réponses, dont aucune sur les 8 de septembre. Trop long, trop « moi », question fermée à la fin.</li>
-            <li><b>Le message B</b> n'a pas été testé (3 envois). Verdict impossible avant 20 à 30 envois.</li>
-            <li><b>Les relances de masse</b> (20/08 : 136 messages, 28/08 : 90 vocaux) : 59 % vus mais des réponses de politesse ou des « pas maintenant ». Elles réveillent des conversations mortes, pas des acheteurs.</li>
-            <li><b>La réactivité</b> : 42 leads ont écrit et attendent une réponse de notre côté (pill « ✋ à répondre » dans l'onglet Leads). C'est le levier le plus rentable et il est gratuit.</li>
-          </ul>
-          <h3 class="mini-title">Pistes d'amélioration</h3>
-          <ol style="margin:0;padding-left:20px">
-            <li><b>Une seule accroche pour tous les setters</b> : « Merci pour le follow » + un détail vu sur le profil + une question ouverte (« tu es à ton compte ou tu diriges une équipe ? »). Le scan arrive après la première réponse, jamais avant.</li>
-            <li><b>Arrêter les messages aux likers non abonnés</b>, ou les réserver aux likers qui suivent déjà le compte.</li>
-            <li><b>Créneau d'envoi 18h-21h</b>, et bloc de réponses le matin pour traiter ce qui est arrivé la nuit.</li>
-            <li><b>Règle des 24 h</b> : répondre dans la journée, une seule relance à J+2, puis on passe. Pas de relance au-delà de 3 jours (cf. Damien).</li>
-            <li><b>Élargir la cible aux managers salariés</b> : ils répondent déjà, il faut une proposition adaptée (le scan parle « dirigeant », une version « manager » ferait la différence).</li>
-            <li><b>Tester le B pour de vrai</b> : 30 envois le soir, même semaine, puis comparer aux 30 perso.</li>
-            <li><b>Fiabiliser l'EOD</b> : l'onglet EOD vs réel montre l'écart entre déclaré et réel. Piloter sur les vrais chiffres, sinon on optimise du vent.</li>
-          </ol>
-        </div>
-      </section>
-      <section hidden>
-        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">💡 Ce qu'on peut en tirer (analyse des relevés du 07 et 08/09)</h2>
-        <div class="card" style="font-size:14.5px;line-height:1.55">
-          <ul style="margin:0;padding-left:20px">
-            <li><b>Le script A long ne marche pas</b> : 0 réponse sur 8 envois, dont Damien qui l'a vu et n'a même pas répondu à la relance. Le message court personnalisé avec une seule question fait 5 réponses sur 17.</li>
-            <li><b>Le message B n'a pas été testé</b> : 3 envois seulement (02/09, Cynthia), aucun ouvert. Il faut 20 à 30 envois par variante avant de conclure.</li>
-            <li><b>Le taux d'ouverture dépend du compte, pas du message.</b> Les messages du 06/09 au soir ont été vus dans les 2 heures, sauf les comptes vides ou privés quasi morts. Un compte mort n'ouvre rien, quel que soit le texte.</li>
-            <li><b>Les réponses arrivent vite ou jamais</b> : les 5 réponses du 05-06/09 sont tombées entre 3 minutes et 2 h 30 après l'envoi. Au-delà de 24 h sans réponse, une relance ne sert à rien (cf. Damien).</li>
-            <li><b>Perso = meilleur pour la qualité</b> : les réponses perso donnent Marion (directrice depuis 5 ans), Nesrine (manage 9 personnes) et MJ (poste à responsabilité), mais aussi une commerciale pharma et un chef de service public.</li>
-            <li><b>Le message « merci pour ton like + scan » ne sert à rien</b> : 36 envois à des non-abonnés, 0 ouvert. Il tombe dans leurs Demandes de messages.</li>
-            <li><b>La relance de masse du 28/08</b> (90 conversations, vocaux) : 59 % vues, 13 réponses (14 %), mais surtout des réponses de politesse ou des « pas maintenant ».</li>
-            <li><b>Relevé rétroactif du 08/09 : 400 anciennes conversations retrouvées</b> (boîte relue jusqu'au 1er juillet, 1 395 conversations au total). Parmi les conversations d'avant le 11/08 : 97 leads avaient répondu, dont <b>49 dont le dernier message est resté sans réponse de notre côté</b> (pill « ✋ à répondre ») et 43 à réactiver après un échange retombé (pill « 🔁 à réactiver »). C'est du lead déjà chaud qui ne coûte aucun nouveau message d'accroche.</li>
-            <li><b>Le volume d'accroches s'est effondré depuis le 27/08</b> : 1 064 accroches en août (dont 216 le 11/08 et 129 le 15/08) contre 54 sur les 8 premiers jours de septembre. Les messages de suivi tiennent (76), pas la prospection froide.</li>
-          </ul>
-        </div>
-      </section>
-      <p class="formnote">Les datas viennent du relevé des conversations Instagram (API interne, lecture seule). La liste des leads et les priorités sont dans l'onglet 👤 Leads.</p>
-      </div>
-      <div id="datas-appels" hidden>
-        <div class="tiles" id="appels-kpis" style="margin-bottom:16px"></div>
-        <section id="sec-appels-analyse" hidden>
-          <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">🧠 Ce qui fait accepter un appel, ce qui le fait rater, et à qui on le propose</h2>
-          <div class="card" style="font-size:14.5px;line-height:1.55" id="appels-analyse"></div>
-        </section>
-        <section>
-          <h2 class="hsec" style="--hc:var(--s1);margin-bottom:10px">🧪 Selon l'accroche de départ</h2>
-          <div class="card"><div class="tbl-scroll" style="margin-top:0" id="appels-by-var"></div>
-          <p class="formnote" style="margin-top:10px">Premier message de la conversation (variante du relevé). « Réponse » = le lead a écrit après la proposition ; « accepté » = il a dit oui, donné un créneau ou booké sur Calendly.</p></div>
-        </section>
-        <section>
-          <h2 class="hsec" style="--hc:var(--s2);margin-bottom:10px">⏱️ Selon le moment où l'appel est proposé</h2>
-          <div class="card"><div class="tbl-scroll" style="margin-top:0" id="appels-by-timing"></div>
-          <p class="formnote" style="margin-top:10px">Nombre de messages écrits par le lead avant qu'on lui propose l'appel, et délai depuis le premier message de la conversation. Vocal = la proposition est accompagnée d'un vocal.</p></div>
-        </section>
-        <section>
-          <h2 class="hsec" style="--hc:var(--good);margin-bottom:10px" id="appels-title">📞 Les conversations où l'appel a été proposé</h2>
-          <div class="tally-counts" id="appels-pills"></div>
-          <div class="rlist" id="appels-list"></div>
-        </section>
-        <p class="formnote" id="appels-note"></p>
-      </div>
-    </div>
-
-    <div id="tab-verif" hidden>
-      <section>
-        <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px">🔍 Ce que les setters déclarent dans l'EOD vs ce qu'on voit vraiment sur Instagram</h2>
-        <div class="tiles" id="verif-kpis" style="margin-bottom:14px"></div>
-        <div class="card">
-          <div class="tbl-scroll" style="margin-top:0" id="verif-table"></div>
-          <p class="formnote" style="margin-top:10px" id="verif-note"></p>
-        </div>
-      </section>
-    </div>
-
-    <div id="tab-calls" hidden>
-      <div class="tally-counts" id="calls-pills"></div>
-      <section id="sec-cav">
-        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">Calls Calendly à venir</h2>
-        <div class="rlist" id="cav-list"></div>
-        <p class="formnote" style="margin-top:10px">RDV lus sur le Calendly de Lauric, rafraîchis toutes les 15 min (~7h-22h). Le bouton « Écrit pré-rédigé » envoie un message de confirmation avant le call.</p>
-      </section>
-      <section id="sec-car-todo">
-        <h2 class="hsec" style="--hc:var(--s4);margin-bottom:10px">Calls passés à remplir</h2>
-        <div class="rlist" id="car-todo"></div>
-      </section>
-      <section id="sec-car-done">
-        <h2 class="hsec" style="--hc:var(--good);margin-bottom:10px">Calls remplis</h2>
-        <div class="rlist" id="car-done"></div>
-      </section>
-      <section id="sec-relance">
-        <h2 class="hsec" style="--hc:var(--s2);margin-bottom:10px">🔁 À relancer (follow-up et pas de vente)</h2>
-        <div class="rlist" id="relance-list"></div>
-      </section>
-      <p class="formnote">Le suivi rempli ici part dans le Sheet EOD (lignes techniques « CallSuivi », exclues des stats) : rien d'autre à faire, la console le relit toute seule.</p>
-    </div>
-
-    <div id="tab-script" hidden>
-      <section>
-        <h2 class="hsec" style="--hc:var(--s2);margin-bottom:10px">Le process étiquette (leads chauds)</h2>
-        <div class="card">
-          <ol class="steps">
-            <li><span>Premier message <b>hyper personnalisé</b> (variante A ou B selon le setter) : au moins <b>1 élément de personnalisation</b> vu sur le profil (« J'ai vu que... »), <b>jamais deux messages identiques</b>. On fait de l'humain, pas du ManyChat. Et on <b>se relit avant d'envoyer</b>.</span></li>
-            <li><span>Le prospect répond → on vérifie s'il est <b>dans la cible</b> (dirigeant, manager ou futur manager).</span></li>
-            <li><span>Dans la cible <b>et il semble chaud</b> (vrai intérêt montré) → on met l'<b>étiquette drapeau</b> sur la conversation Insta et on <b>envoie l'URL du profil sur le groupe WhatsApp</b>.</span></li>
-            <li><span>Dès que l'étiquette est posée, <b>Lauric prend le relais direct</b> sur la conversation.</span></li>
-            <li><span><b>Cynthia, tous les soirs</b> : reporte les URLs du groupe dans l'EOD de la console (champ « URL des personnes mises en étiquette »). Elles atterrissent dans le vivier ci-dessous.</span></li>
-            <li><span>Un setter ne sait pas comment personnaliser ? → il <b>envoie l'URL du profil sur le groupe</b> et on lui dit comment faire.</span></li>
-          </ol>
-          <p class="formnote" style="margin-top:12px">Le lead magnet (scan) s'envoie plus tard dans la conversation, jamais dans le premier message. Le report des étiquettes par l'EOD est la V1 : on testera des méthodes plus simples à l'usage.</p>
-        </div>
-      </section>
-
-      <section>
-        <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px">🔥 Vivier leads chauds (étiquettes)</h2>
-        <details class="answers" id="vivier-fold">
-          <summary id="vivier-sum">Voir le vivier</summary>
-          <div class="rlist" id="vivier-list" style="margin-top:10px"></div>
-        </details>
-      </section>
-
-      <section>
-        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">A/B testing du premier message</h2>
-        <div class="pilot">
-          <div class="card" style="--tc:var(--s1);border-top:3px solid var(--s1)">
-            <div class="rhead"><span class="rname">Message A</span><span class="badge next">Constant</span><span class="badge">écrit long</span></div>
-            <div class="msgcard" id="msg-a">Hello [Prénom] !
-Bienvenue et merci de me suivre 🙏
-[Personnalisation « J'ai vu que... »]
-
-Tu l'as sûrement vu, ici je parle aux dirigeants principalement 😊
-
-J'ai dirigé pendant 10 ans je connais par cœur les défis :
-Tout porter sur ses épaules.
-Le stress du chiffre.
-Recruter, motiver ses employés.
-Prendre une tonne de décisions.
-Etc.
-
-✅ Depuis de nombreuses années j'applique une méthode que j'ai apprise auprès des plus grands dirigeants !
-👉 + d'engagement
-👉 + de business
-C'est dingue la différence.
-
-Et puis la cerise sur le gâteau : beaucoup moins de charge mentale pour le dirigeant 😎
-
-Une question importante :
-Tu es dirigeant d'une boîte ?</div>
-            <button type="button" class="copybtn" data-copy="msg-a">Copier le message A</button>
-            <p class="formnote" style="margin-top:8px">Remplacer [Prénom] et la ligne [Personnalisation] par un vrai détail du profil avant d'envoyer.</p>
-          </div>
-          <div class="card" style="--tc:var(--s5);border-top:3px solid var(--s5)">
-            <div class="rhead"><span class="rname">Message B</span><span class="badge src">Cynthia</span><span class="badge">écrit court + vocal</span></div>
-            <div class="msgcard" id="msg-b">Hello [Prénom] ! Merci beaucoup pour ton abonnement, ça fait super plaisir de te voir ici ! 😁
-
-[Personnalisation « J'ai vu que... »]
-
-J'aime bien savoir qui se cache derrière les nouveaux profils. Je te laisse un petit vocal pour me présenter rapidement !</div>
-            <button type="button" class="copybtn" data-copy="msg-b">Copier le message B</button>
-            <p class="formnote" style="margin-top:8px">Puis envoyer le vocal « VOCAL VARIANTE A » (dispo dans la conversation Insta avec Alex MAJOREL). Remplacer [Prénom] et la ligne [Personnalisation].</p>
-          </div>
-        </div>
-        <div class="card" style="margin-top:14px">
-          <h3 class="mini-title">Résultats par variante · 30 jours (via l'EOD)</h3>
-          <div class="tbl-scroll" style="margin-top:0" id="ab-stats"></div>
-        </div>
-      </section>
-
-      <section>
-        <h2 class="hsec" style="--hc:var(--s3);margin-bottom:10px">Tracking setting</h2>
-        <div class="vkpis" id="track-tiles"></div>
-        <p class="formnote">Le relevé d'abonnés se remplit via l'EOD de Cynthia ; Lauric peut aussi le saisir directement ici, sans passer par un EOD.</p>
-        <form class="card eodform" id="track-form" style="margin-top:14px">
-          <h3 class="mini-title">Saisie directe (Lauric)</h3>
-          <div class="frow2">
-            <div>
-              <label class="flab" for="t-date">Jour concerné</label>
-              <input type="date" id="t-date" required>
-            </div>
-            <div>
-              <label class="flab" for="t-subs">👥 Abonnés au total (optionnel)</label>
-              <input type="number" min="0" inputmode="numeric" id="t-subs">
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-            <button type="submit" class="send" id="t-send">Enregistrer le tracking</button>
-            <p class="sendmsg" id="t-msg" hidden></p>
-          </div>
-          <p class="formnote">Ces lignes alimentent seulement les compteurs ci-dessus : elles ne comptent pas comme un EOD et n'entrent dans aucune stat de setter.</p>
-        </form>
-      </section>
-
-      <section>
-        <h2 class="hsec" style="--hc:var(--s4);margin-bottom:10px">À tester ensuite</h2>
-        <div class="pilot">
-          <div class="card">
-            <h3 class="mini-title">Profil muet → vocal de Lauric</h3>
-            <p class="rstats" style="margin:0 0 6px">Si le profil ne donne aucune info à personnaliser : « Hello [Prénom] ! » + un vocal de Lauric.</p>
-            <div class="msgcard" id="msg-vocal">Trame du vocal : « Finalement je te fais un vocal. Je suis allé voir ton profil et je n'ai pas vu si tu étais à ton compte ou pas. Par contre j'ai vu que tu avais réagi à plusieurs de mes vidéos, j'imagine que tu es quelqu'un que ces sujets travaillent... »</div>
-          </div>
-          <div class="card">
-            <h3 class="mini-title">Proposition IA n°1 · la curieuse</h3>
-            <div class="msgcard" id="msg-p1">Hello [Prénom] ! Petite habitude ici : je vais voir le profil de chaque personne qui s'abonne. [J'ai vu que...] Du coup je suis curieux : tu diriges quoi en ce moment ?</div>
-            <button type="button" class="copybtn" data-copy="msg-p1">Copier</button>
-          </div>
-          <div class="card">
-            <h3 class="mini-title">Proposition IA n°2 · la question unique</h3>
-            <div class="msgcard" id="msg-p2">Bienvenue [Prénom] 🙏 Une seule question, promis : c'est quoi le sujet qui te prend le plus la tête dans ta boîte en ce moment ? Je lis tout et je réponds en vocal.</div>
-            <button type="button" class="copybtn" data-copy="msg-p2">Copier</button>
-          </div>
-          <div class="card">
-            <h3 class="mini-title">Proposition IA n°3 · la franche</h3>
-            <div class="msgcard" id="msg-p3">Hello [Prénom], merci pour l'abonnement ! Je ne vais pas te faire le message copié-collé habituel. [J'ai vu que...] Ça m'a donné envie de te poser la question en vrai : tu es à ton compte ou tu diriges une équipe ?</div>
-            <button type="button" class="copybtn" data-copy="msg-p3">Copier</button>
-          </div>
-        </div>
-        <p class="formnote" style="margin-top:10px">Les propositions IA sont à valider avec Lauric avant de partir en test. L'esprit recherché : un message qui sort de l'ordinaire, authentique sans chercher à prouver, franc, direct et gentil.</p>
-      </section>
-
-      <section>
-        <h2 class="hsec" style="--hc:var(--s5);margin-bottom:10px">💡 Boîte à idées</h2>
-        <form class="card eodform" id="idea-form">
-          <div>
-            <label class="flab" for="idea-text">Une idée de message, d'angle, d'amélioration du process ?</label>
-            <textarea id="idea-text" required></textarea>
-          </div>
-          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-            <button type="submit" class="send">Envoyer l'idée</button>
-            <p class="sendmsg" id="idea-msg" hidden></p>
-          </div>
-        </form>
-        <div class="rlist" id="ideas-list" style="margin-top:14px"></div>
-      </section>
-    </div>
-
-    <div id="tab-abonnes" hidden>
-      <section>
-        <h2 class="hsec" style="--hc:var(--s3);margin-bottom:10px">📈 Abonnés du compte · relevé automatique 18 h</h2>
-        <div class="vkpis" id="nt-kpis"></div>
-        <div class="card">
-          <div id="nt-chart"></div>
-          <p class="formnote" style="margin-top:8px" id="nt-note"></p>
-        </div>
-      </section>
-      <div class="tally-counts" id="nf-pills"></div>
-      <section id="sec-nf-todo">
-        <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px">🚨 Pas encore contactés · message perso prêt à envoyer</h2>
-        <div id="nf-todo"></div>
-      </section>
-      <section id="sec-nf-local" hidden>
-        <h2 class="hsec" style="--hc:var(--s4);margin-bottom:10px">☑️ Cochés « contacté » à la main · vérification au prochain relevé</h2>
-        <div id="nf-local"></div>
-      </section>
-      <section id="sec-nf-ancien" hidden>
-        <details class="addeal">
-          <summary>🗂️ Anciens abonnés jamais contactés · relevé rétroactif <b id="nf-ancien-count"></b> · message perso prêt à envoyer</summary>
-          <p class="formnote" style="margin:10px 0 12px">Abonnés plus anciens que le suivi quotidien (ils suivent le compte depuis un moment) et qui n'ont aucune conversation dans la messagerie. À traiter au rythme de Lauric, ils ne comptent pas dans « À contacter ».</p>
-          <div id="nf-ancien"></div>
-        </details>
-      </section>
-      <section>
-        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">🗂 Data · tous les nouveaux abonnés relevés</h2>
-        <div class="card">
-          <div class="tbl-scroll" style="margin-top:0" id="nf-data"></div>
-          <p class="formnote" style="margin-top:10px" id="nf-note"></p>
-        </div>
-      </section>
-      <div class="card" style="margin-top:14px">
-        <p class="rstats" style="margin:0">Chaque nuit vers 4 h, Claude relève les nouveaux abonnés du compte, vérifie dans la messagerie qui a déjà reçu un message (avec le texte envoyé, la date et le lien de la conversation) et prépare un premier message personnalisé pour les autres. <b>L'envoi reste 100% manuel</b> : ouvrir le profil, relire, adapter, envoyer, puis cocher « Contacté ». La coche est confirmée par le relevé suivant.</p>
-      </div>
-    </div>
-
-    <div id="tab-ventes" hidden>
-      <div class="vkpis" id="v-kpis"></div>
-      <details class="addeal">
-        <summary>➕ Ajouter un deal (lead qui n'est ni dans le scan ni dans le portefeuille)</summary>
-        <form class="eodform" id="v-add-form" style="margin-top:12px">
-          <div>
-            <label class="flab" for="va-name">Nom</label>
-            <input type="text" id="va-name" required placeholder="Prénom Nom" autocomplete="off">
-          </div>
-          <div class="frow2">
-            <div>
-              <label class="flab" for="va-st">Statut</label>
-              <select id="va-st">
-                <option value="avenir">🗓 Call ou relance à venir</option>
-                <option value="encours" selected>⏳ En cours</option>
-                <option value="gagne">✅ Vente signée</option>
-                <option value="perdu">❌ Perdu / KO</option>
-              </select>
-            </div>
-            <div>
-              <label class="flab" for="va-when">Date du prochain call</label>
-              <input type="date" id="va-when">
-            </div>
-          </div>
-          <div>
-            <label class="flab" for="va-offre">Proposition d'offre / montant</label>
-            <input type="text" id="va-offre" placeholder="ex : 3000 € / 3 mois" autocomplete="off">
-          </div>
-          <div>
-            <label class="flab" for="va-note">Note</label>
-            <textarea id="va-note" placeholder="D'où vient le lead, ce qui s'est dit…"></textarea>
-          </div>
-          <div class="edbtns">
-            <button type="submit" class="send" id="va-send">Ajouter le deal</button>
-            <p class="sendmsg" id="va-msg" hidden></p>
-          </div>
-        </form>
-        <p class="formnote" style="margin-top:10px">Le deal apparaît dans les listes du dessous et compte dans les compteurs, exactement comme ceux qui viennent des Sheets. Modifiable et retirable ensuite avec « ✏️ Modifier ».</p>
-      </details>
-      <section id="sec-v-mois" hidden>
-        <h2 class="hsec" style="--hc:var(--s3);margin-bottom:10px">📆 Résultats par mois (calls Calendly)</h2>
-        <div class="card"><div class="tbl-scroll" style="margin-top:0" id="v-mois"></div></div>
-      </section>
-      <section id="sec-v-avenir">
-        <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">Calls et relances à venir</h2>
-        <div class="rlist" id="v-avenir"></div>
-      </section>
-      <section id="sec-v-encours">
-        <h2 class="hsec" style="--hc:var(--s4);margin-bottom:10px">En cours (call fait, pas encore conclu)</h2>
-        <div class="rlist" id="v-encours"></div>
-      </section>
-      <section id="sec-v-gagnes">
-        <h2 class="hsec" style="--hc:var(--good);margin-bottom:10px">Ventes conclues</h2>
-        <div class="rlist" id="v-gagnes"></div>
-      </section>
-      <section id="sec-v-perdus">
-        <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px">Perdus / KO (anciens appels)</h2>
-        <div class="rlist" id="v-perdus"></div>
-      </section>
-      <section id="sec-v-dup">
-        <h2 class="hsec" style="--hc:var(--muted);margin-bottom:10px">🗂️ Doublons mis de côté <span class="count" id="v-dup-count"></span></h2>
-        <div class="rlist" id="v-doublons"></div>
-        <p class="formnote">Sortis des compteurs et des listes du dessus. Ils restent ici, rien n'est supprimé : « Remettre dans le suivi » les fait revenir.</p>
-      </section>
-      <p class="formnote" id="v-note"></p>
-    </div>
-
-    <div id="tab-dash">
-    <div class="vkpis" id="cockpit" hidden style="margin-bottom:20px"></div>
-    <div class="alert" id="alert" hidden>
-      <span aria-hidden="true">&#9888;</span>
-      <span id="alert-text"></span>
-    </div>
-    <div class="card" id="eod-missing" hidden style="margin-bottom:24px"></div>
-
-    <section>
-      <div class="sec-head">
-        <h2>Entonnoir</h2>
-        <div class="seg" id="seg" role="group" aria-label="Période">
-          <button data-w="1" id="btn-w1">Hier</button>
-          <button data-w="3">3 jours</button>
-          <button data-w="7" class="on">7 jours</button>
-          <button data-w="30">30 jours</button>
-        </div>
-      </div>
-      <div class="card">
-        <div class="funnel" id="funnel"></div>
-        <p class="fcover" id="fcover"></p>
-      </div>
-    </section>
-
-    <section id="sec-funnel2" hidden>
-      <h2 style="margin-bottom:10px">Du message à la vente · 30 jours</h2>
-      <div class="card">
-        <div class="funnel" id="funnel2"></div>
-        <p class="fcover" id="funnel2-note"></p>
-      </div>
-    </section>
-
-    <section>
-      <h2 style="margin-bottom:10px">Chiffres clés</h2>
-      <div class="tiles" id="tiles"></div>
-    </section>
-
-    <section>
-      <h2 style="margin-bottom:10px">Messages par catégorie</h2>
-      <div class="tiles" id="cat-tiles"></div>
-    </section>
-
-    <section>
-      <h2 style="margin-bottom:10px">Par setter</h2>
-      <div class="card">
-        <div class="tbl-scroll" style="margin-top:0" id="setter-tbl"></div>
-      </div>
-    </section>
-
-    <section>
-      <div class="sec-head">
-        <h2>Messages par jour et par catégorie · 30 jours</h2>
-        <div class="legend" id="legend"></div>
-      </div>
-      <div class="card chart-scroll">
-        <div id="chart"></div>
-      </div>
-    </section>
-
-    <section>
-      <h2 style="margin-bottom:10px">Abonnés et scans par jour · 30 jours</h2>
-      <div class="minis" id="minis"></div>
-    </section>
-
-    <section class="card">
-      <details>
-        <summary>Détail jour par jour (30 derniers jours)</summary>
-        <div class="tbl-scroll" id="tbl"></div>
-      </details>
-    </section>
-
-    </div><!-- /tab-dash -->
 
     <footer id="foot"></footer>
   </div>
@@ -1261,7 +1394,7 @@ const ETQ_RETIREES = new Set([
 
 // lignes à ignorer dans les stats : tests techniques + soumissions de la
 // boîte à idées (onglet Script setting), qui passent par le même Google Form
-const isTestRow = r => /test console|bo[iî]te\s*[aà]\s*id[ée]es|^\s*doublon\s*$|^\s*tracking\s*$|^\s*vente\s*$|^\s*callsuivi\s*$|^\s*vote\s*$|^\s*todo\s*$|^\s*repinsta\s*$/i.test(r[COL.SETTER] || "");
+const isTestRow = r => /test console|bo[iî]te\s*[aà]\s*id[ée]es|^\s*doublon\s*$|^\s*tracking\s*$|^\s*vente\s*$|^\s*callsuivi\s*$|^\s*vote\s*$|^\s*todo\s*$|^\s*repinsta\s*$|^\s*[ée]tiquette\s*$/i.test(r[COL.SETTER] || "");
 const isIdeaRow = r => /bo[iî]te\s*[aà]\s*id[ée]es/i.test(r[COL.SETTER] || "");
 const isTrackRow = r => /^\s*tracking\s*$/i.test(r[COL.SETTER] || "");
 
@@ -1304,6 +1437,7 @@ function parseDealEdits(eodText) {
       return x ? x[1].trim() : "";
     };
     map.set(m[1].trim(), {
+      rowDate: parseDate(r[0]) || parseDate(r[1]) || "",
       key: m[1].trim(), name: (m[2] || "").trim(), st: field("Statut").toLowerCase(),
       when: field("Date"), offre: field("Offre"), note: field("Note"),
     });
@@ -1460,6 +1594,7 @@ async function load(showSpinner) {
   get("data/a-repondre.json").then(t => { AREP = JSON.parse(t); renderArepTab(); }).catch(() => renderArepTab());
   get("data/abonnes.csv").then(renderAbonnesTab).catch(() => renderAbonnesTab(""));
   get("data/abonnes_total.csv").then(renderTotalChart).catch(() => renderTotalChart(""));
+  get("data/lead-magnets.json").then(t => { LM_DATA = JSON.parse(t); renderLmTab(); renderChauds(); scheduleOverview(); }).catch(() => renderLmTab());
   // le portefeuille a son propre fallback : un export CSV privé renvoie du HTML
   const pf = await get(SHEETS.pf)
     .then(t => /^\s*</.test(t) ? Promise.reject(new Error("privé")) : t)
@@ -1893,19 +2028,44 @@ function mini(rows30, title, f, color, untrackedNote) {
    Onglets EOD + Scans Tally
    ============================================================ */
 
-const TABS = ["dash", "todo", "arep", "eod", "tally", "leads", "datas", "verif", "calls", "ventes", "script", "abonnes"];
-const TAB_ALIAS = { cav: "calls", car: "calls" };   // anciens liens #cav / #car
+/* Navigation : 5 onglets (Vue d'ensemble, Contenu, Setting, Closing, To do) ; Setting a des sous-onglets
+   (« panes »). Un lien #eod, #script, #lm… ouvre directement le bon pôle et le bon sous-onglet. */
+const TABS = ["dash", "contenu", "setting", "closing", "todo"];
+const PANES = { audience: "contenu",
+  eod: "setting", abonnes: "setting", script: "setting", datas: "setting", eodstats: "setting", verif: "setting",
+  arep: "setting", chauds: "setting", lm: "setting", appels: "setting", leads: "setting",
+  ventes: "closing" };
+const TAB_ALIAS = { cav: "ventes", car: "ventes", calls: "ventes", tally: "lm", scans: "lm" };   // anciens liens
+const POLE_DEFAULT = { contenu: "audience", setting: "eod", closing: "ventes" };
+let curPane = {};
+try { curPane = JSON.parse(localStorage.getItem("curPane") || "{}"); } catch (e) {}
 function showTab(name) {
   name = TAB_ALIAS[name] || name;
-  if (!TABS.includes(name)) return;
-  document.querySelectorAll("#tabbar button").forEach(x => x.classList.toggle("on", x.dataset.tab === name));
-  TABS.forEach(t => { el("tab-" + t).hidden = t !== name; });
+  let pole = name, pane = null;
+  if (PANES[name]) { pole = PANES[name]; pane = name; }
+  if (!TABS.includes(pole)) return;
+  if (!pane && POLE_DEFAULT[pole]) pane = curPane[pole] && PANES[curPane[pole]] === pole ? curPane[pole] : POLE_DEFAULT[pole];
+  document.querySelectorAll("#tabbar button").forEach(x => x.classList.toggle("on", x.dataset.tab === pole));
+  TABS.forEach(t => { el("tab-" + t).hidden = t !== pole; });
+  if (pane) {
+    Object.keys(PANES).filter(p => PANES[p] === pole).forEach(p => { el("tab-" + p).hidden = p !== pane; });
+    document.querySelectorAll("#subnav-" + pole + " button").forEach(x => x.classList.toggle("on", x.dataset.pane === pane));
+    curPane[pole] = pane;
+    try { localStorage.setItem("curPane", JSON.stringify(curPane)); } catch (e) {}
+  }
+  if (name === "dash") scheduleOverview();
 }
 el("tabbar").addEventListener("click", e => {
   const b = e.target.closest("button");
   if (!b) return;
   showTab(b.dataset.tab);
   history.replaceState(null, "", b.dataset.tab === "dash" ? location.pathname : "#" + b.dataset.tab);
+});
+document.addEventListener("click", e => {
+  const b = e.target.closest(".subnav button[data-pane]");
+  if (b) { showTab(b.dataset.pane); history.replaceState(null, "", "#" + b.dataset.pane); return; }
+  const g = e.target.closest("[data-go]:not(.tabgo)");
+  if (g) { e.preventDefault(); if (g.dataset.vf) { vFilter = g.dataset.vf; applyVFilter(); } showTab(g.dataset.go); history.replaceState(null, "", "#" + g.dataset.go); scrollTo({ top: 0, behavior: "smooth" }); }
 });
 // lien direct vers un onglet (ex. #script depuis la notif Telegram d'une idée)
 showTab((location.hash || "").replace("#", ""));
@@ -1977,6 +2137,9 @@ function renderExtras(eodText, tallyText, partialsText, pfText, calText, leadsTe
   renderCallsTabs(calText || "");
   renderLeadsTab(leadsText || "");
   renderVerifTab();
+  renderLmTab();
+  updatePoleCounts();
+  scheduleOverview();
 }
 
 /* ---------- onglet EOD : derniers reports + pilotage ---------- */
@@ -2014,8 +2177,7 @@ function renderEodTab(eodText) {
     const detail = parseDetail(joined);
     const mDrap = /[ÉE]tiquette drapeau\s*:?\s*(\d+)/i.exec(joined);
     const drapeau = mDrap ? +mDrap[1] : null;
-    const urls = [...joined.matchAll(/[ÉE]tiquette URL\s*:\s*(\S+)/gi)].map(m => m[1])
-      .filter(u => !ETQ_RETIREES.has(instaName(u).replace(/^@/, "").toLowerCase()));
+    const urls = [...joined.matchAll(/[ÉE]tiquette URL\s*:\s*(\S+)/gi)].map(m => m[1]);
     const mTot = /—\s*Abonn[ée]s total\s*:\s*(\d+)/i.exec(joined);
     const mImpr = /—\s*Impressions\s*:\s*(\d+)/i.exec(joined);
     const mMc = /—\s*ManyChat Clart[ée]\s*:\s*(\d+)/i.exec(joined);
@@ -2176,13 +2338,12 @@ function renderCallsTabs(calText) {
       (c.visio ? '<p class="rstats"><a href="' + esc(c.visio) + '" target="_blank" rel="noopener" style="color:var(--accent)">Lien visio ↗</a></p>' : '') +
       waBtn(c.tel, msg) + mailLine(c) +
       '</div>';
-  }).join("") || '<p class="empty-note">Aucun call à venir sur le Calendly de Lauric.</p>';
+  }).join("");
 
   /* à remplir / remplis */
   const past = calls.filter(c => c.start < now).sort((a, b) => b.start - a.start);
   const todo = past.filter(c => c.status === "active" && !CALL_EDITS.has(c.uuid));
   const done = past.filter(c => c.status !== "active" || CALL_EDITS.has(c.uuid));
-  el("calls-count").textContent = todo.length ? "(" + todo.length + ")" : "";
   el("car-todo").innerHTML = todo.map(c =>
     '<div class="rcard deal" style="--dc:var(--s4)">' +
     '<div class="rhead"><span class="rname">' + esc(c.name) + '</span>' +
@@ -2234,20 +2395,19 @@ function renderCallsTabs(calText) {
       waBtn(c.tel, msg) + mailLine(c) + '</div>';
   }).join("") || '<p class="empty-note">Personne à relancer : aucun call marqué follow-up ou pas de vente.</p>';
 
-  el("calls-pills").innerHTML =
-    '<button class="pill fpill" data-f="avenir"><b>' + upcoming.length + '</b>&nbsp;à venir</button>' +
-    '<button class="pill fpill" data-f="remplir"><b>' + todo.length + '</b>&nbsp;à remplir</button>' +
-    '<button class="pill fpill" data-f="remplis"><b>' + done.length + '</b>&nbsp;remplis</button>' +
-    '<button class="pill fpill" data-f="relancer"><b>' + relances.length + '</b>&nbsp;à relancer</button>';
-  applyCallsView();
+  el("car-done-sum").textContent = "📞 Historique des calls Calendly remplis (" + done.length + ")";
+  el("cav-sub").textContent = upcoming.length ? "Réservés sur Calendly (" + upcoming.length + ")" : "Réservés sur Calendly : aucun pour l'instant";
 
-  /* données pour le cockpit et le funnel complet de la Vue d'ensemble */
+  /* données pour le cockpit, l'onglet Closing et l'entonnoir de la Vue d'ensemble */
   CPT.today = upcoming.filter(c => iso(c.start) === iso(now)).length;
   CPT.todo = todo.length;
-  CPT.ventesMois = past.filter(c => iso(c.start).slice(0, 7) === iso(now).slice(0, 7) &&
+  CPT.relances = relances.length;
+  CPT.calUpcoming = upcoming;
+  CPT.ventesMoisCal = past.filter(c => iso(c.start).slice(0, 7) === iso(now).slice(0, 7) &&
     (CALL_EDITS.get(c.uuid) || {}).res === "vente").length;
   CPT.calls30 = past.filter(c => c.status === "active" && (now - c.start) / 86400000 < 30);
-  renderCockpit();
+  CPT.calAll = calls;
+  renderVentesTab(LAST_TALLY, LAST_PF);
   applySearch();
 }
 
@@ -2265,6 +2425,7 @@ const LEAD_STAGES = [
 const LEAD_RANK = Object.fromEntries(LEAD_STAGES.map(([k], i) => [k, i]));
 
 function renderLeadsTab(leadsText) {
+  LAST_LEADS_CSV = leadsText || "";
   const map = new Map();
   const norm = s => (s || "").trim().toLowerCase();
   /* clé d'un lead : le pseudo Insta quand on l'a (évite de fusionner deux « Maxime »), sinon le prénom ;
@@ -2345,7 +2506,9 @@ function renderLeadsTab(leadsText) {
     '</div>').join("");
 
   /* 2) étiquettes leads chauds (URLs reportées dans l'EOD) */
+  const etqRet = etqRetiredMap();
   (EOD_REPORTS || []).forEach(r => (r.urls || []).forEach(u => {
+    if (etqRet[etqKey(u)]) return;   // étiquette retirée : plus un lead chaud
     const ps = instaName(u).replace(/^@/, "");
     if (ps) touch(norm(ps), { nom: "@" + ps, pseudo: ps, src: "Étiquette" }, "chaud");
   }));
@@ -2377,6 +2540,7 @@ function renderLeadsTab(leadsText) {
     return o;
   }).sort((a, b) => (b.arep ? 1 : 0) - (a.arep ? 1 : 0) || LEAD_RANK[b.best] - LEAD_RANK[a.best]);
 
+  LEAD_BY_PSEUDO = new Map(leads.filter(l => l.pseudo).map(l => [l.pseudo.toLowerCase(), l]));
   el("leads-count").textContent = leads.length ? "(" + leads.length + ")" : "";
   el("leads-pills").innerHTML =
     '<button class="pill fpill' + (leadsFilter.f === "all" && !leadsFilter.fv ? " on" : "") + '" data-f="all"><b>' + leads.length + '</b>&nbsp;tous</button>' +
@@ -2419,6 +2583,8 @@ function renderLeadsTab(leadsText) {
     (releve ? " (dernier relevé le " + releve + ", fait par Claude dans Chrome)" : "") +
     ", étiquettes leads chauds de l'EOD, scans Tally remplis et calls Calendly. Le badge coloré = l'étape la plus avancée connue du lead.";
   applySearch();
+  renderChauds();
+  scheduleOverview();
 }
 
 /* filtre de l'onglet Leads : état conservé entre les rafraîchissements, composé avec la recherche et la période */
@@ -2628,7 +2794,7 @@ function renderTodoTab() {
   const sel = el("td-qui");
   if (!sel.options.length) sel.innerHTML = TODO_PEOPLE.map(p => '<option>' + p + '</option>').join("");
   if (todoWho !== "all" && document.activeElement !== sel) sel.value = todoWho;
-  el("todo-note").textContent = "Les relances marquées « analyse appels » viennent du sous-onglet Datas › Appels proposés (relevé des conversations Instagram). Une tâche cochée reste visible dans « Tâches faites ».";
+  el("todo-note").textContent = "Les relances marquées « analyse appels » viennent de Setting › 📞 Appels proposés (relevé des conversations Instagram). Une tâche cochée reste visible dans « Tâches faites ».";
 }
 el("todo-pills").addEventListener("click", e => {
   const b = e.target.closest(".fpill"); if (!b) return;
@@ -2752,6 +2918,7 @@ function renderArepTab() {
   convs.forEach(c => { done[c.pseudo] = map[c.pseudo] != null ? map[c.pseudo] : !!c.repondu; });
   const open = convs.filter(c => !done[c.pseudo]);
   el("arep-count").textContent = open.length ? "(" + open.length + ")" : "";
+  AREP_OPEN = open.length; updatePoleCounts(); scheduleOverview();
   const sets = {
     todo: open,
     prio: open.filter(c => (c.priorite || 9) <= 2),
@@ -2801,17 +2968,6 @@ const ISSUE_LABELS = {
   discussion: ["💬 a répondu, pas de date", "var(--accent)"], reporte: ["⏳ reporté ou refusé", "var(--s4)"], vu: ["👀 vu, pas de réponse", "var(--bad)"], nonvu: ["⬜ pas encore vu", "var(--muted)"] };
 const ISSUE_ORDER = ["vente", "fait", "booke", "accepte", "discussion", "reporte", "vu", "nonvu"];
 let APPELS = { convs: [] }, appelsFilter = "all";
-let datasSub = "main";
-try { datasSub = localStorage.getItem("datasSub") || "main"; } catch (e) {}
-function showDatasSub(name) {
-  datasSub = name === "appels" ? "appels" : "main";
-  el("datas-main").hidden = datasSub !== "main";
-  el("datas-appels").hidden = datasSub !== "appels";
-  document.querySelectorAll("#datas-sub .fpill").forEach(x => x.classList.toggle("on", x.dataset.s === datasSub));
-  try { localStorage.setItem("datasSub", datasSub); } catch (e) {}
-}
-el("datas-sub").addEventListener("click", e => { const b = e.target.closest(".fpill"); if (b) showDatasSub(b.dataset.s); });
-showDatasSub(datasSub);
 
 function renderAppelsTab(json) {
   APPELS = json && json.convs ? json : { convs: [] };
@@ -3088,44 +3244,30 @@ el("leads-pills").addEventListener("click", e => {
   el("leads-list-title").scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
-/* vues de l'onglet Calls : À venir / À remplir / Remplis / À relancer */
-let callsView = "avenir";
-function applyCallsView() {
-  el("sec-cav").hidden = callsView !== "avenir";
-  el("sec-car-todo").hidden = callsView !== "remplir";
-  el("sec-car-done").hidden = callsView !== "remplis";
-  el("sec-relance").hidden = callsView !== "relancer";
-  document.querySelectorAll("#calls-pills .fpill").forEach(b =>
-    b.classList.toggle("on", b.dataset.f === callsView));
-}
-el("calls-pills").addEventListener("click", e => {
-  const b = e.target.closest(".fpill");
-  if (!b) return;
-  callsView = b.dataset.f;
-  applyCallsView();
-});
-
 /* ---------- cockpit de la Vue d'ensemble + funnel complet ---------- */
 
 const CPT = {};   // rempli par renderCallsTabs (calls) et renderVentesTab (CA)
 
 function renderCockpit() {
-  if (CPT.today == null || CPT.caPaye == null) return;   // attend les deux sources
+  if (CPT.today == null || CPT.avenir == null) return;   // attend les calls Calendly et le pipeline
   const box = el("cockpit");
   box.hidden = false;
-  const t = (kc, n, l, tab) => '<div class="vkpi tabgo" data-go="' + tab + '" data-view="' + (tab === "calls" ? (l.includes("remplir") ? "remplir" : "avenir") : "") + '" style="--kc:' + kc + '"><div class="n">' + n + '</div><div class="l">' + l + '</div></div>';
+  const t = (kc, n, l, vf) => '<div class="vkpi tabgo" data-go="ventes" data-vf="' + vf + '" style="--kc:' + kc + '"><div class="n">' + n + '</div><div class="l">' + l + '</div></div>';
   box.innerHTML =
-    t("var(--accent)", CPT.today, "📞 call" + (CPT.today > 1 ? "s" : "") + " aujourd'hui", "calls") +
-    t("var(--s4)", CPT.todo, "📋 à remplir", "calls") +
-    t("var(--good)", CPT.ventesMois, "✅ vente" + (CPT.ventesMois > 1 ? "s" : "") + " ce mois-ci", "ventes") +
-    t("var(--s3)", fmt(Math.round(CPT.caPaye)) + "&nbsp;€", "💶 encaissés", "ventes");
+    t("var(--accent)", CPT.today, "📞 call" + (CPT.today > 1 ? "s" : "") + " aujourd'hui", "avenir") +
+    t("var(--funnel-2)", CPT.avenir, "🗓 à venir", "avenir") +
+    t("var(--s4)", CPT.todo, "📋 call" + (CPT.todo > 1 ? "s" : "") + " à remplir", "remplir") +
+    t("var(--good)", CPT.ventesMois, "✅ vente" + (CPT.ventesMois > 1 ? "s" : "") + " ce mois-ci", "gagne");
   renderBigFunnel();
+  updatePoleCounts();
+  scheduleOverview();
 }
 el("cockpit").addEventListener("click", e => {
   const b = e.target.closest(".tabgo");
   if (!b) return;
-  if (b.dataset.view) { callsView = b.dataset.view; applyCallsView(); }
+  vFilter = b.dataset.vf || "all"; applyVFilter();
   showTab(b.dataset.go);
+  history.replaceState(null, "", "#" + b.dataset.go);
 });
 
 function renderBigFunnel() {
@@ -3165,7 +3307,7 @@ function renderBigFunnel() {
     box.appendChild(row);
   });
   el("funnel2-note").textContent =
-    "Fenêtre : 30 derniers jours. Calls faits = calls Calendly passés hors no-show et annulés ; Ventes = calls validés « vente » dans l'onglet Calls.";
+    "Fenêtre : 30 derniers jours, chiffres déclarés dans l'EOD. Calls faits = calls Calendly passés hors no-show et annulés ; Ventes = calls validés « vente » dans l'onglet Closing. L'entonnoir complet, sur les vrais chiffres Instagram, est dans la Vue d'ensemble.";
 }
 
 /* ---------- recherche par prénom, tous onglets ---------- */
@@ -3243,26 +3385,7 @@ function renderScriptTab(reports, ideas, trackRows) {
   const w30 = reports.filter(r => inWin(r, 30));
   const sumf = (rows, f) => rows.reduce((a, r) => a + (f(r) || 0), 0);
 
-  /* vivier leads chauds : URLs d'étiquettes reportées dans les EOD, dédupliquées */
-  const seen = new Map();
-  [...reports].reverse().forEach(r => (r.urls || []).forEach(u => {
-    const key = u.replace(/\/+$/, "").toLowerCase();
-    if (!seen.has(key)) seen.set(key, { url: u, date: r.date, setter: r.setter });
-    else seen.get(key).date = r.date; // dernière fois vue
-  }));
-  const vivier = [...seen.values()].sort((a, b) => a.date < b.date ? 1 : -1);
-  el("script-count").textContent = vivier.length ? "(" + vivier.length + ")" : "";
-  el("vivier-sum").textContent = vivier.length
-    ? "🔥 " + vivier.length + " lead" + (vivier.length > 1 ? "s" : "") + " chaud" + (vivier.length > 1 ? "s" : "") + " · déplier / replier"
-    : "Aucun lead chaud pour l'instant";
-  el("vivier-list").innerHTML = vivier.map(v => {
-    const href = /^https?:\/\//i.test(v.url) ? v.url : "https://" + v.url;
-    return '<div class="rcard deal" style="--dc:var(--bad)">' +
-      '<div class="rhead"><a class="vivlink" href="' + esc(href) + '" target="_blank" rel="noopener">' + esc(instaName(v.url)) + ' ↗</a>' +
-      '<span class="badge lose">🔥 lead chaud</span>' +
-      '<span class="rmeta">étiquette posée, ajouté le ' + esc(frDate(v.date)) + ' · Lauric a le relais</span></div>' +
-      '</div>';
-  }).join("") || '<p class="empty-note">Aucune URL d\'étiquette reportée pour l\'instant. Elles s\'ajoutent via le formulaire EOD (champ 🏷️), reporté chaque soir par Cynthia.</p>';
+  renderChauds();   /* vivier leads chauds : sous-onglet Setting › 🔥 Leads chauds */
 
   /* A/B : Constant = variante A, Cynthia = variante B, chiffres EOD sur 30 j */
   const variants = [
@@ -3292,6 +3415,9 @@ function renderScriptTab(reports, ideas, trackRows) {
   /* tracking : abonnés + scans (impressions et ManyChat retirés le 01/09, demande d'Alex) */
   const trackAll = [...reports, ...(trackRows || [])].sort((a, b) => a.date < b.date ? 1 : -1);
   const lastTot = trackAll.find(r => r.totalSubs != null);   // relevé du soir de Cynthia (ou saisie Lauric)
+  const lastImpr = trackAll.find(r => r.impr != null);
+  LAST_IMPR = lastImpr ? { n: lastImpr.impr, date: lastImpr.date } : null;
+  renderContenu();
   const t = (kc, n, l) => '<div class="vkpi" style="--kc:' + kc + '"><div class="n">' + n + '</div><div class="l">' + l + '</div></div>';
   el("track-tiles").innerHTML =
     t("var(--funnel-2)", lastTot ? fmt(lastTot.totalSubs) : "–", "abonnés au total · dernier relevé") +
@@ -3305,6 +3431,77 @@ function renderScriptTab(reports, ideas, trackRows) {
     '<p class="rnote" style="margin-top:4px">' + esc(i.text) + '</p></div>').join("") ||
     '<p class="empty-note">Aucune idée pour l\'instant. La première lance la machine !</p>';
 }
+
+/* ---------- Setting › 🔥 Leads chauds : étiquettes actives et anciennes ----------
+   Une étiquette = une URL de profil reportée dans l'EOD (champ 🏷️). Lauric la retire d'un clic : ligne « Etiquette »
+   du Google Form « — EtqRetiree : <pseudo> · 1 » (0 = remise en lead chaud), la dernière ligne gagne. ETQ_RETIREES
+   garde les retraits faits à la main avant le bouton. Attente locale 30 min (etqPending) le temps que le Sheet suive. */
+let LEAD_BY_PSEUDO = new Map(), LAST_LEADS_CSV = "";
+const etqKey = u => instaName(u).replace(/^@/, "").toLowerCase();
+function etqPending() {
+  try { return JSON.parse(localStorage.getItem("etqPending") || "[]").filter(p => Date.now() - p.ts < 30 * 60000); } catch (e) { return []; }
+}
+function etqRetiredMap() {
+  const m = {};
+  ETQ_RETIREES.forEach(k => { m[k] = true; });
+  const lines = [];
+  parseCSV(TODO_EOD_TEXT || "").slice(1).forEach(r => {
+    [r[5], r[6], r[12]].map(x => (x || "").trim()).filter(Boolean).join("\n").split("\n").forEach(l => lines.push(l));
+  });
+  etqPending().forEach(p => lines.push(p.line));
+  lines.forEach(l => { const x = /—\s*EtqRetiree\s*:\s*([^\s·]+)\s*·\s*([01])/.exec(l); if (x) m[x[1].toLowerCase()] = x[2] === "1"; });
+  return m;
+}
+let VIVIER = [];
+function renderChauds() {
+  if (!el("vivier-list")) return;
+  const ret = etqRetiredMap();
+  const seen = new Map();
+  [...(EOD_REPORTS || [])].reverse().forEach(r => (r.urls || []).forEach(u => {
+    const key = etqKey(u);
+    if (!key || /\s/.test(key)) return;
+    if (!seen.has(key)) seen.set(key, { url: u, key, date: r.date, setter: r.setter });
+  }));
+  VIVIER = [...seen.values()].sort((a, b) => a.date < b.date ? 1 : -1);
+  const actifs = VIVIER.filter(v => !ret[v.key]), anciens = VIVIER.filter(v => ret[v.key]);
+  el("chauds-count").textContent = actifs.length ? "(" + actifs.length + ")" : "";
+  el("chauds-title").textContent = "🔥 Leads chauds actifs (" + actifs.length + ")";
+  el("chauds-old-sum").textContent = "🗂️ Étiquettes anciennes (" + anciens.length + ")";
+  el("chauds-old-details").hidden = !anciens.length;
+  const card = (v, old) => {
+    const href = /^https?:\/\//i.test(v.url) ? v.url : "https://" + v.url;
+    const l = LEAD_BY_PSEUDO.get(v.key);
+    const st = l && LEAD_STAGES.find(([k]) => k === l.best);
+    const lm = (LM_DATA && LM_DATA.personnes || []).filter(p => p.pseudo.toLowerCase() === v.key);
+    return '<div class="rcard deal" style="--dc:' + (old ? "var(--muted)" : "var(--bad)") + '">' +
+      '<div class="rhead"><a class="vivlink" href="' + esc(href) + '" target="_blank" rel="noopener">' + esc(instaName(v.url)) + ' ↗</a>' +
+      (l && l.nom && l.nom !== "@" + v.key ? '<span class="rname" style="font-size:14px">' + esc(l.nom) + '</span>' : '') +
+      (old ? '<span class="badge gray">étiquette retirée</span>' : '<span class="badge lose">🔥 lead chaud</span>') +
+      (st && st[0] !== "chaud" ? '<span class="badge" style="color:' + st[2] + ';border-color:' + st[2] + '">' + st[1] + '</span>' : '') +
+      (l && l.arep ? '<span class="badge lose">✋ à répondre</span>' : '') +
+      lm.map(p => '<span class="badge next">🎁 ' + (p.lm === "yt" ? "vidéo" : "scan") + (p.ouvert ? " " + p.ouvert : p.lien ? " envoyé" : " proposé") + '</span>').join("") +
+      '<span class="rmeta">étiquette posée le ' + esc(frDate(v.date)) + (v.setter && v.setter !== "?" ? " · " + esc(v.setter) : "") + '</span></div>' +
+      (l && l.detail ? '<p class="rnote">' + esc(l.detail) + '</p>' : '') +
+      '<div class="dealbtns">' +
+      (l && l.conv ? '<a class="copybtn" style="text-decoration:none" href="' + esc(l.conv) + '" target="_blank" rel="noopener">Ouvrir la conversation ↗</a>' : '') +
+      '<button type="button" class="copybtn ' + (old ? "" : "etqbtn") + '" data-etq="' + esc(v.key) + '" data-etqval="' + (old ? 0 : 1) + '">' +
+      (old ? "↩︎ Remettre en lead chaud" : "🗂️ Retirer l'étiquette") + '</button></div></div>';
+  };
+  el("vivier-list").innerHTML = actifs.map(v => card(v, false)).join("") ||
+    '<p class="empty-note">Aucun lead chaud actif. Les étiquettes s\'ajoutent via le formulaire EOD (champ 🏷️), reporté chaque soir par Cynthia.</p>';
+  el("vivier-old").innerHTML = anciens.map(v => card(v, true)).join("");
+  applySearch();
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-etq]");
+  if (!b) return;
+  const line = "— EtqRetiree : " + b.dataset.etq + " · " + b.dataset.etqval;
+  try { const p = etqPending(); p.push({ line, ts: Date.now() }); localStorage.setItem("etqPending", JSON.stringify(p)); } catch (e2) {}
+  renderChauds();
+  renderLeadsTab(LAST_LEADS_CSV);
+  scheduleOverview();
+  postEodRow("Etiquette", line).catch(() => alert("Le changement n'a pas pu être envoyé, réessaie."));
+});
 
 /* ---------- pilotage : quoi améliorer pour booker plus de calls ---------- */
 function hbars(items, color) {
@@ -3705,9 +3902,10 @@ el("track-form").addEventListener("submit", async e => {
   if (!dateVal) return;
   const parts = [];
   if (el("t-subs").value !== "") parts.push("— Abonnés total : " + Math.max(0, +el("t-subs").value || 0));
+  if (el("t-impr").value !== "") parts.push("— Impressions : " + Math.max(0, +el("t-impr").value || 0));
   if (!parts.length) {
     msg.hidden = false; msg.className = "sendmsg ko";
-    msg.textContent = "Remplis le nombre d'abonnés.";
+    msg.textContent = "Remplis les abonnés ou les impressions.";
     return;
   }
   btn.disabled = true;
@@ -3805,6 +4003,7 @@ function parseTotal(text) {
 }
 function renderTotalChart(text) {
   const pts = parseTotal(text);
+  NT_POINTS = pts; renderContenu(); scheduleOverview();
   const box = el("nt-chart"), kp = el("nt-kpis"), note = el("nt-note");
   if (!pts.length) {
     kp.innerHTML = "";
@@ -3916,7 +4115,8 @@ function renderAbonnesTab(text) {
   const local = NF_LIST.filter(f => !f.contacte && seen[f.pseudo]);
   const done = NF_LIST.filter(f => f.contacte);
   const cnt = el("abonnes-count");
-  if (cnt) cnt.textContent = todo.length ? "· " + todo.length : "";
+  if (cnt) cnt.textContent = todo.length ? "(" + todo.length + ")" : "";
+  NF_TODO_N = todo.length; scheduleOverview();
   box.innerHTML = todo.map((f, i) => nfCard(f, i, false)).join("") ||
     '<div class="card"><p class="rstats" style="margin:0">✅ Tout le monde a été contacté.</p></div>';
   el("sec-nf-local").hidden = !local.length;
@@ -4185,10 +4385,10 @@ function renderVentesTab(tallyText, pfText) {
   // prénom passe gagné tout seul (évite la double saisie). Une modification
   // manuelle de Lauric (bloc 3) garde le dernier mot.
   const ventesCalls = new Map();
-  const bookedFn = new Set();   // prénoms qui ont un vrai RDV Calendly à venir
+  const bookedFnCal = new Set();   // prénoms qui ont un vrai RDV Calendly à venir
   parseCSV(LAST_CAL).slice(1).forEach(r => {
     const fn = firstName(r[4] || "").toLowerCase();
-    if (fn && (r[3] || "").trim() === "active" && new Date((r[1] || "").trim()) >= new Date()) bookedFn.add(fn);
+    if (fn && (r[3] || "").trim() === "active" && new Date((r[1] || "").trim()) >= new Date()) bookedFnCal.add(fn);
     const e = CALL_EDITS.get((r[0] || "").trim());
     if (!e || e.res !== "vente") return;
     if (fn) ventesCalls.set(fn, { date: (r[1] || "").slice(0, 10), propo: e.propo || "" });
@@ -4214,9 +4414,12 @@ function renderVentesTab(tallyText, pfText) {
 
   // doublons signalés depuis la console : hors compteurs et hors listes, gardés en bas
   const doublons = deals.filter(d => d.key && DUP_KEYS.has(d.key));
+  const bookedFn = new Set((CPT.calUpcoming || []).map(c => firstName(c.name).toLowerCase()).filter(Boolean));
   const vivants = deals.filter(d => !d.key || !DUP_KEYS.has(d.key));
   const by = st => vivants.filter(d => d.st === st);
-  const avenir = by("avenir").sort((a, b) => a.when < b.when ? -1 : 1);
+  const avenirAll = by("avenir").sort((a, b) => a.when < b.when ? -1 : 1);
+  // un deal daté dont la personne a un vrai RDV Calendly à venir est déjà affiché dans « Réservés sur Calendly »
+  const avenir = avenirAll.filter(d => !bookedFn.has(firstName(d.name || "").toLowerCase()));
   const encours = by("encours").reverse();
   const gagnes = by("gagne").reverse();
   const perdus = by("perdu").reverse();
@@ -4230,28 +4433,39 @@ function renderVentesTab(tallyText, pfText) {
   const ca = gagnes.reduce((a, d) => a + amount(d), 0);
   const stage = d => STAGE_EDITS.get(d.key) || "vente";
   const vers = d => VERS_EDITS.get(d.key) || null;
-  // part encaissée : versements reçus/total si renseignés, sinon 1 quand « payé »
-  const paidRatio = d => {
-    const v = vers(d);
-    if (v && v.t > 0) return Math.min(1, v.r / v.t);
-    return stage(d) === "paye" ? 1 : 0;
-  };
   const signes = gagnes.filter(d => stage(d) !== "vente" || (vers(d) && vers(d).r > 0));
-  const payes = gagnes.filter(d => paidRatio(d) >= 1);
-  const caPaye = gagnes.reduce((a, d) => a + amount(d) * paidRatio(d), 0);
-  CPT.caPaye = caPaye;
+  const payes = gagnes.filter(d => stage(d) === "paye" || (vers(d) && vers(d).t > 0 && vers(d).r >= vers(d).t));
 
-  el("ventes-count").textContent = gagnes.length ? "(" + gagnes.length + ")" : "";
+  /* date de chaque vente, pour les chiffres « ce mois-ci » et l'entonnoir 30 jours :
+     marquée gagnée dans la console, sinon call Calendly « vente », sinon 1er contact du portefeuille, sinon date du scan */
+  gagnes.forEach(d => {
+    const e = DEAL_EDITS.get(d.key);
+    d.saleDate = (e && e.st === "gagne" && e.rowDate) || (d.fromCall && d.fromCall.date) ||
+      dateInText(d.first) || (TDATES[d.key] || "").slice(0, 10) || "";
+  });
+  const moisCourant = today.slice(0, 7);
+  const calUp = CPT.calUpcoming || [];
+  CPT.avenir = calUp.length + avenir.length;
+  CPT.avenirDeals = avenir;
+  CPT.encours = encours.length;
+  CPT.gagnes = gagnes;
+  CPT.perdus = perdus.length;
+  CPT.ventesMois = gagnes.filter(d => (d.saleDate || "").slice(0, 7) === moisCourant).length;
+
   const sub = t => '<div class="l" style="font-size:11px;opacity:0.85;text-transform:none;letter-spacing:0">' + t + '</div>';
+  const tile = (vf, kc, n, l, extra) => '<div class="vkpi vf" data-vf="' + vf + '" style="--kc:' + kc + '"><div class="n">' + n + '</div><div class="l">' + l + '</div>' + (extra || "") + '</div>';
   el("v-kpis").innerHTML =
-    '<div class="vkpi vf" data-vf="avenir" style="--kc:var(--accent)"><div class="n">' + avenir.length + '</div><div class="l">🗓 à venir</div></div>' +
-    '<div class="vkpi vf" data-vf="encours" style="--kc:var(--s4)"><div class="n">' + encours.length + '</div><div class="l">⏳ en cours</div></div>' +
-    '<div class="vkpi vf" data-vf="gagne" style="--kc:var(--good)"><div class="n">' + gagnes.length + '</div><div class="l">✅ ventes</div>' +
+    tile("avenir", "var(--accent)", CPT.avenir, "🗓 à venir", sub(calUp.length + " Calendly · " + avenir.length + " datés dans le suivi")) +
+    tile("remplir", "var(--s3)", CPT.todo == null ? "–" : CPT.todo, "📋 calls à remplir") +
+    tile("encours", "var(--s4)", encours.length, "⏳ en cours") +
+    tile("relancer", "var(--s2)", CPT.relances == null ? "–" : CPT.relances, "🔁 à relancer") +
+    tile("gagne", "var(--good)", gagnes.length, "✅ ventes",
       sub("📄 " + signes.length + " contrat" + (signes.length > 1 ? "s" : "") + " signé" + (signes.length > 1 ? "s" : "") +
-          " · 💶 " + payes.length + " payé" + (payes.length > 1 ? "s" : "")) + '</div>' +
-    '<div class="vkpi vf" data-vf="perdu" style="--kc:var(--bad)"><div class="n">' + perdus.length + '</div><div class="l">❌ perdus</div></div>' +
-    '<div class="vkpi" style="--kc:var(--s3)"><div class="n">' + fmt(ca) + '&nbsp;€</div><div class="l">💶 CA signé (approx.)</div>' +
-      sub("dont " + fmt(caPaye) + " € encaissés") + '</div>';
+          " · 💶 " + payes.length + " payé" + (payes.length > 1 ? "s" : ""))) +
+    tile("perdu", "var(--bad)", perdus.length, "❌ perdus") +
+    '<div class="vkpi" style="--kc:var(--muted)"><div class="n">' + fmt(ca) + '&nbsp;€</div><div class="l">CA signé (approx.)</div></div>';
+  el("v-avenir-title").textContent = "🗓 Calls et relances à venir (" + CPT.avenir + ")";
+  el("v-avenir-sub").textContent = avenir.length ? "Datés dans le suivi, hors Calendly (" + avenir.length + ")" : "Datés dans le suivi, hors Calendly : aucun";
   applyVFilter();
 
   const color = { avenir: "var(--accent)", encours: "var(--s4)", gagne: "var(--good)", perdu: "var(--bad)" };
@@ -4271,7 +4485,7 @@ function renderVentesTab(tallyText, pfText) {
     if (d.st === "perdu") badges.push('<span class="badge lose">KO</span>');
     if (d.st === "avenir") {
       badges.push('<span class="badge next">' + esc(frDate(d.when)) + ' · ' + esc(relFr(d.when)) + '</span>');
-      if (!bookedFn.has(firstName(d.name || "").toLowerCase()))
+      if (!bookedFnCal.has(firstName(d.name || "").toLowerCase()))
         badges.push('<span class="badge warn2">⚠️ pas de résa Calendly</span>');
     }
     if (d.cible === "non") badges.push('<span class="badge gray">hors cible</span>');
@@ -4354,7 +4568,6 @@ function renderVentesTab(tallyText, pfText) {
     monthMap.set(k, m);
   });
   const months = [...monthMap.entries()].sort((a, b) => a[0] < b[0] ? 1 : -1);
-  el("sec-v-mois").hidden = !months.length;
   const moisFr = k => new Date(k + "-15T12:00:00").toLocaleDateString("fr-FR", { month: "long", year: "numeric" });
   el("v-mois").innerHTML =
     '<table><thead><tr><th>Mois</th><th>Calls</th><th>Faits</th><th>No-show</th><th>Show-up</th><th>Ventes</th><th>CA (propo)</th></tr></thead><tbody>' +
@@ -4373,6 +4586,7 @@ function renderVentesTab(tallyText, pfText) {
     })() +
     '</tbody></table>';
 
+  applyVFilter();
   applySearch();
   renderCockpit();
 
@@ -4385,9 +4599,11 @@ function renderVentesTab(tallyText, pfText) {
 /* filtres de l'onglet Ventes : cliquer une tuile n'affiche que sa liste, re-cliquer remet tout */
 let vFilter = "all";
 function applyVFilter() {
-  const map = { avenir: "sec-v-avenir", encours: "sec-v-encours", gagne: "sec-v-gagnes", perdu: "sec-v-perdus" };
-  Object.entries(map).forEach(([k, id]) => { el(id).hidden = vFilter !== "all" && vFilter !== k; });
-  el("sec-v-dup").hidden = vFilter !== "all";
+  const map = { avenir: ["sec-v-avenir"], remplir: ["sec-car-todo"], encours: ["sec-v-encours"], relancer: ["sec-relance"],
+                gagne: ["sec-v-gagnes"], perdu: ["sec-v-perdus"] };
+  Object.entries(map).forEach(([k, ids]) => ids.forEach(id => { el(id).hidden = vFilter !== "all" && vFilter !== k; }));
+  ["sec-car-done", "sec-v-dup"].forEach(id => { el(id).hidden = vFilter !== "all"; });
+  el("sec-v-mois").hidden = vFilter !== "all" || !el("v-mois").innerHTML.includes("<tr");
   document.querySelectorAll("#v-kpis .vf").forEach(t => t.classList.toggle("on", t.dataset.vf === vFilter));
 }
 el("v-kpis").addEventListener("click", e => {
@@ -4446,6 +4662,288 @@ document.addEventListener("click", async e => {
 
 // topic ntfy déjà suivi par Lauric (et Alex) : la page peut y publier en direct
 const NTFY_TOPIC_PAGE = "scan-dirigeant-lauric-d7k4q2";
+
+/* ============================================================
+   Vue d'ensemble, Contenu, Lead magnet
+   ============================================================ */
+let LM_DATA = null, LAST_IMPR = null, NT_POINTS = [], AREP_OPEN = null, NF_TODO_N = null;
+const pctTxt = (n, d) => d ? Math.round(100 * n / d) + " %" : "–";
+const dfr = d => d ? d.slice(8, 10) + "/" + d.slice(5, 7) : "";
+const isoDaysAgo = n => iso(new Date(Date.now() - n * 864e5));
+
+function updatePoleCounts() {
+  const sc = el("pole-setting-count"), cc = el("pole-closing-count");
+  if (sc) { sc.textContent = AREP_OPEN ? "(" + AREP_OPEN + ")" : ""; sc.title = AREP_OPEN ? AREP_OPEN + " conversations à répondre" : ""; }
+  if (cc) { cc.textContent = CPT.avenir ? "(" + CPT.avenir + ")" : ""; cc.title = CPT.avenir ? CPT.avenir + " calls ou relances à venir" : ""; }
+}
+
+/* abonnés gagnés sur n jours d'après la courbe (relevé de 18 h) ; depuis le 1er relevé si la courbe est plus courte */
+function subsGain(n) {
+  const pts = NT_POINTS;
+  if (!pts.length) return null;
+  const last = pts[pts.length - 1], lim = isoDaysAgo(n);
+  const before = pts.filter(p => p.date <= lim);
+  const base = before.length ? before[before.length - 1] : pts[0];
+  return { v: Math.max(0, last.n - base.n), since: before.length ? "" : base.date, total: last.n, lastDate: last.date };
+}
+
+function renderContenu() {
+  const box = el("ct-kpis");
+  if (!box) return;
+  const g30 = subsGain(30), g7 = subsGain(7);
+  const k = (kc, n, l) => '<div class="vkpi" style="--kc:' + kc + '"><div class="n">' + n + '</div><div class="l">' + l + '</div></div>';
+  box.innerHTML =
+    k("var(--s5)", LAST_IMPR ? fmt(LAST_IMPR.n) : "–", "👁 vues sur 30 jours" + (LAST_IMPR ? " · saisi le " + dfr(LAST_IMPR.date) : " · à saisir")) +
+    k("var(--s3)", g30 ? "+" + fmt(g30.v) : "–", "🆕 nouveaux abonnés · 30 j" + (g30 && g30.since ? " (depuis le " + dfr(g30.since) + ")" : "")) +
+    k("var(--s1)", g7 ? "+" + fmt(g7.v) : "–", "🆕 nouveaux abonnés · 7 j") +
+    k("var(--accent)", LAST_IMPR && g30 && LAST_IMPR.n ? (100 * g30.v / LAST_IMPR.n).toLocaleString("fr-FR", { maximumFractionDigits: 2 }) + " %" : "–", "vues → abonnés");
+  el("ct-note").textContent = "Les vues se saisissent en bas de cette page (chiffre du tableau de bord professionnel Instagram, 30 derniers jours). Les abonnés sont relevés automatiquement chaque soir à 18 h.";
+}
+
+let OV_T = null;
+function scheduleOverview() { clearTimeout(OV_T); OV_T = setTimeout(() => { try { renderOverview(); } catch (e) { console.error("vue d'ensemble", e); } }, 80); }
+
+function renderOverview() {
+  const box = el("ov-funnel");
+  if (!box || typeof LEAD_ROWS === "undefined") return;
+  const today = iso(new Date()), d30 = isoDaysAgo(30);
+  const in30 = d => !!d && d.slice(0, 10) >= d30 && d.slice(0, 10) <= today;
+  el("ov-period").textContent = "du " + dfr(d30) + " au " + dfr(today);
+
+  /* contenu */
+  const g30 = subsGain(30);
+  /* setting · premier message : accroches réelles relevées sur Instagram */
+  const acc = LEAD_ROWS.filter(r => r.va && !["suivi", "historique", "relance2808"].includes(r.va) && in30(r.d));
+  const env = acc.length, likes = acc.filter(r => r.va === "like").length;
+  const vus = acc.filter(r => ["vu", "reagi", "repondu"].includes(r.st)).length;
+  const reps = acc.filter(r => r.st === "repondu").length;
+  /* setting · Lauric */
+  const ret = etqRetiredMap();
+  const chauds = VIVIER.filter(v => !ret[v.key] && in30(v.date)).length;
+  const P = (LM_DATA && LM_DATA.personnes) || [];
+  const lmSent = P.filter(p => p.lien && in30(p.lien.date));
+  const lmProp = P.filter(p => p.offre && in30(p.offre.date) && !(p.lien && in30(p.lien.date))).length;
+  const lmScan = lmSent.filter(p => p.lm === "scan");
+  const lmOuv = lmScan.filter(p => p.ouvert).length;
+  const lmRep = lmSent.filter(p => p.lien.rep || (p.rep && p.repDate >= p.lien.date)).length;
+  /* closing */
+  const calAll = CPT.calAll || [];
+  const r1cal = calAll.filter(c => c.status === "active" && iso(c.start) >= d30);
+  const r1 = r1cal.length + ((CPT.avenirDeals || []).length);
+  const v30 = (CPT.gagnes || []).filter(d => in30(d.saleDate)).length;
+
+  const G = [
+    { color: "var(--s5)", title: "🎬 Contenu", sub: "ce qui fait venir les gens", go: "audience", rows: [
+      { lab: "Impressions", small: "vues du compte sur 30 jours", v: LAST_IMPR ? LAST_IMPR.n : null,
+        miss: 'pas encore saisi · <a data-go="audience">saisir dans Contenu</a>', extra: LAST_IMPR ? "saisi le " + dfr(LAST_IMPR.date) : "" },
+      { lab: "Nouveaux abonnés", small: "gain du compte", v: g30 ? g30.v : null, miss: "relevé des abonnés indisponible",
+        extra: g30 && g30.since ? "depuis le 1er relevé du " + dfr(g30.since) : (LAST_IMPR && g30 && LAST_IMPR.n ? pctTxt(g30.v, LAST_IMPR.n).replace(" %", " %") + " des vues" : "") } ] },
+    { color: "var(--accent)", title: "✉️ Setting · premier message", sub: "les setters, relevé réel Instagram", go: "datas", rows: [
+      { lab: "Messages envoyés", small: "premiers messages (accroches)", v: env, extra: (env - likes) + " aux abonnés · " + likes + " aux likes" },
+      { lab: "Vus", small: "le lead a ouvert", v: vus, rate: pctTxt(vus, env) + " de taux de vu" },
+      { lab: "Réponses", small: "le lead a répondu", v: reps, rate: pctTxt(reps, env) + " de taux de réponse" } ] },
+    { color: "var(--s2)", title: "🎯 Setting · Lauric", sub: "dès que le lead répond", go: "chauds", rows: [
+      { lab: "Leads chauds", small: "étiquette posée", v: chauds, extra: VIVIER.filter(v => !ret[v.key]).length + " actifs au total" },
+      { lab: "Lead magnets envoyés", small: "lien du scan ou vidéo", v: lmSent.length, extra: lmProp ? "+ " + lmProp + " scan" + (lmProp > 1 ? "s" : "") + " proposé" + (lmProp > 1 ? "s" : "") + " sans lien" : "" },
+      { lab: "Ouverts", small: "scan commencé ou rempli", v: lmOuv, rate: lmScan.length ? pctTxt(lmOuv, lmScan.length) + " des scans envoyés" : "", extra: lmSent.length - lmScan.length ? "vidéo : non mesurable" : "" },
+      { lab: "Répondus", small: "réponse après l'envoi", v: lmRep, rate: pctTxt(lmRep, lmSent.length) } ] },
+    { color: "var(--good)", title: "🤝 Closing", sub: "Lauric en call", go: "ventes", rows: [
+      { lab: "R1 pris", small: "calls des 30 j et à venir", v: r1, extra: r1cal.length + " Calendly · " + (CPT.avenirDeals || []).length + " hors Calendly" },
+      { lab: "Ventes", small: "signées sur 30 jours", v: v30, rate: r1 ? pctTxt(v30, r1) + " des R1" : "" } ] },
+  ];
+  const max = Math.max(1, ...G.flatMap(g => g.rows.map(r => r.v || 0)));
+  const w = v => 3 + 52 * Math.log10((v || 0) + 1) / Math.log10(max + 1);   // max 55 % : la valeur et le taux restent sur la même ligne
+  box.innerHTML = G.map(g => '<div class="ovgrp" style="--pc:' + g.color + '">' +
+    '<button type="button" class="ovgrp-h" data-go="' + g.go + '">' + g.title + ' <small>' + g.sub + ' ›</small></button>' +
+    g.rows.map(r => '<div class="ovrow"><div class="ovlab">' + r.lab + '<small>' + r.small + '</small></div>' +
+      '<div class="ovbar-zone">' + (r.v == null ? '<span class="ovmiss">' + r.miss + '</span>'
+        : '<div class="ovbar" style="width:' + w(r.v) + '%"></div><span class="ovval">' + fmt(r.v) + '</span>' +
+          (r.rate ? '<span class="ovrate">' + r.rate + '</span>' : '') + (r.extra ? '<span class="ovsub">' + r.extra + '</span>' : '')) +
+      '</div></div>').join("") + '</div>').join("");
+  el("ov-funnel-note").textContent = "Barres en échelle logarithmique pour garder lisibles les grandes et les petites étapes. Messages, vus et réponses : relevé des conversations Instagram (accroches, sans les relances). Leads chauds : étiquettes posées sur la période (hors étiquettes retirées). Lead magnets : liens du scan et de la vidéo envoyés en message sur la période. R1 : calls Calendly des 30 derniers jours et à venir, plus les calls datés hors Calendly. Clic sur un pôle pour ouvrir son onglet.";
+
+  /* récap par pôle */
+  const kv = (k, v) => '<div class="ovkv"><span>' + k + '</span><b>' + v + '</b></div>';
+  const todoLine = (txt, go) => '<div class="ovtodo" data-go="' + go + '">👉 ' + txt + '</div>';
+  const g7 = subsGain(7);
+  const acc7 = LEAD_ROWS.filter(r => r.va && !["suivi", "historique", "relance2808"].includes(r.va) && r.d && r.d >= isoDaysAgo(7));
+  const rep7 = acc7.filter(r => r.st === "repondu").length;
+  const imprOld = !LAST_IMPR || LAST_IMPR.date < isoDaysAgo(7);
+  const lmNoLink = P.filter(p => p.lm === "scan" && p.offre && p.offre.rep && !p.lien).length;
+  const todoL = typeof todoState === "function" ? todoState().filter(t => !t.fait && t.qui === "Lauric").length : 0;
+  const chaudsActifs = VIVIER.filter(v => !ret[v.key]).length;
+  const next = [...(CPT.calUpcoming || []).map(c => ({ n: c.name, d: iso(c.start) })), ...(CPT.avenirDeals || []).map(d => ({ n: d.name, d: d.when }))]
+    .filter(x => x.d).sort((a, b) => a.d < b.d ? -1 : 1).slice(0, 3);
+  const card = (color, title, go, body) => '<div class="card ovpole" style="--pc:' + color + '"><h3>' + title + '</h3>' + body +
+    '<a class="ovgo" data-go="' + go + '">Ouvrir ›</a></div>';
+  el("ov-poles").innerHTML =
+    card("var(--s5)", "🎬 Contenu", "audience",
+      kv("Abonnés au total", g30 ? fmt(g30.total) : "–") + kv("Gagnés sur 7 jours", g7 ? "+" + fmt(g7.v) : "–") +
+      kv("Vues sur 30 jours", LAST_IMPR ? fmt(LAST_IMPR.n) : "à saisir") +
+      (imprOld ? todoLine("Saisir les vues de la semaine", "audience") : "")) +
+    card("var(--accent)", "✉️ Setting · 1er message", "eod",
+      kv("Accroches sur 7 jours", fmt(acc7.length)) + kv("Taux de réponse 7 j", pctTxt(rep7, acc7.length)) +
+      kv("Nouveaux abonnés à contacter", NF_TODO_N == null ? "–" : NF_TODO_N) +
+      (NF_TODO_N ? todoLine(NF_TODO_N + " abonné" + (NF_TODO_N > 1 ? "s" : "") + " à contacter", "abonnes") : "") +
+      (el("eod-missing") && /badge lose/.test(el("eod-missing").innerHTML) ? todoLine("EOD manquants cette semaine", "eod") : "")) +
+    card("var(--s2)", "🎯 Setting · Lauric", "arep",
+      kv("Conversations à répondre", AREP_OPEN == null ? "–" : AREP_OPEN) + kv("Leads chauds actifs", chaudsActifs) +
+      kv("Tâches de Lauric", todoL) +
+      (AREP_OPEN ? todoLine("Répondre à " + AREP_OPEN + " conversation" + (AREP_OPEN > 1 ? "s" : ""), "arep") : "") +
+      (lmNoLink ? todoLine(lmNoLink + " personne" + (lmNoLink > 1 ? "s" : "") + " ont répondu au scan sans recevoir le lien", "lm") : "")) +
+    card("var(--good)", "🤝 Closing", "ventes",
+      kv("À venir", CPT.avenir == null ? "–" : CPT.avenir) +
+      next.map(x => '<div class="ovkv"><span>' + esc(x.n) + '</span><b>' + esc(frDate(x.d)) + '</b></div>').join("") +
+      kv("En cours", CPT.encours == null ? "–" : CPT.encours) + kv("Ventes ce mois-ci", CPT.ventesMois == null ? "–" : CPT.ventesMois) +
+      (CPT.todo ? todoLine(CPT.todo + " call" + (CPT.todo > 1 ? "s" : "") + " à remplir", "ventes") : ""));
+}
+
+/* ---------- Setting › 🎁 Lead magnet (data/lead-magnets.json, produit par lead_magnets.py) ---------- */
+let lmSub = "pilotage", lmEnvFilter = "actifs";
+try { lmSub = localStorage.getItem("lmSub") || "pilotage"; } catch (e) {}
+const LM_TESTS = [
+  { titre: "À tester · le scan après un oui, lien personnalisé", texte: "Top [Prénom] ! Le voici : https://tally.so/r/zxvka0?insta=[pseudo]\n\n3 minutes, et je t'envoie ton résultat en vocal dès que c'est rempli.",
+    pourquoi: "Envoyé dans la journée qui suit le oui. Le ?insta=[pseudo] dit exactement qui a ouvert et rempli (champ caché « insta » à ajouter dans Tally)." },
+  { titre: "À tester · la vidéo avec une question", texte: "Hello [Prénom] ! J'ai pensé à toi en publiant cette vidéo : https://youtu.be/edgg977QObk\n\nQuestion franche une fois que tu l'as vue : qu'est-ce qui te parle le plus pour ta boîte en ce moment ?",
+    pourquoi: "La vidéo seule reçoit des « merci, je regarde ». Une question précise à la fin rouvre la conversation, et le scan se propose à ceux qui répondent." },
+];
+function lmStats(list) {
+  const c = f => list.filter(f).length;
+  return { pers: list.length, offre: c(p => p.offre), lien: c(p => p.lien), vu: c(p => p.vu), rep: c(p => p.rep),
+           ouvert: c(p => p.ouvert), rempli: c(p => p.ouvert === "rempli"), booke: c(p => p.booke),
+           lienOuv: c(p => p.lien && p.ouvert), lienBook: c(p => p.lien && p.booke) };
+}
+function showLmSub(name) {
+  lmSub = ["pilotage", "scan", "yt", "envois"].includes(name) ? name : "pilotage";
+  ["pilotage", "scan", "yt", "envois"].forEach(k => { el("lm-" + k).hidden = k !== lmSub; });
+  document.querySelectorAll("#lm-sub .fpill").forEach(b => b.classList.toggle("on", b.dataset.lm === lmSub));
+  try { localStorage.setItem("lmSub", lmSub); } catch (e) {}
+}
+el("lm-sub").addEventListener("click", e => { const b = e.target.closest(".fpill"); if (b) showLmSub(b.dataset.lm); });
+showLmSub(lmSub);
+
+function lmPersonCell(p) {
+  return '<a href="https://www.instagram.com/' + esc(p.pseudo) + '/" target="_blank" rel="noopener"><b>' + esc(p.nom || p.pseudo) + '</b></a><br><span style="color:var(--muted)">@' + esc(p.pseudo) + '</span>';
+}
+const yesno = (b, txt) => b ? '<span style="color:var(--good);font-weight:600">' + (txt || "oui") + '</span>' : '<span style="color:var(--muted)">·</span>';
+function lmRowsTable(list, withLm) {
+  if (!list.length) return '<p class="empty-note" style="margin:0">Personne pour ce filtre.</p>';
+  return '<table><thead><tr><th>Personne</th>' + (withLm ? '<th>Lead magnet</th>' : '') + '<th>Proposé le</th><th>Lien envoyé le</th><th>Vu</th><th>Répondu</th><th>Ouvert</th><th>Booké</th><th style="text-align:left">Sa réponse</th><th>Conv</th></tr></thead><tbody>' +
+    list.map(p => '<tr><td>' + lmPersonCell(p) + '</td>' +
+      (withLm ? '<td>' + (p.lm === "yt" ? "▶️ vidéo" : "🎯 scan") + '</td>' : '') +
+      '<td>' + (p.offre ? dfr(p.offre.date) : '<span style="color:var(--muted)">·</span>') + '</td>' +
+      '<td>' + (p.lien ? '<b>' + dfr(p.lien.date) + '</b>' : '<span style="color:var(--muted)">·</span>') + '</td>' +
+      '<td>' + yesno(p.vu) + '</td><td>' + yesno(p.rep) + '</td>' +
+      '<td>' + (p.lm === "yt" ? '<span style="color:var(--muted)" title="YouTube ne dit pas qui regarde">n/m</span>' : yesno(p.ouvert, p.ouvert)) + '</td>' +
+      '<td>' + (p.booke ? '<span style="color:var(--good);font-weight:700">' + esc(p.booke) + '</span>' : p.avant ? '<span style="color:var(--muted)">déjà ' + esc(p.avant) + ' avant</span>' : '<span style="color:var(--muted)">·</span>') + '</td>' +
+      '<td class="tdw" style="font-size:12.5px">' + esc(p.repTxt || "") + '</td>' +
+      '<td>' + (p.conv ? '<a href="' + esc(p.conv) + '" target="_blank" rel="noopener">ouvrir ↗</a>' : '') + '</td></tr>').join("") +
+    '</tbody></table>';
+}
+
+function renderLmTab() {
+  if (!el("lm-kpis")) return;
+  const D = LM_DATA || { personnes: [], lms: [], templates: {}, analyse: [], exemples: {} };
+  const P = D.personnes || [];
+  const scan = P.filter(p => p.lm === "scan"), yt = P.filter(p => p.lm === "yt");
+  const S1 = lmStats(scan), S2 = lmStats(yt);
+  const sent = P.filter(p => p.lien);
+  el("lm-envois-count").textContent = P.length ? "(" + P.length + ")" : "";
+  const k = (kc, n, l) => '<div class="vkpi" style="--kc:' + kc + '"><div class="n">' + n + '</div><div class="l">' + l + '</div></div>';
+  el("lm-kpis").innerHTML =
+    k("var(--accent)", fmt(sent.length), "🎁 lead magnets envoyés (liens)") +
+    k("var(--muted)", fmt(S1.offre), "🎯 scans proposés") +
+    k("var(--s3)", fmt(S1.ouvert), "📂 scans ouverts (" + S1.rempli + " remplis)") +
+    k("var(--s2)", fmt(sent.filter(p => p.rep).length), "💬 ont répondu") +
+    k("var(--good)", fmt(S1.booke + S2.booke), "📞 ont booké ensuite");
+
+  /* tableau par lead magnet */
+  const row = (lab, st, isYt) => '<tr><td class="tot tdw">' + lab + '</td><td>' + st.pers + '</td><td>' + (isYt ? '<span style="color:var(--muted)">·</span>' : st.offre) +
+    '</td><td class="tot">' + st.lien + '</td><td>' + st.vu + ' <span style="color:var(--muted)">(' + pctTxt(st.vu, st.pers) + ')</span></td><td>' + st.rep + ' <span style="color:var(--muted)">(' + pctTxt(st.rep, st.pers) + ')</span></td>' +
+    '<td>' + (isYt ? '<span style="color:var(--muted)">non mesurable</span>' : st.ouvert + ' <span style="color:var(--muted)">(' + st.rempli + ' remplis)</span>') + '</td>' +
+    '<td class="tot">' + st.booke + '</td><td class="tot">' + (isYt ? "–" : pctTxt(st.lienOuv, st.lien)) + '</td><td class="tot">' + pctTxt(st.lienBook, st.lien) + '</td></tr>';
+  el("lm-table").innerHTML = '<table><thead><tr><th>Lead magnet</th><th>Personnes touchées</th><th>Proposé</th><th>Lien envoyé</th><th>Vus</th><th>Ont répondu</th><th>Ouverts</th><th>Bookés après</th><th>Lien → ouvert</th><th>Lien → booké</th></tr></thead><tbody>' +
+    row("🎯 Le Scan Dirigeant", S1, false) + row("▶️ Vidéo YouTube", S2, true) + '</tbody></table>';
+  el("lm-table-note").textContent = "Personnes touchées = au moins une proposition ou un lien. Vus et réponses : sur la conversation, après le message. Ouvert = scan commencé ou rempli dans Tally, rapproché par prénom (à confirmer tant que le lien personnalisé n'est pas en place). Booké après = call Calendly, appel accepté ou fiche du portefeuille datés après le lead magnet ; ceux qui avaient déjà eu leur call avant ne comptent pas.";
+
+  /* messages d'envoi */
+  const groups = [];
+  const add = (lab, list, ex) => { if (list.length) groups.push({ lab, st: lmStats(list), ex }); };
+  const offres = scan.filter(p => p.offre);
+  add((D.templates || {}).BIENV || "BIENV", offres.filter(p => p.offre.tpl === "BIENV"), "BIENV");
+  add((D.templates || {}).LIKE || "LIKE", offres.filter(p => p.offre.tpl === "LIKE"), "LIKE");
+  add("Proposition du scan écrite à la main", offres.filter(p => !["BIENV", "LIKE"].includes(p.offre.tpl)));
+  add("Lien du scan envoyé directement (sans proposition avant)", scan.filter(p => p.lien && !p.offre));
+  add((D.templates || {}).RESS || "RESS", yt.filter(p => p.lien && p.lien.tpl === "RESS"), "RESS");
+  add("Vidéo partagée dans un message écrit à la main", yt.filter(p => p.lien && p.lien.tpl !== "RESS"));
+  el("lm-msgs").innerHTML = '<table><thead><tr><th>Message</th><th>Envois</th><th>% vus</th><th>% réponses</th><th>Lien envoyé ensuite</th><th>Ouverts</th><th>Bookés</th></tr></thead><tbody>' +
+    groups.sort((a, b) => (b.st.booke / b.st.pers) - (a.st.booke / a.st.pers) || (b.st.rep / b.st.pers) - (a.st.rep / a.st.pers)).map(g =>
+      '<tr><td class="tot tdw">' + esc(g.lab) + '</td><td>' + g.st.pers + '</td><td>' + pctTxt(g.st.vu, g.st.pers) + '</td><td class="tot">' + pctTxt(g.st.rep, g.st.pers) +
+      '</td><td>' + g.st.lien + '</td><td>' + g.st.ouvert + '</td><td class="tot">' + g.st.booke + '</td></tr>').join("") + '</tbody></table>';
+  const ex = D.exemples || {};
+  el("lm-msg-cards").innerHTML =
+    ["BIENV", "LIKE", "RESS"].filter(t => ex[t]).map((t, i) => '<div class="card"><h3 class="mini-title">Message utilisé · ' + esc(((D.templates || {})[t] || t).split(" : ")[0]) + '</h3>' +
+      '<div class="msgcard" id="lm-ex-' + i + '">' + esc(ex[t]) + '</div><button type="button" class="copybtn" data-copy="lm-ex-' + i + '">Copier</button></div>').join("") +
+    LM_TESTS.map((t, i) => '<div class="card" style="border-top:3px solid var(--good)"><h3 class="mini-title">' + esc(t.titre) + '</h3>' +
+      '<div class="msgcard" id="lm-test-' + i + '">' + esc(t.texte) + '</div><button type="button" class="copybtn" data-copy="lm-test-' + i + '">Copier</button>' +
+      '<p class="rstats" style="margin-top:8px">' + esc(t.pourquoi) + '</p></div>').join("");
+
+  /* ont répondu à la proposition sans recevoir le lien */
+  const noLink = scan.filter(p => p.offre && p.offre.rep && !p.lien).sort((a, b) => a.offre.date < b.offre.date ? 1 : -1);
+  el("lm-sec-todo").hidden = !noLink.length;
+  el("lm-todo-title").textContent = "📨 Ont répondu à la proposition du scan, sans jamais recevoir le lien (" + noLink.length + ")";
+  el("lm-todo").innerHTML = lmRowsTable(noLink, false);
+
+  const an = D.analyse || [];
+  el("lm-sec-analyse").hidden = !an.length;
+  el("lm-analyse").innerHTML = an.map(sec => '<h3 class="mini-title">' + esc(sec.titre) + '</h3><ul style="margin:0 0 12px;padding-left:20px">' +
+    (sec.points || []).map(x => '<li>' + x + '</li>').join("") + '</ul>').join("");
+
+  /* fiches des deux lead magnets */
+  const lmInfo = id => (D.lms || []).find(x => x.id === id) || {};
+  const iS = lmInfo("scan"), iY = lmInfo("yt");
+  const miniStats = (st, isYt) => '<div class="winrows">' +
+    '<div class="winrow"><span>Personnes touchées</span><b>' + st.pers + '</b></div>' +
+    (isYt ? '' : '<div class="winrow"><span>Proposé</span><b>' + st.offre + '</b></div>') +
+    '<div class="winrow"><span>Lien envoyé</span><b>' + st.lien + '</b></div>' +
+    '<div class="winrow"><span>Ont répondu</span><b>' + st.rep + '</b></div>' +
+    (isYt ? '' : '<div class="winrow"><span>Ouverts (remplis)</span><b>' + st.ouvert + ' (' + st.rempli + ')</b></div>') +
+    '<div class="winrow"><span>Bookés après</span><b>' + st.booke + '</b></div></div>';
+  el("lm-card-scan").innerHTML = '<div><h3>🎯 ' + esc(iS.nom || "Le Scan Dirigeant") + '</h3><p class="rstats">' + esc(iS.support || "") + '</p>' +
+    '<div class="msgcard" id="lm-url-scan">' + esc(iS.url || "https://tally.so/r/zxvka0") + '</div><button type="button" class="copybtn" data-copy="lm-url-scan">Copier le lien</button>' +
+    '<p class="formnote" style="margin-top:10px">Astuce pilotage : envoyer <b>' + esc((iS.url || "https://tally.so/r/zxvka0") + "?insta=pseudo") + '</b> (champ caché « insta » dans Tally) pour savoir exactement qui ouvre et remplit.</p></div>' +
+    '<div>' + miniStats(S1, false) + '</div>';
+  el("lm-card-yt").innerHTML = '<div><h3>▶️ ' + esc((iY.nom || "Vidéo YouTube").replace(/^Vidéo YouTube /, "")) + '</h3><p class="rstats">' + esc(iY.support || "") + '</p>' +
+    '<div class="msgcard" id="lm-url-yt">' + esc(iY.url || "") + '</div><button type="button" class="copybtn" data-copy="lm-url-yt">Copier le lien</button>' +
+    miniStats(S2, true) + '<p class="formnote" style="margin-top:8px">YouTube ne dit pas qui a regardé : « ouvert » n\'est pas mesurable par personne, seulement le vu du message et la réponse.</p></div>' +
+    (iY.youtube_id ? '<div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/' + esc(iY.youtube_id) + '" title="Vidéo lead magnet" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div>' : '');
+  el("lm-yt-title").textContent = "Les personnes qui ont reçu la vidéo (" + yt.length + ")";
+  el("lm-yt-list").innerHTML = lmRowsTable(yt, false);
+
+  /* tous les envois, filtrables */
+  const F = {
+    actifs: ["🔥 lien envoyé ou a répondu", p => p.lien || p.rep],
+    tous: ["tous", () => true],
+    scan: ["🎯 scan", p => p.lm === "scan"],
+    yt: ["▶️ vidéo", p => p.lm === "yt"],
+    ouverts: ["📂 ouverts", p => p.ouvert],
+    bookes: ["📞 bookés", p => p.booke],
+  };
+  el("lm-env-pills").innerHTML = Object.entries(F).map(([key, [lab, f]]) =>
+    '<button class="pill fpill' + (lmEnvFilter === key ? " on" : "") + '" data-lmf="' + key + '"><b>' + P.filter(f).length + '</b>&nbsp;' + lab + '</button>').join("");
+  const shown = P.filter((F[lmEnvFilter] || F.actifs)[1]);
+  el("lm-env-table").innerHTML = lmRowsTable(shown, true);
+  el("lm-env-note").textContent = "Une ligne par personne et par lead magnet. « Proposé » = message qui propose le scan (souvent en premier message) ; « Lien envoyé » = le lien Tally ou YouTube est parti. n/m = non mesurable.";
+  el("lm-note").textContent = LM_DATA ? "Analyse des conversations du " + (D.genere || "") + (D.releve ? " · " + D.releve : "") +
+    ". Mise à jour chaque matin avec le relevé Instagram (lecture seule), par lead_magnets.py." : "Pas encore d'analyse des lead magnets.";
+  scheduleOverview();
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-lmf]");
+  if (!b) return;
+  lmEnvFilter = b.dataset.lmf;
+  renderLmTab();
+});
 
 /* ---------- démarrage ---------- */
 if (SNAPSHOT) {

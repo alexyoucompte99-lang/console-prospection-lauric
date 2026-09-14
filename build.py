@@ -370,7 +370,7 @@ def notify_new_calls(old_text: str, new_text: str) -> None:
                       + (col(r, "invite") or "Sans nom") + " · " + quand
                       + ("\n" + col(r, "evenement") if col(r, "evenement") else "")
                       + ("\nTél : " + col(r, "telephone") if col(r, "telephone") else "")
-                      + "\n\nhttps://alexyoucompte99-lang.github.io/console-prospection-lauric/#calls")
+                      + "\n\nhttps://alexyoucompte99-lang.github.io/console-prospection-lauric/#ventes")
 
 
 def notify_today_calls(cal_text: str) -> None:
@@ -414,7 +414,7 @@ def notify_today_calls(cal_text: str) -> None:
         return
     body = ("📞 " + str(len(todays)) + " call" + ("s" if len(todays) > 1 else "")
             + " aujourd'hui :\n" + "\n".join(sorted(todays))
-            + "\n\nhttps://alexyoucompte99-lang.github.io/console-prospection-lauric/#calls")
+            + "\n\nhttps://alexyoucompte99-lang.github.io/console-prospection-lauric/#ventes")
     try:
         req = urllib.request.Request(
             "https://ntfy.sh/" + NTFY_TOPIC,

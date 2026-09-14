@@ -1,0 +1,34 @@
+{
+  "_releve": "14/09/2026 (400 conversations relues en détail depuis le 26/08, et les accroches de tout l'historique depuis juillet)",
+  "_analyse": [
+    {
+      "titre": "Ce que disent les chiffres",
+      "points": [
+        "<b>Le scan est proposé en masse, mais presque jamais envoyé</b> : 910 personnes ont reçu la proposition en août (2 messages types), le lien Tally n'est parti que chez 21 personnes. Le goulot est là, entre « proposé » et « lien envoyé ».",
+        "<b>« Bienvenue sur mon compte, j'offre un scan »</b> : 231 envois, 56 % vus, 8 % de réponses, 13 liens envoyés, 4 scans remplis, 1 call. Le message dit « like ce message et je te l'envoie » : beaucoup ont liké, peu ont reçu le lien.",
+        "<b>« Merci pour ton like… je propose un scan »</b> : 694 envois, 4 % vus seulement (le message tombe dans les Demandes des non-abonnés), 2 % de réponses, 3 liens, 0 scan rempli. C'est 75 % du volume pour quasiment rien.",
+        "<b>Une fois le lien envoyé, le scan marche</b> : sur 21 liens, 8 personnes l'ont ouvert (5 remplis, 3 commencés) et 3 ont pris un call (Morgane, Marie, Paul André). Environ 1 call pour 7 liens envoyés.",
+        "<b>La vidéo YouTube</b> : 7 envois (5 le 11/09 en message groupé « je te partage une ressource 100 % maison », 2 à la main fin août), 6 vus, 4 réponses polies (« je regarde ça au calme »), aucun call. 2 des 5 destinataires du 11/09 avaient déjà eu leur call. YouTube ne dit pas qui a regardé : l'ouverture n'est pas mesurable par personne.",
+        "<b>19 scans remplis au total dans Tally, 5 seulement sont rapprochés d'un envoi en message</b> : les autres arrivent par le lien en bio, WhatsApp ou le bouche-à-oreille."
+      ]
+    },
+    {
+      "titre": "Pourquoi le scan fonctionne mieux que la vidéo",
+      "points": [
+        "Le scan demande une action courte (3 minutes) et promet un retour personnel de Lauric : il crée une raison naturelle de se reparler, et le call arrive comme la suite logique du résultat.",
+        "La vidéo se consomme seule, sans retour attendu : la personne remercie, regarde (ou pas), et la conversation s'arrête là. Sans question à la fin, rien ne relance l'échange.",
+        "Le scan proposé en premier message ressemble à un pitch : il est peu lu et peu répondu. Envoyé après une vraie réponse du lead, il est ouvert une fois sur trois."
+      ]
+    },
+    {
+      "titre": "Pistes pour piloter",
+      "points": [
+        "<b>Règle des 24 h</b> : dès qu'un lead répond oui ou like la proposition, le lien part dans la journée. Aujourd'hui l'essentiel des oui n'a jamais reçu le lien.",
+        "<b>Lien Tally personnalisé</b> : envoyer <code>https://tally.so/r/zxvka0?insta=pseudo</code> (champ caché Tally « insta ») pour savoir exactement qui ouvre et qui remplit, sans rapprochement par prénom.",
+        "<b>Arrêter la proposition du scan aux likers non abonnés</b> : 694 envois, 0 scan rempli.",
+        "<b>La vidéo en appui, jamais seule</b> : la partager après un échange, avec une question précise à la fin (« qu'est-ce qui te parle le plus pour ta boîte ? »), puis proposer le scan à ceux qui répondent.",
+        "<b>Relancer une fois à J+2 les scans commencés</b> (partiels Tally) avec le message prêt dans le sous-onglet Scan Dirigeant."
+      ]
+    }
+  ]
+}

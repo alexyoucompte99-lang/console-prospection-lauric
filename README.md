@@ -1,5 +1,23 @@
 # Console Prospection Insta · Lauric
 
+## Structure de la console (refonte du 14/09/2026)
+
+5 onglets, organisés par pôle. Rien n'a été supprimé : les anciens onglets sont devenus des sous-onglets, et les anciens liens (`#eod`, `#script`, `#calls`, `#tally`…) ouvrent toujours le bon endroit (`PANES` + `TAB_ALIAS` dans index.html).
+
+- **📊 Vue d'ensemble** : cockpit (calls du jour, à venir, à remplir, ventes du mois), l'entonnoir complet sur 30 jours groupé par pôle (Contenu : impressions → nouveaux abonnés ; Setting premier message : messages envoyés → vus → réponses, relevé réel Instagram ; Setting Lauric : leads chauds → lead magnets envoyés → ouverts → répondus ; Closing : R1 pris → ventes), un récap par pôle avec les actions à faire, les EOD non faits. `renderOverview()`, appelé via `scheduleOverview()` par chaque rendu.
+- **🎬 Contenu** › Audience : vues sur 30 jours (saisie Lauric, ligne `Tracking` avec `— Impressions : N`), courbe des abonnés, saisie directe.
+- **💬 Setting**, deux familles de sous-onglets :
+  - Premier message (setters) : 📝 EOD · 🆕 Nouveaux abonnés · 📣 Script et A/B · 📈 Chiffres des accroches (ex-Datas) · 📊 Chiffres EOD (ex-Vue d'ensemble) · 🔍 EOD vs réel
+  - Lauric, dès que le lead répond : 💬 À répondre · 🔥 Leads chauds (bouton « Retirer l'étiquette » → « Étiquettes anciennes », ligne `Etiquette` du Google Form `— EtqRetiree : <pseudo> · 1|0`) · 🎁 Lead magnet (ex-Scans Tally : pilotage, Scan Dirigeant, Vidéo YouTube, tous les envois) · 📞 Appels proposés · 👤 Tous les leads
+- **🤝 Closing** : l'ancien onglet Calls est fusionné dans Ventes. Tuiles filtres : à venir (Calendly + datés dans le suivi hors Calendly), calls à remplir, en cours, à relancer, ventes, perdus, CA signé. Le CA encaissé a été retiré de toute la console (les étapes contrat / paiement restent).
+- **✅ To do** : inchangé.
+
+Lead magnet : `data/lead-magnets.json` fabriqué par `lead_magnets.py` à partir de l'export `scripts-releve/export_lm.js` (relevé du matin, voir RELEVE-INSTA.md) + `leads-insta.csv`, Tally, Calendly, appels, portefeuille. Analyse rédigée dans `data/lead-magnets-notes.json`.
+
+Sauvegarde complète du 14/09/2026 (avant la refonte) : Google Sheet « Sauvegarde console Lauric 14-09-2026 », https://docs.google.com/spreadsheets/d/1AcReB0mtFb9_zngcDDizLyVazbnI3hieC1zx7oTyS-s (compte alexyoucompte99).
+
+
+
 Console de suivi du setting Instagram de Lauric : entonnoir (messages, nouveaux abonnés, scans acceptés, scans remplis) avec sélecteur Hier / 3 / 7 / 30 jours, chiffres clés avec delta vs 7 jours précédents et cumul du mois, tuiles « Messages par catégorie », vue par setter, messages par jour, alerte si l'EOD n'est plus rempli. Instagram uniquement, LinkedIn exclu.
 
 6 onglets : Vue d'ensemble (avec panneau « EOD non faits » par setter actif), EOD (formulaire + pilotage + derniers reports), Scans Tally (remplis + partiels, boutons WhatsApp), **Calls** (fusion le 04/09 : vues À venir / À remplir / Remplis / À relancer par pills ; à venir = RDV Calendly futurs avec message WhatsApp de confirmation pré-call + lien visio ; à relancer = calls follow-up ou pas de vente avec message WhatsApp de relance ; à remplir = RDV Calendly passés avec suivi fait/no-show/annulé + issue + note, rempli par Lauric depuis la page via des lignes « CallSuivi » du Google Form, la dernière ligne par call gagne), **Ventes** (suivi des calls de vente : à venir / en cours / conclues / perdus + CA signé approximatif, croisement des colonnes de suivi du Sheet Tally et du Sheet « portefeuille des leads », bouton « Voir toutes les infos du call » par carte, **modification directe de chaque deal par Lauric** et ajout d'un deal à la main), **Script setting** (process étiquette leads chauds, vivier d'URLs cliquables vers Insta, A/B testing des messages A Constant / B Cynthia avec résultats EOD par variante, tracking abonnés + scans (saisie directe du total d'abonnés par Lauric), propositions IA, boîte à idées).

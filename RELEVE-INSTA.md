@@ -139,3 +139,28 @@ personne. La page lit `data/a-repondre.json` ; l'état « Répondu » est partag
 Pièges : ne jamais ouvrir une conversation dans l'interface Instagram pendant le relevé (ça envoie le « vu ») ;
 les vocaux du lead ne sont pas transcrits, la carte dit de les écouter avant d'envoyer ; un message de masse
 envoyé après la réponse du lead compte comme une réponse, vérifier à la main si la liste paraît trop courte.
+
+## Onglet « 🎁 Lead magnet » (Setting, ajouté le 14/09/2026)
+
+But : savoir à qui on a proposé ou envoyé chaque lead magnet (Le Scan Dirigeant sur Tally, la vidéo YouTube
+https://youtu.be/edgg977QObk), qui l'a vu, ouvert, qui a répondu, qui a booké ensuite, et quel message marche le mieux.
+La page lit `data/lead-magnets.json` ; les analyses rédigées vivent dans `data/lead-magnets-notes.json` (`_analyse`, `_releve`).
+
+1. Avec le même `window.__T` que le relevé (aucun nouvel appel à Instagram), exécuter `scripts-releve/export_lm.js`
+   dans l'onglet Instagram : une ligne par message de Lauric qui contient un lien Tally, un lien YouTube ou le mot « scan »,
+   avec vu / réaction / réponse du lead après CE message. Renvoie le nombre de tranches (souvent 1 ou 2).
+2. Sortie par `browser_batch` : [javascript_tool `window.__lpart(0)`, get_page_text, `window.__lpart(1)`, get_page_text…].
+3. `python3 scripts-releve/glue_lm.py <scratchpad>/export_lm.txt` puis
+   `python3 lead_magnets.py <scratchpad>/export_lm.txt --date JJ/MM/AAAA`.
+   Le script fusionne avec la veille (les envois plus anciens que le relevé du jour sont gardés), ajoute les propositions
+   du scan trouvées dans `leads-insta.csv` (accroches LIKE et BIENV sur tout l'historique), rapproche les scans remplis ou
+   commencés (Tally, par prénom, uniquement parmi les personnes qui ont reçu le lien ou répondu) et les calls bookés
+   APRÈS l'envoi (Calendly par nom complet, `insta-appels.json`, portefeuille). Un call antérieur au lead magnet est noté
+   « déjà … avant » et ne compte pas.
+4. Mettre à jour les chiffres de `data/lead-magnets-notes.json` (`_analyse`) si ils ont bougé (le script affiche les
+   totaux par lead magnet), et `_releve` avec la date. Pas de tiret cadratin.
+5. `git add data/lead-magnets.json data/lead-magnets-notes.json`.
+
+Limites : YouTube ne dit pas qui regarde (« ouvert » non mesurable pour la vidéo) ; le rapprochement Tally se fait par
+prénom tant que le lien personnalisé `https://tally.so/r/zxvka0?insta=<pseudo>` (champ caché « insta » dans Tally)
+n'est pas en place ; seuls les 20 derniers messages de chaque conversation sont relus.
