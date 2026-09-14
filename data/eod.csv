@@ -356,3 +356,36 @@ Horodateur,Date du jour :,Setter,Nombre de Messages d'accroche envoyés aux nouv
 13/09/2026 20:10:21,13/09/2026,Todo,0,0,,— TodoFait : rel-camelia-loic · 1,0,,,,,,0,,0,0,0,0,0,0
 13/09/2026 20:25:34,13/09/2026,Todo,0,0,,— TodoFait : rel-jessicacannas · 1,0,,,,,,0,,0,0,0,0,0,0
 13/09/2026 20:30:24,13/09/2026,Todo,0,0,,— TodoFait : rel-camillepoilpot · 1,0,,,,,,0,,0,0,0,0,0,0
+14/09/2026 09:15:49,14/09/2026,Vote,0,0,,— Vote accroche : acc-0 · Lauric · 4,0,,,,,,0,,0,0,0,0,0,0
+14/09/2026 09:15:51,14/09/2026,Vote,0,0,,— Vote accroche : acc-6 · Lauric · 4,0,,,,,,0,,0,0,0,0,0,0
+14/09/2026 09:16:18,14/09/2026,Vote,0,0,,— Vote accroche : acc-6 · Lauric · 1,0,,,,,,0,,0,0,0,0,0,0
+14/09/2026 09:16:58,14/09/2026,Vote,0,0,,— Vote accroche : acc-7 · Lauric · 1,0,,,,,,0,,0,0,0,0,0,0
+14/09/2026 09:17:32,14/09/2026,Vote,0,0,,— Vote accroche : acc-3 · Lauric · 3,0,,,,,,0,,0,0,0,0,0,0
+14/09/2026 09:17:35,14/09/2026,Vote,0,0,,— Vote accroche : acc-2 · Lauric · 4,0,,,,,,0,,0,0,0,0,0,0
+14/09/2026 09:17:42,14/09/2026,Vote,0,0,,— Vote accroche : acc-1 · Lauric · 5,0,,,,,,0,,0,0,0,0,0,0
+14/09/2026 09:17:52,14/09/2026,Vote,0,0,,— Vote accroche : acc-4 · Lauric · 1,0,,,,,,0,,0,0,0,0,0,0
+14/09/2026 09:17:58,14/09/2026,Vote,0,0,,— Vote accroche : acc-5 · Lauric · 5,0,,,,,,0,,0,0,0,0,0,0
+14/09/2026 09:18:18,14/09/2026,Vote,0,0,,— Vote accroche : acc-8 · Lauric · 5,0,,,,,,0,,0,0,0,0,0,0
+14/09/2026 09:18:39,14/09/2026,Vote,0,0,,— Vote accroche : acc-9 · Lauric · 2,0,,,,,,0,,0,0,0,0,0,0
+14/09/2026 09:21:43,14/09/2026,Vente,0,0,,— Étape vente : pf|lisa et nicolas (apport lauric) · contrat,0,,,,,,0,,0,0,0,0,0,0
+14/09/2026 09:21:44,14/09/2026,Vente,0,0,,— Étape vente : pf|maxime vial · contrat,0,,,,,,0,,0,0,0,0,0,0
+14/09/2026 09:21:48,14/09/2026,Vente,0,0,,— Étape vente : pf|lisa et nicolas (apport lauric) · paye,0,,,,,,0,,0,0,0,0,0,0
+14/09/2026 09:21:50,14/09/2026,Vente,0,0,,— Étape vente : pf|maxime vial · paye,0,,,,,,0,,0,0,0,0,0,0
+14/09/2026 09:46:05,14/09/2026,Vente,0,0,,"— Vente : man|mu0xv7x6 · Maximilien CAUSSE
+— Statut : encours
+— Date : 2026-09-21
+— Offre : 
+— Note : ",0,,,,,,0,,0,0,0,0,0,0
+14/09/2026 09:46:32,14/09/2026,Vente,0,0,,"— Vente : man|mu0xv7x6 · Maximilien CAUSSE
+— Statut : avenir
+— Date : 2026-09-21
+— Offre : 
+— Note : ",0,,,,,,0,,0,0,0,0,0,0
+14/09/2026 10:03:14,14/09/2026,Vente,0,0,,"— Vente : 8N6eWEx · Morgane
+— Statut : encours
+— Date : 
+— Offre : 
+— Note : ""Le 1er call a manqué de chiffres et de la roadmap précise pour leur business"". Surpris par ce feedback car le peu de chiffres que j'ai demandé (CAC LTV etc) ils n'avaient pas la réponse, et l'enjeu du 1er call n'est pas de faire rêver avec du chiffre ""bidon"" comme je leur ai dit. A intégrer pour les prochains calls malgré tout.",0,,,,,,0,,0,0,0,0,0,0
+14/09/2026 10:06:13,13/09/2026,Constant,0,0,,,0,,,,,,0,,0,0,0,0,0,0
+14/09/2026 10:16:46,14/09/2026,Todo,0,0,,— TodoFait : rel-maximiliencausse · 1,0,,,,,,0,,0,0,0,0,0,0
+14/09/2026 10:16:47,14/09/2026,Todo,0,0,,— TodoFait : rel-thineymarie · 1,0,,,,,,0,,0,0,0,0,0,0
