@@ -7,8 +7,10 @@ name: Rafraichir les donnees
 # D'ou le passage a un rythme horaire en journee.
 on:
   schedule:
-    - cron: "*/15 5-20 * * *"   # toutes les 15 min, ~7h -> ~22h Paris (ete),
-                                # pour que les notifs (ntfy scan rempli, Telegram idée) arrivent vite
+    - cron: "7,22,37,52 5-20 * * *"   # toutes les 15 min, ~7h -> ~22h Paris (ete),
+                                      # pour que les notifs (ntfy scan rempli, Telegram idée) arrivent vite.
+                                      # Minutes décalées exprès : GitHub saute la plupart des runs calés
+                                      # sur :00/:15/:30/:45 (4 à 6 runs par jour au lieu de 64 mi-septembre).
   workflow_dispatch:
 
 permissions:
