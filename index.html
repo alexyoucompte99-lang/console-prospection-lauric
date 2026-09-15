@@ -340,6 +340,36 @@
   .ctop li:first-child { border-top: 0; }
   .ctop .cbar { height: 8px; border-radius: 4px; background: var(--s5); min-width: 3px; }
   .ctop .cval { font-variant-numeric: tabular-nums; font-weight: 600; }
+  /* Contenu › Reels */
+  .rlresume { font-size: 14px; line-height: 1.55; margin-top: -4px; }
+  .rlresume p { margin: 0 0 6px; }
+  .rlresume p:last-child { margin-bottom: 0; }
+  .rlcards { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px; }
+  .rlcard { display: grid; grid-template-columns: 118px 1fr; gap: 14px; align-items: start; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; }
+  .rlcard.noimg { grid-template-columns: 1fr; }
+  .rlcov { position: relative; display: block; width: 118px; aspect-ratio: 9 / 16; border-radius: 9px; overflow: hidden; background: linear-gradient(165deg, var(--s5), var(--accent)); color: #fff; text-decoration: none; }
+  .rlcov span.rlalt { position: absolute; inset: 8px; font-size: 11.5px; line-height: 1.3; font-weight: 600; overflow: hidden; }
+  .rlcov img { position: relative; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .rlcov .rlplay { position: absolute; right: 6px; bottom: 5px; font-size: 12px; text-shadow: 0 1px 3px rgba(0, 0, 0, .6); }
+  .rlbody h3 { margin: 2px 0 4px; font-size: 15px; line-height: 1.3; color: var(--ink); }
+  .rlbody h4 { margin: 10px 0 4px; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .rlbody ul { margin: 0; padding-left: 18px; font-size: 13.5px; line-height: 1.45; }
+  .rlmeta { font-size: 12px; color: var(--muted); }
+  .rlnums { font-size: 13px; margin: 2px 0 4px; color: var(--ink-2); }
+  .rlhook { margin: 6px 0 0; font-size: 13.5px; font-style: italic; color: var(--ink-2); }
+  .rlrec { display: grid; grid-template-columns: max-content 1fr; gap: 4px 10px; margin: 0; font-size: 13.5px; line-height: 1.4; }
+  .rlrec dt { font-weight: 600; color: var(--ink); }
+  .rlrec dd { margin: 0; }
+  .rllink { display: inline-block; margin-top: 8px; font-size: 13px; font-weight: 600; }
+  .rlwhy { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 12px; margin-bottom: 12px; }
+  .rlwhy h3 { margin: 0 0 6px; font-size: 14.5px; }
+  .rlwhy p { margin: 0; font-size: 13.5px; line-height: 1.5; }
+  #rl-table th[data-k] { cursor: pointer; user-select: none; }
+  #rl-table th[data-k].on { color: var(--ink); }
+  #rl-table td.tdw { white-space: normal; min-width: 240px; max-width: 420px; text-align: left; }
+  #rl-table tr.rltop td { background: color-mix(in srgb, var(--good) 9%, transparent); }
+  #rl-table tr.rlflop td { color: var(--muted); }
+  @media (max-width: 560px) { .rlcards { grid-template-columns: 1fr; } .rlcard { grid-template-columns: 92px 1fr; } .rlcov { width: 92px; } }
   .ctratio { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 4px 18px; }
   .ctratio div { display: flex; justify-content: space-between; gap: 10px; padding: 7px 0; border-top: 1px solid var(--border); font-size: 13.5px; }
   .ctratio b { font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -576,6 +606,12 @@
     </div><!-- /tab-dash -->
 
     <div id="tab-contenu" hidden>
+      <div class="subnav" id="subnav-contenu">
+        <div class="subgrp">
+          <button data-pane="audience">👁 Audience</button>
+          <button data-pane="reels">🎬 Reels à refaire <span class="count" id="reels-count"></span></button>
+        </div>
+      </div>
       <div id="tab-audience" class="pane">
   <section>
     <h2 class="hsec" style="--hc:var(--s5);margin-bottom:10px">👁 Portée du contenu · 30 jours</h2>
@@ -627,6 +663,43 @@
             </div>
             <p class="formnote">Ces lignes alimentent seulement les compteurs ci-dessus : elles ne comptent pas comme un EOD et n'entrent dans aucune stat de setter.</p>
           </form>
+        </section>
+      </div>
+      <div id="tab-reels" class="pane" hidden>
+        <section>
+          <h2 class="hsec" style="--hc:var(--s5);margin-bottom:6px">🎬 Les Reels qui marchent, et comment les refaire</h2>
+          <p class="formnote" id="rl-note" style="margin:0 0 14px"></p>
+          <div class="vkpis" id="rl-kpis"></div>
+          <div class="card rlresume" id="rl-resume" hidden></div>
+        </section>
+        <section id="rl-top-sec" hidden>
+          <h2 class="hsec" style="--hc:var(--good);margin-bottom:10px">🏆 À refaire en priorité</h2>
+          <div class="rlcards" id="rl-top"></div>
+        </section>
+        <section id="rl-why-sec" hidden>
+          <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">🧠 Pourquoi ils marchent mieux que les autres</h2>
+          <div class="rlwhy" id="rl-why"></div>
+          <div class="card" id="rl-fact" hidden></div>
+        </section>
+        <section id="rl-idees-sec" hidden>
+          <h2 class="hsec" style="--hc:var(--s3);margin-bottom:10px">💡 Les prochains Reels à tourner</h2>
+          <div class="rlcards" id="rl-idees"></div>
+        </section>
+        <section id="rl-eviter-sec" hidden>
+          <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px">🚫 Ce qui ne marche pas</h2>
+          <div class="card" id="rl-eviter"></div>
+        </section>
+        <section>
+          <div class="sec-head">
+            <h2>📋 Tous les Reels</h2>
+            <div class="tally-counts" id="rl-per" style="margin:0">
+              <button class="pill fpill" data-p="30">30 jours</button>
+              <button class="pill fpill" data-p="90">90 jours</button>
+              <button class="pill fpill" data-p="tout">Tout le relevé</button>
+            </div>
+          </div>
+          <div class="card"><div class="tbl-scroll" style="margin-top:0"><table id="rl-table"></table></div></div>
+          <p class="formnote" id="rl-table-note"></p>
         </section>
       </div>
     </div>
@@ -978,6 +1051,30 @@
               <li><b>Tester le B pour de vrai</b> : 30 envois le soir, même semaine, puis comparer aux 30 perso.</li>
               <li><b>Fiabiliser l'EOD</b> : l'onglet EOD vs réel montre l'écart entre déclaré et réel. Piloter sur les vrais chiffres, sinon on optimise du vent.</li>
             </ol>
+          </div>
+        </section>
+        <section>
+          <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">💡 Ce qu'on peut en tirer · relevé du 15/09 au soir</h2>
+          <div class="card" style="font-size:14.5px;line-height:1.55">
+            <p style="margin:0 0 8px"><b>Les 4 actions de la semaine</b></p>
+            <ol style="margin:0 0 14px;padding-left:20px">
+              <li><b>Tout le monde passe au message B</b> (court + vocal), et on arrête le A.</li>
+              <li><b>On envoie les accroches entre 17h et 21h</b>, plus le matin.</li>
+              <li><b>Lauric répond sous 24 h</b>, en commençant par le sous-onglet 💬 À répondre.</li>
+              <li><b>On envoie le lien du scan directement</b> au lieu de le proposer.</li>
+            </ol>
+            <ul style="margin:0;padding-left:20px">
+              <li><b>Le message B gagne le test A/B</b> : 4 réponses sur 14 envois depuis le 27/08 (29 %), dont 3 sur 7 cette semaine. Le message A long : 1 réponse sur 17 (6 %).</li>
+              <li><b>Le soir répond presque 3 fois mieux que le matin</b> (accroches des 14 derniers jours) : 25 % de réponses entre 18h et minuit, 20 % l'après-midi, 9 % le matin. Pourtant 85 accroches sur 184 partent encore le matin.</li>
+              <li><b>Plus aucune relance de masse depuis le 13/09</b> (« bien reçu ? », « c'est la rentrée », vidéo en série) : la semaine d'avant, 38 messages de ce genre avaient donné 1 réponse. On garde ce cap.</li>
+              <li><b>La campagne vers les anciens abonnés (14 et 15/09) répond, mais hors cible</b> : 27 envois, 5 réponses en 24 h, toutes de salariés ou de non-entrepreneurs. Poser tout de suite « tu encadres une équipe ? » pour trier.</li>
+              <li><b>Le délai de réponse reste le premier frein</b> : 6 h 30 en médiane, mais 9 réponses de leads sur 25 ont attendu plus de 24 h ces 14 derniers jours. 14 leads récents attendent (6 depuis moins d'un jour, 3 depuis 1 à 3 jours, 5 depuis 3 à 7 jours), plus 66 réponses d'avant septembre jamais traitées.</li>
+              <li><b>L'EOD surdéclare toujours</b> : 32 accroches déclarées le 14/09 pour 20 réellement parties, 48 pour 27 le 11/09, et aucun EOD le 12/09 alors que 14 accroches sont parties.</li>
+              <li><b>Le scan est proposé, pas envoyé</b> : le lien n'est parti que chez 21 personnes sur 932 à qui on l'a proposé. Une fois envoyé, il marche : 8 ouvertures, 3 calls bookés.</li>
+              <li><b>Abonnés : +31 en 8 jours</b> (2 566 le 07/09, 2 597 le 15/09). 78 des 88 nouveaux abonnés relevés ont été contactés, 18 ont répondu.</li>
+              <li><b>Le contenu attire mais ne fait pas venir en message</b> : 142 000 vues sur 30 jours, dont 91 % chez des non-abonnés, pour 753 visites du profil et 12 clics sur le lien en bio (0 sur les 7 derniers jours). Le levier est dans les Reels et la bio : voir Contenu › 🎬 Reels à refaire.</li>
+              <li><b>Les appels</b> : 33 propositions d'appel depuis mars, 10 appels obtenus dont 1 vente. Un créneau précis donne un appel, « tu as une dispo ? » non. 2 calls à venir : Marie le 17/09, Maximilien le 21/09.</li>
+            </ul>
           </div>
         </section>
         <section hidden>
@@ -1619,6 +1716,7 @@ async function load(showSpinner) {
     s7: r[8] ? { vues: +r[8] || 0, spect: +r[9] || 0, inter: +r[10] || 0, comptes: +r[11] || 0, visites: +r[12] || 0, liens: +r[13] || 0 } : null,
     nonf: r[14] ? +r[14] : null, reels: r[15] ? +r[15] : null, top30: r[16] || "", top7: r[17] || "" })).filter(r => r.date && r.vues).sort((a, b) => a.date < b.date ? -1 : 1); renderContenu(); scheduleOverview(); }).catch(() => {});
   get("data/lead-magnets.json").then(t => { LM_DATA = JSON.parse(t); renderLmTab(); renderChauds(); scheduleOverview(); }).catch(() => renderLmTab());
+  get("data/reels.json").then(t => { RL_DATA = JSON.parse(t); renderReels(); }).catch(() => renderReels());
   // le portefeuille a son propre fallback : un export CSV privé renvoie du HTML
   const pf = await get(SHEETS.pf)
     .then(t => /^\s*</.test(t) ? Promise.reject(new Error("privé")) : t)
@@ -2055,7 +2153,7 @@ function mini(rows30, title, f, color, untrackedNote) {
 /* Navigation : 5 onglets (Vue d'ensemble, Contenu, Setting, Closing, To do) ; Setting a des sous-onglets
    (« panes »). Un lien #eod, #script, #lm… ouvre directement le bon pôle et le bon sous-onglet. */
 const TABS = ["dash", "contenu", "setting", "closing", "todo"];
-const PANES = { audience: "contenu",
+const PANES = { audience: "contenu", reels: "contenu",
   eod: "setting", abonnes: "setting", script: "setting", datas: "setting", eodstats: "setting", verif: "setting",
   arep: "setting", chauds: "setting", lm: "setting", appels: "setting", leads: "setting",
   ventes: "closing" };
@@ -4773,6 +4871,133 @@ function renderContenu() {
     }).join("");
   }
 }
+
+/* ---------- Contenu › 🎬 Reels (data/reels.json, produit par reels.py ; analyse rédigée dans data/reels-notes.json) ---------- */
+let RL_DATA = null, RL_PER = "tout", RL_SORT = { k: "vues", d: -1 };
+try { RL_PER = localStorage.getItem("rlPer") || "tout"; } catch (e) {}
+const RL_REC = { accroche: "Accroche", format: "Format", structure: "Déroulé", duree: "Durée", cta: "Fin", legende: "Légende" };
+const rlNum = v => v == null ? "–" : fmt(v);
+const rlDec = (v, suf) => v == null ? "–" : String(v).replace(".", ",") + (suf || "");
+
+function rlCover(p) {
+  const alt = '<span class="rlalt">' + esc((p.accroche || "").slice(0, 90)) + '</span>';
+  const img = p.cover ? '<img loading="lazy" referrerpolicy="no-referrer" src="' + esc(p.cover) + '" alt="" onerror="this.remove()">' : "";
+  return '<a class="rlcov" href="' + esc(p.url || "#") + '" target="_blank" rel="noopener">' + alt + img + '<span class="rlplay">▶ ' + (p.duree ? p.duree + " s" : "") + '</span></a>';
+}
+
+function rlCard(x, p) {
+  const nums = p ? '<div class="rlnums"><b>' + rlNum(p.vues) + '</b> vues' + (p.x_med ? ' · <b>× ' + rlDec(p.x_med) + '</b> la médiane' : '') +
+    ' · ' + rlNum(p.likes) + ' ❤️ · ' + rlNum(p.comms) + ' 💬' + (p.partages != null ? ' · ' + rlNum(p.partages) + ' ↗' : '') + '</div>' : '';
+  const list = (t, l) => l && l.length ? '<h4>' + t + '</h4><ul>' + l.map(s => '<li>' + s + '</li>').join("") + '</ul>' : "";
+  const rec = x.recette ? '<h4>La recette pour le refaire</h4><dl class="rlrec">' +
+    Object.entries(x.recette).map(([k2, v]) => '<dt>' + esc(RL_REC[k2] || k2) + '</dt><dd>' + v + '</dd>').join("") + '</dl>' : "";
+  return '<article class="rlcard' + (p ? "" : " noimg") + '">' + (p ? rlCover(p) : "") + '<div class="rlbody">' +
+    (p ? '<div class="rlmeta">Publié ' + frDate(p.date) + ' à ' + esc(p.heure || "") + (p.recent ? " · encore en train de tourner" : "") + '</div>' : "") +
+    '<h3>' + (x.titre || esc(p ? p.accroche : "")) + '</h3>' + nums +
+    (p && p.accroche ? '<p class="rlhook">« ' + esc(p.accroche) + ' »</p>' : "") +
+    list("Pourquoi ça marche", x.pourquoi) + rec + list("À garder en tête", x.attention) +
+    (p ? '<a class="rllink" href="' + esc(p.url) + '" target="_blank" rel="noopener">Voir le Reel ↗</a>' : "") +
+    '</div></article>';
+}
+
+function renderReels() {
+  const box = el("rl-kpis");
+  if (!box) return;
+  const D = RL_DATA;
+  if (!D || !D.publications) {
+    box.innerHTML = "";
+    el("rl-note").textContent = "Pas encore de relevé des Reels : il se fait depuis le Chrome d'Alex (scripts-releve/reels.js puis reels.py).";
+    return;
+  }
+  const S = D.stats || {}, A = D.analyse || {}, F = D.facteurs || {};
+  const P = D.publications, R = P.filter(p => p.type === "reel" && p.vues);
+  const byCode = {};
+  P.forEach(p => { byCode[p.code] = p; });
+  const cnt = el("reels-count");
+  if (cnt) cnt.textContent = R.length ? "(" + R.length + ")" : "";
+  const k = (kc, n, l) => '<div class="vkpi" style="--kc:' + kc + '"><div class="n">' + n + '</div><div class="l">' + l + '</div></div>';
+  box.innerHTML =
+    k("var(--s5)", rlNum(S.n_reels), "🎬 Reels relevés · du " + frDate(D.periode.du) + " au " + frDate(D.periode.au)) +
+    k("var(--s4)", S.mediane_vues != null ? rlNum(Math.round(S.mediane_vues)) : "–", "👁 vues d'un Reel moyen (médiane)") +
+    k("var(--s2)", rlNum(S.top_vues), "🏆 vues du meilleur Reel") +
+    k("var(--good)", rlNum(S.x2), "🚀 Reels à 2× la médiane ou plus") +
+    k("var(--s3)", rlDec(S.eng_median, " %"), "❤️ interactions ÷ vues (médiane)");
+  el("rl-note").textContent = "Relevé du " + D.releve + " sur le profil @lauric_sergent, en lecture seule. Vues = lectures du Reel sur Instagram. « × la médiane » compare chaque Reel au Reel moyen du compte ; un Reel de moins de 3 jours n'a pas fini de tourner et ne compte pas dans les médianes.";
+
+  const resume = el("rl-resume");
+  resume.hidden = !A.resume;
+  if (A.resume) resume.innerHTML = [].concat(A.resume).map(s => "<p>" + s + "</p>").join("");
+
+  const top = (A.a_refaire || []).filter(x => byCode[x.code]);
+  el("rl-top-sec").hidden = !top.length;
+  el("rl-top").innerHTML = top.map(x => rlCard(x, byCode[x.code])).join("");
+
+  const why = A.pourquoi || [];
+  el("rl-why-sec").hidden = !why.length && !F.n_top;
+  el("rl-why").innerHTML = why.map(w => '<div class="card"><h3>' + w.titre + '</h3><p>' + w.texte + '</p></div>').join("");
+  const fact = el("rl-fact");
+  fact.hidden = !F.n_top;
+  if (F.n_top) {
+    const row = (lab, pair, suf, dec) => pair && (pair[0] != null || pair[1] != null)
+      ? '<tr><td>' + lab + '</td><td><b>' + (pair[0] == null ? "–" : (dec ? rlDec(pair[0]) : fmt(Math.round(pair[0]))) + (suf || "")) + '</b></td><td>' + (pair[1] == null ? "–" : (dec ? rlDec(pair[1]) : fmt(Math.round(pair[1]))) + (suf || "")) + '</td></tr>' : "";
+    fact.innerHTML = '<h3 class="mini-title">Les ' + F.n_top + ' meilleurs Reels (plus de ' + fmt(F.seuil_top) + ' vues) comparés aux ' + F.n_reste + ' autres</h3>' +
+      '<div class="tbl-scroll"><table><thead><tr><th></th><th>Les meilleurs</th><th>Les autres</th></tr></thead><tbody>' +
+      row("Durée médiane", F.duree, " s") + row("Interactions ÷ vues", F.eng, " %", true) + row("Commentaires pour 1 000 vues", F.comm_1k, "", true) +
+      row("Longueur de la légende", F.longueur, " caractères") + row("Avec un appel à l'action", F.avec_cta, " %") +
+      row("« Commente MOT »", F.cta_commente, " %") + row("Accroche en question", F.accroche_question, " %") +
+      row("Accroche avec un chiffre", F.accroche_chiffre, " %") + row("En collaboration", F.collab, " %") +
+      '</tbody></table></div><p class="formnote" style="margin-top:8px">Tendances sur un petit nombre de Reels : à lire avec les exemples au-dessus, pas comme une loi.</p>';
+  }
+
+  const idees = A.idees || [];
+  el("rl-idees-sec").hidden = !idees.length;
+  el("rl-idees").innerHTML = idees.map(x => rlCard(x, null)).join("");
+
+  const ev = A.a_eviter || [];
+  el("rl-eviter-sec").hidden = !ev.length;
+  el("rl-eviter").innerHTML = '<ul style="margin:0;padding-left:18px;font-size:14px;line-height:1.55">' + ev.map(s => "<li>" + s + "</li>").join("") + "</ul>";
+
+  renderReelsTable();
+}
+
+function renderReelsTable() {
+  const D = RL_DATA;
+  if (!D || !D.publications) return;
+  document.querySelectorAll("#rl-per .fpill").forEach(b => b.classList.toggle("on", b.dataset.p === RL_PER));
+  const lim = RL_PER === "tout" ? "" : isoDaysAgo(+RL_PER);
+  const rows = D.publications.filter(p => p.type === "reel" && p.vues && (!lim || p.date >= lim));
+  const { k, d } = RL_SORT;
+  rows.sort((a, b) => {
+    const va = a[k], vb = b[k];
+    if (va == null && vb == null) return 0;
+    if (va == null) return 1;
+    if (vb == null) return -1;
+    return (va < vb ? -1 : va > vb ? 1 : 0) * d;
+  });
+  const cols = [["date", "Date"], ["accroche", "Accroche"], ["vues", "Vues"], ["x_med", "× médiane"], ["likes", "❤️"], ["comms", "💬"], ["eng", "Interactions"], ["duree", "Durée"], ["cta", "Fin de la légende"]];
+  const CTA = { commente: "commente un mot", message: "écris-moi", lien: "lien en bio", enregistre: "enregistre", partage: "partage", abonne: "abonne-toi" };
+  el("rl-table").innerHTML = '<thead><tr>' + cols.map(([c, l]) => '<th data-k="' + c + '"' + (c === k ? ' class="on"' : '') + '>' + l + (c === k ? (d < 0 ? " ▾" : " ▴") : "") + '</th>').join("") + '</tr></thead><tbody>' +
+    rows.map(p => '<tr class="' + (p.recent ? "" : p.x_med >= 2 ? "rltop" : p.x_med != null && p.x_med <= 0.5 ? "rlflop" : "") + '">' +
+      '<td>' + frDate(p.date) + '</td>' +
+      '<td class="tdw"><a href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.accroche || "(sans légende)") + '</a>' + (p.recent ? ' <span class="badge-untracked">récent</span>' : '') + '</td>' +
+      '<td><b>' + rlNum(p.vues) + '</b></td><td>' + (p.x_med != null ? "× " + rlDec(p.x_med) : "–") + '</td><td>' + rlNum(p.likes) + '</td><td>' + rlNum(p.comms) + '</td>' +
+      '<td>' + rlDec(p.eng, " %") + '</td><td>' + (p.duree != null ? p.duree + " s" : "–") + '</td><td>' + esc(p.cta ? (CTA[p.cta] || p.cta) + (p.mot ? " « " + p.mot + " »" : "") : "–") + '</td></tr>').join("") +
+    '</tbody>';
+  el("rl-table-note").textContent = rows.length + " Reels · en vert : 2× la médiane ou plus, en gris : moitié de la médiane ou moins. Clic sur un titre de colonne pour trier.";
+}
+el("rl-per").addEventListener("click", e => {
+  const b = e.target.closest(".fpill");
+  if (!b) return;
+  RL_PER = b.dataset.p;
+  try { localStorage.setItem("rlPer", RL_PER); } catch (err) {}
+  renderReelsTable();
+});
+el("rl-table").addEventListener("click", e => {
+  const th = e.target.closest("th[data-k]");
+  if (!th) return;
+  RL_SORT = RL_SORT.k === th.dataset.k ? { k: th.dataset.k, d: -RL_SORT.d } : { k: th.dataset.k, d: th.dataset.k === "accroche" || th.dataset.k === "cta" ? 1 : -1 };
+  renderReelsTable();
+});
 
 let OV_T = null;
 function scheduleOverview() { clearTimeout(OV_T); OV_T = setTimeout(() => { try { renderOverview(); } catch (e) { console.error("vue d'ensemble", e); } }, 80); }
