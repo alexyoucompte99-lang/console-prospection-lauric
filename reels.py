@@ -69,21 +69,25 @@ def main():
             continue
         d = datetime.fromtimestamp(p["t"], timezone.utc).astimezone(PARIS)
         vues = next((p[k] for k in ("plays", "igp", "views") if isinstance(p.get(k), int) and p[k] > 0), None)
-        likes, comms = p.get("likes") or 0, p.get("comms") or 0
+        likes = p["likes"] if isinstance(p.get("likes"), int) else None   # absent quand la grille n'a pas été captée
+        comms = p["comms"] if isinstance(p.get("comms"), int) else None
         share = p.get("share") if isinstance(p.get("share"), int) else None
         cta, mot = cta_of(p.get("cap"))
         cap = p.get("cap") or ""
+        note = notes.get(p["code"]) or {}
         it = {
             "code": p["code"], "url": ("https://www.instagram.com/reel/" if kind_of(p) == "reel" else "https://www.instagram.com/p/") + p["code"] + "/",
             "type": kind_of(p), "date": d.strftime("%Y-%m-%d"), "heure": d.strftime("%H:%M"), "jour": JOURS[d.weekday()],
             "age": (now - d).days, "vues": vues, "likes": likes, "comms": comms, "partages": share,
             "enreg": p.get("save") if isinstance(p.get("save"), int) else None,
             "duree": round(p["dur"]) if isinstance(p.get("dur"), (int, float)) else None,
-            "eng": round(100 * (likes + comms + (share or 0)) / vues, 2) if vues else None,
-            "comm_1k": round(1000 * comms / vues, 1) if vues else None,
-            "accroche": hook_of(cap), "legende": cap, "longueur": len(cap), "hashtags": len(re.findall(r"#\w", cap)),
-            "cta": cta, "mot": mot, "cover": p.get("cov") or "", "audio": p.get("audio") or "", "collab": p.get("collab") or [],
-            "note": notes.get(p["code"]) or None,
+            "eng": round(100 * (likes + (comms or 0) + (share or 0)) / vues, 2) if vues and likes is not None else None,
+            "comm_1k": round(1000 * comms / vues, 1) if vues and comms is not None else None,
+            # sur un Reel, l'accroche qui compte est celle écrite sur la vidéo (notée à la main), pas la 1re ligne de la légende
+            "accroche": note.get("accroche") or hook_of(cap), "legende": cap, "longueur": len(cap), "hashtags": len(re.findall(r"#\w", cap)),
+            "format": note.get("format", ""), "sujet": note.get("sujet", ""),
+            "cta": cta or note.get("cta", ""), "mot": mot or note.get("mot", ""),
+            "cover": p.get("cov") or "", "audio": p.get("audio") or "", "collab": p.get("collab") or [],
         }
         items.append(it)
 
@@ -105,19 +109,36 @@ def main():
             return statistics.median(v) if v else None
         def pct(l, f):
             return round(100 * sum(1 for x in l if f(x)) / len(l)) if l else None
+        def pct_a(l, f):   # accroches : notées à la main, on ne compte que les Reels qui en ont une
+            l = [x for x in l if x["accroche"]]
+            return round(100 * sum(1 for x in l if f(x)) / len(l)) if l else None
+        # légendes lues pour moins de la moitié des Reels (relevé par la grille du profil) : pas de stats de légende
+        has_cap = sum(1 for x in base if x["legende"]) >= len(base) / 2
+        if not has_cap:
+            def pct(l, f, _pct=pct):
+                return None
         facteurs = {
             "n_top": len(top), "n_reste": len(rest), "seuil_top": top[-1]["vues"],
             "duree": [med_of(top, "duree"), med_of(rest, "duree")],
             "eng": [med_of(top, "eng"), med_of(rest, "eng")],
             "comm_1k": [med_of(top, "comm_1k"), med_of(rest, "comm_1k")],
-            "longueur": [med_of(top, "longueur"), med_of(rest, "longueur")],
+            "longueur": [med_of(top, "longueur"), med_of(rest, "longueur")] if has_cap else None,
             "avec_cta": [pct(top, lambda x: x["cta"]), pct(rest, lambda x: x["cta"])],
             "cta_commente": [pct(top, lambda x: x["cta"] == "commente"), pct(rest, lambda x: x["cta"] == "commente")],
-            "accroche_question": [pct(top, lambda x: "?" in x["accroche"]), pct(rest, lambda x: "?" in x["accroche"])],
-            "accroche_chiffre": [pct(top, lambda x: bool(re.search(r"\d", x["accroche"]))), pct(rest, lambda x: bool(re.search(r"\d", x["accroche"])))],
+            "accroche_question": [pct_a(top, lambda x: "?" in x["accroche"]), pct_a(rest, lambda x: "?" in x["accroche"])],
+            "accroche_chiffre": [pct_a(top, lambda x: bool(re.search(r"\d", x["accroche"]))), pct_a(rest, lambda x: bool(re.search(r"\d", x["accroche"])))],
             "collab": [pct(top, lambda x: x["collab"]), pct(rest, lambda x: x["collab"])],
             "jours_top": [x["jour"] for x in top],
         }
+    # vues médianes par sujet et par format (notés à la main dans reels-notes.json)
+    for key in ("sujet", "format"):
+        groups = {}
+        for x in base:
+            if x[key]:
+                groups.setdefault(x[key], []).append(x["vues"])
+        facteurs["par_" + key] = sorted(
+            [{"nom": k, "n": len(v), "mediane": statistics.median(v), "max": max(v), "au_dessus_2000": sum(1 for n in v if n >= 2000)}
+             for k, v in groups.items()], key=lambda g: -g["mediane"])
 
     out = {
         "releve": stamp,

@@ -4878,6 +4878,7 @@ try { RL_PER = localStorage.getItem("rlPer") || "tout"; } catch (e) {}
 const RL_REC = { accroche: "Accroche", format: "Format", structure: "Déroulé", duree: "Durée", cta: "Fin", legende: "Légende" };
 const rlNum = v => v == null ? "–" : fmt(v);
 const rlDec = (v, suf) => v == null ? "–" : String(v).replace(".", ",") + (suf || "");
+const rlX = v => v == null ? "–" : "× " + (v >= 10 ? Math.round(v) : String(Math.round(v * 10) / 10).replace(".", ","));
 
 function rlCover(p) {
   const alt = '<span class="rlalt">' + esc((p.accroche || "").slice(0, 90)) + '</span>';
@@ -4886,7 +4887,7 @@ function rlCover(p) {
 }
 
 function rlCard(x, p) {
-  const nums = p ? '<div class="rlnums"><b>' + rlNum(p.vues) + '</b> vues' + (p.x_med ? ' · <b>× ' + rlDec(p.x_med) + '</b> la médiane' : '') +
+  const nums = p ? '<div class="rlnums"><b>' + rlNum(p.vues) + '</b> vues' + (p.x_med ? ' · <b>' + rlX(p.x_med) + '</b> la médiane' : '') +
     ' · ' + rlNum(p.likes) + ' ❤️ · ' + rlNum(p.comms) + ' 💬' + (p.partages != null ? ' · ' + rlNum(p.partages) + ' ↗' : '') + '</div>' : '';
   const list = (t, l) => l && l.length ? '<h4>' + t + '</h4><ul>' + l.map(s => '<li>' + s + '</li>').join("") + '</ul>' : "";
   const rec = x.recette ? '<h4>La recette pour le refaire</h4><dl class="rlrec">' +
@@ -4936,17 +4937,23 @@ function renderReels() {
   el("rl-why-sec").hidden = !why.length && !F.n_top;
   el("rl-why").innerHTML = why.map(w => '<div class="card"><h3>' + w.titre + '</h3><p>' + w.texte + '</p></div>').join("");
   const fact = el("rl-fact");
-  fact.hidden = !F.n_top;
-  if (F.n_top) {
+  const groups = [["Par sujet", F.par_sujet], ["Par format", F.par_format]].filter(([, g]) => g && g.length);
+  fact.hidden = !F.n_top && !groups.length;
+  if (!fact.hidden) {
+    const gtab = ([lab, g]) => {
+      const mx = Math.max(...g.map(x => x.mediane));
+      return '<div><h3 class="mini-title">' + lab + '</h3><div class="tbl-scroll" style="margin-top:4px"><table><thead><tr><th></th><th>Reels</th><th>Vues médianes</th><th>+ de 2 000</th></tr></thead><tbody>' +
+        g.map(x => '<tr><td>' + esc(x.nom) + '</td><td>' + x.n + '</td><td><b' + (x.mediane === mx ? ' style="color:var(--good)"' : '') + '>' + fmt(Math.round(x.mediane)) + '</b></td><td>' + x.au_dessus_2000 + '</td></tr>').join("") +
+        '</tbody></table></div></div>';
+    };
     const row = (lab, pair, suf, dec) => pair && (pair[0] != null || pair[1] != null)
       ? '<tr><td>' + lab + '</td><td><b>' + (pair[0] == null ? "–" : (dec ? rlDec(pair[0]) : fmt(Math.round(pair[0]))) + (suf || "")) + '</b></td><td>' + (pair[1] == null ? "–" : (dec ? rlDec(pair[1]) : fmt(Math.round(pair[1]))) + (suf || "")) + '</td></tr>' : "";
-    fact.innerHTML = '<h3 class="mini-title">Les ' + F.n_top + ' meilleurs Reels (plus de ' + fmt(F.seuil_top) + ' vues) comparés aux ' + F.n_reste + ' autres</h3>' +
-      '<div class="tbl-scroll"><table><thead><tr><th></th><th>Les meilleurs</th><th>Les autres</th></tr></thead><tbody>' +
-      row("Durée médiane", F.duree, " s") + row("Interactions ÷ vues", F.eng, " %", true) + row("Commentaires pour 1 000 vues", F.comm_1k, "", true) +
-      row("Longueur de la légende", F.longueur, " caractères") + row("Avec un appel à l'action", F.avec_cta, " %") +
-      row("« Commente MOT »", F.cta_commente, " %") + row("Accroche en question", F.accroche_question, " %") +
-      row("Accroche avec un chiffre", F.accroche_chiffre, " %") + row("En collaboration", F.collab, " %") +
-      '</tbody></table></div><p class="formnote" style="margin-top:8px">Tendances sur un petit nombre de Reels : à lire avec les exemples au-dessus, pas comme une loi.</p>';
+    const tvr = F.n_top ? row("Durée médiane", F.duree, " s") + row("Interactions ÷ vues", F.eng, " %", true) + row("Commentaires pour 1 000 vues", F.comm_1k, "", true) +
+      row("Longueur de la légende", F.longueur, " caractères") + row("Avec un appel à l'action", F.avec_cta, " %") + row("« Commente MOT »", F.cta_commente, " %") +
+      row("Accroche en question", F.accroche_question, " %") + row("Accroche avec un chiffre (« #1 », « 90 % »)", F.accroche_chiffre, " %") + row("En collaboration", F.collab, " %") : "";
+    fact.innerHTML = '<div class="rlwhy" style="margin-bottom:6px">' + groups.map(gtab).join("") + '</div>' +
+      (tvr ? '<h3 class="mini-title" style="margin-top:10px">Les ' + F.n_top + ' meilleurs Reels (' + fmt(F.seuil_top) + ' vues et plus) comparés aux ' + F.n_reste + ' autres</h3><div class="tbl-scroll" style="margin-top:4px"><table><thead><tr><th></th><th>Les meilleurs</th><th>Les autres</th></tr></thead><tbody>' + tvr + '</tbody></table></div>' : '') +
+      '<p class="formnote" style="margin-top:8px">Sujet et format notés à la main en regardant chaque Reel. Les Reels de moins de 3 jours sont exclus. Petits échantillons : à lire avec les exemples, pas comme une loi.</p>';
   }
 
   const idees = A.idees || [];
@@ -4974,14 +4981,13 @@ function renderReelsTable() {
     if (vb == null) return -1;
     return (va < vb ? -1 : va > vb ? 1 : 0) * d;
   });
-  const cols = [["date", "Date"], ["accroche", "Accroche"], ["vues", "Vues"], ["x_med", "× médiane"], ["likes", "❤️"], ["comms", "💬"], ["eng", "Interactions"], ["duree", "Durée"], ["cta", "Fin de la légende"]];
-  const CTA = { commente: "commente un mot", message: "écris-moi", lien: "lien en bio", enregistre: "enregistre", partage: "partage", abonne: "abonne-toi" };
+  const cols = [["date", "Date"], ["accroche", "Accroche écrite sur le Reel"], ["vues", "Vues"], ["x_med", "× médiane"], ["likes", "❤️"], ["comms", "💬"], ["eng", "Interactions"], ["sujet", "Sujet"], ["format", "Format"]];
   el("rl-table").innerHTML = '<thead><tr>' + cols.map(([c, l]) => '<th data-k="' + c + '"' + (c === k ? ' class="on"' : '') + '>' + l + (c === k ? (d < 0 ? " ▾" : " ▴") : "") + '</th>').join("") + '</tr></thead><tbody>' +
     rows.map(p => '<tr class="' + (p.recent ? "" : p.x_med >= 2 ? "rltop" : p.x_med != null && p.x_med <= 0.5 ? "rlflop" : "") + '">' +
       '<td>' + frDate(p.date) + '</td>' +
       '<td class="tdw"><a href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.accroche || "(sans légende)") + '</a>' + (p.recent ? ' <span class="badge-untracked">récent</span>' : '') + '</td>' +
-      '<td><b>' + rlNum(p.vues) + '</b></td><td>' + (p.x_med != null ? "× " + rlDec(p.x_med) : "–") + '</td><td>' + rlNum(p.likes) + '</td><td>' + rlNum(p.comms) + '</td>' +
-      '<td>' + rlDec(p.eng, " %") + '</td><td>' + (p.duree != null ? p.duree + " s" : "–") + '</td><td>' + esc(p.cta ? (CTA[p.cta] || p.cta) + (p.mot ? " « " + p.mot + " »" : "") : "–") + '</td></tr>').join("") +
+      '<td><b>' + rlNum(p.vues) + '</b></td><td>' + rlX(p.x_med) + '</td><td>' + rlNum(p.likes) + '</td><td>' + rlNum(p.comms) + '</td>' +
+      '<td>' + rlDec(p.eng, " %") + '</td><td>' + esc(p.sujet || "–") + '</td><td>' + esc(p.format || "–") + '</td></tr>').join("") +
     '</tbody>';
   el("rl-table-note").textContent = rows.length + " Reels · en vert : 2× la médiane ou plus, en gris : moitié de la médiane ou moins. Clic sur un titre de colonne pour trier.";
 }
@@ -4995,7 +5001,7 @@ el("rl-per").addEventListener("click", e => {
 el("rl-table").addEventListener("click", e => {
   const th = e.target.closest("th[data-k]");
   if (!th) return;
-  RL_SORT = RL_SORT.k === th.dataset.k ? { k: th.dataset.k, d: -RL_SORT.d } : { k: th.dataset.k, d: th.dataset.k === "accroche" || th.dataset.k === "cta" ? 1 : -1 };
+  RL_SORT = RL_SORT.k === th.dataset.k ? { k: th.dataset.k, d: -RL_SORT.d } : { k: th.dataset.k, d: ["accroche", "sujet", "format"].includes(th.dataset.k) ? 1 : -1 };
   renderReelsTable();
 });
 
