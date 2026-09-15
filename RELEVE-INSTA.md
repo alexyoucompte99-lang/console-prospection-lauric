@@ -166,3 +166,24 @@ La page lit `data/lead-magnets.json` ; les analyses rédigées vivent dans `data
 Limites : YouTube ne dit pas qui regarde (« ouvert » non mesurable pour la vidéo) ; le rapprochement Tally se fait par
 prénom tant que le lien personnalisé `https://tally.so/r/zxvka0?insta=<pseudo>` (champ caché « insta » dans Tally)
 n'est pas en place ; seuls les 20 derniers messages de chaque conversation sont relus.
+
+## Onglet « 🎬 Reels à refaire » (Contenu, ajouté le 15/09/2026)
+À refaire une fois par mois environ, pas chaque jour, et jamais le même jour qu'un gros relevé.
+- **Ce qui ne marche pas** : `/api/v1/feed/user/77138870834/` renvoie une page HTML (plus de JSON côté web),
+  `/api/v1/users/web_profile_info/` a répondu 429 dès le premier appel le 15/09 au matin.
+- **Ce qui marche (lecture seule, trafic de visiteur normal)** : ouvrir `https://www.instagram.com/lauric_sergent/reels/`,
+  installer un espion sur `window.fetch` et `XMLHttpRequest` qui garde les réponses `/graphql/query` contenant `play_count`,
+  puis faire défiler avec l'outil `computer` (molette, 8 à 10 crans, 10 s d'attente) : chaque cran charge une ligne de 4 Reels
+  (code, `play_count`, `like_count`, `comment_count`, couverture). `window.scrollBy` ne déclenche pas le chargement.
+  Les 12 premiers Reels sont déjà chargés avant l'espion : vues lues sur la vignette, likes inconnus. 60 Reels = 15 lignes.
+- **Date** : décodée depuis l'identifiant, sans requête : `pk = shortcode en base64 (A-Z a-z 0-9 - _)`,
+  `timestamp_ms = (pk >> 23) + 1314220021721`.
+- **Légendes** : absentes de la grille. Ouvrir `https://www.instagram.com/p/<code>/` (pas `/reel/`, qui ouvre le fil de
+  suggestions) pour 3 ou 4 Reels maximum, 40 s d'écart. La légende type est « Follow @lauric_sergent si t'es dirigeant… ».
+- **Sortie** : dump JSON dans un `<pre>` + `get_page_text` (21 k caractères pour 60 Reels, revenu en clair : récupéré dans le
+  transcript jsonl de la session), converti au format de `reels.py` (`plays`, `likes`, `comms`, `t`, `cov`).
+- **Analyse** : l'accroche écrite sur la vidéo, le format et le sujet se notent à la main dans `data/reels-notes.json`
+  (clé = code du Reel) en regardant les couvertures ; `_analyse` contient résumé, à refaire, pourquoi, idées, à éviter.
+  Puis `python3 reels.py <export.json> --date "JJ/MM/AAAA HHhMM"` → `data/reels.json`.
+- Les couvertures sont des liens Instagram signés qui expirent en 5 jours environ : la carte affiche alors l'accroche sur fond
+  coloré, rien ne casse.
