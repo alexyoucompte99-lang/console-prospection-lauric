@@ -48,8 +48,10 @@ window.__state2='done(max)'; }catch(e){window.__state2='EXC '+e.message} })();
 MAXPAGES = 8 (300 convs) + pages supplémentaires pour dépasser le plancher de la veille de 5 pages.
 Attendre (`python3 -c "import time; time.sleep(60)"`) et lire `window.__state2` jusqu'à « done ».
 
+Astuce du 15/09 : lancer la boucle avec `thread_message_limit=40` depuis un onglet `instagram.com/robots.txt` (rien ne se fige), garder le résultat dans `window.__T40`, puis `window.__T = __T40` réduit aux 20 derniers messages (`nItems` plafonné à 20) pour les étapes 3, Appels et Lead magnet : un seul passage sur Instagram sert aussi à l'onglet À répondre (40 messages de contexte, étiquettes, vocaux).
+
 ## Étape 3 : mise en forme (javascript_tool)
-Construire `window.__out3` : une ligne par conversation ayant au moins un message de Lauric, 20 champs séparés par `┃`
+Code de référence : `scripts-releve/step3.js` (corrigé le 15/09 : un like du lead après sa réponse ne masque plus la réponse, et une réponse du lead au milieu d'une rafale de messages de Lauric ne la classe plus « à répondre »). Construire `window.__out3` : une ligne par conversation ayant au moins un message de Lauric, 20 champs séparés par `┃`
 (pseudo, nom, ts accroche, texte accroche, vocal 0/1, ts vu, ts dernier message Lauric, texte, ts dernier message lead,
 texte, read_state, thread_id, nb L, nb P, ts des relances, 1er message = Lauric 0/1, récent 0/1, ts 1er item, nb items, réagi 0/1),
 puis les lignes `ACT┃YYYY-MM-DD┃accroches┃suivi┃vocaux`. Retours à la ligne → `⏎`. **Compresser les templates** :

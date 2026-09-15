@@ -334,6 +334,16 @@
     width: 100%; max-width: 340px; margin: -8px 0 18px; display: block;
   }
   .search:focus-visible { outline: 2px solid var(--accent); outline-offset: -1px; }
+  .ctop { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+  .ctop ol { margin: 0; padding: 0; list-style: none; }
+  .ctop li { display: grid; grid-template-columns: 64px 1fr auto; gap: 10px; align-items: center; padding: 6px 0; border-top: 1px solid var(--border); font-size: 13.5px; }
+  .ctop li:first-child { border-top: 0; }
+  .ctop .cbar { height: 8px; border-radius: 4px; background: var(--s5); min-width: 3px; }
+  .ctop .cval { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .ctratio { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 4px 18px; }
+  .ctratio div { display: flex; justify-content: space-between; gap: 10px; padding: 7px 0; border-top: 1px solid var(--border); font-size: 13.5px; }
+  .ctratio b { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ctratio small { display: block; color: var(--ink-2); font-size: 12px; }
   .vkpi.tabgo { cursor: pointer; }
   .vkpi.tabgo:hover { outline: 2px solid var(--kc); outline-offset: 1px; }
   .vkpi.vf { cursor: pointer; }
@@ -571,6 +581,17 @@
     <h2 class="hsec" style="--hc:var(--s5);margin-bottom:10px">👁 Portée du contenu · 30 jours</h2>
     <div class="vkpis" id="ct-kpis"></div>
     <p class="formnote" id="ct-note"></p>
+  </section>
+  <section id="ct-sept-sec" hidden>
+    <h2 class="hsec" style="--hc:var(--s5);margin-bottom:10px">📅 Les 7 derniers jours · ratios de pilotage</h2>
+    <div class="vkpis" id="ct-kpis7"></div>
+    <div class="card" id="ct-ratios"></div>
+    <p class="formnote" id="ct-note7"></p>
+  </section>
+  <section id="ct-top-sec" hidden>
+    <h2 class="hsec" style="--hc:var(--s5);margin-bottom:10px">🏆 Meilleurs contenus d'après les vues</h2>
+    <div class="ctop" id="ct-top"></div>
+    <p class="formnote">Instagram ne donne que la date et les vues de chaque contenu dans le tableau de bord (95 % des vues viennent des Reels). Pour savoir de quel Reel il s'agit, regarder les publications de cette date sur le profil.</p>
   </section>
   <section>
           <h2 class="hsec" style="--hc:var(--s3);margin-bottom:10px">📈 Abonnés du compte · relevé automatique 18 h</h2>
@@ -1594,7 +1615,9 @@ async function load(showSpinner) {
   get("data/a-repondre.json").then(t => { AREP = JSON.parse(t); renderArepTab(); }).catch(() => renderArepTab());
   get("data/abonnes.csv").then(renderAbonnesTab).catch(() => renderAbonnesTab(""));
   get("data/abonnes_total.csv").then(renderTotalChart).catch(() => renderTotalChart(""));
-  get("data/contenu-insta.csv").then(t => { CT_ROWS = parseCSV(t).slice(1).map(r => ({ date: parseDate(r[0]), vues: +r[1] || 0, spect: +r[2] || 0, inter: +r[3] || 0, comptes: +r[4] || 0, visites: +r[5] || 0, liens: +r[6] || 0, followers: +r[7] || 0 })).filter(r => r.date && r.vues).sort((a, b) => a.date < b.date ? -1 : 1); renderContenu(); scheduleOverview(); }).catch(() => {});
+  get("data/contenu-insta.csv").then(t => { CT_ROWS = parseCSV(t).slice(1).map(r => ({ date: parseDate(r[0]), vues: +r[1] || 0, spect: +r[2] || 0, inter: +r[3] || 0, comptes: +r[4] || 0, visites: +r[5] || 0, liens: +r[6] || 0, followers: +r[7] || 0,
+    s7: r[8] ? { vues: +r[8] || 0, spect: +r[9] || 0, inter: +r[10] || 0, comptes: +r[11] || 0, visites: +r[12] || 0, liens: +r[13] || 0 } : null,
+    nonf: r[14] ? +r[14] : null, reels: r[15] ? +r[15] : null, top30: r[16] || "", top7: r[17] || "" })).filter(r => r.date && r.vues).sort((a, b) => a.date < b.date ? -1 : 1); renderContenu(); scheduleOverview(); }).catch(() => {});
   get("data/lead-magnets.json").then(t => { LM_DATA = JSON.parse(t); renderLmTab(); renderChauds(); scheduleOverview(); }).catch(() => renderLmTab());
   // le portefeuille a son propre fallback : un export CSV privé renvoie du HTML
   const pf = await get(SHEETS.pf)
@@ -4712,6 +4735,43 @@ function renderContenu() {
   el("ct-note").textContent = ct
     ? "Tableau de bord professionnel Instagram relevé le " + frDate(ct.date) + " (30 derniers jours glissants) : " + (ct.spect ? pctTxt(ct.visites, ct.spect) + " des comptes touchés visitent le profil, " : "") + (ct.comptes ? fmt(ct.comptes) + " comptes ont interagi, " : "") + fmt(ct.liens) + " clics sur le lien en bio. Relevé automatique chaque soir à 18 h avec les abonnés."
     : "Les chiffres du tableau de bord professionnel Instagram se relèvent chaque soir à 18 h. En secours, la saisie manuelle en bas de page reste possible.";
+
+  /* 7 derniers jours + ratios (colonnes ajoutées le 15/09/2026, absentes des relevés plus anciens) */
+  const s7 = ct && ct.s7, sec7 = el("ct-sept-sec");
+  if (sec7) sec7.hidden = !s7;
+  if (s7) {
+    const pace = ct.vues * 7 / 30, dPace = pace ? Math.round(100 * (s7.vues - pace) / pace) : null;
+    el("ct-kpis7").innerHTML =
+      k("var(--s5)", fmt(s7.vues), "👁 vues · 7 j" + (dPace != null ? " · " + (dPace >= 0 ? "+" : "") + dPace + " % vs rythme 30 j" : "")) +
+      k("var(--s4)", fmt(s7.spect), "👤 comptes touchés · 7 j") +
+      k("var(--s2)", fmt(s7.inter), "❤️ interactions · 7 j") +
+      k("var(--accent)", fmt(s7.visites), "🔎 visites du profil · 7 j") +
+      k("var(--s3)", g7 ? "+" + fmt(g7.v) : "–", "🆕 nouveaux abonnés · 7 j") +
+      k("var(--s1)", fmt(s7.liens), "🔗 clics sur le lien en bio · 7 j");
+    const pct = (n, d, dec) => d ? (100 * n / d).toFixed(dec == null ? 1 : dec).replace(".", ",") + " %" : "–";
+    const row = (lab, sub, v7, v30) => '<div><span>' + lab + '<small>' + sub + '</small></span><b>' + v7 + (v30 ? ' <small style="display:inline;font-weight:400">· 30 j : ' + v30 + '</small>' : '') + '</b></div>';
+    el("ct-ratios").innerHTML = '<div class="ctratio">' +
+      row("Taux d'interaction", "interactions ÷ vues", pct(s7.inter, s7.vues), pct(ct.inter, ct.vues)) +
+      row("Curiosité pour le profil", "visites du profil ÷ comptes touchés", pct(s7.visites, s7.spect), pct(ct.visites, ct.spect)) +
+      row("Visite → abonnement", "nouveaux abonnés ÷ visites du profil", g7 && s7.visites && !g7.since ? pct(g7.v, s7.visites, 0) : "–", g30 && ct.visites && !g30.since ? pct(g30.v, ct.visites, 0) : "") +
+      row("Clics sur le lien en bio", "clics ÷ visites du profil", pct(s7.liens, s7.visites), pct(ct.liens, ct.visites)) +
+      (ct.nonf != null ? row("Vues venant de non-abonnés", "le contenu touche de nouvelles personnes", String(ct.nonf).replace(".", ",") + " %", "") : "") +
+      (ct.reels != null ? row("Part des Reels", "dans les vues, le reste = stories et posts", String(ct.reels).replace(".", ",") + " %", "") : "") +
+      '</div>';
+    el("ct-note7").textContent = "Lecture : le rythme 30 j = vues des 30 derniers jours ramenées à une semaine. Les pourcentages « 30 j » à droite servent de référence. Pour piloter le contenu, les deux chiffres qui comptent : les vues venant de non-abonnés (portée nouvelle) et le passage visite du profil → abonnement (la bio et les 9 dernières publications font le travail).";
+  }
+  const tops = [["7 derniers jours", ct && ct.top7], ["30 derniers jours", ct && ct.top30]]
+    .map(([lab, s]) => [lab, (s || "").split(" ").map(x => x.split("@")).filter(x => x.length === 2).map(([v, d]) => ({ v: +v, d }))])
+    .filter(([, l]) => l.length);
+  const secTop = el("ct-top-sec");
+  if (secTop) secTop.hidden = !tops.length;
+  if (tops.length) {
+    el("ct-top").innerHTML = tops.map(([lab, l]) => {
+      const mx = Math.max(...l.map(x => x.v));
+      return '<div class="card"><h3 class="mini-title">' + lab + '</h3><ol>' + l.map(x =>
+        '<li><span>' + x.d + '</span><div class="cbar" style="width:' + Math.max(3, Math.round(100 * x.v / mx)) + '%"></div><span class="cval">' + fmt(x.v) + '</span></li>').join("") + '</ol></div>';
+    }).join("");
+  }
 }
 
 let OV_T = null;

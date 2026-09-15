@@ -11,13 +11,15 @@ for(const t of T){
   const C0=1787781600, recent=L.some(i=>i.t>=C0);
   const g0=recent?(firstIsAcc&&t.items[0].t>=C0?groups[0]:groups.find(g=>g.start>=C0)):groups[0];
   const accText=g0.items.filter(i=>i.x).map(i=>i.x).join('\n'), accVoc=g0.items.some(i=>i.ty==='voice_media');
-  const lastLg=groups[groups.length-1], lastP=P[P.length-1];
+  const lastLg=groups[groups.length-1], PR=P.filter(i=>i.ty!=='action_log'), lastP=PR.length?PR[PR.length-1]:P[P.length-1];  // un like du lead après sa réponse ne masque pas la réponse
+  // le lead a répondu au milieu d'une rafale de Lauric (moins de 15 min entre ses messages) : le dernier message de Lauric compte à partir de la suite
+  const after=lastP&&lastP.ty!=='action_log'?lastLg.items.filter(i=>i.t>lastP.t):[], lastLts=after.length&&after[0].t>lastLg.start?after[0].t:lastLg.start;
   const lastLText=lastLg.items.filter(i=>i.x).map(i=>i.x).join('\n')||(lastLg.items.some(i=>i.ty==='voice_media')?'[vocal]':'['+lastLg.items[0].ty+']');
-  const relDays=groups.filter(g=>g!==g0).map(g=>g.start).join(','), reagi=L.some(i=>/P/.test(i.re))?1:0;
-  rows.push([t.u,cl(t.n),g0.start,code(accText),accVoc?1:0,t.seen||0,lastLg.start,code(lastLText),lastP?lastP.t:0,lastP?cl(lastP.x||('['+lastP.ty+']')).slice(0,400):'',t.rs,t.id,L.length,P.length,relDays,firstIsAcc?1:0,recent?1:0,t.items[0].t,t.nItems,reagi].join('┃'));
+  const relDays=groups.filter(g=>g!==g0).map(g=>g.start).join(','), reagi=(L.some(i=>/P/.test(i.re))||P.some(i=>i.ty==='action_log'&&i.t>lastLg.start))?1:0;
+  rows.push([t.u,cl(t.n),g0.start,code(accText),accVoc?1:0,t.seen||0,lastLts,code(lastLText),lastP?lastP.t:0,lastP?cl(lastP.x||('['+lastP.ty+']')).slice(0,400):'',t.rs,t.id,L.length,P.length,relDays,firstIsAcc?1:0,recent?1:0,t.items[0].t,t.nItems,reagi].join('┃'));
 }
 const actLines=Object.keys(act).sort().map(d=>'ACT┃'+d+'┃'+act[d].acc+'┃'+act[d].rel+'┃'+act[d].voc);
 window.__out4='RICH2\n'+rows.join('\n')+'\n'+actLines.join('\n')+'\nENDDUMP';
-window.__dump=(txt)=>{const m=document.querySelector('main');m.innerHTML='';const d=document.createElement('pre');d.textContent=txt;m.appendChild(d);return txt.length};
+window.__dump=(txt)=>{const m=document.querySelector('main')||document.body;m.innerHTML='';const d=document.createElement('pre');d.textContent=txt;m.appendChild(d);return txt.length};
 window.__part=(k)=>{const s=window.__out4.slice(k*47000,k*47000+49000); return window.__dump('P'+k+'\n'+s+'\nENDPART\n'+window.__out4.slice(0,30000))};
 'len='+window.__out4.length+' rows='+rows.length+' days='+actLines.length+' parts='+Math.ceil(window.__out4.length/47000)+' oldest='+new Date(Math.min(...T.map(t=>t.la))*1000).toLocaleDateString('fr-FR')+' mois='+JSON.stringify(T.reduce((a,t)=>{const k=new Date(t.la*1000).toISOString().slice(0,7);a[k]=(a[k]||0)+1;return a},{}))

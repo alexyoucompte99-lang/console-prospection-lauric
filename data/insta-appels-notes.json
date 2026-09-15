@@ -93,7 +93,7 @@
   "issue": "fait",
   "cible": "wedding planner solo, trésorerie faible, cherche un salariat",
   "type": "créneau précis",
-  "recap": "Laurianne (Laurelys, événementiel). Demande les tarifs, vocal en réponse, elle explique que sa trésorerie est limitée et qu'elle cherche une activité salariée en plus. Lien Calendly puis « Demain matin ? » : oui en 2 h, invitation par mail, visio le 27/08 à 9h30 faite. Réel posté avec elle le 31/08.",
+  "recap": "Laurianne (Laurelys, événementiel). Demande les tarifs, vocal en réponse, elle explique que sa trésorerie est limitée et qu'elle cherche une activité salariée en plus. Lien Calendly puis « Demain matin ? » : oui en 2 h, invitation par mail, visio le 27/08 à 9h30 faite. Réel posté avec elle le 31/08. Le 14/09 Lauric décale un nouvel appel (réunion de rentrée) : elle est dispo le 15/09 après-midi à partir de 15h, invitation modifiée, « c'est validé ! ».",
   "verdict": "« Demain matin ? » juste après le lien a fait mieux que le lien seul. Appel facile, mais profil sans budget : aucune suite commerciale."
  },
  "veroniquevaramo": {
@@ -284,5 +284,9 @@
   "type": "rendez-vous confirmé en direct",
   "recap": "Marie a liké l'ancien script le 14/08, scan envoyé le 18/08. Un premier rendez-vous était calé le 27/08 à 14h30, puis la visio a été refixée au 17/09. Le 09/09 Lauric confirme la visio et demande ses sujets prioritaires pour la fin d'année : message pas encore ouvert. Le 13/09, Lauric relance avec une question courte sur son sujet prioritaire pour le jeudi 17 : pas encore de réponse.",
   "verdict": "Visio du 17/09 à préparer. Elle n'a pas donné ses sujets prioritaires : relancer par une question courte 48 h avant, sinon l'appel démarre à froid."
+ },
+ "mickael.miguez": {
+  "exclude": true,
+  "recap": "Élève du club Investisseurs 3.0 (champion d'Europe) qui demande de l'aide sur son plan d'épargne Trade Republic : support de formation, pas une proposition d'appel de coaching."
  }
 }

@@ -148,5 +148,6 @@ la courbe en haut de l'onglet « Nouveaux abonnés » (KPIs : dernier relevé, d
 Dans la même tâche de 18 h : ouvrir `https://www.instagram.com/accounts/insights/?timeframe=30` (lecture seule, 1 seule page),
 `get_page_text`, écrire le texte dans un fichier puis `python3 releve_contenu.py <fichier>` → `data/contenu-insta.csv`
 (Date, Vues 30j, Spectateurs 30j, Interactions 30j, Comptes ayant interagi 30j, Visites profil 30j, Liens externes 30j, Followers).
-Chiffres glissants sur 30 jours, une ligne par jour. Lus par l'onglet Contenu et la ligne « Impressions » de la Vue d'ensemble
+Chiffres glissants sur 30 jours, une ligne par jour.
+Depuis le 15/09/2026 : ouvrir aussi `?timeframe=7`, sauver son texte dans un 2e fichier et lancer `python3 releve_contenu.py <texte_30j> --sept <texte_7j>` : le script ajoute les colonnes 7 j (vues, comptes touchés, interactions, comptes ayant interagi, visites du profil, clics lien), la part des non-followers et des Reels dans les vues, et les 5 meilleurs contenus (`vues@jj/mm`). L'onglet Contenu affiche alors la section « 7 derniers jours · ratios de pilotage » et « Meilleurs contenus ». Lus par l'onglet Contenu et la ligne « Impressions » de la Vue d'ensemble
 (la saisie manuelle de Lauric ne sert plus qu'en secours, la valeur la plus récente gagne). Premier relevé : 14/09/2026, 146 356 vues.

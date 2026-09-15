@@ -1,5 +1,5 @@
 {
-"releve": "14/09/2026",
+"releve": "15/09/2026",
 "analyse": [
 {
 "titre": "Les chiffres (relevé du 09/09, conversations depuis mars)",
@@ -54,6 +54,166 @@
 ],
 "convs": [
 {
+"pseudo": "lauriannebaudel",
+"nom": "Laurianne Baudel",
+"thread": "340282366841710301244259261509968060870",
+"variante": "suivi",
+"premier": {
+"text": "Hello Laurianne, \n\nTu es à l'honneur ce matin j'ai posté un réel avec toi. \n\nÀ ce soir !",
+"t": "31/08/2026 11:03",
+"partial": true
+},
+"complet": false,
+"nItems": 20,
+"propose": {
+"text": "Hello Laurianne ! \n\nDésolé on doit décaler, j'ai la réunion de rentrée pour Hugo. \n\nTu es dispo demain dans la journée ?",
+"t": "14/09/2026 17:08",
+"ts": 1789398495,
+"n": 1,
+"vocal": false
+},
+"avant": {
+"msgsLead": 7,
+"msgsLauric": 7,
+"jours": 19.2
+},
+"apres": {
+"repondu": 3,
+"texte": "salut! pas de problème t’inquiète\noui je dispo l’après midi jusqu’à 18h et plutôt à partir de 15h c’est validé!",
+"t": "14/09/2026 17:10",
+"vu": true
+},
+"issue": "fait",
+"booked": [],
+"conv": "https://www.instagram.com/direct/t/340282366841710301244259261509968060870/",
+"msgs": [
+{
+"w": "L",
+"t": "26/08/2026 12:01",
+"ty": "text",
+"x": "Demain matin ?"
+},
+{
+"w": "P",
+"t": "26/08/2026 13:49",
+"ty": "text",
+"x": "Oui demain matin ça me va!"
+},
+{
+"w": "L",
+"t": "26/08/2026 16:33",
+"ty": "text",
+"x": "Let's go !\n\nTu veux bien me partager ton mail ?"
+},
+{
+"w": "L",
+"t": "26/08/2026 16:34",
+"ty": "text",
+"x": "Je t'envoie l'invitation comme ça"
+},
+{
+"w": "P",
+"t": "26/08/2026 16:34",
+"ty": "text",
+"x": "contact@laurelys.fr"
+},
+{
+"w": "L",
+"t": "26/08/2026 16:35",
+"ty": "text",
+"x": "9h30 ça te convient ?"
+},
+{
+"w": "P",
+"t": "26/08/2026 16:35",
+"ty": "text",
+"x": "oui c’est très bien!"
+},
+{
+"w": "L",
+"t": "26/08/2026 16:36",
+"ty": "text",
+"x": "Tu as dû recevoir une invit"
+},
+{
+"w": "P",
+"t": "26/08/2026 16:37",
+"ty": "text",
+"x": "Je l’ai reçu, merci beaucoup!"
+},
+{
+"w": "L",
+"t": "31/08/2026 11:03",
+"ty": "text",
+"x": "Hello Laurianne, \n\nTu es à l'honneur ce matin j'ai posté un réel avec toi. \n\nÀ ce soir !"
+},
+{
+"w": "P",
+"t": "31/08/2026 11:45",
+"ty": "action_log",
+"x": ""
+},
+{
+"w": "P",
+"t": "31/08/2026 19:09",
+"ty": "media",
+"x": ""
+},
+{
+"w": "P",
+"t": "31/08/2026 19:09",
+"ty": "text",
+"x": "J’ai appelé sans réponse, j’ai donc laissé ce message ☺️"
+},
+{
+"w": "L",
+"t": "31/08/2026 19:11",
+"ty": "text",
+"x": "\"J'aimerais\" avec un S (je dis ça mais ça m'arrive aussi 😅)\n\nSuper ton message Laurianne !"
+},
+{
+"w": "P",
+"t": "31/08/2026 19:13",
+"ty": "text",
+"x": "Effectivement, merci!"
+},
+{
+"w": "L",
+"t": "14/09/2026 17:08",
+"ty": "text",
+"x": "Hello Laurianne ! \n\nDésolé on doit décaler, j'ai la réunion de rentrée pour Hugo. \n\nTu es dispo demain dans la journée ?"
+},
+{
+"w": "P",
+"t": "14/09/2026 17:10",
+"ty": "text",
+"x": "salut! pas de problème t’inquiète\noui je dispo l’après midi jusqu’à 18h"
+},
+{
+"w": "P",
+"t": "14/09/2026 17:10",
+"ty": "text",
+"x": "et plutôt à partir de 15h"
+},
+{
+"w": "L",
+"t": "14/09/2026 18:27",
+"ty": "text",
+"x": "Je viens de t'envoyer la modif"
+},
+{
+"w": "P",
+"t": "14/09/2026 18:32",
+"ty": "text",
+"x": "c’est validé!"
+}
+],
+"recap": "Laurianne (Laurelys, événementiel). Demande les tarifs, vocal en réponse, elle explique que sa trésorerie est limitée et qu'elle cherche une activité salariée en plus. Lien Calendly puis « Demain matin ? » : oui en 2 h, invitation par mail, visio le 27/08 à 9h30 faite. Réel posté avec elle le 31/08. Le 14/09 Lauric décale un nouvel appel (réunion de rentrée) : elle est dispo le 15/09 après-midi à partir de 15h, invitation modifiée, « c'est validé ! ».",
+"cible": "wedding planner solo, trésorerie faible, cherche un salariat",
+"type": "créneau précis",
+"verdict": "« Demain matin ? » juste après le lien a fait mieux que le lien seul. Appel facile, mais profil sans budget : aucune suite commerciale."
+},
+{
 "pseudo": "maximiliencausse",
 "nom": "Maximilien Causse",
 "thread": "340282366841710301244260146071271376480",
@@ -64,7 +224,7 @@
 "partial": true
 },
 "complet": false,
-"nItems": 21,
+"nItems": 20,
 "propose": {
 "text": "Salut Maximilien, comme convenu je reviens vers toi en septembre. Tu en es où sur l'EURL et l'apprenti ? Je te propose 20 minutes au téléphone pour en parler : mardi 19h30 ou jeudi 19h30 ?",
 "t": "13/09/2026 20:09",
@@ -74,8 +234,8 @@
 },
 "avant": {
 "msgsLead": 1,
-"msgsLauric": 4,
-"jours": 48.4
+"msgsLauric": 3,
+"jours": 45.3
 },
 "apres": {
 "repondu": 6,
@@ -87,12 +247,6 @@
 "booked": [],
 "conv": "https://www.instagram.com/direct/t/340282366841710301244260146071271376480/",
 "msgs": [
-{
-"w": "L",
-"t": "27/07/2026 09:27",
-"ty": "text",
-"x": "Bonjour Maximilien, j’espère que tu vas bien.\n\nAs-tu bien reçu mon message?"
-},
 {
 "w": "P",
 "t": "30/07/2026 12:56",
@@ -305,7 +459,7 @@
 "partial": true
 },
 "complet": false,
-"nItems": 21,
+"nItems": 20,
 "propose": {
 "text": "Bjr Meriem, \n\nAs-tu une dispo cette semaine pour une visio avec moi ?",
 "t": "08/09/2026 08:18",
@@ -314,9 +468,9 @@
 "vocal": false
 },
 "avant": {
-"msgsLead": 13,
+"msgsLead": 12,
 "msgsLauric": 7,
-"jours": 28.1
+"jours": 20.0
 },
 "apres": {
 "repondu": 0,
@@ -328,12 +482,6 @@
 "booked": [],
 "conv": "https://www.instagram.com/direct/t/340282366841710301244259228342877589947/",
 "msgs": [
-{
-"w": "P",
-"t": "11/08/2026 06:58",
-"ty": "text",
-"x": "bonjour monsieur, je trouves la question du chiffre d’affaires inutile, merci"
-},
 {
 "w": "L",
 "t": "19/08/2026 08:15",
@@ -471,7 +619,7 @@
 "partial": true
 },
 "complet": false,
-"nItems": 21,
+"nItems": 20,
 "propose": {
 "text": "Hello, \n\nÊtes vous ouvert à parler de votre entreprise et des sujets qui vous bloquent à ce jour ?",
 "t": "08/09/2026 07:52",
@@ -480,9 +628,9 @@
 "vocal": false
 },
 "avant": {
-"msgsLead": 1,
+"msgsLead": 0,
 "msgsLauric": 5,
-"jours": 32.0
+"jours": 31.9
 },
 "apres": {
 "repondu": 5,
@@ -494,12 +642,6 @@
 "booked": [],
 "conv": "https://www.instagram.com/direct/t/340282366841710301244285445757659694845/",
 "msgs": [
-{
-"w": "P",
-"t": "07/08/2026 07:46",
-"ty": "text",
-"x": "Non pas vraiment ! Quel type d’accompagnement proposez-vous ?"
-},
 {
 "w": "L",
 "t": "07/08/2026 09:36",
@@ -735,7 +877,7 @@
 "w": "L",
 "t": "30/08/2026 21:33",
 "ty": "reel_share",
-"x": ""
+"x": "🔥🔥"
 },
 {
 "w": "P",
@@ -759,7 +901,7 @@
 "w": "L",
 "t": "07/09/2026 21:46",
 "ty": "reel_share",
-"x": ""
+"x": "J’ai hâte de voir ça !"
 }
 ],
 "recap": "Traiteur qui dirige des équipes et fait de la promotion immobilière à l'étranger. A dit deux fois qu'il est débordé, décroche à la salle de sport. Il envoie un vocal le 31/08 à 0h37 ; la réponse est un pavé de 8 lignes sur le cabinet qui finit par « une disponibilité même en soirée cette semaine ? ». Jamais ouvert depuis.",
@@ -928,172 +1070,6 @@
 "verdict": "Le lead venait de poser son besoin noir sur blanc. Il fallait répondre « tu as 30 min demain ou jeudi ? », pas un texte sans date. Cœur de cible, à rattraper avec deux créneaux."
 },
 {
-"pseudo": "lauriannebaudel",
-"nom": "Laurianne Baudel",
-"thread": "340282366841710301244259261509968060870",
-"variante": "suivi",
-"premier": {
-"text": "Hello Laurianne, \n\nTu es à l'honneur ce matin j'ai posté un réel avec toi. \n\nÀ ce soir !",
-"t": "31/08/2026 11:03",
-"partial": true
-},
-"complet": false,
-"nItems": 21,
-"propose": {
-"text": "Je te laisse mon agenda et tu réserves ton créneau comme ça on fait comme ça t’arrange Laurianne😊",
-"t": "26/08/2026 10:56",
-"ts": 1787734563,
-"n": 1,
-"vocal": false
-},
-"avant": {
-"msgsLead": 3,
-"msgsLauric": 1,
-"jours": 0.8
-},
-"apres": {
-"repondu": 7,
-"texte": "Oui demain matin ça me va! contact@laurelys.fr oui c’est très bien! Je l’ai reçu, merci beaucoup!  J’ai appelé sans réponse, j’ai donc laissé ce message ☺️ Effectivement, merci!",
-"t": "26/08/2026 13:49",
-"vu": true
-},
-"issue": "fait",
-"booked": [],
-"conv": "https://www.instagram.com/direct/t/340282366841710301244259261509968060870/",
-"msgs": [
-{
-"w": "P",
-"t": "25/08/2026 15:59",
-"ty": "text",
-"x": "Merci beaucoup pour tous les conseils, je vais sérieusement y réfléchir! Quels sont tes tarifs?"
-},
-{
-"w": "L",
-"t": "25/08/2026 19:09",
-"ty": "voice_media",
-"x": ""
-},
-{
-"w": "P",
-"t": "26/08/2026 10:32",
-"ty": "text",
-"x": "Du point de vue de ma trésorerie ça doit s’étudier car en réalité j’ai déjà fais le choix d’un premier investissement en prenant l’abonnement premium sur mariage . net afin d’accroître ma visibilité\nMais nous pouvons quand même en discuter"
-},
-{
-"w": "P",
-"t": "26/08/2026 10:35",
-"ty": "text",
-"x": "Pour mes disponibilités, c’est un peu compliqué, car je suis activement à la recherche d’une activité salariée en plus, donc à court terme je suis disponible demain, vendredi, samedi et lundi ☺️ à long terme, je ne peux te donner que les samedis"
-},
-{
-"w": "L",
-"t": "26/08/2026 10:56",
-"ty": "text",
-"x": "Je te laisse mon agenda et tu réserves ton créneau comme ça on fait comme ça t’arrange Laurianne😊"
-},
-{
-"w": "L",
-"t": "26/08/2026 10:56",
-"ty": "link",
-"x": "https://l.instagram.com/?u=https%3A%2F%2Fcalendly.com%2Flauricsergent%2F1h-offerte%3Futm_id%3D97760_v0_s00_e0_tv4&e=AUC39ySQO7YlYAAOVdQxzf4blzKjyo3m4iuRHJ-DAtPzxiwHgy4_i7YqYjCBHlRXntJ5j0eOdi24Lf0gK_XEV7u2MYsrKV0HT9DM-HpBUd_td4PNIV5uuAV8lUOtpRMaReIXWJYfTAbK"
-},
-{
-"w": "L",
-"t": "26/08/2026 12:01",
-"ty": "text",
-"x": "Demain matin ?"
-},
-{
-"w": "P",
-"t": "26/08/2026 13:49",
-"ty": "text",
-"x": "Oui demain matin ça me va!"
-},
-{
-"w": "L",
-"t": "26/08/2026 16:33",
-"ty": "text",
-"x": "Let's go !\n\nTu veux bien me partager ton mail ?"
-},
-{
-"w": "L",
-"t": "26/08/2026 16:34",
-"ty": "text",
-"x": "Je t'envoie l'invitation comme ça"
-},
-{
-"w": "P",
-"t": "26/08/2026 16:34",
-"ty": "text",
-"x": "contact@laurelys.fr"
-},
-{
-"w": "L",
-"t": "26/08/2026 16:35",
-"ty": "text",
-"x": "9h30 ça te convient ?"
-},
-{
-"w": "P",
-"t": "26/08/2026 16:35",
-"ty": "text",
-"x": "oui c’est très bien!"
-},
-{
-"w": "L",
-"t": "26/08/2026 16:36",
-"ty": "text",
-"x": "Tu as dû recevoir une invit"
-},
-{
-"w": "P",
-"t": "26/08/2026 16:37",
-"ty": "text",
-"x": "Je l’ai reçu, merci beaucoup!"
-},
-{
-"w": "L",
-"t": "31/08/2026 11:03",
-"ty": "text",
-"x": "Hello Laurianne, \n\nTu es à l'honneur ce matin j'ai posté un réel avec toi. \n\nÀ ce soir !"
-},
-{
-"w": "P",
-"t": "31/08/2026 11:45",
-"ty": "action_log",
-"x": ""
-},
-{
-"w": "P",
-"t": "31/08/2026 19:09",
-"ty": "media",
-"x": ""
-},
-{
-"w": "P",
-"t": "31/08/2026 19:09",
-"ty": "text",
-"x": "J’ai appelé sans réponse, j’ai donc laissé ce message ☺️"
-},
-{
-"w": "L",
-"t": "31/08/2026 19:11",
-"ty": "text",
-"x": "\"J'aimerais\" avec un S (je dis ça mais ça m'arrive aussi 😅)\n\nSuper ton message Laurianne !"
-},
-{
-"w": "P",
-"t": "31/08/2026 19:13",
-"ty": "text",
-"x": "Effectivement, merci!"
-}
-],
-"recap": "Laurianne (Laurelys, événementiel). Demande les tarifs, vocal en réponse, elle explique que sa trésorerie est limitée et qu'elle cherche une activité salariée en plus. Lien Calendly puis « Demain matin ? » : oui en 2 h, invitation par mail, visio le 27/08 à 9h30 faite. Réel posté avec elle le 31/08.",
-"cible": "wedding planner solo, trésorerie faible, cherche un salariat",
-"type": "créneau précis",
-"verdict": "« Demain matin ? » juste après le lien a fait mieux que le lien seul. Appel facile, mais profil sans budget : aucune suite commerciale."
-},
-{
 "pseudo": "veroniquevaramo",
 "nom": "Varamo Véronique",
 "thread": "340282366841710301244259222036911677174",
@@ -1104,7 +1080,7 @@
 "partial": true
 },
 "complet": false,
-"nItems": 21,
+"nItems": 20,
 "propose": {
 "text": "Parfait, tu peux me donner ton mail stp comme ça je t'envoie une invitation en perso pour notre visio 🤗",
 "t": "25/08/2026 14:12",
@@ -1113,7 +1089,7 @@
 "vocal": false
 },
 "avant": {
-"msgsLead": 1,
+"msgsLead": 0,
 "msgsLauric": 0,
 "jours": 0.0
 },
@@ -1127,12 +1103,6 @@
 "booked": [],
 "conv": "https://www.instagram.com/direct/t/340282366841710301244259222036911677174/",
 "msgs": [
-{
-"w": "P",
-"t": "25/08/2026 13:58",
-"ty": "text",
-"x": "Je te propose d en discuter lundi 31 ou vendredi 04, 11h."
-},
 {
 "w": "L",
 "t": "25/08/2026 14:12",
@@ -1357,7 +1327,7 @@
 "partial": true
 },
 "complet": false,
-"nItems": 21,
+"nItems": 20,
 "propose": {
 "text": "https://calendly.com/lauricsergent/1h-offerte",
 "t": "13/08/2026 22:15",
@@ -1367,7 +1337,7 @@
 },
 "avant": {
 "msgsLead": 0,
-"msgsLauric": 2,
+"msgsLauric": 1,
 "jours": 0.0
 },
 "apres": {
@@ -1380,12 +1350,6 @@
 "booked": [],
 "conv": "https://www.instagram.com/direct/t/340282366841710301244259234898013649314/",
 "msgs": [
-{
-"w": "L",
-"t": "13/08/2026 22:13",
-"ty": "voice_media",
-"x": ""
-},
 {
 "w": "L",
 "t": "13/08/2026 22:15",
@@ -1523,23 +1487,23 @@
 "partial": true
 },
 "complet": false,
-"nItems": 21,
+"nItems": 20,
 "propose": {
-"text": "Bonjour Lamia, \n\nJe confirme mes rdv de la journée. \n\nC'est toujours ok pour toi à 14h (15h chez moi) ? \n\nLauric",
-"t": "11/08/2026 09:10",
-"ts": 1786432227,
-"n": 4,
+"text": "Tu as reçu un mail d'invitation avec Google Meet. \nJe te mets en dessous ici",
+"t": "11/08/2026 11:59",
+"ts": 1786442380,
+"n": 3,
 "vocal": false
 },
 "avant": {
-"msgsLead": 0,
+"msgsLead": 2,
 "msgsLauric": 0,
 "jours": 0.0
 },
 "apres": {
-"repondu": 6,
-"texte": "Bonjour, oui c’est confirmé C’est sur quel lien ? Je n’arrive pas à me connecter  Bonjour, demain si tu veux. Fin de l’après-midi On peut faire un call whatsapp ?",
-"t": "11/08/2026 11:52",
+"repondu": 4,
+"texte": "Je n’arrive pas à me connecter  Bonjour, demain si tu veux. Fin de l’après-midi On peut faire un call whatsapp ?",
+"t": "11/08/2026 15:04",
 "vu": true
 },
 "issue": "booke",
@@ -1551,12 +1515,6 @@
 ],
 "conv": "https://www.instagram.com/direct/t/340282366841710301244259873562868453791/",
 "msgs": [
-{
-"w": "L",
-"t": "11/08/2026 09:10",
-"ty": "text",
-"x": "Bonjour Lamia, \n\nJe confirme mes rdv de la journée. \n\nC'est toujours ok pour toi à 14h (15h chez moi) ? \n\nLauric"
-},
 {
 "w": "P",
 "t": "11/08/2026 11:52",
@@ -1694,7 +1652,7 @@
 "partial": true
 },
 "complet": false,
-"nItems": 21,
+"nItems": 20,
 "propose": {
 "text": "J'aimerais en savoir davantage sur ton projet, les enjeux, ton positionnement et surtout les objectifs que tu te fixes à 3/5 ans. \n\nCa te dit qu'on se prenne un temps en visio tous les 2 ? \n\nC'est un coaching/prise de recul que j'offre quand j'aime bien le projet 😊. \n\n(En aucun cas un pseudo appel de vente bidon, ce n'est pas ma manière de bosser). \n\nOn fait que de la strat, vision et plan d'actions pendant 1h. \n\nSi ça te plaît et que t'es ok je te parle de notre accompagnement (j'ai 3 personnes avec moi) pour que tu puisses te projeter.\n\nEt au pire tu repars avec un temps de recul et ma vision de ton projet avec mes reco. \n\nLet's go ?",
 "t": "10/08/2026 22:17",
@@ -1704,8 +1662,8 @@
 },
 "avant": {
 "msgsLead": 2,
-"msgsLauric": 3,
-"jours": 2.5
+"msgsLauric": 2,
+"jours": 2.0
 },
 "apres": {
 "repondu": 4,
@@ -1722,12 +1680,6 @@
 ],
 "conv": "https://www.instagram.com/direct/t/340282366841710301244259208870429806598/",
 "msgs": [
-{
-"w": "L",
-"t": "08/08/2026 09:40",
-"ty": "link",
-"x": "https://tally.so/r/zxvka0"
-},
 {
 "w": "P",
 "t": "08/08/2026 21:19",
@@ -2292,7 +2244,7 @@
 "partial": true
 },
 "complet": false,
-"nItems": 21,
+"nItems": 20,
 "propose": {
 "text": "Bjr Loïc, \n\nQuelles sont tes prochaines dispos ?\n\nBonne semaine à toi😊\n\nLauric",
 "t": "27/07/2026 09:30",
@@ -2301,9 +2253,9 @@
 "vocal": false
 },
 "avant": {
-"msgsLead": 4,
+"msgsLead": 3,
 "msgsLauric": 8,
-"jours": 24.8
+"jours": 22.7
 },
 "apres": {
 "repondu": 2,
@@ -2315,12 +2267,6 @@
 "booked": [],
 "conv": "https://www.instagram.com/direct/t/340282366841710301244260212804957259533/",
 "msgs": [
-{
-"w": "P",
-"t": "02/07/2026 14:26",
-"ty": "text",
-"x": "Bonjour je suis seul à la tête de mon entreprise mais j’ai aussi des collaborateurs ! Pourquoi ?"
-},
 {
 "w": "L",
 "t": "04/07/2026 16:16",
@@ -2433,7 +2379,7 @@
 "w": "L",
 "t": "29/08/2026 23:10",
 "ty": "reel_share",
-"x": ""
+"x": "Ça fait des beaux horaires ! Tu as pris des vacances ?"
 },
 {
 "w": "P",
@@ -2527,7 +2473,7 @@
 "partial": true
 },
 "complet": false,
-"nItems": 21,
+"nItems": 20,
 "propose": {
 "text": "Hello Camille, j’espère que tu vas bien ! \n\nTout simplement pour t’informer que j’offre 1h de coaching aux entrepreneurs de ma communauté. \n\nAu vu de notre conversation, et de ce que j’ai vu de ton profil je suis certain que je peux t’apporter beaucoup de valeur.\n\nAttention, ce n’est en aucun cas un appel de vente déguisé.\n\nEst-ce que tu as une heure de libre la semaine prochaine ?😀",
 "t": "27/07/2026 09:29",
@@ -2536,9 +2482,9 @@
 "vocal": false
 },
 "avant": {
-"msgsLead": 2,
+"msgsLead": 1,
 "msgsLauric": 6,
-"jours": 24.8
+"jours": 22.7
 },
 "apres": {
 "repondu": 4,
@@ -2550,12 +2496,6 @@
 "booked": [],
 "conv": "https://www.instagram.com/direct/t/340282366841710301244260685071769835259/",
 "msgs": [
-{
-"w": "P",
-"t": "02/07/2026 14:07",
-"ty": "text",
-"x": "Bonne semaine"
-},
 {
 "w": "L",
 "t": "04/07/2026 16:02",
@@ -2840,7 +2780,7 @@
 "partial": true
 },
 "complet": false,
-"nItems": 21,
+"nItems": 20,
 "propose": {
 "text": "Jessica, \n\nCet été je propose 1h d'accompagnement offert. \n\nC'est sans engagement, je le propose uniquement si je pense que ça peut avoir de l'intérêt, ce qui me semble être le cas au vue de notre dernière discussion. \n\nQuelles sont tes disponibilités la semaine prochaine ?",
 "t": "25/07/2026 14:19",
@@ -2850,8 +2790,8 @@
 },
 "avant": {
 "msgsLead": 5,
-"msgsLauric": 7,
-"jours": 20.9
+"msgsLauric": 6,
+"jours": 18.1
 },
 "apres": {
 "repondu": 2,
@@ -2863,12 +2803,6 @@
 "booked": [],
 "conv": "https://www.instagram.com/direct/t/340282366841710301244259075195929477901/",
 "msgs": [
-{
-"w": "L",
-"t": "04/07/2026 16:18",
-"ty": "voice_media",
-"x": ""
-},
 {
 "w": "L",
 "t": "07/07/2026 11:11",
@@ -3580,7 +3514,7 @@
 "partial": true
 },
 "complet": false,
-"nItems": 21,
+"nItems": 20,
 "propose": {
 "text": "À dispo pour en parler !\n\nSi tu le souhaites j'offre 30 min d'échange avec moi en visio pour faire connaissance et voir si ça peut faire sens",
 "t": "07/07/2026 21:09",
@@ -3590,8 +3524,8 @@
 },
 "avant": {
 "msgsLead": 1,
-"msgsLauric": 4,
-"jours": 0.2
+"msgsLauric": 3,
+"jours": 0.1
 },
 "apres": {
 "repondu": 5,
@@ -3603,12 +3537,6 @@
 "booked": [],
 "conv": "https://www.instagram.com/direct/t/340282366841710301244259175667296614077/",
 "msgs": [
-{
-"w": "L",
-"t": "07/07/2026 16:29",
-"ty": "voice_media",
-"x": ""
-},
 {
 "w": "P",
 "t": "07/07/2026 19:48",
@@ -3746,7 +3674,7 @@
 "partial": true
 },
 "complet": false,
-"nItems": 21,
+"nItems": 20,
 "propose": {
 "text": "Hello Virginia! Je souhaitais t’informer que je reprenais des appels de valeur pour les 10 prochains jours.\n\nLe but est de faire un point avec des personnes comme toi qui gère seule un commerce physique et les conseiller bien sûr.\n\nCet audit dure 45 minutes, quand as-tu de la disponibilité ?",
 "t": "07/07/2026 11:05",
@@ -3755,7 +3683,7 @@
 "vocal": false
 },
 "avant": {
-"msgsLead": 7,
+"msgsLead": 6,
 "msgsLauric": 5,
 "jours": 9.0
 },
@@ -3769,12 +3697,6 @@
 "booked": [],
 "conv": "https://www.instagram.com/direct/t/340282366841710301244259513187762250273/",
 "msgs": [
-{
-"w": "P",
-"t": "28/06/2026 10:42",
-"ty": "text",
-"x": "Bonjour, je vous avoue que je ne sais plus quelle publication j’ai liker"
-},
 {
 "w": "L",
 "t": "28/06/2026 10:44",

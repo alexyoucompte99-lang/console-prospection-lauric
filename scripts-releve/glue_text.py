@@ -6,7 +6,7 @@ out = sys.argv[1]
 pre = sys.argv[sys.argv.index("--prefix") + 1] if "--prefix" in sys.argv else "P"
 hours = float(sys.argv[sys.argv.index("--hours") + 1]) if "--hours" in sys.argv else 3
 lim = time.time() - hours * 3600
-files = sorted([p for p in glob.glob(os.path.expanduser('~/.claude/projects/*/*/tool-results/*.txt')) if os.path.getmtime(p) >= lim], key=os.path.getmtime)
+files = sorted([p for p in glob.glob(os.path.expanduser('~/.claude/projects/*/*/tool-results/*')) if os.path.getmtime(p) >= lim], key=os.path.getmtime)
 parts = {}
 for p in files:
     try: t = ''.join(x.get('text', '') for x in json.load(open(p, encoding='utf-8')))
