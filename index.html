@@ -192,6 +192,13 @@
   details summary { cursor: pointer; font-size: 13px; font-weight: 600; color: var(--ink-2); padding: 4px 0; }
   details summary:hover { color: var(--ink); }
   .tbl-scroll { overflow-x: auto; margin-top: 10px; }
+  table.sortable th { cursor: pointer; user-select: none; white-space: nowrap; }
+  table.sortable th:hover { color: var(--accent); }
+  table.sortable th .sarr { font-size: 10px; margin-left: 3px; opacity: .45; }
+  table.sortable th.sorted { color: var(--accent); }
+  table.sortable th.sorted .sarr { opacity: 1; }
+  .relinsights { margin: 0; padding-left: 18px; line-height: 1.55; }
+  .relinsights li { margin: 4px 0; }
   table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
   th, td { text-align: right; padding: 6px 10px; border-bottom: 1px solid var(--grid); white-space: nowrap; }
   th:first-child, td:first-child { text-align: left; }
@@ -1017,6 +1024,20 @@
           <div class="card">
             <div class="tbl-scroll" style="margin-top:0" id="leads-ab"></div>
             <p class="formnote" style="margin-top:10px" id="leads-ab-note"></p>
+          </div>
+        </section>
+        <section id="sec-relances" hidden>
+          <h2 class="hsec" style="--hc:var(--s2);margin-bottom:10px" id="relances-title">🔁 Analyse des relances</h2>
+          <div class="card">
+            <div class="tbl-scroll" style="margin-top:0" id="relances-types"></div>
+            <h3 style="margin:18px 0 6px;font-size:15px">Ce qui fait répondre</h3>
+            <p class="formnote" style="margin:0 0 6px">Le modèle copié-collé est comparé à tout le reste ; les autres critères (question, prénom, longueur, délai, heure) sont mesurés sur les relances écrites à la main, pour que le modèle ne fausse pas la comparaison.</p>
+            <div class="tbl-scroll" style="margin-top:0" id="relances-facteurs"></div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:16px">
+              <div><h3 style="margin:0 0 6px;font-size:15px">📌 Ce que disent les chiffres</h3><ul class="relinsights" id="relances-constats"></ul></div>
+              <div><h3 style="margin:0 0 6px;font-size:15px">🚀 Comment avoir plus de réponses</h3><ul class="relinsights" id="relances-conseils"></ul></div>
+            </div>
+            <p class="formnote" style="margin-top:10px" id="relances-note"></p>
           </div>
         </section>
         <section id="sec-leads-daily" hidden>
@@ -2613,7 +2634,8 @@ function renderLeadsTab(leadsText) {
       if (st === "reagi") s.reagi++;
       if (st === "repondu") s.rep++;
       const hm = /\s(\d\d):\d\d$/.exec(v(iDen));
-      LEAD_ROWS.push({ d, va, st, nom: v(iNo), pseudo: v(iPs), h: hm ? +hm[1] : -1 });
+      LEAD_ROWS.push({ d, va, st, nom: v(iNo), pseudo: v(iPs), h: hm ? +hm[1] : -1,
+        pc: v(iPc), lastL: v(iLl), dLastL: v(iDll), dReply: v(iDr) });
     }
     const stage = st === "repondu" ? "repondu" : (st === "vu" || st === "reagi") ? "vu" : "accroche";
     touch(keyOf(v(iNo), v(iPs)),
@@ -2759,6 +2781,181 @@ function rangeLabel() {
   if (leadsRange.key !== "custom") return leadsRange.key === "0" ? "aujourd'hui" : (leadsRange.key + " derniers jours");
   return (from ? "du " + fr(from) : "") + (to ? " au " + fr(to) : "");
 }
+/* tri des tableaux : clic sur un en-tête = du plus grand au plus petit, re-clic = inverse ; la ligne Total reste en bas */
+const SORT_STATE = {};
+function cellVal(td) {
+  const t = (td ? td.textContent : "").replace(/[↕▲▼]/g, "").trim();
+  if (t === "–" || t === "·" || t === "") return -Infinity;
+  const h = /^(\d+)\s*(min|h|j)$/.exec(t);
+  if (h) return +h[1] * (h[2] === "min" ? 1 / 60 : h[2] === "h" ? 1 : 24);
+  const m = /^-?\d+(?:[.,]\d+)?/.exec(t);
+  return m ? parseFloat(m[0].replace(",", ".")) : t.toLowerCase();
+}
+function applySort(table) {
+  if (!table || !table.id) return;
+  const st = SORT_STATE[table.id];
+  [...table.querySelectorAll("thead th")].forEach((th, i) => {
+    if (!th.querySelector(".sarr")) th.insertAdjacentHTML("beforeend", '<span class="sarr">↕</span>');
+    th.classList.toggle("sorted", !!st && st.col === i);
+    th.querySelector(".sarr").textContent = st && st.col === i ? (st.dir < 0 ? "▼" : "▲") : "↕";
+  });
+  if (!st) return;
+  const tb = table.tBodies[0]; if (!tb) return;
+  const rows = [...tb.rows], total = rows.filter(r => r.dataset.total), body = rows.filter(r => !r.dataset.total);
+  body.sort((a, b) => {
+    const x = cellVal(a.cells[st.col]), y = cellVal(b.cells[st.col]);
+    if (typeof x === "string" || typeof y === "string") return st.dir * String(x).localeCompare(String(y), "fr");
+    return st.dir * (x - y);
+  });
+  [...body, ...total].forEach(r => tb.appendChild(r));
+}
+document.addEventListener("click", e => {
+  const th = e.target.closest("table.sortable thead th");
+  if (!th) return;
+  const table = th.closest("table"), col = [...th.parentNode.children].indexOf(th);
+  const st = SORT_STATE[table.id];
+  SORT_STATE[table.id] = { col, dir: st && st.col === col ? -st.dir : (col === 0 ? 1 : -1) };
+  applySort(table);
+});
+
+/* analyse des relances : dernier message de Lauric envoyé au moins 12 h après l'accroche, sans réponse du lead entre les deux,
+   et qui ressemble à une relance (formule de relance, ou message qui rouvre la conversation par une salutation) */
+const REL_TYPES = [
+  ["modele_recu", "📩 « Tu as bien reçu mon message ? » (modèle)", /bien re[çc]u mon message/i],
+  ["modele_entrepreneur", "❓ « Tu vas bien ? Tu es toi-même entrepreneur ? » (modèle)", /toi[ -]m[eê]me entrepreneur/i],
+  ["derniere", "🚨 « Dernière relance »", /derni[eè]re fois|dernier message/i],
+  ["rentree", "📣 Annonce « C'est la rentrée »", /c'est la rentr[ée]e/i],
+  ["attends", "⏳ « J'attends ton retour »", /attends (toujours )?(ton|votre) retour/i],
+  ["check", "👀 Check court « tu as vu / tu es là ? »", /(as|avez)[- ](tu |vous )?(bien )?(vu|re[çc]u|pu)\b|jeter un (œ|oe)il|tu es l[àa] ?\?|pr[ée]c[ée]dent message|parti[s]? un peu vite/i],
+  ["question", "🎯 Nouvelle question sur son activité ou sa situation", null],
+  ["salut", "👋 Prise de nouvelles sans question", null],
+];
+const REL_GREET = /^(hello|salut|bonjour|bonsoir|coucou|hey|hi)\b/i;
+const REL_PERSO = /j'ai vu que|tes posts|ton profil|si j'en crois|ton projet|ton activit|ta reprise|ton repost|comment[ée]|ta bo[iî]te|ton entreprise|ta prise de fonction|photos|comme convenu|nos [ée]changes/i;
+function relDate(s) {
+  const m = /(\d\d)\/(\d\d)\/(\d{4})(?:\s+(\d\d):(\d\d))?/.exec(s || "");
+  return m ? new Date(+m[3], +m[2] - 1, +m[1], +(m[4] || 12), +(m[5] || 0)) : null;
+}
+function relType(t) {
+  if (!t || /^\[/.test(t.trim())) return null;   // vocal, image, partage : impossible de savoir si c'est une relance
+  for (const [k, , re] of REL_TYPES) if (re && re.test(t)) return k;
+  const clean = t.trim().replace(/^[^\p{L}]+/u, "");
+  if (REL_GREET.test(clean)) return /\?/.test(t) ? "question" : "salut";
+  return null;
+}
+function renderRelances() {
+  const pct = (n, d) => d ? Math.round(100 * n / d) + " %" : "–";
+  const list = [];
+  LEAD_ROWS.forEach(r => {
+    const fc = relDate(r.pc), ld = relDate(r.dLastL), rd = relDate(r.dReply);
+    if (!fc || !ld || ld - fc < 12 * 3600e3) return;
+    if (rd && rd < ld) return;                  // le lead avait déjà répondu : c'est de la conversation, pas une relance
+    const type = relType(r.lastL);
+    if (!type) return;
+    if (!inRange(iso(ld))) return;
+    const txt = r.lastL, prenom = ((r.nom || "").split(/\s+/)[0] || "").toLowerCase();
+    const rep = r.st === "repondu" && !!rd && rd >= ld;
+    list.push({
+      type, rep, reagi: r.st === "reagi", vu: rep || r.st === "vu" || r.st === "reagi",
+      delaiRep: rep ? (rd - ld) / 3600e3 : null,
+      gapJ: (ld - fc) / 86400e3, h: ld.getHours(),
+      q: /\?/.test(txt), prenom: prenom.length >= 3 && txt.toLowerCase().includes(prenom),
+      perso: REL_PERSO.test(txt), court: txt.length < 140, modele: type.startsWith("modele"),
+      emoji: /\p{Extended_Pictographic}/u.test(txt),
+    });
+  });
+  const lab = rangeLabel();
+  el("relances-title").textContent = "🔁 Analyse des relances" + (lab ? " · " + lab : "");
+  el("sec-relances").hidden = !list.length;
+  if (!list.length) return;
+  const agg = arr => {
+    const o = { env: arr.length, vu: 0, reagi: 0, rep: 0, dl: [] };
+    arr.forEach(x => { if (x.vu) o.vu++; if (x.reagi) o.reagi++; if (x.rep) { o.rep++; o.dl.push(x.delaiRep); } });
+    o.rate = o.env ? o.rep / o.env : 0;
+    o.med = o.dl.length ? o.dl.sort((a, b) => a - b)[Math.floor(o.dl.length / 2)] : null;
+    return o;
+  };
+  const fmtH = h => h == null ? "–" : h < 1 ? Math.max(1, Math.round(h * 60)) + " min" : h < 48 ? Math.round(h) + " h" : Math.round(h / 24) + " j";
+  const row = (label, o, extra) => '<tr' + (extra || "") + '><td class="tot" style="white-space:normal;max-width:340px">' + label + '</td><td>' + o.env + '</td><td>' + o.vu + '</td><td>' + pct(o.vu, o.env) +
+    '</td><td>' + o.reagi + '</td><td class="tot">' + o.rep + '</td><td class="tot">' + pct(o.rep, o.env) + '</td><td>' + fmtH(o.med) + '</td></tr>';
+  const head = first => '<thead><tr><th>' + first + '</th><th>Envoyées</th><th>Vues</th><th>% vues</th><th>❤️</th><th>Réponses</th><th>% rép.</th><th>Délai de réponse</th></tr></thead>';
+
+  /* 1) par type de relance */
+  const byType = REL_TYPES.map(([k, label]) => [k, label, agg(list.filter(x => x.type === k))]).filter(x => x[2].env);
+  byType.sort((a, b) => b[2].rate - a[2].rate || b[2].env - a[2].env);
+  const all = agg(list);
+  el("relances-types").innerHTML = '<table class="sortable" id="tbl-rel-types">' + head("Type de relance") + '<tbody>' +
+    byType.map(([, label, o]) => row(label, o)).join("") + row("Total", all, ' data-total="1"') + '</tbody></table>';
+  applySort(el("tbl-rel-types"));
+
+  /* 2) critères : avec / sans */
+  const FACT = [
+    ["❓ Pose une question", x => x.q, "❓ Sans question"],
+    ["🙋 Cite le prénom", x => x.prenom, "🙋 Sans le prénom"],
+    ["🎯 Personnalisée (profil, projet, échange passé)", x => x.perso, "🎯 Générique"],
+    ["✂️ Courte (moins de 140 caractères)", x => x.court, "✂️ Longue"],
+    ["📋 Message modèle copié-collé", x => x.modele, "📋 Écrite à la main"],
+    ["😊 Avec emoji", x => x.emoji, "😊 Sans emoji"],
+  ];
+  const GAPS = [["⏱️ Relance moins de 3 j après l'accroche", x => x.gapJ < 3], ["⏱️ Relance entre 3 et 14 j après", x => x.gapJ >= 3 && x.gapJ <= 14], ["⏱️ Relance plus de 14 j après", x => x.gapJ > 14]];
+  const HOURS = [["🌅 Envoyée le matin (6h-12h)", x => x.h >= 6 && x.h < 12], ["☀️ Envoyée l'après-midi (12h-18h)", x => x.h >= 12 && x.h < 18], ["🌙 Envoyée le soir (18h-23h)", x => x.h >= 18 && x.h < 23]];
+  /* le modèle copié-collé écrase tout en volume : les autres critères se mesurent sur les relances écrites à la main */
+  const hand = list.filter(x => !x.modele);
+  const facts = FACT.map(([l1, f, l0]) => { const base = l1.includes("modèle") ? list : hand; return { l1, l0, a: agg(base.filter(f)), b: agg(base.filter(x => !f(x))) }; });
+  const frows = [];
+  facts.forEach(({ l1, l0, a, b }) => { if (a.env) frows.push(row(l1, a)); if (b.env) frows.push(row(l0, b, ' style="opacity:.75"')); });
+  const gaps = GAPS.map(([l, f]) => [l, agg(hand.filter(f))]).filter(x => x[1].env);
+  const hours = HOURS.map(([l, f]) => [l, agg(hand.filter(f))]).filter(x => x[1].env);
+  gaps.concat(hours).forEach(([l, o]) => frows.push(row(l, o)));
+  el("relances-facteurs").innerHTML = '<table class="sortable" id="tbl-rel-fact">' + head("Critère") + '<tbody>' + frows.join("") + '</tbody></table>';
+  applySort(el("tbl-rel-fact"));
+
+  /* 3) constats calculés (au moins 5 relances de chaque côté) */
+  const MIN = 5, P = o => Math.round(100 * o.rate), noEmo = l => l.replace(/^\S+\s/, "");
+  const c = [];
+  if (hand.length < 60) c.push("<i>Seulement " + hand.length + " relances écrites à la main sur la période : les écarts entre critères sont des tendances à confirmer, pas encore des règles.</i>");
+  const okT = byType.filter(x => x[2].env >= MIN);
+  if (okT.length >= 2) {
+    const best = okT[0], worst = okT[okT.length - 1];
+    c.push("La relance qui marche le mieux : <b>" + noEmo(best[1]) + "</b> avec <b>" + P(best[2]) + " %</b> de réponses (" + best[2].rep + " sur " + best[2].env + ").");
+    c.push("La moins efficace : " + noEmo(worst[1]) + " avec " + P(worst[2]) + " % (" + worst[2].rep + " sur " + worst[2].env + ").");
+  } else c.push("Pas encore assez de relances par type (5 minimum) pour désigner un gagnant sur cette période.");
+  const effects = facts.filter(f => f.a.env >= MIN && f.b.env >= MIN).map(f => ({ ...f, diff: f.a.rate - f.b.rate }))
+    .sort((x, y) => Math.abs(y.diff) - Math.abs(x.diff));
+  effects.slice(0, 4).forEach(e => {
+    if (Math.abs(e.diff) < 0.03) return;
+    const [win, lose] = e.diff > 0 ? [e.l1, e.l0] : [e.l0, e.l1], [ow, ol] = e.diff > 0 ? [e.a, e.b] : [e.b, e.a];
+    c.push(noEmo(win) + " : <b>" + P(ow) + " %</b> de réponses, contre " + P(ol) + " % pour « " + noEmo(lose).toLowerCase() + " ».");
+  });
+  const okG = gaps.filter(x => x[1].env >= MIN).sort((a, b) => b[1].rate - a[1].rate);
+  if (okG.length >= 2) c.push("Meilleur délai : " + noEmo(okG[0][0]).toLowerCase() + " (" + P(okG[0][1]) + " %, contre " + P(okG[okG.length - 1][1]) + " % pour « " + noEmo(okG[okG.length - 1][0]).toLowerCase() + " »).");
+  const okH = hours.filter(x => x[1].env >= MIN).sort((a, b) => b[1].rate - a[1].rate);
+  if (okH.length >= 2) c.push("Meilleur moment : " + noEmo(okH[0][0]).replace(/^Envoyée /, "").toLowerCase() + " (" + P(okH[0][1]) + " % de réponses).");
+  if (all.med != null) c.push("Quand un lead répond à une relance, il le fait en général en <b>" + fmtH(all.med) + "</b>.");
+  c.push((all.env - all.vu) + " relances sur " + all.env + " (" + pct(all.env - all.vu, all.env) + ") ne sont même pas ouvertes : le premier obstacle, c'est d'être lu.");
+  el("relances-constats").innerHTML = c.map(x => "<li>" + x + "</li>").join("");
+
+  /* 4) conseils, appuyés sur les écarts mesurés quand il y en a */
+  const eff = k => effects.find(e => e.l1.includes(k)), pts = e => Math.round(100 * Math.abs(e.diff));
+  const eq = eff("question"), ep = eff("Personnalisée"), em = eff("modèle"), en = eff("prénom"), ec = eff("Courte");
+  const tips = [
+    "<b>Toujours finir par une question simple sur lui</b> (son activité, son objectif du moment), jamais « tu as vu mon message ? » tout seul" + (eq && eq.diff > 0 ? " : +" + pts(eq) + " points mesurés." : "."),
+    "<b>Changer d'angle à chaque relance</b> : un détail de son profil, un post récent, une actu de son secteur. Chaque relance doit donner une nouvelle raison de répondre" + (ep && ep.diff > 0 ? " (personnalisée : +" + pts(ep) + " points)." : "."),
+    "<b>Arrêter le copié-collé de masse</b>" + (em && em.diff < 0 ? " : les modèles font " + pts(em) + " points de moins" : "") + ". Le modèle sert de trame, la première phrase se réécrit à la main.",
+    "<b>Citer le prénom et rester court</b> : 2 ou 3 lignes lisibles dans l'aperçu de la messagerie" + (ec && ec.diff > 0 ? " (courte : +" + pts(ec) + " points" + (en && en.diff > 0 ? ", prénom : +" + pts(en) + " points)." : ").") : (en && en.diff > 0 ? " (prénom : +" + pts(en) + " points)." : ".")),
+    "<b>Rythme : J+2, J+5, puis une dernière à J+10 maximum</b>, avec une porte de sortie (« si ce n'est pas le moment, dis-le moi simplement »). Au-delà, un like ou un commentaire sur son contenu plutôt qu'un message de plus.",
+    "<b>Pas vu = pas de 2e message texte</b> : réagir à sa story ou commenter un post pour remonter dans sa boîte, puis relancer.",
+  ];
+  if (okH.length >= 2) tips.push("<b>Envoyer " + noEmo(okH[0][0]).replace(/^Envoyée /, "") + "</b>, le créneau qui répond le mieux.");
+  tips.push("<b>Un ❤️ n'est pas un non</b> : rebondir tout de suite avec une question courte, c'est le lead le plus facile à faire parler.");
+  el("relances-conseils").innerHTML = tips.map(x => "<li>" + x + "</li>").join("");
+
+  el("relances-note").textContent =
+    "Relance = dernier message de notre côté, envoyé au moins 12 h après l'accroche, sans réponse du lead avant, et qui a la forme d'une relance (formule de relance ou message qui rouvre la conversation). " +
+    "Vocaux et images exclus (texte illisible). Le relevé ne garde que la dernière relance de chaque conversation" + (LEADS_RELEVE ? " (relevé du " + LEADS_RELEVE + ")" : "") +
+    ". Période filtrée sur la date de la relance. Cliquez un titre de colonne pour trier.";
+}
+
 /* tableau A/B + activité par jour, recalculés selon la période choisie */
 function renderLeadsStats() {
   /* pills des mois présents dans le relevé */
@@ -2784,16 +2981,18 @@ function renderLeadsStats() {
   el("sec-leads-ab").hidden = !vkeys.length;
   const tot = vkeys.reduce((a, k) => ({ env: a.env + vs[k].env, vu: a.vu + vs[k].vu, reagi: a.reagi + vs[k].reagi, rep: a.rep + vs[k].rep }), { env: 0, vu: 0, reagi: 0, rep: 0 });
   el("leads-ab").innerHTML =
-    '<table><thead><tr><th>Accroche</th><th>Envoyées</th><th>Vues</th><th>% vues</th><th>❤️</th><th>Réponses</th><th>% rép.</th></tr></thead><tbody>' +
+    '<table class="sortable" id="tbl-ab"><thead><tr><th>Accroche</th><th>Envoyées</th><th>Vues</th><th>% vues</th><th>❤️</th><th>Réponses</th><th>% rép.</th></tr></thead><tbody>' +
     vkeys.map(k => {
       const s = vs[k];
       return '<tr><td class="tot" style="white-space:normal;max-width:300px">' + (VAR_LABELS[k] || k) + '</td><td>' + s.env + '</td><td>' + s.vu +
         '</td><td>' + pct(s.vu, s.env) + '</td><td>' + s.reagi + '</td><td class="tot">' + s.rep +
         '</td><td class="tot">' + pct(s.rep, s.env) + '</td></tr>';
     }).join("") +
-    (vkeys.length > 1 ? '<tr><td class="tot">Total</td><td class="tot">' + tot.env + '</td><td class="tot">' + tot.vu + '</td><td>' + pct(tot.vu, tot.env) + '</td><td>' + tot.reagi + '</td><td class="tot">' + tot.rep + '</td><td class="tot">' + pct(tot.rep, tot.env) + '</td></tr>' : '') +
+    (vkeys.length > 1 ? '<tr data-total="1"><td class="tot">Total</td><td class="tot">' + tot.env + '</td><td class="tot">' + tot.vu + '</td><td>' + pct(tot.vu, tot.env) + '</td><td>' + tot.reagi + '</td><td class="tot">' + tot.rep + '</td><td class="tot">' + pct(tot.rep, tot.env) + '</td></tr>' : '') +
     '</tbody></table>';
   const kpi = (label, val, sub, col) => '<div class="card tile" style="--tc:' + col + '"><div class="formnote" style="margin:0">' + label + '</div><div style="font-size:28px;font-weight:700;line-height:1.2">' + val + '</div>' + (sub ? '<div class="formnote" style="margin:4px 0 0">' + sub + '</div>' : '') + '</div>';
+  applySort(el("tbl-ab"));
+  renderRelances();
   const nbRep = rows.filter(r => r.st === "repondu").length, nbSuivi = rows.filter(r => r.va === "suivi" || r.va === "historique").length;
   el("datas-kpis").innerHTML =
     kpi("Messages d'accroche envoyés", tot.env, lab ? "sur la période · " + lab : "toutes dates", "var(--accent)") +
