@@ -721,19 +721,19 @@
     <div id="tab-setting" hidden>
       <div class="subnav" id="subnav-setting">
         <div class="subgrp"><span class="subgl">✉️ Premier message · setters</span>
+          <button data-pane="datas">📈 Datas Globale</button>
           <button data-pane="eod">📝 EOD <span class="count" id="eod-count"></span></button>
           <button data-pane="abonnes">🆕 Nouveaux abonnés <span class="count" id="abonnes-count"></span></button>
           <button data-pane="script">📣 Script et A/B</button>
-          <button data-pane="datas">📈 Chiffres des accroches</button>
           <button data-pane="eodstats">📊 Chiffres EOD</button>
           <button data-pane="verif">🔍 EOD vs réel</button>
         </div>
         <div class="subgrp"><span class="subgl">🎯 Lauric · dès que le lead répond</span>
+          <button data-pane="leads">👤 Tous les leads <span class="count" id="leads-count"></span></button>
           <button data-pane="arep">💬 À répondre <span class="count" id="arep-count"></span></button>
           <button data-pane="chauds">🔥 Leads chauds <span class="count" id="chauds-count"></span></button>
           <button data-pane="lm">🎁 Lead magnet <span class="count" id="tally-count"></span></button>
           <button data-pane="appels">📞 Appels proposés <span class="count" id="appels-count"></span></button>
-          <button data-pane="leads">👤 Tous les leads <span class="count" id="leads-count"></span></button>
         </div>
       </div>
       <div id="tab-eod" class="pane" hidden>
@@ -2173,7 +2173,7 @@ const PANES = { audience: "contenu", reels: "contenu",
   arep: "setting", chauds: "setting", lm: "setting", appels: "setting", leads: "setting",
   ventes: "closing" };
 const TAB_ALIAS = { cav: "ventes", car: "ventes", calls: "ventes", tally: "lm", scans: "lm" };   // anciens liens
-const POLE_DEFAULT = { contenu: "audience", setting: "eod", closing: "ventes" };
+const POLE_DEFAULT = { contenu: "audience", setting: "datas", closing: "ventes" };
 let curPane = {};
 try { curPane = JSON.parse(localStorage.getItem("curPane") || "{}"); } catch (e) {}
 function showTab(name) {
