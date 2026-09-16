@@ -618,6 +618,20 @@
     <div class="vkpis" id="ct-kpis"></div>
     <p class="formnote" id="ct-note"></p>
   </section>
+  <section id="vj-sec" hidden>
+    <div class="sec-head">
+      <h2 class="hsec" style="--hc:var(--s5);margin:0">📊 Vues par jour</h2>
+      <div class="tally-counts" id="vj-per" style="margin:0">
+        <button class="pill fpill" data-p="30">30 jours</button>
+        <button class="pill fpill" data-p="90">90 jours</button>
+      </div>
+    </div>
+    <div class="vkpis" id="vj-kpis"></div>
+    <div class="card">
+      <div id="vj-chart"></div>
+      <p class="formnote" style="margin-top:8px" id="vj-note"></p>
+    </div>
+  </section>
   <section id="ct-sept-sec" hidden>
     <h2 class="hsec" style="--hc:var(--s5);margin-bottom:10px">📅 Les 7 derniers jours · ratios de pilotage</h2>
     <div class="vkpis" id="ct-kpis7"></div>
@@ -1716,7 +1730,8 @@ async function load(showSpinner) {
     s7: r[8] ? { vues: +r[8] || 0, spect: +r[9] || 0, inter: +r[10] || 0, comptes: +r[11] || 0, visites: +r[12] || 0, liens: +r[13] || 0 } : null,
     nonf: r[14] ? +r[14] : null, reels: r[15] ? +r[15] : null, top30: r[16] || "", top7: r[17] || "" })).filter(r => r.date && r.vues).sort((a, b) => a.date < b.date ? -1 : 1); renderContenu(); scheduleOverview(); }).catch(() => {});
   get("data/lead-magnets.json").then(t => { LM_DATA = JSON.parse(t); renderLmTab(); renderChauds(); scheduleOverview(); }).catch(() => renderLmTab());
-  get("data/reels.json").then(t => { RL_DATA = JSON.parse(t); renderReels(); }).catch(() => renderReels());
+  get("data/reels.json").then(t => { RL_DATA = JSON.parse(t); renderReels(); renderVuesJour(); }).catch(() => renderReels());
+  get("data/vues-jour.csv").then(t => { VJ_ROWS = parseCSV(t).slice(1).map(r => ({ date: r[0], n: +r[1] || 0, spect: +r[2] || 0, reach: +r[3] || 0 })).filter(r => /^\d{4}-\d\d-\d\d$/.test(r.date)).sort((a, b) => a.date < b.date ? -1 : 1); renderVuesJour(); }).catch(() => {});
   // le portefeuille a son propre fallback : un export CSV privé renvoie du HTML
   const pf = await get(SHEETS.pf)
     .then(t => /^\s*</.test(t) ? Promise.reject(new Error("privé")) : t)
@@ -4815,6 +4830,67 @@ function subsGain(n) {
   const before = pts.filter(p => p.date <= lim);
   const base = before.length ? before[before.length - 1] : pts[0];
   return { v: Math.max(0, last.n - base.n), since: before.length ? "" : base.date, total: last.n, lastDate: last.date };
+}
+
+/* ---------- vues par jour : data/vues-jour.csv (Date AAAA-MM-JJ, Vues, Spectateurs, Comptes touches), relevé
+   depuis le tableau de bord professionnel en demandant une période d'une seule journée (releve_vues_jour.py) ---------- */
+let VJ_ROWS = [], VJ_PER = (() => { try { return localStorage.getItem("vjPer") || "30"; } catch (e) { return "30"; } })();
+function renderVuesJour() {
+  const sec = el("vj-sec");
+  if (!sec) return;
+  sec.hidden = !VJ_ROWS.length;
+  if (!VJ_ROWS.length) return;
+  const per = el("vj-per");
+  per.querySelectorAll("button").forEach(b => {
+    b.classList.toggle("on", b.dataset.p === VJ_PER);
+    b.onclick = () => { VJ_PER = b.dataset.p; try { localStorage.setItem("vjPer", VJ_PER); } catch (e) {} renderVuesJour(); };
+  });
+  const pts = VJ_ROWS.slice(-(+VJ_PER));
+  const reels = {};
+  ((RL_DATA && RL_DATA.publications) || []).forEach(r => { if (r.date) (reels[r.date] = reels[r.date] || []).push(r); });
+  const avg = a => a.length ? Math.round(a.reduce((x, y) => x + y, 0) / a.length) : 0;
+  const all = VJ_ROWS, last = all[all.length - 1];
+  const m7 = avg(all.slice(-7).map(p => p.n)), m7p = avg(all.slice(-14, -7).map(p => p.n));
+  const best = pts.reduce((a, b) => b.n > a.n ? b : a, pts[0]);
+  const withR = pts.filter(p => reels[p.date]), noR = pts.filter(p => !reels[p.date]);
+  const k = (kc, n, l) => '<div class="vkpi" style="--kc:' + kc + '"><div class="n">' + n + '</div><div class="l">' + l + '</div></div>';
+  const d7 = m7p ? Math.round(100 * (m7 - m7p) / m7p) : null;
+  el("vj-kpis").innerHTML =
+    k("var(--s5)", fmt(last.n), "👁 vues le " + frDate(last.date)) +
+    k("var(--s4)", fmt(m7), "moyenne par jour · 7 j" + (d7 != null ? " · " + (d7 >= 0 ? "+" : "") + d7 + " % vs 7 j d'avant" : "")) +
+    k("var(--accent)", fmt(best.n), "🏆 meilleur jour · " + frDate(best.date)) +
+    (RL_DATA && withR.length && noR.length ? k("var(--s3)", fmt(avg(withR.map(p => p.n))) + " / " + fmt(avg(noR.map(p => p.n))), "moyenne jour avec Reel publié / sans") : "");
+  const box = el("vj-chart");
+  const W = Math.max(680, box.clientWidth || 680), H = 240, padL = 50, padB = 26, padT = 10, padR = 12;
+  const iW = W - padL - padR, iH = H - padT - padB, bw = iW / pts.length;
+  const hi = Math.max(...pts.map(p => p.n)) * 1.08 || 1;
+  const X = i => padL + bw * i + bw / 2, Y = v => padT + iH - iH * v / hi;
+  let svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" height="' + H + '" role="img" aria-label="Vues du compte par jour">';
+  for (let t = 0; t <= 4; t++) {
+    const v = hi * t / 4, y = Y(v);
+    svg += '<line x1="' + padL + '" x2="' + (W - padR) + '" y1="' + y + '" y2="' + y + '" stroke="var(--grid)"/>' +
+      '<text x="' + (padL - 6) + '" y="' + (y + 4) + '" text-anchor="end" font-size="10.5" fill="var(--muted)">' + fmt(Math.round(v / 100) * 100) + '</text>';
+  }
+  const mm = pts.map((p, i) => { const j = VJ_ROWS.indexOf(p); return avg(VJ_ROWS.slice(Math.max(0, j - 6), j + 1).map(x => x.n)); });
+  pts.forEach((p, i) => {
+    const r = reels[p.date] || [];
+    const tip = '<div class="tdate">' + frDate(p.date) + '</div><div class="trow"><span>Vues</span><b>' + fmt(p.n) + '</b></div>' +
+      '<div class="trow"><span>Comptes touchés</span><b>' + fmt(p.reach || p.spect) + '</b></div>' +
+      '<div class="trow"><span>Moyenne 7 j</span><b>' + fmt(mm[i]) + '</b></div>' +
+      r.map(x => '<div class="trow"><span>🎬 ' + esc(x.accroche || "Reel publié") + '</span><b>' + (x.vues != null ? fmt(x.vues) : "") + '</b></div>').join("");
+    const h = Math.max(1, padT + iH - Y(p.n));
+    svg += '<g data-tip="' + tip.replace(/"/g, "&quot;") + '"><rect x="' + (padL + bw * i) + '" y="' + padT + '" width="' + bw + '" height="' + iH + '" fill="transparent"/>' +
+      '<rect x="' + (X(i) - bw * 0.36).toFixed(1) + '" y="' + Y(p.n).toFixed(1) + '" width="' + (bw * 0.72).toFixed(1) + '" height="' + h.toFixed(1) + '" rx="2" fill="var(--s5)" opacity="' + (r.length ? 0.95 : 0.55) + '"/>' +
+      (r.length ? '<circle cx="' + X(i).toFixed(1) + '" cy="' + (padT + iH + 6) + '" r="3" fill="var(--s3)"/>' : "") + '</g>';
+  });
+  svg += '<path d="' + mm.map((v, i) => (i ? "L" : "M") + X(i).toFixed(1) + " " + Y(v).toFixed(1)).join(" ") + '" fill="none" stroke="var(--ink-2)" stroke-width="1.8" stroke-linejoin="round" pointer-events="none"/>';
+  const step = Math.ceil(pts.length / 10);
+  pts.forEach((p, i) => { if (i % step && i !== pts.length - 1) return; svg += '<text x="' + X(i).toFixed(1) + '" y="' + (H - 4) + '" text-anchor="middle" font-size="10.5" fill="var(--muted)">' + dfr(p.date) + '</text>'; });
+  svg += '<line x1="' + padL + '" x2="' + (W - padR) + '" y1="' + (padT + iH) + '" y2="' + (padT + iH) + '" stroke="var(--baseline)"/></svg>';
+  box.innerHTML = svg;
+  box.querySelectorAll("g[data-tip]").forEach(g => { g.addEventListener("mousemove", e => showTip(e, g.dataset.tip)); g.addEventListener("mouseleave", hideTip); });
+  el("vj-note").textContent = "Barres = vues du jour (plus foncées et point vert quand un Reel a été publié ce jour-là), trait = moyenne sur 7 jours. Survoler une barre pour le détail. " +
+    VJ_ROWS.length + " jours relevés du " + frDate(VJ_ROWS[0].date) + " au " + frDate(last.date) + " dans le tableau de bord professionnel Instagram (la journée en cours n'est jamais comptée).";
 }
 
 function renderContenu() {

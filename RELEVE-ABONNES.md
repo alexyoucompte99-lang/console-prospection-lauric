@@ -151,3 +151,18 @@ Dans la même tâche de 18 h : ouvrir `https://www.instagram.com/accounts/insigh
 Chiffres glissants sur 30 jours, une ligne par jour.
 Depuis le 15/09/2026 : ouvrir aussi `?timeframe=7`, sauver son texte dans un 2e fichier et lancer `python3 releve_contenu.py <texte_30j> --sept <texte_7j>` : le script ajoute les colonnes 7 j (vues, comptes touchés, interactions, comptes ayant interagi, visites du profil, clics lien), la part des non-followers et des Reels dans les vues, et les 5 meilleurs contenus (`vues@jj/mm`). L'onglet Contenu affiche alors la section « 7 derniers jours · ratios de pilotage » et « Meilleurs contenus ». Lus par l'onglet Contenu et la ligne « Impressions » de la Vue d'ensemble
 (la saisie manuelle de Lauric ne sert plus qu'en secours, la valeur la plus récente gagne). Premier relevé : 14/09/2026, 146 356 vues.
+
+### Vues par jour (ajouté le 16/09/2026)
+Le tableau de bord web ne propose que 7/14/30/90 jours, mais sa requête GraphQL accepte n'importe quelle période.
+1. Onglet `accounts/insights/?timeframe=30`, installer un espion sur `fetch`/`XMLHttpRequest` qui garde dans
+   `sessionStorage.__vqb` le corps de la requête dont la réponse contient `views_current_period`, puis changer la période
+   dans le menu (clic) pour déclencher la requête.
+2. Naviguer le MÊME onglet vers `instagram.com/robots.txt` (la page insights se fige si on boucle dessus), relire le corps
+   depuis sessionStorage et rejouer `POST /api/graphql` (en-têtes `content-type` form, `x-fb-lsd` = champ `lsd` du corps,
+   `x-ig-app-id`) en remplaçant `variables.currentPeriodStart/currentPeriodEnd` par une journée (00:00:00 → 23:59:59 heure de Paris).
+   Réponse : `views_current_period`, `viewers_current_period`, `reach_current_period`.
+3. Un jour toutes les 4-5 s, par lots lancés sans attendre la fin (l'outil coupe à 45 s) et UN SEUL lot à la fois
+   (deux lots en parallèle relisent le même jour). Le 16/09 : 68 jours (10/07 → 15/09), puis « Failed to fetch » : s'arrêter là.
+4. Lignes `AAAA-MM-JJ,vues,spectateurs,comptes touchés` dans un fichier puis `python3 releve_vues_jour.py <fichier> --date JJ/MM/AAAA`
+   → `data/vues-jour.csv`. Contrôle : la somme des 30 derniers jours doit égaler les vues 30 j du tableau de bord (140 089 le 16/09 ✓).
+Chaque soir, ajouter seulement la veille (1 requête). Lu par Contenu › Audience, section « Vues par jour ».
