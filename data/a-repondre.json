@@ -1,14 +1,128 @@
 {
- "genere": "15/09/2026 18h30 (relevé du mardi soir)",
- "fenetre": "du 08 au 15/09",
+ "genere": "16/09/2026 18h45 (relevé du mercredi soir)",
+ "fenetre": "du 09 au 16/09",
  "convs": [
+  {
+   "pseudo": "adannkfils",
+   "nom": "Adann K-fils",
+   "conv": "https://www.instagram.com/direct/t/340282366841710301244259794534180289337/",
+   "cat": "rep",
+   "profil_info": "69 abonnés · 1 publications · compte public",
+   "fil": [
+    {
+     "w": "P",
+     "t": "lun. 14/09 22:40",
+     "x": "Bonjour \nOui je suis directeur général dans une association"
+    },
+    {
+     "w": "L",
+     "t": "mer. 16/09 07:59",
+     "x": "Bonjour, \n\nJe vois, c'est une association importante en matière de taille ?\n\nAvec une portée \"managériale\" ?"
+    },
+    {
+     "w": "P",
+     "t": "mer. 16/09 09:05",
+     "x": "Bonjour \n\nPour le moment il y a une trentaine de salariés. L'enjeu est d'atteindre le plus rapidement possible 100 salariés puis 200 si nois en avons la capacité."
+    }
+   ],
+   "dernier": {
+    "t": "mer. 16/09 09:05",
+    "x": "Bonjour \n\nPour le moment il y a une trentaine de salariés. L'enjeu est d'atteindre le plus rapidement possible 100 salariés puis 200 si nois en avons la capacité."
+   },
+   "attente_jours": 0.37,
+   "non_lu": true,
+   "categorie": "prospect_chaud",
+   "priorite": 1,
+   "cible": "Dans la cible : directeur général d'une association d'une trentaine de salariés, avec un objectif de croissance à 100 puis 200 salariés.",
+   "resume": "Compte quasi vide (69 abonnés, 1 publication). Le 14/09 à 22h40 il répond qu'il est directeur général dans une association. Le 16/09 à 7h59 Lauric demande la taille et la portée managériale. À 9h05 : « une trentaine de salariés, l'enjeu est d'atteindre le plus rapidement possible 100 salariés puis 200 ».",
+   "attend": "Que Lauric rebondisse sur son enjeu de croissance, il a donné un chiffre précis et une ambition.",
+   "objectif": "Faire parler du vrai défi (passer de 30 à 100 salariés sans exploser) et proposer un appel avec deux créneaux précis.",
+   "format": "ecrit",
+   "reponse": "Passer de 30 à 100 salariés, c'est un sacré cap 👏\n\nLe plus dur à ce stade, ce n'est souvent pas de recruter, c'est que tout ne repose plus sur toi et que les managers intermédiaires tiennent la route.\n\nC'est quoi aujourd'hui ce qui te bloque le plus pour accélérer ?",
+   "pourquoi": "Il a donné un chiffre et une ambition sans qu'on le pousse : c'est le profil exact de Lauric. Une question sur son point de blocage le fait parler de sa douleur avant de proposer l'appel, ce qui rend la proposition naturelle au message suivant. L'analyse des appels montre que les créneaux précis marchent (5 sur 5) : les garder pour la réponse d'après.",
+   "alternatives": [
+    {
+     "angle": "Appel direct",
+     "texte": "Passer de 30 à 100 salariés, c'est exactement le type de cap sur lequel j'accompagne des dirigeants 😊\n\nOn s'appelle 20 minutes pour en parler ? Je peux jeudi à 12h30 ou vendredi à 18h, qu'est-ce qui t'arrange ?",
+     "pourquoi": "S'il répond vite et semble pressé : il a déjà donné l'essentiel."
+    }
+   ],
+   "si_silence": {
+    "delai": "48 h",
+    "texte": "Hello ! Je repensais à ton objectif des 100 salariés. Si tu veux, on en parle 20 minutes cette semaine, je peux jeudi 12h30 ou vendredi 18h 😊"
+   },
+   "eviter": [
+    "Envoyer le scan ou la vidéo avant d'avoir eu l'appel : il est déjà qualifié.",
+    "Un pavé sur le cabinet : trois lignes maximum.",
+    "« Tu as une dispo ? » sans créneau."
+   ],
+   "chances": "haute",
+   "quand": "Ce soir mercredi 16/09 ou demain matin avant 9h.",
+   "lauric_seul": true
+  },
+  {
+   "pseudo": "q_uuentiiin",
+   "nom": "Quentin",
+   "conv": "https://www.instagram.com/direct/t/340282366841710301244259254637355219093/",
+   "cat": "rep",
+   "profil_info": "740 abonnés · compte privé",
+   "fil": [
+    {
+     "w": "L",
+     "t": "mer. 16/09 11:54",
+     "x": "Hello Quentin! Je me permets de t’envoyer un message car je vois que tu es abonné depuis un moment et nous n’avons jamais discuté 😊\n\nJe vois que tu es en privé mais j’étais curieux de savoir ce que tu faisais dans la vie.\n\nTu es toi même dirigeant d’entreprise ?"
+    },
+    {
+     "w": "P",
+     "t": "mer. 16/09 13:17",
+     "x": "Hello Lauric ! \nC’est ça"
+    },
+    {
+     "w": "P",
+     "t": "mer. 16/09 13:17",
+     "x": "Et toi"
+    }
+   ],
+   "dernier": {
+    "t": "mer. 16/09 13:17",
+    "x": "Et toi"
+   },
+   "attente_jours": 0.19,
+   "non_lu": true,
+   "categorie": "prospect_chaud",
+   "priorite": 1,
+   "cible": "Dans la cible a priori : il confirme être dirigeant d'entreprise. Activité et taille d'équipe inconnues (compte privé, 740 abonnés).",
+   "resume": "Compte privé (740 abonnés, 0 publication visible). Le 16/09 à 11h54, message aux anciens abonnés (« tu es toi même dirigeant d'entreprise ? »). À 13h17 : « Hello Lauric ! C'est ça » puis « Et toi ».",
+   "attend": "Que Lauric réponde à sa question « et toi ? ».",
+   "objectif": "Répondre en deux lignes sur Lauric, puis le faire parler de son entreprise et de son équipe.",
+   "format": "ecrit",
+   "reponse": "Top ! Moi j'ai dirigé pendant 10 ans, et aujourd'hui j'accompagne des dirigeants sur le management et la charge mentale 😊\n\nEt toi tu es dans quel domaine ? Tu as une équipe avec toi ?",
+   "pourquoi": "Il pose une question, on y répond vite et court, puis on renvoie la balle sur les deux infos qui manquent pour qualifier : le secteur et l'équipe.",
+   "alternatives": [
+    {
+     "angle": "Plus curieux",
+     "texte": "Ah génial ! Moi j'accompagne justement des dirigeants, après 10 ans à diriger moi-même 😊\n\nTu as monté quoi ? Ça fait longtemps ?",
+     "pourquoi": "Fait parler de son histoire, plus ouvert."
+    }
+   ],
+   "si_silence": {
+    "delai": "3 jours",
+    "texte": "Hello Quentin ! Tu m'avais dit que tu étais dirigeant, tu es dans quel domaine ? 😊"
+   },
+   "eviter": [
+    "Proposer l'appel ou le scan dans ce message : on ne sait encore rien de lui.",
+    "Répondre par un pavé sur le cabinet."
+   ],
+   "chances": "haute",
+   "quand": "Ce soir mercredi 16/09."
+  },
   {
    "pseudo": "7020md",
    "nom": "md",
    "conv": "https://www.instagram.com/direct/t/340282366841710301244261018910263081563/",
    "cat": "rep",
    "non_lu": false,
-   "attente_jours": 8.92,
+   "attente_jours": 9.87,
    "profil_info": "Hôtel et hébergement · 23 abonnés · compte privé",
    "dernier": {
     "t": "dim. 06/09 21:05",
@@ -71,7 +185,7 @@
    "conv": "https://www.instagram.com/direct/t/340282366841710301244259238462970019977/",
    "cat": "rep",
    "non_lu": false,
-   "attente_jours": 8.89,
+   "attente_jours": 9.84,
    "profil_info": "577 abonnés · 55 publications · compte privé · bio : 📍 Brussels",
    "dernier": {
     "t": "dim. 06/09 21:48",
@@ -175,12 +289,176 @@
    "quand": "Lundi 14/09 dans la matinée, après avoir ouvert les médias."
   },
   {
+   "pseudo": "christophed_64",
+   "nom": "Christophe",
+   "conv": "https://www.instagram.com/direct/t/340282366841710301244276040644412661811/",
+   "cat": "rep",
+   "profil_info": "compte public",
+   "fil": [
+    {
+     "w": "P",
+     "t": "sam. 14/02 22:21",
+     "x": "[réponse à une story : 🔥]"
+    },
+    {
+     "w": "L",
+     "t": "mar. 15/09 15:36",
+     "x": "Hello Christophe ! J’ai vu que tu me suivais depuis un moment et je t’en remercie 😊\n\nJe vois que ton compte est en privé mais j’étais curieux de t’envoyer un message.\n\nTu es toi même chef d’entreprise ?"
+    },
+    {
+     "w": "P",
+     "t": "mar. 15/09 15:38",
+     "x": "Non je suis salarié de banque"
+    },
+    {
+     "w": "L",
+     "t": "mar. 15/09 20:21",
+     "x": "Ok je vois Christophe ! \n\nJ'en viens 😅"
+    },
+    {
+     "w": "L",
+     "t": "mar. 15/09 20:21",
+     "x": "Tu fais quoi ? En agence ou fonction support ?"
+    },
+    {
+     "w": "P",
+     "t": "mar. 15/09 21:17",
+     "x": "Responsable de l’équipe restructuration de crédits"
+    }
+   ],
+   "dernier": {
+    "t": "mar. 15/09 21:17",
+    "x": "Responsable de l’équipe restructuration de crédits"
+   },
+   "attente_jours": 0.86,
+   "non_lu": false,
+   "categorie": "manager_salarie",
+   "priorite": 2,
+   "cible": "Seconde cible : responsable de l'équipe restructuration de crédits dans une banque. Salarié, mais il manage une équipe.",
+   "resume": "Compte privé très actif (3 835 abonnés, 658 publications), abonné depuis longtemps. Le 15/09 il répond qu'il est salarié de banque. Lauric répond à 20h21 qu'il en vient et demande agence ou fonction support. À 21h17 : « Responsable de l'équipe restructuration de crédits ».",
+   "attend": "Une suite à l'échange sur la banque, le point commun avec Lauric.",
+   "objectif": "Savoir combien de personnes il encadre et ce qui est le plus dur pour lui dans ce rôle.",
+   "format": "ecrit",
+   "reponse": "Ah la restructuration, pas le service le plus reposant 😅\n\nTu as combien de personnes dans ton équipe ? Et c'est quoi le plus dur pour toi en ce moment côté management ?",
+   "pourquoi": "Il manage : il rentre dans la seconde cible. Deux questions simples, la taille de l'équipe et la difficulté du moment, suffisent pour savoir s'il y a un sujet à creuser en appel.",
+   "alternatives": [
+    {
+     "angle": "Vécu de Lauric",
+     "texte": "Je connais bien, j'ai eu des équipes en banque aussi 😊\n\nTu encadres combien de personnes ? Ça se passe comment en ce moment ?",
+     "pourquoi": "Si Lauric veut appuyer sur son propre parcours."
+    }
+   ],
+   "si_silence": {
+    "delai": "Pas de relance avant 5 jours.",
+    "texte": "Hello Christophe ! Tu encadres combien de personnes dans ton équipe ? 😊"
+   },
+   "eviter": [
+    "Critiquer la banque.",
+    "Proposer un appel avant de connaître la taille de l'équipe."
+   ],
+   "chances": "moyenne",
+   "quand": "Ce soir mercredi 16/09 ou jeudi en fin de journée."
+  },
+  {
+   "pseudo": "chef_nerry.lianza",
+   "nom": "Chef Nerry Lianza",
+   "conv": "https://www.instagram.com/direct/t/340282366841710301244259228003164227490/",
+   "cat": "rep",
+   "profil_info": "6453 abonnés · 41 publications · compte public · bio : Traiteur | Chef à domicile",
+   "fil": [
+    {
+     "w": "P",
+     "t": "lun. 17/08 18:42",
+     "x": "Oui j arrive la je me prépare pour aller à la salle du temps \nSalle de sport je me déconnecte la bas je relâche tout"
+    },
+    {
+     "w": "L",
+     "t": "sam. 22/08 08:23",
+     "x": "[vocal de 18 s]"
+    },
+    {
+     "w": "L",
+     "t": "sam. 22/08 08:23",
+     "x": "[vocal de 7 s]"
+    },
+    {
+     "w": "L",
+     "t": "sam. 29/08 23:19",
+     "x": "Hello ! Comment vas-tu ?😊"
+    },
+    {
+     "w": "L",
+     "t": "dim. 30/08 21:33",
+     "x": "[réponse à une story : 🔥🔥]"
+    },
+    {
+     "w": "P",
+     "t": "lun. 31/08 00:37",
+     "x": "[vocal de 22 s]"
+    },
+    {
+     "w": "L",
+     "t": "lun. 31/08 09:26",
+     "x": "Avec plaisir pour parler de tes enjeux et défis futurs à relever. \n\nC’est exactement le sens de mon cabinet : accompagner des entrepreneurs pour qu’ils puissent continuer de développer leur business rentable et le plus autonome possible pour respecter leur vie personnelle également. \n\nC’est cet équilibre qui permet de durer !\n\nSi ça te parle, je suis certain que tu trouveras du temps pour qu’on puisse échanger ensemble et trouver des solutions concrètes 😊\n\nTu aurais une disponibilité même en soirée cette semaine?"
+    },
+    {
+     "w": "L",
+     "t": "lun. 07/09 21:46",
+     "x": "[réponse à une story : J’ai hâte de voir ça !]"
+    },
+    {
+     "w": "L",
+     "t": "mer. 16/09 12:25",
+     "x": "Hello ! J’attends toujours ton retour, tu es typiquement le type de personnes que j’accompagne donc c’est toujours intéressant de comprendre quels sont les problématiques des entrepreneurs de la communauté 😊"
+    },
+    {
+     "w": "P",
+     "t": "mer. 16/09 12:33",
+     "x": "Slt \n\nOulala \nJ étais vraiment trop pris mon ami \nMais je vais faire un effort"
+    }
+   ],
+   "dernier": {
+    "t": "mer. 16/09 12:33",
+    "x": "Slt \n\nOulala \nJ étais vraiment trop pris mon ami \nMais je vais faire un effort"
+   },
+   "attente_jours": 0.22,
+   "non_lu": false,
+   "categorie": "prospect_chaud",
+   "priorite": 2,
+   "cible": "Dans la cible : chef traiteur et chef à domicile (6 453 abonnés) qui fait aussi de la promotion immobilière à l'étranger. Débordé, il l'a dit plusieurs fois.",
+   "resume": "Échange depuis le 15/08 : il cumule restauration et promotion immobilière, se dit débordé et décroche à la salle de sport. Vocal de sa part le 31/08, puis un long message de Lauric sur le cabinet qui finissait par une demande de dispo, resté sans réponse. Le 16/09 à 12h25 Lauric relance (« tu es typiquement le type de personnes que j'accompagne »). À 12h33 : « Slt, oulala, j'étais vraiment trop pris mon ami, mais je vais faire un effort ».",
+   "attend": "Qu'on lui rende les choses faciles : il a peu de temps et vient de s'excuser.",
+   "objectif": "Obtenir un appel court en lui donnant deux créneaux précis, sans reparler du cabinet.",
+   "format": "ecrit",
+   "reponse": "Aucun souci, je vois bien que tu es sous l'eau 😅\n\nJustement, on se cale 15 minutes au téléphone ? Jeudi 21h ou samedi 10h, qu'est-ce qui t'arrange ?",
+   "pourquoi": "Sa réponse « je vais faire un effort » est une porte ouverte. Le long message du 31/08 est resté sans réponse : cette fois une ligne, une durée courte et deux créneaux, dont un en soirée puisqu'il travaille en journée.",
+   "vocal": "« Salut Nerry ! Aucun souci, je vois bien que tu cours partout. Je te propose juste 15 minutes au téléphone pour voir comment tu t'organises entre le traiteur et l'immo. Jeudi 21h ou samedi 10h, tu me dis ! »",
+   "alternatives": [
+    {
+     "angle": "Vocal",
+     "texte": "Envoyer un vocal de 20 secondes avec le même contenu : pas de souci, 15 minutes, jeudi 21h ou samedi 10h.",
+     "pourquoi": "Il a lui-même répondu en vocal le 31/08."
+    }
+   ],
+   "si_silence": {
+    "delai": "4 jours",
+    "texte": "Hello Nerry ! Toujours partant pour les 15 minutes ? Dis-moi juste un jour qui t'arrange 😊"
+   },
+   "eviter": [
+    "Réexpliquer le cabinet : c'est ce qui l'a fait décrocher le 31/08.",
+    "« Tu as une dispo ? » sans créneau.",
+    "Le culpabiliser sur le délai."
+   ],
+   "chances": "moyenne",
+   "quand": "Ce soir mercredi 16/09."
+  },
+  {
    "pseudo": "laurelys.events",
    "nom": "Laurélys",
    "conv": "https://www.instagram.com/direct/t/340282366841710301244259827075806944982/",
    "cat": "rep",
    "non_lu": false,
-   "attente_jours": 7.26,
+   "attente_jours": 8.21,
    "profil_info": "Services événementiels · 97 abonnés · 8 publications · compte public · bio : Laurélys / Wedding planner et organisation d’événements ✨ / 📍 Cahors, Lot / 📩 contact@laurelys.fr",
    "dernier": {
     "t": "mar. 08/09 12:56",
@@ -249,7 +527,7 @@
    "conv": "https://www.instagram.com/direct/t/340282366841710301244259513187762250273/",
    "cat": "rep",
    "non_lu": false,
-   "attente_jours": 6.37,
+   "attente_jours": 7.32,
    "profil_info": "Salon de beauté · 2147 abonnés · 848 publications · compte public · bio : 🤎 Chaque femme est unique, nos soins aussi / ⭐️ Expert soin du regard & minceur / 💎 Exclusivité : Head SPA avec sauna dô…",
    "dernier": {
     "t": "mer. 09/09 10:14",
@@ -259,7 +537,7 @@
     {
      "w": "L",
      "t": "sam. 04/07 16:00",
-     "x": "[vocal de 51 s]"
+     "x": "[vocal de ? s]"
     },
     {
      "w": "L",
@@ -289,7 +567,7 @@
     {
      "w": "L",
      "t": "lun. 24/08 11:11",
-     "x": "[vocal de 36 s]"
+     "x": "[vocal de ? s]"
     },
     {
      "w": "P",
@@ -351,7 +629,7 @@
    "conv": "https://www.instagram.com/direct/t/340282366841710301244260358181822668254/",
    "cat": "rep",
    "non_lu": false,
-   "attente_jours": 4.94,
+   "attente_jours": 5.89,
    "profil_info": "553 abonnés · 8 publications · compte public",
    "dernier": {
     "t": "jeu. 10/09 20:41",
@@ -434,7 +712,7 @@
    "conv": "https://www.instagram.com/direct/t/340282366841710301244260167787022543195/",
    "cat": "rep",
    "non_lu": false,
-   "attente_jours": 1.81,
+   "attente_jours": 2.76,
    "profil_info": "Salarié en brasserie, aide ses parents restaurateurs pour la vente de leur affaire · élève de la formation bourse de Thomas · fiche non relue le 14/09",
    "dernier": {
     "t": "dim. 13/09 23:37",
@@ -520,48 +798,135 @@
    "quand": "Lundi 14/09 dans la journée, ou un like sur son message si Lauric manque de temps."
   },
   {
-   "pseudo": "christophed_64",
-   "nom": "Christophe",
-   "conv": "https://www.instagram.com/direct/t/340282366841710301244276040644412661811/",
+   "pseudo": "mkbeauty337",
+   "nom": "~ MK beauty ~",
+   "conv": "https://www.instagram.com/direct/t/340282366841710301244259258145651662866/",
    "cat": "rep",
-   "profil_info": "3835 abonnés · 658 publications · compte privé",
+   "profil_info": "compte public",
    "fil": [
     {
      "w": "P",
-     "t": "sam. 14/02 22:21",
-     "x": "[réponse à une story : 🔥]"
-    },
-    {
-     "w": "L",
-     "t": "mar. 15/09 15:36",
-     "x": "Hello Christophe ! J’ai vu que tu me suivais depuis un moment et je t’en remercie 😊\n\nJe vois que ton compte est en privé mais j’étais curieux de t’envoyer un message.\n\nTu es toi même chef d’entreprise ?"
+     "t": "jeu. 10/09 13:46",
+     "x": "[vocal de 17 s]"
     },
     {
      "w": "P",
-     "t": "mar. 15/09 15:38",
-     "x": "Non je suis salarié de banque"
+     "t": "jeu. 10/09 13:46",
+     "x": "[vocal de 49 s]"
+    },
+    {
+     "w": "L",
+     "t": "sam. 12/09 11:09",
+     "x": "Ah génial ça fait plaisir de voir cette ambition\nTu as l’air de faire plein de choses et c’est aussi lié autour du domaine ongulaire \n\nTu arrives à bien tout gérer en parallèle ? C’est quoi un peu ton challenge/défis principal pour développer tout ça en parallèle ?"
+    },
+    {
+     "w": "P",
+     "t": "dim. 13/09 11:30",
+     "x": "Je m'occupe de mes filles et je vous répond en suivant"
+    },
+    {
+     "w": "L",
+     "t": "dim. 13/09 13:24",
+     "x": "Pas de problèmes !"
+    },
+    {
+     "w": "P",
+     "t": "dim. 13/09 14:32",
+     "x": "Je suis la"
+    },
+    {
+     "w": "P",
+     "t": "dim. 13/09 16:02",
+     "x": "Du coup j'arrive a géré mais je fait pas tout , tout les jours"
+    },
+    {
+     "w": "P",
+     "t": "dim. 13/09 16:02",
+     "x": "En ce moment je suit plus focus sur ma marque et ma boutique en ligne ainsi que mes concours top model et Miss Europe continentale"
+    },
+    {
+     "w": "L",
+     "t": "lun. 14/09 09:34",
+     "x": "Ok je vois !\n\nC'est quoi ton objectif pour la marque et la boutique en ligne ? \n\nTu auras réussi si.... \n\nIntéressant d'avoir ton feedback"
+    },
+    {
+     "w": "P",
+     "t": "mer. 16/09 10:42",
+     "x": "[vocal de 26 s]"
     }
    ],
    "dernier": {
-    "t": "mar. 15/09 15:38",
-    "x": "Non je suis salarié de banque"
+    "t": "mer. 16/09 10:42",
+    "x": "[vocal de 26 s]"
    },
-   "attente_jours": 0.15,
-   "non_lu": true,
+   "attente_jours": 0.3,
+   "non_lu": false,
+   "vocaux": "1 vocal(s) du lead à écouter avant de répondre",
    "categorie": "a_qualifier",
    "priorite": 3,
-   "cible": "Seconde cible possible : salarié de banque (comme Lauric avant), abonné depuis longtemps. Poste et équipe inconnus.",
-   "resume": "Compte privé très actif (3 835 abonnés, 658 publications). Il suit Lauric depuis longtemps : le 14/02 il avait partagé un réel de Lauric avec 🔥. Le 15/09 à 15h36, message de l'équipe aux anciens abonnés. À 15h38 : « Non je suis salarié de banque ».",
-   "attend": "Rien de précis, mais la banque est un point commun direct avec le parcours de Lauric.",
-   "objectif": "Créer le lien sur la banque et savoir s'il encadre une agence ou une équipe.",
+   "cible": "À qualifier : multi-activités (ongles, marque et boutique en ligne, concours de beauté), rien ne dit encore qu'elle a des salariés.",
+   "resume": "Échange depuis le 09/09. Le 13/09 elle dit gérer sans tout faire tous les jours et être concentrée sur sa marque, sa boutique en ligne et ses concours. Le 14/09 Lauric demande son objectif pour la marque (« tu auras réussi si… »). Le 16/09 à 10h42 elle répond par un vocal de 26 secondes.",
+   "attend": "Que Lauric réagisse à son vocal, qui répond sûrement à la question sur son objectif.",
+   "objectif": "Rebondir sur l'objectif qu'elle donne dans le vocal et savoir si elle travaille seule.",
+   "format": "ecrit_et_vocal",
+   "reponse": "Merci pour ton vocal 😊\n\n[reprendre en une phrase l'objectif qu'elle donne], c'est clair et ambitieux !\n\nAujourd'hui tu fais tout ça seule ou tu as quelqu'un qui t'aide ?",
+   "pourquoi": "Elle répond à la question de Lauric : il faut écouter le vocal et reprendre ses mots. La question sur l'équipe dit si elle est dans la cible ou non.",
+   "vocal": "Répondre en vocal de 20 secondes si son vocal est long ou personnel : reprendre son objectif, puis « tu gères tout ça seule ou tu as du monde avec toi ? ».",
+   "alternatives": [],
+   "si_silence": {
+    "delai": "Pas de relance.",
+    "texte": ""
+   },
+   "eviter": [
+    "Répondre sans avoir écouté le vocal.",
+    "Proposer un appel avant de savoir si elle a une équipe."
+   ],
+   "chances": "moyenne",
+   "quand": "Ce soir mercredi 16/09, après avoir écouté son vocal."
+  },
+  {
+   "pseudo": "veroniquefagour",
+   "nom": "Xéna",
+   "conv": "https://www.instagram.com/direct/t/340282366841710301244260094257973233471/",
+   "cat": "rep",
+   "profil_info": "20 abonnés · compte privé",
+   "fil": [
+    {
+     "w": "L",
+     "t": "sam. 12/09 11:25",
+     "x": "Hello Véronique! J’ai vu que tu me suivais depuis un moment et je t’en remercie 😊\n\nJe vois que ton compte est en privé mais j’étais curieux de t’envoyer un petit message.\n\nDeux type de profil me suivent : ceux qui dirigent déjà une équipe, et ceux qui veulent y arriver. Tu es plutôt lequel ?"
+    },
+    {
+     "w": "L",
+     "t": "mer. 16/09 12:30",
+     "x": "Hello Véronique, tu vas bien ?😊\n\nJe me demandais simplement si tu avais bien reçu mon message.\n\nBonne journée !"
+    },
+    {
+     "w": "P",
+     "t": "mer. 16/09 12:38",
+     "x": "Bonjour ! Je suis une Leadeuse née avec un état d'esprit très corporate. Bon mercredi and a good Lunch-time. 👋👏👌👍👊"
+    }
+   ],
+   "dernier": {
+    "t": "mer. 16/09 12:38",
+    "x": "Bonjour ! Je suis une Leadeuse née avec un état d'esprit très corporate. Bon mercredi and a good Lunch-time. 👋👏👌👍👊"
+   },
+   "attente_jours": 0.22,
+   "non_lu": false,
+   "categorie": "a_qualifier",
+   "priorite": 3,
+   "cible": "À qualifier : se décrit comme « leadeuse née avec un état d'esprit très corporate », sans dire si elle dirige ou manage. Compte privé vide (20 abonnés).",
+   "resume": "Le 12/09, message aux anciens abonnés (« ceux qui dirigent déjà une équipe, et ceux qui veulent y arriver, tu es plutôt lequel ? »). Relance le 16/09 à 12h30. À 12h38 : « Je suis une Leadeuse née avec un état d'esprit très corporate. Bon mercredi and a good lunch-time ».",
+   "attend": "Rien de précis, elle a répondu poliment et avec de l'énergie.",
+   "objectif": "Savoir si elle manage une équipe aujourd'hui et dans quel cadre.",
    "format": "ecrit",
-   "reponse": "Ah, un banquier 😄 J'y ai passé une bonne partie de ma carrière avant de me lancer !\n\nTu es en agence ? Tu encadres une équipe ?",
-   "pourquoi": "Lauric a quitté la banque pour entreprendre : ce point commun rend la conversation naturelle. Les deux questions fermées disent tout de suite s'il est directeur d'agence ou manager, ce qui en ferait un profil de la seconde cible.",
+   "reponse": "Merci Véronique, j'aime l'énergie 😄\n\nEt aujourd'hui tu encadres une équipe ? Dans quel type de boîte ?",
+   "pourquoi": "Elle n'a pas répondu à la question posée (dirige déjà ou veut y arriver). On la repose simplement, en fermé, pour savoir si elle est dans la seconde cible.",
    "alternatives": [
     {
-     "angle": "Sur le réel partagé",
-     "texte": "Merci Christophe ! Et tu m'avais partagé un de mes réels en février, ça m'avait fait plaisir 🔥\n\nTu es en agence ? Tu encadres une équipe ?",
-     "pourquoi": "Si Lauric préfère ne pas parler de son passé bancaire."
+     "angle": "Reprendre sa formule",
+     "texte": "Leadeuse née, ça me plaît 😄 Et tu diriges une équipe aujourd'hui ou c'est la prochaine étape ?",
+     "pourquoi": "Reprend ses mots et la question d'origine."
     }
    ],
    "si_silence": {
@@ -569,73 +934,10 @@
     "texte": ""
    },
    "eviter": [
-    "Critiquer la banque ou le salariat.",
-    "Proposer un appel avant de savoir s'il manage."
+    "Parler de l'accompagnement tant qu'on ne sait pas si elle manage."
    ],
    "chances": "moyenne",
-   "quand": "Ce soir ou demain en fin de journée."
-  },
-  {
-   "pseudo": "fairouzhamidat",
-   "nom": "Fairouz Hamidat",
-   "conv": "https://www.instagram.com/direct/t/340282366841710301244259284401162008256/",
-   "cat": "rep",
-   "profil_info": "232 abonnés · 1 publications · compte privé",
-   "fil": [
-    {
-     "w": "L",
-     "t": "mar. 15/09 15:42",
-     "x": "Hello Fairouz! J’ai vu que tu me suivais depuis un moment et je t’en remercie 😊\n\nJe vois que ton compte est en privé mais j’étais curieux de t’envoyer un message.\n\nTu es toi même cheffe d’entreprise ?"
-    },
-    {
-     "w": "P",
-     "t": "mar. 15/09 16:01",
-     "x": "Salut Lauric.\nC’est normal, il faut soutenir les anciens collègues.\n\nNon, je travaille pour un groupe."
-    },
-    {
-     "w": "L",
-     "t": "mar. 15/09 18:00",
-     "x": "Salut Fairouz, je vois que mon équipe t'a envoyé un message 😅\n\nÇa va sinon ? Ta reconversion ?"
-    },
-    {
-     "w": "P",
-     "t": "mar. 15/09 18:10",
-     "x": "Slt ca va et toi ?\nBah écoute oui, je suis fraîchement diplômée"
-    }
-   ],
-   "dernier": {
-    "t": "mar. 15/09 18:10",
-    "x": "Slt ca va et toi ?\nBah écoute oui, je suis fraîchement diplômée"
-   },
-   "attente_jours": 0.04,
-   "non_lu": true,
-   "categorie": "hors_cible",
-   "priorite": 3,
-   "cible": "Hors cible : ancienne collègue de Lauric, salariée dans un groupe, fraîchement diplômée après une reconversion. Relation à entretenir.",
-   "resume": "Compte privé (232 abonnés, 1 publication). Le 15/09 à 15h42, message de l'équipe (« tu me suis depuis un moment… tu es cheffe d'entreprise ? »). Elle répond à 16h01 qu'il faut « soutenir les anciens collègues » et qu'elle travaille pour un groupe. À 18h00 Lauric reprend la main lui-même (« je vois que mon équipe t'a envoyé un message 😅, ta reconversion ? »). À 18h10 : « ça va et toi ? Bah écoute oui, je suis fraîchement diplômée ».",
-   "attend": "Une réponse à son « ça va et toi ? » et un mot sur son diplôme.",
-   "objectif": "Garder un échange naturel entre anciens collègues, sans rien vendre.",
-   "format": "ecrit",
-   "reponse": "Ça va super merci ! Et félicitations pour le diplôme 🎉\n\nC'est dans quel domaine finalement ? Tu as déjà un poste en vue ?",
-   "pourquoi": "Elle a répondu deux fois en moins de 20 minutes et pose une question : on répond, on félicite, et on la fait parler de sa reconversion. Aucune qualification, c'est une ancienne collègue qui a déjà dit qu'elle était salariée.",
-   "alternatives": [
-    {
-     "angle": "Plus court",
-     "texte": "Ça va super ! Félicitations pour le diplôme 🎉 C'est dans quel domaine ?",
-     "pourquoi": "Si Lauric répond depuis son téléphone entre deux rendez-vous."
-    }
-   ],
-   "si_silence": {
-    "delai": "Pas de relance : c'est une conversation entre anciens collègues.",
-    "texte": ""
-   },
-   "eviter": [
-    "Parler d'accompagnement ou du Scan Dirigeant : elle est salariée et en début de poste.",
-    "Revenir sur le message de l'équipe : Lauric s'en est déjà amusé."
-   ],
-   "chances": "haute",
-   "quand": "Ce soir mardi 15/09, elle est en ligne.",
-   "lauric_seul": true
+   "quand": "Demain jeudi 17/09 à l'heure du déjeuner, elle a répondu à midi."
   },
   {
    "pseudo": "papyrus.pa",
@@ -643,7 +945,7 @@
    "conv": "https://www.instagram.com/direct/t/340282366841710301244260514516910629548/",
    "cat": "reac",
    "non_lu": false,
-   "attente_jours": 8.92,
+   "attente_jours": 9.87,
    "profil_info": "34 abonnés · compte privé",
    "dernier": {
     "t": "dim. 06/09 21:02",
@@ -704,99 +1006,6 @@
    ],
    "chances": "moyenne",
    "quand": "Dimanche soir ou lundi 14/09"
-  },
-  {
-   "pseudo": "marketdamp",
-   "nom": "Lucas Dampeyrou",
-   "conv": "https://www.instagram.com/direct/t/340282366841710301244259714549397916077/",
-   "cat": "rep",
-   "non_lu": false,
-   "attente_jours": 3.12,
-   "profil_info": "146880 abonnés · 92 publications · compte public · bio : Je t’installe mon système contenu → clients 📹 / → @braandscalee - DM « SYSTÈME » / ↓ Masterclass Gratuite ↓",
-   "dernier": {
-    "t": "sam. 12/09 16:16",
-    "x": "d’ici la fin de l’année si ça continue d’avancer comme ça tu penses avoir atteins combien de client honnêtement ?"
-   },
-   "fil": [
-    {
-     "w": "P",
-     "t": "mer. 09/09 19:58",
-     "x": "c’est assez intéressant"
-    },
-    {
-     "w": "P",
-     "t": "mer. 09/09 19:58",
-     "x": "tu te fais accompagner depuis combien de temps dessus ?"
-    },
-    {
-     "w": "L",
-     "t": "mer. 09/09 19:58",
-     "x": "Depuis juin"
-    },
-    {
-     "w": "L",
-     "t": "mer. 09/09 20:00",
-     "x": "J'arrive à faire du volume (à mon niveau) avec 150k d'impressions en moyenne sur 30 jours\n\nJ'ai mis en place un vrai tunnel avec du setting de qualité mais le goulot est encore à ce stade"
-    },
-    {
-     "w": "P",
-     "t": "mer. 09/09 20:01",
-     "x": "ouais les vues c’est cool, maintenant à voir combien deviennent des clients, car je pense que tu veux faire des ventes et pas devenir influ ahah"
-    },
-    {
-     "w": "P",
-     "t": "mer. 09/09 20:01",
-     "x": "sur ces 150k en 30 jours, t’as eu combien de nouveaux clients ?"
-    },
-    {
-     "w": "P",
-     "t": "ven. 11/09 17:58",
-     "x": "?"
-    },
-    {
-     "w": "L",
-     "t": "sam. 12/09 11:11",
-     "x": "0 venant dinsta"
-    },
-    {
-     "w": "P",
-     "t": "sam. 12/09 16:16",
-     "x": "donc là concrètement tu te fais accompagner depuis 4mois et tu n’as toujours pas fais de client via insta ?"
-    },
-    {
-     "w": "P",
-     "t": "sam. 12/09 16:16",
-     "x": "d’ici la fin de l’année si ça continue d’avancer comme ça tu penses avoir atteins combien de client honnêtement ?"
-    }
-   ],
-   "categorie": "vendeur",
-   "priorite": 4,
-   "cible": "Hors cible : créateur de 146 k abonnés qui vend son propre système « contenu vers clients » et qui prospecte Lauric, pas un dirigeant avec équipe à accompagner.",
-   "resume": "Lucas Dampeyrou (@marketdamp, 146 880 abonnés) vend un accompagnement « contenu vers clients » et prospecte Lauric depuis le 09/09 avec des questions en escalier (stats, DM générés, clients signés). Samedi 12/09 à 11h11 Lauric a répondu « 0 venant d'insta » : le chiffre creux qu'il attendait. À 16h16 il a enchaîné : « tu te fais accompagner depuis 4 mois et tu n'as toujours pas fait de client via insta ? » puis « d'ici la fin de l'année, tu penses avoir atteint combien de clients honnêtement ? ». C'est la phase où il fait chiffrer la douleur avant de proposer son offre.",
-   "attend": "Un nombre de clients projeté pour la fin d'année, qu'il retournera contre l'accompagnement actuel de Lauric pour placer le sien.",
-   "objectif": "Ne pas donner le chiffre, clore la séquence commerciale poliment, sans justifier ni dénigrer l'accompagnement en cours.",
-   "format": "ecrit",
-   "reponse": "Honnêtement Lucas, c'est un sujet que je traite avec la personne qui m'accompagne, pas en DM 🙂\n\nJe ne cherche pas d'autre accompagnement pour l'instant.\n\nBonne continuation, beau compte !",
-   "pourquoi": "Il demande de chiffrer l'échec projeté : répondre, même par une estimation, lui donne l'argument « à ce rythme tu vas finir l'année à zéro ». Le message reprend son mot « honnêtement » pour montrer qu'on a compris la question, puis sort le sujet du DM et dit clairement non à la vente. Pas de question, pas de chiffre, pas de critique de sa méthode : il n'a rien à attraper. Le « beau compte » garde des relations correctes avec un compte très visible.",
-   "alternatives": [
-    {
-     "angle": "Le non en une ligne",
-     "texte": "Hello Lucas, je ne cherche pas d'autre accompagnement pour le moment. Bonne continuation !",
-     "pourquoi": "Zéro énergie, à choisir si Lauric ne veut plus rien écrire sur ce fil."
-    }
-   ],
-   "si_silence": {
-    "delai": "Aucune relance : son silence est le résultat visé.",
-    "texte": ""
-   },
-   "eviter": [
-    "Donner un nouveau chiffre (clients signés, CA, coût par lead) ou rouvrir le problème avec un « c'est mon chantier du moment » : chaque ouverture lui sert de rampe de lancement.",
-    "Commenter sa technique de vente (« je sens l'entonnoir », « bien joué l'enchaînement ») : ça le relance au lieu de le fermer, et ça sonne condescendant face à un compte de 146 k.",
-    "Poser une question, même de politesse : ça relance la séquence alors que l'objectif est de la clore.",
-    "Accepter un appel, un audit gratuit ou un « je te montre vite fait », et ne jamais nommer la personne qui accompagne Lauric."
-   ],
-   "chances": "haute",
-   "quand": "Lundi 14/09, en dernier, après les vrais prospects."
   },
   {
    "pseudo": "douceur_d_ame_et_de_l_esprit",
@@ -860,7 +1069,7 @@
     "t": "lun. 14/09 12:31",
     "x": "Regarde un peu tu as quitté le domaine bancaire qui est une structure assez stable pour te lancer vers quelque chose qui t'appelais de bcp plus fort, ce n'est pas l'argent ni la strcture c'est quelque chose de plus grand que toi et qui fait référence à ta destinée, à un parcours qui t'es propre, je ne te connais pas donc je vais eviter de brusquer mes paroles😄 au fond de toi il y a toutes les reponses pour ton élévation ton evolution, si tu fais confiance à ce parcours qui t'es destiné alors tu manifestera le meilleur et le plus juste pour ta réussite, quand tu doutes et c'est une marque d'intelligence reconcentre toi sur ce qui t'a emmené jusqu'à ce point et retrouve ta détermination, aucun collaborateur ou associé ne pourront le faire à ta place voilà pourquoi le leadership est indispensable"
    },
-   "attente_jours": 1.28,
+   "attente_jours": 2.23,
    "non_lu": false,
    "categorie": "hors_cible",
    "priorite": 4,
@@ -911,7 +1120,7 @@
     "t": "mar. 15/09 16:09",
     "x": "Bonjour \n\nHélas je suis employer 😂"
    },
-   "attente_jours": 0.13,
+   "attente_jours": 1.07,
    "non_lu": false,
    "categorie": "hors_cible",
    "priorite": 4,
@@ -962,7 +1171,7 @@
     "t": "mar. 15/09 16:47",
     "x": "Nn du tout pourquoi"
    },
-   "attente_jours": 0.1,
+   "attente_jours": 1.05,
    "non_lu": false,
    "categorie": "hors_cible",
    "priorite": 4,
@@ -992,12 +1201,211 @@
    "quand": "Ce soir ou demain matin."
   },
   {
+   "pseudo": "valsferrazza",
+   "nom": "Val Sferrazza",
+   "conv": "https://www.instagram.com/direct/t/340282366841710301244259236300586964117/",
+   "cat": "rep",
+   "profil_info": "213 abonnés · 60 publications · compte privé",
+   "fil": [
+    {
+     "w": "L",
+     "t": "mar. 15/09 08:08",
+     "x": "Hello Val ! Je me permets de t'écrire, tu suis mon compte depuis un moment et je ne t'ai jamais dit bonjour, c'est réparé 😊\n\nTon compte est privé donc je n'ai rien pu voir de ton activité, et j'aime bien savoir qui se cache derrière les personnes qui me suivent.\n\nTu es à ton compte ou tu diriges une équipe ?"
+    },
+    {
+     "w": "P",
+     "t": "mer. 16/09 08:12",
+     "x": "Bonjour je ne suis pas à mon compte je suis employé en pharmacie esthéticienne \nJ ai un projet de me mettre à mon compte"
+    }
+   ],
+   "dernier": {
+    "t": "mer. 16/09 08:12",
+    "x": "Bonjour je ne suis pas à mon compte je suis employé en pharmacie esthéticienne \nJ ai un projet de me mettre à mon compte"
+   },
+   "attente_jours": 0.41,
+   "non_lu": true,
+   "categorie": "hors_cible",
+   "priorite": 4,
+   "cible": "Hors cible aujourd'hui : employée en pharmacie (esthéticienne), avec un projet de se mettre à son compte.",
+   "resume": "Compte privé (213 abonnés, 60 publications). Le 15/09 à 8h08, message aux anciens abonnés (« tu es à ton compte ou tu diriges une équipe ? »). Le 16/09 à 8h12 : « je ne suis pas à mon compte, je suis employée en pharmacie esthéticienne, j'ai un projet de me mettre à mon compte ».",
+   "attend": "Un mot sur son projet.",
+   "objectif": "Répondre chaleureusement et garder le lien pour plus tard, sans vendre.",
+   "format": "ecrit",
+   "reponse": "Merci Val pour ta réponse 😊\n\nBeau projet ! Tu te vois lancer ça quand ?",
+   "pourquoi": "Elle est hors cible aujourd'hui mais peut le devenir. Une question sur le calendrier garde la conversation ouverte et dit à Lauric quand revenir vers elle.",
+   "alternatives": [],
+   "si_silence": {
+    "delai": "Pas de relance.",
+    "texte": ""
+   },
+   "eviter": [
+    "Proposer un appel ou le scan dirigeant."
+   ],
+   "chances": "moyenne",
+   "quand": "Demain jeudi 17/09 le matin, elle a répondu à 8h."
+  },
+  {
+   "pseudo": "le_monde_de_rs",
+   "nom": "Julie 😎🥳👩‍👦‍👦",
+   "conv": "https://www.instagram.com/direct/t/340282366841710301244259569494396457243/",
+   "cat": "rep",
+   "profil_info": "compte public",
+   "fil": [
+    {
+     "w": "P",
+     "t": "mer. 09/09 16:57",
+     "x": "Non je leur vend à un prix pour qu ils le revendent au prix conseillé a minima"
+    },
+    {
+     "w": "L",
+     "t": "mer. 09/09 17:21",
+     "x": "Je vois. \n\nIl faudrait trouver un modèle gagnant gagnant. \n\nUn espace vide que tu peux exploiter chez eux (1m2, un bout de vitrine, etc..), tu vends direct au client au prix que toi tu fixes et tu leur reverses un %"
+    },
+    {
+     "w": "L",
+     "t": "mer. 09/09 17:21",
+     "x": "Comme un concept store"
+    },
+    {
+     "w": "P",
+     "t": "mer. 09/09 17:34",
+     "x": "Je voudrais une revente qui ne nécessite pas ma présence"
+    },
+    {
+     "w": "L",
+     "t": "mer. 09/09 19:06",
+     "x": "Oui c'est ça"
+    },
+    {
+     "w": "L",
+     "t": "mer. 09/09 19:06",
+     "x": "Ce modèle est bien pour ça non ?"
+    },
+    {
+     "w": "L",
+     "t": "ven. 11/09 18:49",
+     "x": "Hello Julie, \n\nAfin de t'aider dans ta démarche entrepreneuriale, je te partage une ressource 100% maison. \n\nhttps://youtu.be/edgg977QObk?is=ONKd7xn1DIJh6dqp\n\nHâte d'avoir ton retour si ça t'a aidé !\n\nBon week-end"
+    },
+    {
+     "w": "P",
+     "t": "sam. 12/09 12:40",
+     "x": "Hello Lauric et merci bcp pour le partage je regarde ça avec attention et te ferai un retour\nBeau week-end à toi"
+    },
+    {
+     "w": "L",
+     "t": "mar. 15/09 10:19",
+     "x": "Hello! Tu as pu y jeter un œil ?\n\nBonne journée Julie 🙂"
+    },
+    {
+     "w": "P",
+     "t": "mer. 16/09 11:33",
+     "x": "Hello pas encore \nJe te tiens au courant merci Lauric"
+    }
+   ],
+   "dernier": {
+    "t": "mer. 16/09 11:33",
+    "x": "Hello pas encore \nJe te tiens au courant merci Lauric"
+   },
+   "attente_jours": 0.27,
+   "non_lu": true,
+   "categorie": "prospect_chaud",
+   "priorite": 4,
+   "cible": "Dans la cible, sans budget aujourd'hui : cheffe d'entreprise d'une marque de produits, seule, qui veut se libérer du temps et développer les revendeurs.",
+   "resume": "Lauric lui a partagé la vidéo YouTube le 11/09, relance le 15/09 (« tu as pu y jeter un œil ? »). Le 16/09 à 11h33 : « pas encore, je te tiens au courant, merci Lauric ».",
+   "attend": "Rien : elle a dit qu'elle reviendrait.",
+   "objectif": "Ne pas la presser.",
+   "format": "reaction",
+   "reponse": "Mettre un ❤️ sur son message, sans écrire.",
+   "pourquoi": "Elle a déjà dit qu'elle regarderait et reviendrait. Une nouvelle question ferait pression pour une vidéo qu'elle n'a pas encore vue.",
+   "alternatives": [
+    {
+     "angle": "Un mot court",
+     "texte": "Avec plaisir Julie, prends ton temps 😊",
+     "pourquoi": "Si Lauric préfère écrire."
+    }
+   ],
+   "si_silence": {
+    "delai": "Lundi 21/09",
+    "texte": "Hello Julie ! Au passage, tu as avancé sur tes revendeurs cette semaine ? 😊"
+   },
+   "eviter": [
+    "Redemander si elle a vu la vidéo avant la semaine prochaine."
+   ],
+   "chances": "moyenne",
+   "quand": "Maintenant (réaction)."
+  },
+  {
+   "pseudo": "cecile_la_pipelette",
+   "nom": "Cécile | Blabla de la vie la vrai",
+   "conv": "https://www.instagram.com/direct/t/340282366841710301244276055853575661811/",
+   "cat": "rep",
+   "profil_info": "733 abonnés · 578 publications · compte public · bio : Du sport pour repousser les limites, objectif confiance",
+   "fil": [
+    {
+     "w": "P",
+     "t": "mer. 13/05 11:35",
+     "x": "[message non affichable]"
+    },
+    {
+     "w": "P",
+     "t": "mer. 13/05 11:35",
+     "x": "Bilan"
+    },
+    {
+     "w": "L",
+     "t": "sam. 12/09 11:20",
+     "x": "Hello Cécile ! Je reviens vers toi car nous n’avions jamais vraiment échangé 😊\n\nDans la vie tu es coach c’est ça ?"
+    },
+    {
+     "w": "L",
+     "t": "mer. 16/09 12:11",
+     "x": "Hello Cécile! Tu as bien vu mon message?"
+    },
+    {
+     "w": "P",
+     "t": "mer. 16/09 12:15",
+     "x": "Bonjour, désolé oui j’avais bien vu ton message mais complètement oublié de répondre"
+    },
+    {
+     "w": "P",
+     "t": "mer. 16/09 12:15",
+     "x": "Et pour répondre à ta question, non je ne suis pas coach"
+    }
+   ],
+   "dernier": {
+    "t": "mer. 16/09 12:15",
+    "x": "Et pour répondre à ta question, non je ne suis pas coach"
+   },
+   "attente_jours": 0.24,
+   "non_lu": true,
+   "categorie": "a_qualifier",
+   "priorite": 4,
+   "cible": "À qualifier : pas coach. Compte public de vie perso et de sport (733 abonnés, 578 publications, « objectif confiance », maman). Activité pro inconnue.",
+   "resume": "Le 12/09 Lauric demande « dans la vie tu es coach c'est ça ? ». Relance le 16/09 à 12h11. À 12h15 elle s'excuse d'avoir oublié de répondre : « non je ne suis pas coach ».",
+   "attend": "Rien de précis, elle a juste corrigé l'info.",
+   "objectif": "Savoir ce qu'elle fait dans la vie, sans insister.",
+   "format": "ecrit",
+   "reponse": "Pas de souci Cécile 😊\n\nAh je pensais avec tout le sport et la confiance en toi sur ton compte ! Tu fais quoi du coup dans la vie ?",
+   "pourquoi": "On garde un ton léger en rebondissant sur ce qu'on a vu de son compte, et une seule question pour savoir si elle a une activité à son compte ou une équipe.",
+   "alternatives": [],
+   "si_silence": {
+    "delai": "Pas de relance.",
+    "texte": ""
+   },
+   "eviter": [
+    "Proposer le scan ou un appel.",
+    "Commenter son physique ou ses photos de sport."
+   ],
+   "chances": "moyenne",
+   "quand": "Demain jeudi 17/09 vers midi."
+  },
+  {
    "pseudo": "banibani_j",
    "nom": "MJ",
    "conv": "https://www.instagram.com/direct/t/340282366841710301244260507850154549218/",
    "cat": "reac",
    "non_lu": false,
-   "attente_jours": 7.3,
+   "attente_jours": 8.25,
    "profil_info": "133 abonnés · 109 publications · compte public · bio : Travelor as much as possible 🏝️🌍🍹 🌏✈️",
    "dernier": {
     "t": "mar. 08/09 12:02",
@@ -1096,7 +1504,7 @@
    "conv": "https://www.instagram.com/direct/t/340282366841710301244262047616573303423/",
    "cat": "reac",
    "non_lu": false,
-   "attente_jours": 7.27,
+   "attente_jours": 8.22,
    "profil_info": "90 abonnés · 3 publications · compte privé",
    "dernier": {
     "t": "mar. 08/09 12:36",
@@ -1206,7 +1614,7 @@
     "t": "lun. 14/09 12:53",
     "x": "Bonjour Lauric je suis seulement le compte je n’ai pas besoin de l’accompagnement je t’en remercie"
    },
-   "attente_jours": 1.26,
+   "attente_jours": 2.21,
    "non_lu": false,
    "categorie": "hors_cible",
    "priorite": 5,
@@ -1296,7 +1704,7 @@
     "t": "lun. 14/09 18:32",
     "x": "c’est validé!"
    },
-   "attente_jours": 1.03,
+   "attente_jours": 1.98,
    "non_lu": false,
    "categorie": "deja_clos",
    "priorite": 5,
@@ -1347,8 +1755,8 @@
     "t": "mar. 15/09 15:38",
     "x": "Bonjour je ne suis rien de tout ça"
    },
-   "attente_jours": 0.15,
-   "non_lu": true,
+   "attente_jours": 1.1,
+   "non_lu": false,
    "categorie": "hors_cible",
    "priorite": 5,
    "cible": "Hors cible : ni à son compte ni dirigeant. Compte privé vide (10 abonnés, 0 publication).",
@@ -1376,12 +1784,273 @@
    "quand": "Quand Lauric a le temps."
   },
   {
+   "pseudo": "arnaud_comolet",
+   "nom": "Comolet Arnaud",
+   "conv": "https://www.instagram.com/direct/t/340282366841710301244260007421538551197/",
+   "cat": "rep",
+   "profil_info": "224 abonnés · 4 publications · compte public · bio : Architecte d'intérieur, kitchen designer",
+   "fil": [
+    {
+     "w": "L",
+     "t": "dim. 06/09 19:29",
+     "x": "Hello Arnaud ! Merci pour le follow\n\nJe vois que tu architecte, je me demandais si tu étais totalement indépendant ou si tu travaillais avec une équipe 😊\n\nHâte d’échanger !"
+    },
+    {
+     "w": "L",
+     "t": "mar. 08/09 11:01",
+     "x": "Hello Arnaud, tu vas bien ?\n\nJe me demandais simplement si tu avais bien reçu mon message😊\n\nBonne journée!"
+    },
+    {
+     "w": "P",
+     "t": "mar. 15/09 22:48",
+     "x": "Bonjour, bien reçus…. De passage par curiosité…"
+    }
+   ],
+   "dernier": {
+    "t": "mar. 15/09 22:48",
+    "x": "Bonjour, bien reçus…. De passage par curiosité…"
+   },
+   "attente_jours": 0.8,
+   "non_lu": false,
+   "categorie": "deja_clos",
+   "priorite": 5,
+   "cible": "Hors cible : architecte d'intérieur et kitchen designer (224 abonnés), passé « par curiosité ».",
+   "resume": "Le 06/09, message sur son métier d'architecte, relance le 08/09. Le 15/09 à 22h48 : « Bonjour, bien reçus… De passage par curiosité… ».",
+   "attend": "Rien, il ferme poliment.",
+   "objectif": "Clore sur une note sympathique.",
+   "format": "ecrit",
+   "reponse": "Merci Arnaud pour ta réponse 😊 Bonne continuation dans tes projets !",
+   "pourquoi": "Il dit clairement qu'il n'est pas intéressé. Une phrase courte laisse une bonne image.",
+   "alternatives": [],
+   "si_silence": {
+    "delai": "Rien à faire.",
+    "texte": ""
+   },
+   "eviter": [
+    "Reposer la question de l'équipe."
+   ],
+   "chances": "haute",
+   "quand": "Quand Lauric veut."
+  },
+  {
+   "pseudo": "lesalonpascalbecuwe",
+   "nom": "Le Salon Pascal Becuwe",
+   "conv": "https://www.instagram.com/direct/t/340282366841710301244259625547374032524/",
+   "cat": "rep",
+   "profil_info": "Barbier · 1097 abonnés · 228 publications · compte public · bio : Coiffeur et barbier depuis 3 générations",
+   "fil": [
+    {
+     "w": "L",
+     "t": "mer. 16/09 09:32",
+     "x": "Hello ! Merci de me suivre 🙏\n\nJe suis passée faire un petit tour sur ton profil et j’ai vu que le métier se transmettait dans la famille depuis 3 générations. Je trouve ça assez rare ! Qu’est-ce qui t’a donné envie de poursuivre à ton tour ?"
+    },
+    {
+     "w": "P",
+     "t": "mer. 16/09 09:32",
+     "x": "Bonjour, \nNous avons bien reçu votre message. \nNous vous proposons de nous contacter sur le téléphone fixe du salon 03.21.51.78.06 \nou de nous contacter sur le site www.le salonpascalbecuwe.com \n(rubrique \" contact\") vous pourrez directement prendre votre rendez-vous et consulter nos tarifs. Merci à vous, A trés bientot .\nPascal Becuwe💈"
+    }
+   ],
+   "dernier": {
+    "t": "mer. 16/09 09:32",
+    "x": "Bonjour, \nNous avons bien reçu votre message. \nNous vous proposons de nous contacter sur le téléphone fixe du salon 03.21.51.78.06 \nou de nous contacter sur le site www.le salonpascalbecuwe.com \n(rubrique \" contact\") vous pourrez directement prendre votre rendez-vous et consulter nos tarifs. Merci à vous, A trés bientot .\nPascal Becuwe💈"
+   },
+   "attente_jours": 0.35,
+   "non_lu": false,
+   "categorie": "a_qualifier",
+   "priorite": 5,
+   "cible": "Potentiel : salon de coiffure et barbier familial depuis 3 générations (1 097 abonnés), équipe probable.",
+   "resume": "Nouvel abonné. Le 16/09 à 9h32, message sur le métier transmis depuis 3 générations. Réponse automatique immédiate du salon (« contactez-nous sur le fixe ou le site pour prendre rendez-vous »). Personne n'a encore vraiment lu le message.",
+   "attend": "Rien : c'est un message automatique.",
+   "objectif": "Attendre que Pascal lise le message lui-même.",
+   "format": "rien",
+   "reponse": "Ne pas répondre au message automatique.",
+   "pourquoi": "Répondre à un robot n'apporte rien et pousse la conversation plus bas dans leur boîte. Le vrai message de Lauric est déjà juste au-dessus.",
+   "alternatives": [],
+   "si_silence": {
+    "delai": "5 jours",
+    "texte": "Hello Pascal ! Je me permets de revenir vers toi, j'étais curieux de savoir combien vous êtes au salon aujourd'hui 😊"
+   },
+   "eviter": [
+    "Appeler le fixe du salon : ce n'est pas le canal choisi."
+   ],
+   "chances": "faible",
+   "quand": "Lundi 21/09 si toujours rien."
+  },
+  {
+   "pseudo": "marketdamp",
+   "nom": "Lucas Dampeyrou",
+   "conv": "https://www.instagram.com/direct/t/340282366841710301244259714549397916077/",
+   "cat": "rep",
+   "profil_info": "compte public",
+   "fil": [
+    {
+     "w": "P",
+     "t": "mer. 16/09 14:22",
+     "x": "?"
+    },
+    {
+     "w": "L",
+     "t": "mer. 16/09 15:22",
+     "x": "Oui ?"
+    },
+    {
+     "w": "P",
+     "t": "mer. 16/09 15:26",
+     "x": "je me demandais si t’avais vu mes messages"
+    },
+    {
+     "w": "P",
+     "t": "mer. 16/09 15:26",
+     "x": "je te demandais si tu continuais à avancer avec cette stratégie combien de client tu pensais avoir d’ici cette fin d’année ?"
+    },
+    {
+     "w": "P",
+     "t": "mer. 16/09 15:27",
+     "x": "sachant que ça fait 4 mois que t’es accompagné sans avoir eu de nouveaux client"
+    },
+    {
+     "w": "L",
+     "t": "mer. 16/09 16:14",
+     "x": "Que proposes tu ?"
+    },
+    {
+     "w": "P",
+     "t": "mer. 16/09 16:17",
+     "x": "de base je préfère voir si je peux VRAIMENT t’aider avant de te dire ce que je propose mais en gros"
+    },
+    {
+     "w": "P",
+     "t": "mer. 16/09 16:18",
+     "x": "stratégie de contenu qui ne fait pas QUE faire des vues mais principalement qui génère des leads et qui convertit"
+    },
+    {
+     "w": "L",
+     "t": "mer. 16/09 16:42",
+     "x": "Ça va alors nous sommes alignés."
+    },
+    {
+     "w": "P",
+     "t": "mer. 16/09 16:57",
+     "x": "actuellement c’est quelque chose que tu recherches ? + de client à travers tes réseaux ?"
+    }
+   ],
+   "dernier": {
+    "t": "mer. 16/09 16:57",
+    "x": "actuellement c’est quelque chose que tu recherches ? + de client à travers tes réseaux ?"
+   },
+   "attente_jours": 0.04,
+   "non_lu": true,
+   "categorie": "vendeur",
+   "priorite": 5,
+   "cible": "Hors cible : créateur de contenu qui vend une stratégie de contenu à Lauric. Il prospecte, il n'achète pas.",
+   "resume": "Depuis le 11/09 il questionne Lauric sur ses résultats Instagram (« 4 mois accompagné sans nouveau client ? »). Le 16/09 Lauric demande « que proposes-tu ? », il répond « stratégie de contenu qui génère des leads et qui convertit ». Lauric : « ça va alors nous sommes alignés ». À 16h57 : « c'est quelque chose que tu recherches ? + de clients à travers tes réseaux ? ».",
+   "attend": "Un oui pour enchaîner sur son offre.",
+   "objectif": "Clore poliment la conversation.",
+   "format": "ecrit",
+   "reponse": "Non merci Lucas, je suis déjà accompagné sur le sujet 🙂\n\nBonne continuation !",
+   "pourquoi": "Chaque réponse relance sa vente. Une phrase claire ferme la porte sans froisser.",
+   "alternatives": [],
+   "si_silence": {
+    "delai": "Rien à faire.",
+    "texte": ""
+   },
+   "eviter": [
+    "Donner des chiffres sur les résultats du compte.",
+    "Poser une nouvelle question."
+   ],
+   "chances": "haute",
+   "quand": "Quand Lauric veut, ou ne pas répondre."
+  },
+  {
+   "pseudo": "arnaudloriers",
+   "nom": "CA Loriers",
+   "conv": "https://www.instagram.com/direct/t/340282366841710301244259271619683710942/",
+   "cat": "rep",
+   "profil_info": "141 abonnés · 7 publications · compte public",
+   "fil": [
+    {
+     "w": "L",
+     "t": "jeu. 10/09 18:33",
+     "x": "Hello Arnaud !\nBienvenue et merci de me suivre 🙏\n\nJ’aime beaucoup ton profil avec toutes les photos, on ressent ta joie de vivre et c’est beau a voir.\n\nTu l’as sûrement vu, ici je parle aux dirigeants principalement 😊\n\nJ’ai dirigé pendant 10 ans je connais par cœur les défis :\nTout porter sur ses épaules.\nLe stress du chiffre.\nRecruter, motiver ses employés.\nPrendre une tonne de décisions.\nEtc.\n\n✅ Depuis de nombreuses années j’applique une méthode que j’ai apprise auprès des plus grands dirigeants !\n👉 + d’engagement\n👉 + de business\nC’est dingue la différence.\n\nEt puis la cerise sur le gâteau : beaucoup moins de charge mentale pour le dirigeant 😎\n\nUne question importante :\nTu es dirigeant d’une boîte ?"
+    },
+    {
+     "w": "L",
+     "t": "mer. 16/09 12:26",
+     "x": "Hello, tu vas bien ?😊\n\nJe me demandais simplement si tu avais bien reçu mon message.\n\nBonne journée !"
+    },
+    {
+     "w": "P",
+     "t": "mer. 16/09 17:38",
+     "x": "Oui, non merci"
+    }
+   ],
+   "dernier": {
+    "t": "mer. 16/09 17:38",
+    "x": "Oui, non merci"
+   },
+   "attente_jours": 0.01,
+   "non_lu": true,
+   "categorie": "deja_clos",
+   "priorite": 5,
+   "cible": "Hors cible : compte perso (141 abonnés, 7 publications), a dit non.",
+   "resume": "Accroche A le 10/09, relance le 16/09 à 12h26. À 17h38 : « Oui, non merci ».",
+   "attend": "Rien.",
+   "objectif": "Clore.",
+   "format": "reaction",
+   "reponse": "Mettre un 👍 sur son message, ou ne rien faire.",
+   "pourquoi": "Refus clair. Rien à gagner à écrire.",
+   "alternatives": [],
+   "si_silence": {
+    "delai": "Rien à faire.",
+    "texte": ""
+   },
+   "eviter": [
+    "Relancer ou argumenter."
+   ],
+   "chances": "haute",
+   "quand": "Quand Lauric veut."
+  },
+  {
+   "pseudo": "cathy.berry201",
+   "nom": "Berry Cathy",
+   "conv": "https://www.instagram.com/direct/t/340282366841710301244259979064047706511/",
+   "cat": "reac",
+   "profil_info": "45 abonnés · compte public",
+   "fil": [
+    {
+     "w": "L",
+     "t": "mer. 16/09 09:18",
+     "x": "Hello Berry ! Je me permets de t'écrire, tu suis mon compte depuis un moment et je ne t'ai jamais dit bonjour, c'est réparé 😊\n\nTon profil ne dit pas grand chose sur toi, et comme je parle surtout aux dirigeants ici, je suis curieux de savoir ce qui t'a parlé dans mon contenu.\n\nTu es à ton compte ou tu diriges une équipe ?"
+    }
+   ],
+   "non_lu": true,
+   "categorie": "a_qualifier",
+   "priorite": 5,
+   "cible": "À qualifier : compte public vide (45 abonnés, 0 publication), aucune info.",
+   "resume": "Le 16/09 à 9h18, message aux anciens abonnés (« tu es à ton compte ou tu diriges une équipe ? »). Elle a mis un ❤️ sur le message sans écrire.",
+   "attend": "Rien, la réaction vaut un « bien reçu ».",
+   "objectif": "Laisser une chance de réponse sans insister.",
+   "format": "rien",
+   "reponse": "Ne rien envoyer aujourd'hui.",
+   "pourquoi": "Un cœur sans texte sur un message qui pose une question veut souvent dire « vu, pas concerné ». Relancer tout de suite serait lourd.",
+   "alternatives": [],
+   "si_silence": {
+    "delai": "3 jours",
+    "texte": "Merci pour le cœur Cathy 😊 Du coup, tu es à ton compte ou salariée ?"
+   },
+   "eviter": [
+    "Une relance le jour même."
+   ],
+   "chances": "faible",
+   "quand": "Samedi 19/09 si toujours rien."
+  },
+  {
    "pseudo": "myshampouineuse",
    "nom": "Paul André · Spécialistes de la Shampouineuse",
    "conv": "https://www.instagram.com/direct/t/340282366841710301244285445757659694845/",
    "cat": "rep",
    "non_lu": false,
-   "attente_jours": 3.44,
+   "attente_jours": 4.39,
    "profil_info": "Profil Instagram pas relevé aujourd'hui (aucun appel à Instagram, le compte a ralenti) · compte pro « 🥇 Spécialistes de la Shampouineuse » · appel téléphonique déjà fait le mardi 08/09 à 13h",
    "dernier": {
     "t": "sam. 12/09 08:33",
@@ -1486,7 +2155,7 @@
    "conv": "https://www.instagram.com/direct/t/340282366841710301244262869443627929318/",
    "cat": "rep",
    "non_lu": false,
-   "attente_jours": 3.3,
+   "attente_jours": 4.25,
    "profil_info": "429 abonnés · 12 publications · compte privé",
    "dernier": {
     "t": "sam. 12/09 11:55",
@@ -1584,219 +2253,12 @@
    }
   },
   {
-   "pseudo": "le_monde_de_rs",
-   "nom": "Julie 😎🥳👩‍👦‍👦",
-   "conv": "https://www.instagram.com/direct/t/340282366841710301244259569494396457243/",
-   "cat": "rep",
-   "non_lu": true,
-   "attente_jours": 3.27,
-   "profil_info": "Marque de produits (vente en ligne, événements, revendeurs) · fiche non relue le 14/09 · étiquetée lead chaud dans un EOD",
-   "dernier": {
-    "t": "sam. 12/09 12:40",
-    "x": "Hello Lauric et merci bcp pour le partage je regarde ça avec attention et te ferai un retour\nBeau week-end à toi"
-   },
-   "fil": [
-    {
-     "w": "L",
-     "t": "mer. 09/09 13:31",
-     "x": "Tu leur reverse un % de ton CA sur leurs ventes de tes produits"
-    },
-    {
-     "w": "P",
-     "t": "mer. 09/09 16:57",
-     "x": "Non je leur vend à un prix pour qu ils le revendent au prix conseillé a minima"
-    },
-    {
-     "w": "L",
-     "t": "mer. 09/09 17:21",
-     "x": "Je vois. \n\nIl faudrait trouver un modèle gagnant gagnant. \n\nUn espace vide que tu peux exploiter chez eux (1m2, un bout de vitrine, etc..), tu vends direct au client au prix que toi tu fixes et tu leur reverses un %"
-    },
-    {
-     "w": "L",
-     "t": "mer. 09/09 17:21",
-     "x": "Comme un concept store"
-    },
-    {
-     "w": "P",
-     "t": "mer. 09/09 17:34",
-     "x": "Je voudrais une revente qui ne nécessite pas ma présence"
-    },
-    {
-     "w": "L",
-     "t": "mer. 09/09 19:06",
-     "x": "Oui c'est ça"
-    },
-    {
-     "w": "L",
-     "t": "mer. 09/09 19:06",
-     "x": "Ce modèle est bien pour ça non ?"
-    },
-    {
-     "w": "L",
-     "t": "ven. 11/09 18:49",
-     "x": "Hello Julie, \n\nAfin de t'aider dans ta démarche entrepreneuriale, je te partage une ressource 100% maison. \n\nhttps://youtu.be/edgg977QObk?is=ONKd7xn1DIJh6dqp\n\nHâte d'avoir ton retour si ça t'a aidé !\n\nBon week-end"
-    },
-    {
-     "w": "P",
-     "t": "sam. 12/09 12:40",
-     "x": "Hello Lauric et merci bcp pour le partage je regarde ça avec attention et te ferai un retour\nBeau week-end à toi"
-    },
-    {
-     "w": "L",
-     "t": "mar. 15/09 10:19",
-     "x": "Hello! Tu as pu y jeter un œil ?\n\nBonne journée Julie 🙂"
-    }
-   ],
-   "categorie": "prospect_chaud",
-   "priorite": 1,
-   "cible": "Dans la cible, sans budget aujourd'hui : cheffe d'entreprise d'une marque de produits, seule, qui veut embaucher pour se libérer du temps et développer les revendeurs et le B2B.",
-   "resume": "Julie a sa marque (vente en ligne, événements, commerces revendeurs). Fin août elle a dit à Lauric qu'elle n'avait pas de budget mais prendrait ses conseils, et a donné ses 3 sujets : trouver des contrats B2B, convaincre des commerces de revendre ses produits, reprendre la relation client captée à 80 % par les plateformes. Le 08-09/09 : sa contrainte est de ne pas pouvoir embaucher, les commerces trouvent le produit trop cher à l'achat, elle veut une revente « qui ne nécessite pas sa présence ». Lauric a proposé le modèle dépôt avec commission (coin de vitrine, % reversé). Le 11/09 il lui partage sa vidéo YouTube, le samedi 12/09 à 12h40 elle remercie : « je regarde ça avec attention et te ferai un retour ».",
-   "attend": "Rien d'urgent : elle a promis un retour après la vidéo. Elle attend surtout que Lauric reste la personne utile qui l'aide sur ses revendeurs.",
-   "objectif": "Garder le fil chaud sans la presser, et transformer le conseil « dépôt avec commission » en une conversation de vive voix de 20 minutes sur son plan revendeurs.",
-   "format": "ecrit",
-   "reponse": "Avec plaisir Julie 😊\n\nEt pour tes revendeurs, tu as pu tester l'idée du coin de vitrine avec un % reversé ? Si tu veux, on prend 20 minutes au téléphone cette semaine pour monter ta proposition aux commerces ensemble.",
-   "pourquoi": "Elle a fermé poliment (« je te ferai un retour ») : un simple merci laisserait le fil mourir. Le message revient sur SON problème concret du 09/09 (les commerces trouvent le produit trop cher), là où Lauric a déjà apporté une idée utile, et propose un appel court centré sur un livrable précis, sa proposition aux commerces. Elle a dit ne pas avoir de budget : l'appel est présenté comme un coup de main, pas comme un rendez-vous commercial, ce qui correspond à ce qu'elle a accepté (« tes conseils gracieux »).",
-   "alternatives": [
-    {
-     "angle": "Sans appel, juste relancer le sujet",
-     "texte": "Avec plaisir Julie 😊\n\nEt côté commerces, tu as pu tester l'idée du coin de vitrine avec un % reversé ?",
-     "pourquoi": "Si Lauric préfère attendre son retour sur la vidéo avant de proposer un appel. Garde le fil ouvert avec une question facile."
-    },
-    {
-     "angle": "Créneau précis",
-     "texte": "Avec plaisir Julie 😊\n\nPour tes revendeurs, je te propose 20 minutes au téléphone pour construire ta proposition aux commerces : jeudi 17 à 12h30 ou vendredi 18 à 9h ?",
-     "pourquoi": "L'analyse des appels proposés montre que les créneaux précis obtiennent l'appel. À utiliser si Lauric veut tenter l'appel tout de suite."
-    }
-   ],
-   "si_silence": {
-    "delai": "Jeudi 17/09 si pas de réponse",
-    "texte": "Hello Julie, tu as eu le temps de regarder la vidéo ? Je suis curieux de ton avis, surtout sur la partie qui parle de déléguer."
-   },
-   "eviter": [
-    "Parler de prix ou de l'accompagnement payant : elle a dit clairement qu'elle n'avait pas de budget.",
-    "Renvoyer une autre vidéo avant qu'elle ait donné son retour sur la première.",
-    "Une relance « tu as bien reçu mon message ? » : elle répond, juste avec du retard."
-   ],
-   "chances": "moyenne",
-   "quand": "Aujourd'hui lundi 14/09 en fin de matinée.",
-   "repondu": {
-    "t": "mar. 15/09 10:19",
-    "x": "Hello! Tu as pu y jeter un œil ?\n\nBonne journée Julie 🙂"
-   }
-  },
-  {
-   "pseudo": "mkbeauty337",
-   "nom": "~ MK beauty ~",
-   "conv": "https://www.instagram.com/direct/t/340282366841710301244259258145651662866/",
-   "cat": "rep",
-   "non_lu": false,
-   "attente_jours": 2.13,
-   "profil_info": "Santé/beauté · 7012 abonnés · 93 publications · compte public · bio : MissEuropeContinental Madagascar  / MissEurope/Model photo / Prothésiste Ongulaire  / Tatoueuse / @topmodeleuropeofficia…",
-   "dernier": {
-    "t": "dim. 13/09 16:02",
-    "x": "En ce moment je suit plus focus sur ma marque et ma boutique en ligne ainsi que mes concours top model et Miss Europe continentale"
-   },
-   "fil": [
-    {
-     "w": "L",
-     "t": "jeu. 10/09 11:06",
-     "x": "Merci pour ton retour ! \n\nAh donc ce n’est pas ton activité principale, que fais-tu à côté? 😊\n\nBonne journée !"
-    },
-    {
-     "w": "P",
-     "t": "jeu. 10/09 13:46",
-     "x": "[vocal de ? s]"
-    },
-    {
-     "w": "P",
-     "t": "jeu. 10/09 13:46",
-     "x": "[vocal de ? s]"
-    },
-    {
-     "w": "L",
-     "t": "sam. 12/09 11:09",
-     "x": "Ah génial ça fait plaisir de voir cette ambition\nTu as l’air de faire plein de choses et c’est aussi lié autour du domaine ongulaire \n\nTu arrives à bien tout gérer en parallèle ? C’est quoi un peu ton challenge/défis principal pour développer tout ça en parallèle ?"
-    },
-    {
-     "w": "P",
-     "t": "dim. 13/09 11:30",
-     "x": "Je m'occupe de mes filles et je vous répond en suivant"
-    },
-    {
-     "w": "L",
-     "t": "dim. 13/09 13:24",
-     "x": "Pas de problèmes !"
-    },
-    {
-     "w": "P",
-     "t": "dim. 13/09 14:32",
-     "x": "Je suis la"
-    },
-    {
-     "w": "P",
-     "t": "dim. 13/09 16:02",
-     "x": "Du coup j'arrive a géré mais je fait pas tout , tout les jours"
-    },
-    {
-     "w": "P",
-     "t": "dim. 13/09 16:02",
-     "x": "En ce moment je suit plus focus sur ma marque et ma boutique en ligne ainsi que mes concours top model et Miss Europe continentale"
-    },
-    {
-     "w": "L",
-     "t": "lun. 14/09 09:34",
-     "x": "Ok je vois !\n\nC'est quoi ton objectif pour la marque et la boutique en ligne ? \n\nTu auras réussi si.... \n\nIntéressant d'avoir ton feedback"
-    }
-   ],
-   "vocaux": "2 vocalaux du lead (17 s et 49 s) : à écouter avant de répondre",
-   "categorie": "a_qualifier",
-   "priorite": 1,
-   "cible": "À qualifier : multi-activités (ongles, tatouage, modeling, boutique Shopify) mais rien dans le fil ne prouve encore qu'elle ait des salariés, donc risque réel de solo hors cible.",
-   "resume": "MK beauty, compte pro de 7 012 abonnés, se présente en bio comme prothésiste ongulaire, tatoueuse, modèle et Miss Europe Continental Madagascar, avec une boutique Shopify en lien. Elle a répondu à nos deux messages en quelques heures, chaleureusement et en tutoyant, puis a envoyé le jeudi 10/09 à 13h46 deux vocaux (17 s et 49 s) pour expliquer ce qu'elle fait à côté des ongles. Ces vocaux ne sont pas encore écoutés, elle attend depuis 1,4 jour et un setter l'a étiquetée lead chaud.",
-   "attend": "Que Lauric écoute vraiment ses deux vocaux et lui réponde dessus, puisqu'elle a pris 66 secondes pour raconter son parcours après avoir dit « avec plaisir de t'en dire plus et faire connaissance ».",
-   "objectif": "Savoir si des personnes travaillent avec elle ou si elle fait tout tourner seule, pour trancher cœur de cible ou hors cible avant de proposer le moindre appel.",
-   "format": "ecrit_et_vocal",
-   "reponse": "Tes deux vocaux, je les ai écoutés en entier 😊\n\n[détail de son vocal], ça m'a vraiment parlé.\n\nJe t'ai répondu en vocal juste au-dessus, c'était plus simple que d'écrire.\n\nTu fais tourner tout ça toute seule ou tu as des personnes qui travaillent avec toi ?",
-   "pourquoi": "Elle a choisi le vocal, lui répondre en vocal rend la pareille et prouve qu'on l'a écoutée au lieu de dérouler un script. Le message s'ouvre sur ses deux vocaux à elle, pas sur une excuse de retard : 1,4 jour ne justifie pas de commencer par se justifier, et l'excuse est gardée pour une autre conversation du lot. Le détail repris de ses mots rend le message impossible à confondre avec un modèle. La seule question reste à l'écrit, donc elle survit même si elle n'écoute pas le vocal tout de suite, et le mot « travaillent » est ce qui tranche entre une dirigeante avec équipe et une solo, sans jamais passer par le chiffre d'affaires. Ordre d'envoi : le vocal d'abord, le message écrit juste après.",
-   "vocal": "- Ouvrir sur ses deux vocaux : il les a écoutés en entier, c'est plus sympa que l'écrit\n- Réagir pour de vrai à [détail de son vocal], avec ses mots à elle, sans jamais réciter sa bio Instagram\n- Une phrase sur lui, pas un pitch : 10 ans directeur en banque, aujourd'hui il bosse tous les jours avec des patrons qui font tourner plusieurs trucs en même temps, c'est pour ça que son parcours l'intrigue\n- Ne pas s'excuser du délai, ça n'apporte rien ici et c'est réservé à une autre conversation du lot\n- Terminer sur une remarque, jamais sur une question : « je te pose une question juste en dessous »\n- Chaleureux et direct, 30 à 40 secondes, aucun diagnostic, aucune offre, aucun appel proposé",
-   "alternatives": [
-    {
-     "angle": "Écrit seul, si le vocal n'est pas enregistré (setter, ou Lauric pris le samedi)",
-     "texte": "Tes deux vocaux, je les ai écoutés en entier 😊\n\n[détail de son vocal], ça m'a vraiment parlé.\n\nMoi je bosse tous les jours avec des patrons qui font tourner plusieurs trucs en même temps, c'est pour ça que ton parcours m'intrigue.\n\nTu fais tourner tout ça toute seule ou tu as des personnes qui travaillent avec toi ?",
-     "pourquoi": "Même objectif de qualification sans dépendre d'un enregistrement. Comme il n'y a pas de vocal pour le porter, c'est l'écrit qui dit en une ligne qui est Lauric et pourquoi il pose la question : c'est sa troisième question d'affilée sur elle, et elle ne sait toujours rien de lui. La formule est volontairement concrète et non interchangeable avec celle des autres conversations du lot. La question reste binaire, elle a déjà répondu deux fois en moins de 2 heures."
-    },
-    {
-     "angle": "Créneau direct. À n'utiliser QUE si ses vocaux disent noir sur blanc qu'elle a des salariés ou des personnes qui travaillent pour elle, avec un enjeu daté. Dans tous les autres cas, ne pas l'envoyer et rester sur la réponse principale.",
-     "texte": "Tes deux vocaux, je les ai écoutés en entier 😊\n\n[détail de son vocal], tu es typiquement le genre d'entrepreneur que j'accompagne.\n\nOn se cale 20 min au téléphone, mardi 15 à 12h30 ou jeudi 17 à 18h ?",
-     "pourquoi": "Uniquement si la qualification est déjà faite par ses vocaux. Dans ce cas il faut proposer dans l'élan avec deux créneaux nommés : 5 créneaux précis proposés, 5 appels faits, alors qu'une question de dispo ouverte n'a jamais donné de date. La formule « typiquement le genre d'entrepreneur que j'accompagne » est celle de Lauric, elle situe sans rien promettre. Une fois le créneau accepté, lui demander son numéro pour appeler ou passer sur WhatsApp. Si le doute subsiste sur l'équipe, ce message est à jeter : c'est exactement le schéma qui a donné 4 appels avec des solos pour 0 vente."
-    }
-   ],
-   "si_silence": {
-    "delai": "3 jours après l'envoi réel : mardi 15/09 si le message part samedi 12, jeudi 17/09 s'il part lundi 14. Plutôt en soirée.",
-    "texte": "Hello ! 😊\n\nDis-moi juste un truc, en ce moment tu es plutôt en train de développer ou de tenir la charge ?"
-   },
-   "eviter": [
-    "Envoyer avant d'avoir écouté les deux vocaux en entier, ou remplacer le repère entre crochets par un inventaire de sa bio (prothésiste, tatouage, boutique, concours) : elle vient de répondre à cette question en vocal, elle verrait tout de suite qu'on ne l'a pas écoutée.",
-    "Ouvrir sur une excuse de retard : 1,4 jour ne le justifie pas, l'ouverture doit être ses deux vocaux, et l'excuse du délai est réservée à une autre conversation du lot.",
-    "Proposer un appel, le Calendly ou le Scan Dirigeant, et poser un diagnostic du type « tout repose sur toi », tant qu'elle n'a pas dit si des personnes travaillent avec elle : sur ce profil multi-casquettes le risque solo est élevé, et c'est exactement ce qui a donné 4 appels pour 0 vente.",
-    "Poser la question deux fois : elle ne vit qu'à l'écrit, le vocal se termine sans question. Et éviter le samedi en plein après-midi, jour de clientes sur ce métier : le vocal sera vu et jamais écouté. Tôt le samedi matin, en soirée, ou dimanche en fin de journée.",
-    "Reposer la même question mot pour mot en relance : si elle ne répond pas, on change d'angle, sinon ça sent le script."
-   ],
-   "chances": "haute",
-   "quand": "Samedi matin tôt, par Lauric lui-même, après écoute des deux vocaux",
-   "lauric_seul": true,
-   "repondu": {
-    "t": "lun. 14/09 09:34",
-    "x": "Ok je vois !\n\nC'est quoi ton objectif pour la marque et la boutique en ligne ? \n\nTu auras réussi si.... \n\nIntéressant d'avoir ton feedback"
-   }
-  },
-  {
    "pseudo": "le_majordom",
    "nom": "CONCIERGE PRIVATE 🇩🇿🇦🇪",
    "conv": "https://www.instagram.com/direct/t/340282366841710301244261152971186294829/",
    "cat": "rep",
    "non_lu": false,
-   "attente_jours": 4.34,
+   "attente_jours": 5.29,
    "profil_info": "44 abonnés · 15 publications · compte privé · bio : FROM 🇩🇿  /  Clefs d'or international 🗝️",
    "dernier": {
     "t": "ven. 11/09 10:59",
@@ -1858,12 +2320,83 @@
    }
   },
   {
+   "pseudo": "fairouzhamidat",
+   "nom": "Fairouz Hamidat",
+   "conv": "https://www.instagram.com/direct/t/340282366841710301244259284401162008256/",
+   "cat": "rep",
+   "profil_info": "232 abonnés · 1 publications · compte privé",
+   "fil": [
+    {
+     "w": "L",
+     "t": "mar. 15/09 15:42",
+     "x": "Hello Fairouz! J’ai vu que tu me suivais depuis un moment et je t’en remercie 😊\n\nJe vois que ton compte est en privé mais j’étais curieux de t’envoyer un message.\n\nTu es toi même cheffe d’entreprise ?"
+    },
+    {
+     "w": "P",
+     "t": "mar. 15/09 16:01",
+     "x": "Salut Lauric.\nC’est normal, il faut soutenir les anciens collègues.\n\nNon, je travaille pour un groupe."
+    },
+    {
+     "w": "L",
+     "t": "mar. 15/09 18:00",
+     "x": "Salut Fairouz, je vois que mon équipe t'a envoyé un message 😅\n\nÇa va sinon ? Ta reconversion ?"
+    },
+    {
+     "w": "P",
+     "t": "mar. 15/09 18:10",
+     "x": "Slt ca va et toi ?\nBah écoute oui, je suis fraîchement diplômée"
+    },
+    {
+     "w": "L",
+     "t": "mar. 15/09 20:20",
+     "x": "Bravo !"
+    }
+   ],
+   "dernier": {
+    "t": "mar. 15/09 18:10",
+    "x": "Slt ca va et toi ?\nBah écoute oui, je suis fraîchement diplômée"
+   },
+   "attente_jours": 0.99,
+   "non_lu": true,
+   "categorie": "hors_cible",
+   "priorite": 3,
+   "cible": "Hors cible : ancienne collègue de Lauric, salariée dans un groupe, fraîchement diplômée après une reconversion. Relation à entretenir.",
+   "resume": "Compte privé (232 abonnés, 1 publication). Le 15/09 à 15h42, message de l'équipe (« tu me suis depuis un moment… tu es cheffe d'entreprise ? »). Elle répond à 16h01 qu'il faut « soutenir les anciens collègues » et qu'elle travaille pour un groupe. À 18h00 Lauric reprend la main lui-même (« je vois que mon équipe t'a envoyé un message 😅, ta reconversion ? »). À 18h10 : « ça va et toi ? Bah écoute oui, je suis fraîchement diplômée ».",
+   "attend": "Une réponse à son « ça va et toi ? » et un mot sur son diplôme.",
+   "objectif": "Garder un échange naturel entre anciens collègues, sans rien vendre.",
+   "format": "ecrit",
+   "reponse": "Ça va super merci ! Et félicitations pour le diplôme 🎉\n\nC'est dans quel domaine finalement ? Tu as déjà un poste en vue ?",
+   "pourquoi": "Elle a répondu deux fois en moins de 20 minutes et pose une question : on répond, on félicite, et on la fait parler de sa reconversion. Aucune qualification, c'est une ancienne collègue qui a déjà dit qu'elle était salariée.",
+   "alternatives": [
+    {
+     "angle": "Plus court",
+     "texte": "Ça va super ! Félicitations pour le diplôme 🎉 C'est dans quel domaine ?",
+     "pourquoi": "Si Lauric répond depuis son téléphone entre deux rendez-vous."
+    }
+   ],
+   "si_silence": {
+    "delai": "Pas de relance : c'est une conversation entre anciens collègues.",
+    "texte": ""
+   },
+   "eviter": [
+    "Parler d'accompagnement ou du Scan Dirigeant : elle est salariée et en début de poste.",
+    "Revenir sur le message de l'équipe : Lauric s'en est déjà amusé."
+   ],
+   "chances": "haute",
+   "quand": "Ce soir mardi 15/09, elle est en ligne.",
+   "lauric_seul": true,
+   "repondu": {
+    "t": "mar. 15/09 20:20",
+    "x": "Bravo !"
+   }
+  },
+  {
    "pseudo": "paulenvraii",
    "nom": "Paul Barret",
    "conv": "https://www.instagram.com/direct/t/340282366841710301244259941742038465462/",
    "cat": "rep",
-   "non_lu": false,
-   "attente_jours": 0.04,
+   "non_lu": true,
+   "attente_jours": 0.98,
    "profil_info": "20276 abonnés · 29 publications · compte public · bio : On transforme ton contenu Instagram  / en machine à leads qualifiés réguliers (sans pub) / +50 indépendants accompagnés …",
    "dernier": {
     "t": "mar. 15/09 18:20",
@@ -1962,6 +2495,8 @@
   }
  ],
  "synthese": [
+  "Relevé du mercredi 16/09 en fin de journée : 10 nouvelles cartes et 4 mises à jour. Deux vrais prospects sont sortis de la campagne vers les anciens abonnés : Adann (directeur général d'une association de 30 salariés qui vise 100 puis 200) et Quentin (confirme être dirigeant). Ce sont les deux premières réponses à envoyer ce soir.",
+  "La relance de masse du 16/09 midi (« je me demandais simplement si tu avais bien reçu mon message ») a déjà fait répondre Nerry (traiteur, « je vais faire un effort »), Véronique, Cécile et Arnaud. Christophe, responsable d'équipe en banque, entre dans la seconde cible (managers salariés).",
   "Relevé du mardi 15/09 au soir : 8 nouvelles cartes. La campagne du 14-15/09 vers les anciens abonnés (« tu me suis depuis un moment… tu es chef d'entreprise ? ») a fait 27 envois et 5 réponses en 24 h, toutes de salariés ou de non-entrepreneurs (banque, employée, éducateur sportif, diplômée). Le message répond bien, mais il fait surtout remonter des abonnés hors cible : garder une réponse courte et chaleureuse pour eux, et poser tout de suite la question « tu encadres une équipe ? » aux salariés, c'est la seconde cible.",
   "Lauric a répondu à Julie (le_monde_de_rs) et à Paul (paulenvraii) depuis le dernier relevé. Loïc (camelia_by_loic, maison de thé, 4 collaborateurs) attend toujours une réponse depuis le 03/09 : c'est dans la To do de Lauric.",
   "Le lot ne contient qu'un seul vrai cœur de cible actif (abiaad_georges) et un deuxième déjà grillé par un pitch trop rapide (banibani_j et ses 14 ingénieurs, à réactiver le 1er octobre). En face : 4 profils à qualifier, 4 hors cible, 1 manager salarié, 1 partenaire, 1 vendeur qui prospecte Lauric, 1 échange terminé. Le problème de Lauric n'est pas la qualité de ses réponses, c'est le nombre de dirigeants avec salariés qui entrent dans la boîte.",

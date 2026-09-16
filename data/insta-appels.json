@@ -1,5 +1,5 @@
 {
-"releve": "15/09/2026",
+"releve": "16/09/2026",
 "analyse": [
 {
 "titre": "Les chiffres (relevé du 09/09, conversations depuis mars)",
@@ -383,7 +383,7 @@
 "t": "12/08/2026 15:34"
 },
 "complet": true,
-"nItems": 6,
+"nItems": 7,
 "propose": {
 "text": "Bjr Marie, \n\nJe te confirme notre visio du 17/09 ! \n\nAfin de rendre ce moment à grande valeur, pourrais-tu me donner les sujets prioritaires pour toi sur cette fin d'année ? \n\nBelle journée",
 "t": "09/09/2026 10:20",
@@ -441,6 +441,12 @@
 "t": "13/09/2026 20:26",
 "ty": "text",
 "x": "Hello Marie, on se voit jeudi 17. \n\nUne question rapide pour préparer : c'est quoi le sujet numéro un que tu veux régler d'ici la fin de l'année ?"
+},
+{
+"w": "L",
+"t": "16/09/2026 12:19",
+"ty": "text",
+"x": "Hello Marie, tu es là ?"
 }
 ],
 "recap": "Marie a liké l'ancien script le 14/08, scan envoyé le 18/08. Un premier rendez-vous était calé le 27/08 à 14h30, puis la visio a été refixée au 17/09. Le 09/09 Lauric confirme la visio et demande ses sujets prioritaires pour la fin d'année : message pas encore ouvert. Le 13/09, Lauric relance avec une question courte sur son sujet prioritaire pour le jeudi 17 : pas encore de réponse.",
@@ -778,7 +784,7 @@
 "t": "15/08/2026 18:48"
 },
 "complet": true,
-"nItems": 17,
+"nItems": 19,
 "propose": {
 "text": "Avec plaisir pour parler de tes enjeux et défis futurs à relever. \n\nC’est exactement le sens de mon cabinet : accompagner des entrepreneurs pour qu’ils puissent continuer de développer leur business rentable et le plus autonome possible pour respecter leur vie personnelle également. \n\nC’est cet équilibre qui permet de durer !\n\nSi ça te parle, je suis certain que tu trouveras du temps pour qu’on puisse échanger ensemble et trouver des solutions concrètes 😊\n\nTu aurais une disponibilité même en soirée cette semaine?",
 "t": "31/08/2026 09:26",
@@ -792,12 +798,12 @@
 "jours": 15.6
 },
 "apres": {
-"repondu": 0,
-"texte": "",
-"t": "",
+"repondu": 1,
+"texte": "Slt \n\nOulala \nJ étais vraiment trop pris mon ami \nMais je vais faire un effort",
+"t": "16/09/2026 12:33",
 "vu": false
 },
-"issue": "nonvu",
+"issue": "discussion",
 "booked": [],
 "conv": "https://www.instagram.com/direct/t/340282366841710301244259228003164227490/",
 "msgs": [
@@ -902,6 +908,18 @@
 "t": "07/09/2026 21:46",
 "ty": "reel_share",
 "x": "J’ai hâte de voir ça !"
+},
+{
+"w": "L",
+"t": "16/09/2026 12:25",
+"ty": "text",
+"x": "Hello ! J’attends toujours ton retour, tu es typiquement le type de personnes que j’accompagne donc c’est toujours intéressant de comprendre quels sont les problématiques des entrepreneurs de la communauté 😊"
+},
+{
+"w": "P",
+"t": "16/09/2026 12:33",
+"ty": "text",
+"x": "Slt \n\nOulala \nJ étais vraiment trop pris mon ami \nMais je vais faire un effort"
 }
 ],
 "recap": "Traiteur qui dirige des équipes et fait de la promotion immobilière à l'étranger. A dit deux fois qu'il est débordé, décroche à la salle de sport. Il envoie un vocal le 31/08 à 0h37 ; la réponse est un pavé de 8 lignes sur le cabinet qui finit par « une disponibilité même en soirée cette semaine ? ». Jamais ouvert depuis.",
