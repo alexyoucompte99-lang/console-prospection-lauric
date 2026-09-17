@@ -8,7 +8,7 @@ préparer un premier message personnalisé pour ceux qui ne l'ont pas été, et 
 ## Fichier de sortie : data/abonnes.csv
 
 Colonnes (en-tête exact, ordre exact) :
-`Pseudo,Nom,Detecte,Profil,Cible,Message propose,Contacte,Date contact,Message envoye,Statut,Conv,Releve,Type`
+`Pseudo,Nom,Detecte,Profil,Cible,Message propose,Contacte,Date contact,Message envoye,Statut,Conv,Releve,Type,Abonne le,Premier message le`
 
 - Pseudo : identifiant Insta sans @. Clé unique : ne jamais dupliquer une ligne.
 - Nom : nom affiché (sinon le pseudo).
@@ -22,6 +22,8 @@ Colonnes (en-tête exact, ordre exact) :
 - Statut : `envoye` (pas vu), `vu`, `reagi` (❤️), `repondu`, sinon vide.
 - Conv : URL `https://www.instagram.com/direct/t/<id>/` si connue, sinon vide.
 - Releve : jj/mm/aaaa du dernier passage qui a vérifié cette ligne.
+- Abonne le : jj/mm/aaaa hh:mm exacts de l'abonnement, lus dans les notifications Instagram (17/09/2026, `reactivite.py --notif`). Vide pour les abonnés plus anciens que 5 jours au moment du relevé.
+- Premier message le : jj/mm/aaaa hh:mm du premier message de notre côté dans la conversation (`reactivite.py`). Antérieur à « Abonne le » = déjà en conversation avant l'abonnement.
 
 Les anciennes lignes sont CONSERVÉES et mises à jour (Contacte / Date / Message / Statut / Conv / Releve).
 Une ligne passée à `oui` ne repasse jamais à `non`. Écrire le CSV avec le module `csv` de Python

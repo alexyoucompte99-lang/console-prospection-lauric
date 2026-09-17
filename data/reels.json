@@ -1,33 +1,33 @@
 {
- "releve": "15/09/2026 20h50",
+ "releve": "17/09/2026 16h40",
  "periode": {
   "du": "2026-07-16",
   "au": "2026-09-15"
  },
  "stats": {
-  "n_publications": 60,
-  "n_reels": 60,
+  "n_publications": 61,
+  "n_reels": 61,
   "n_autres": 0,
-  "mediane_vues": 864.5,
-  "moyenne_vues": 3262,
+  "mediane_vues": 917,
+  "moyenne_vues": 3359,
   "top_vues": 37746,
-  "eng_median": 0.98,
-  "x2": 19
+  "eng_median": 0.97,
+  "x2": 20
  },
  "facteurs": {
   "n_top": 14,
-  "n_reste": 44,
-  "seuil_top": 2314,
+  "n_reste": 45,
+  "seuil_top": 2358,
   "duree": [
    null,
    null
   ],
   "eng": [
-   0.885,
-   1.025
+   0.91,
+   1.0
   ],
   "comm_1k": [
-   0.05,
+   0.1,
    0.0
   ],
   "longueur": null,
@@ -44,8 +44,8 @@
    3
   ],
   "accroche_chiffre": [
-   8,
-   32
+   17,
+   31
   ],
   "collab": [
    null,
@@ -56,24 +56,24 @@
    "vendredi",
    "mercredi",
    "mercredi",
-   "vendredi",
+   "lundi",
    "vendredi",
    "lundi",
+   "vendredi",
    "mercredi",
    "mercredi",
    "jeudi",
    "mardi",
    "mardi",
-   "mercredi",
-   "jeudi"
+   "mercredi"
   ],
   "par_sujet": [
    {
     "nom": "tension de dirigeant",
-    "n": 12,
-    "mediane": 6319.0,
+    "n": 13,
+    "mediane": 7110,
     "max": 37746,
-    "au_dessus_2000": 9
+    "au_dessus_2000": 10
    },
    {
     "nom": "équipe et recrutement",
@@ -134,18 +134,18 @@
     "au_dessus_2000": 6
    },
    {
+    "nom": "face caméra",
+    "n": 16,
+    "mediane": 518.0,
+    "max": 7867,
+    "au_dessus_2000": 4
+   },
+   {
     "nom": "face caméra au micro",
     "n": 8,
     "mediane": 476.5,
     "max": 32224,
     "au_dessus_2000": 2
-   },
-   {
-    "nom": "face caméra",
-    "n": 15,
-    "mediane": 453,
-    "max": 3081,
-    "au_dessus_2000": 3
    },
    {
     "nom": "visio / témoignage",
@@ -158,6 +158,7 @@
  },
  "analyse": {
   "resume": [
+   "<b>Point du 17/09 : la semaine a doublé les vues</b> (41 500 vues sur 7 jours contre 18 200 la semaine d'avant, 14 956 le 16/09, meilleur jour depuis le 25/08). Les 3 meilleurs contenus reprennent la recette gagnante, une tension de dirigeant : « Le salarié qui râle tout le temps, ne lui dis jamais arrête de râler mais tu proposes quoi ? » (13 000 vues le 16/09), « Steve Jobs ne parle pas pendant 25 secondes » (7 900 vues le 14/09) et « C'est quoi ces clients qui parlent mal à tes salariés ? » (3 300 vues le 16/09). Les deux du 16/09 et celui du 13/09 (« ta charge mentale explose à cause de ça », 1 800 vues) n'apparaissent pas dans l'onglet Reels du profil : ce sont sans doute des Reels d'essai, montrés d'abord aux non-abonnés. Résultat : 44 abonnements en 5 jours, dont 24 en moins de 24 h.",
    "<b>Le sujet fait les vues, pas le décor.</b> Les Reels sur une tension que vit tout dirigeant (être aimé ou respecté, les critiques, garder son calme quand l'équipe craque, la charge mentale) font <b>6 300 vues en médiane</b>. Les conseils généraux (« le secret #1 », « l'erreur #1 », « le bon mindset ») font <b>425 vues</b> : 15 fois moins.",
    "<b>Les 3 idées gagnantes ont été publiées deux fois et ont marché les deux fois</b> : elles font 6 des 8 meilleurs Reels. Refaire un gagnant avec une nouvelle accroche rapporte plus qu'une idée neuve.",
    "<b>À corriger tout de suite</b> : septembre est retombé à 676 vues en médiane (1 217 en juillet-août) avec surtout des conseils face caméra, et presque aucun Reel ne demande une action simple. Chaque Reel doit finir par un mot-clé à commenter, relié à ManyChat."
@@ -319,8 +320,8 @@
    "date": "2026-09-15",
    "heure": "16:45",
    "jour": "mardi",
-   "age": 0,
-   "vues": 177,
+   "age": 2,
+   "vues": 259,
    "likes": null,
    "comms": null,
    "partages": null,
@@ -339,7 +340,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.2,
+   "x_med": 0.28,
    "recent": true
   },
   {
@@ -349,8 +350,8 @@
    "date": "2026-09-14",
    "heure": "19:05",
    "jour": "lundi",
-   "age": 1,
-   "vues": 205,
+   "age": 2,
+   "vues": 350,
    "likes": null,
    "comms": null,
    "partages": null,
@@ -369,8 +370,38 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.24,
+   "x_med": 0.38,
    "recent": true
+  },
+  {
+   "code": "DdRKTO7INAP",
+   "url": "https://www.instagram.com/reel/DdRKTO7INAP/",
+   "type": "reel",
+   "date": "2026-09-14",
+   "heure": "14:42",
+   "jour": "lundi",
+   "age": 3,
+   "vues": 7867,
+   "likes": null,
+   "comms": null,
+   "partages": null,
+   "enreg": null,
+   "duree": null,
+   "eng": null,
+   "comm_1k": null,
+   "accroche": "Steve Jobs ne parle pas pendant 25 secondes",
+   "legende": "",
+   "longueur": 0,
+   "hashtags": 0,
+   "format": "face caméra",
+   "sujet": "tension de dirigeant",
+   "cta": "",
+   "mot": "",
+   "cover": "",
+   "audio": "",
+   "collab": [],
+   "x_med": 8.58,
+   "recent": false
   },
   {
    "code": "DdJrKBSs3_b",
@@ -379,8 +410,8 @@
    "date": "2026-09-11",
    "heure": "16:55",
    "jour": "vendredi",
-   "age": 4,
-   "vues": 870,
+   "age": 6,
+   "vues": 925,
    "likes": null,
    "comms": null,
    "partages": null,
@@ -409,8 +440,8 @@
    "date": "2026-09-11",
    "heure": "14:04",
    "jour": "vendredi",
-   "age": 4,
-   "vues": 676,
+   "age": 6,
+   "vues": 720,
    "likes": null,
    "comms": null,
    "partages": null,
@@ -429,7 +460,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.78,
+   "x_med": 0.79,
    "recent": false
   },
   {
@@ -439,8 +470,8 @@
    "date": "2026-09-10",
    "heure": "22:26",
    "jour": "jeudi",
-   "age": 4,
-   "vues": 935,
+   "age": 6,
+   "vues": 981,
    "likes": null,
    "comms": null,
    "partages": null,
@@ -459,7 +490,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 1.08,
+   "x_med": 1.07,
    "recent": false
   },
   {
@@ -469,8 +500,8 @@
    "date": "2026-09-10",
    "heure": "16:00",
    "jour": "jeudi",
-   "age": 5,
-   "vues": 294,
+   "age": 7,
+   "vues": 329,
    "likes": null,
    "comms": null,
    "partages": null,
@@ -489,7 +520,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.34,
+   "x_med": 0.36,
    "recent": false
   },
   {
@@ -499,8 +530,8 @@
    "date": "2026-09-10",
    "heure": "15:26",
    "jour": "jeudi",
-   "age": 5,
-   "vues": 868,
+   "age": 7,
+   "vues": 917,
    "likes": null,
    "comms": null,
    "partages": null,
@@ -529,8 +560,8 @@
    "date": "2026-09-10",
    "heure": "12:33",
    "jour": "jeudi",
-   "age": 5,
-   "vues": 3231,
+   "age": 7,
+   "vues": 3278,
    "likes": null,
    "comms": null,
    "partages": null,
@@ -549,7 +580,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 3.74,
+   "x_med": 3.57,
    "recent": false
   },
   {
@@ -559,8 +590,8 @@
    "date": "2026-09-09",
    "heure": "20:16",
    "jour": "mercredi",
-   "age": 6,
-   "vues": 342,
+   "age": 7,
+   "vues": 365,
    "likes": null,
    "comms": null,
    "partages": null,
@@ -589,8 +620,8 @@
    "date": "2026-09-07",
    "heure": "14:26",
    "jour": "lundi",
-   "age": 8,
-   "vues": 6538,
+   "age": 10,
+   "vues": 7258,
    "likes": null,
    "comms": null,
    "partages": null,
@@ -609,7 +640,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 7.56,
+   "x_med": 7.91,
    "recent": false
   },
   {
@@ -619,8 +650,8 @@
    "date": "2026-09-06",
    "heure": "19:11",
    "jour": "dimanche",
-   "age": 9,
-   "vues": 344,
+   "age": 10,
+   "vues": 364,
    "likes": null,
    "comms": null,
    "partages": null,
@@ -649,8 +680,8 @@
    "date": "2026-09-05",
    "heure": "11:07",
    "jour": "samedi",
-   "age": 10,
-   "vues": 2032,
+   "age": 12,
+   "vues": 2057,
    "likes": null,
    "comms": null,
    "partages": null,
@@ -669,7 +700,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 2.35,
+   "x_med": 2.24,
    "recent": false
   },
   {
@@ -679,14 +710,14 @@
    "date": "2026-09-05",
    "heure": "10:36",
    "jour": "samedi",
-   "age": 10,
-   "vues": 257,
+   "age": 12,
+   "vues": 278,
    "likes": 2,
    "comms": 0,
    "partages": null,
    "enreg": null,
    "duree": null,
-   "eng": 0.78,
+   "eng": 0.72,
    "comm_1k": 0.0,
    "accroche": "Un entrepreneur doit avoir cette discipline pour réussir",
    "legende": "",
@@ -709,14 +740,14 @@
    "date": "2026-09-04",
    "heure": "15:16",
    "jour": "vendredi",
-   "age": 11,
-   "vues": 703,
+   "age": 13,
+   "vues": 739,
    "likes": 5,
    "comms": 0,
    "partages": null,
    "enreg": null,
    "duree": null,
-   "eng": 0.71,
+   "eng": 0.68,
    "comm_1k": 0.0,
    "accroche": "Fais attention à ne pas tomber dans le piège",
    "legende": "",
@@ -739,14 +770,14 @@
    "date": "2026-09-02",
    "heure": "17:40",
    "jour": "mercredi",
-   "age": 13,
-   "vues": 613,
+   "age": 14,
+   "vues": 628,
    "likes": 6,
    "comms": 0,
    "partages": null,
    "enreg": null,
    "duree": null,
-   "eng": 0.98,
+   "eng": 0.96,
    "comm_1k": 0.0,
    "accroche": "L'erreur qui vous coûte votre légitimité",
    "legende": "",
@@ -759,7 +790,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.71,
+   "x_med": 0.68,
    "recent": false
   },
   {
@@ -769,7 +800,7 @@
    "date": "2026-09-02",
    "heure": "14:16",
    "jour": "mercredi",
-   "age": 13,
+   "age": 15,
    "vues": 364,
    "likes": 4,
    "comms": 0,
@@ -789,7 +820,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.42,
+   "x_med": 0.4,
    "recent": false
   },
   {
@@ -799,7 +830,7 @@
    "date": "2026-09-02",
    "heure": "14:13",
    "jour": "mercredi",
-   "age": 13,
+   "age": 15,
    "vues": 350,
    "likes": 6,
    "comms": 0,
@@ -819,7 +850,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.4,
+   "x_med": 0.38,
    "recent": false
   },
   {
@@ -829,7 +860,7 @@
    "date": "2026-08-31",
    "heure": "17:44",
    "jour": "lundi",
-   "age": 15,
+   "age": 16,
    "vues": 336,
    "likes": 4,
    "comms": 0,
@@ -849,7 +880,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.39,
+   "x_med": 0.37,
    "recent": false
   },
   {
@@ -859,7 +890,7 @@
    "date": "2026-08-31",
    "heure": "11:01",
    "jour": "lundi",
-   "age": 15,
+   "age": 17,
    "vues": 369,
    "likes": 7,
    "comms": 0,
@@ -879,7 +910,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.43,
+   "x_med": 0.4,
    "recent": false
   },
   {
@@ -889,7 +920,7 @@
    "date": "2026-08-29",
    "heure": "09:33",
    "jour": "samedi",
-   "age": 17,
+   "age": 19,
    "vues": 408,
    "likes": 4,
    "comms": 0,
@@ -909,7 +940,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.47,
+   "x_med": 0.44,
    "recent": false
   },
   {
@@ -919,7 +950,7 @@
    "date": "2026-08-27",
    "heure": "16:41",
    "jour": "jeudi",
-   "age": 19,
+   "age": 21,
    "vues": 2314,
    "likes": 19,
    "comms": 0,
@@ -939,7 +970,7 @@
    "cover": "https://instagram.frak2-2.fna.fbcdn.net/v/t51.82787-15/780443409_17899147437574835_7538185065821171888_n.jpg?stp=dst-jpg_e15_p640x640_tt6&_nc_cat=104&_nc_map=urlgen_bucketless&ig_cache_key=Mzk3MzAyNjI5MDYyOTY4NTEzOTE3ODk5MTQ3NDM0NTc0ODM1.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjcyMC5zZHIudmlkZW9fdXNlcl9zZWxlY3RlZF90aHVtYm5haWwuQzMifQ%3D%3D&_nc_ohc=Asp7tpzmlEsQ7kNvwHi51Vt&_nc_oc=AdoGx1w_bUcalyjqLwzGBlt-S3iVVJhKh_7sd-nP-c_d_JeQsK5kQVhXIUW13CwTxb0&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.frak2-2.fna&_nc_gid=vgMdDseC5wSS7q69aJhI7w&_nc_ss=7a22e&oh=00_AQKifFpio2_x3FuFsjXCZmgTOrbnZqKidnmgnM8-vu2paA&oe=6AAF604A",
    "audio": "",
    "collab": [],
-   "x_med": 2.68,
+   "x_med": 2.52,
    "recent": false
   },
   {
@@ -949,7 +980,7 @@
    "date": "2026-08-26",
    "heure": "13:47",
    "jour": "mercredi",
-   "age": 20,
+   "age": 22,
    "vues": 6100,
    "likes": 46,
    "comms": 0,
@@ -969,7 +1000,7 @@
    "cover": "https://instagram.frak2-2.fna.fbcdn.net/v/t51.82787-15/783508971_17898989640574835_2626257999649893841_n.jpg?stp=dst-jpg_e35_p640x640_sh2.08_tt6&_nc_cat=108&_nc_map=urlgen_bucketless&ig_cache_key=Mzk3MjIxMzkxNjA5NjEzNzI1MDE3ODk4OTg5NjM0NTc0ODM1.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjEyMDYuc2RyLnZpZGVvX3VzZXJfc2VsZWN0ZWRfdGh1bWJuYWlsLkMzIn0%3D&_nc_ohc=NX7gjdaKoEMQ7kNvwEp02Q1&_nc_oc=AdpWd9PkXvSm9VyGe2Nh41_e6MsNfCgsAV82X_nQqFsflfzZDa2QRVGUBTtzV5nuBU8&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.frak2-2.fna&_nc_gid=Da3PuGXmDQs_s09tS385GA&_nc_ss=7a22e&oh=00_AQLk-9NO7EBM_kA6dT4o2FTzzb_NxR2LzFuq1wR4-9GaiQ&oe=6AAF487C",
    "audio": "",
    "collab": [],
-   "x_med": 7.06,
+   "x_med": 6.65,
    "recent": false
   },
   {
@@ -979,7 +1010,7 @@
    "date": "2026-08-25",
    "heure": "18:56",
    "jour": "mardi",
-   "age": 21,
+   "age": 22,
    "vues": 424,
    "likes": 12,
    "comms": 0,
@@ -999,7 +1030,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.49,
+   "x_med": 0.46,
    "recent": false
   },
   {
@@ -1009,7 +1040,7 @@
    "date": "2026-08-25",
    "heure": "12:23",
    "jour": "mardi",
-   "age": 21,
+   "age": 23,
    "vues": 37746,
    "likes": 182,
    "comms": 2,
@@ -1029,7 +1060,7 @@
    "cover": "https://instagram.frak2-1.fna.fbcdn.net/v/t51.82787-15/785905175_17898830436574835_9048270785152138686_n.jpg?stp=dst-jpg_e15_p640x640_tt6&_nc_cat=108&_nc_map=urlgen_bucketless&ig_cache_key=Mzk3MTQ0NzM0NjI3OTE4MjA2MDE3ODk4ODMwNDMwNTc0ODM1.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjcyMC5zZHIudmlkZW9fdXNlcl9zZWxlY3RlZF90aHVtYm5haWwuQzMifQ%3D%3D&_nc_ohc=oP_KUM7WTioQ7kNvwFsvPsz&_nc_oc=AdpADELaAJ8iAuPyRPBXTqzM9sgFYxXdHf1IUg1aLEX5UzEvktr2zBzI0vn2lzN1Oko&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.frak2-1.fna&_nc_gid=Da3PuGXmDQs_s09tS385GA&_nc_ss=7a22e&oh=00_AQLMw6SGhrnJK91Ir04UtdDppgmnxqB6fym22zJ3UZAeig&oe=6AAF56C5",
    "audio": "",
    "collab": [],
-   "x_med": 43.66,
+   "x_med": 41.16,
    "recent": false
   },
   {
@@ -1039,7 +1070,7 @@
    "date": "2026-08-24",
    "heure": "17:47",
    "jour": "lundi",
-   "age": 22,
+   "age": 23,
    "vues": 2073,
    "likes": 15,
    "comms": 0,
@@ -1059,7 +1090,7 @@
    "cover": "https://instagram.frak1-2.fna.fbcdn.net/v/t51.71878-15/782616369_2545891679189334_5873318089103524493_n.jpg?stp=dst-jpg_e15_tt6&_nc_cat=105&_nc_map=urlgen_bucketless&ig_cache_key=Mzk3MDg4NTUzMTQ1NzYyNDE3Ng%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjY0MC5zZHIudmlkZW9fZmlyc3RfZnJhbWVfdGh1bWJuYWlsLkMzIn0%3D&_nc_ohc=dxc6INsA6BcQ7kNvwGAHt4z&_nc_oc=Adr5BHkg3u3qu7WX4w8kvVmAaU7nS_6cre7lB3dnYkZ0cF3oC9BYp4U0Nrbdg18Hcpc&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.frak1-2.fna&_nc_gid=nn2FpeJllu1E0HlG5-SLbw&_nc_ss=7a22e&oh=00_AQJpC0PBJJyKJZ8zOywKhI4PysnnK1XM4u8M7kW3GaCWoA&oe=6AAF7721",
    "audio": "",
    "collab": [],
-   "x_med": 2.4,
+   "x_med": 2.26,
    "recent": false
   },
   {
@@ -1069,7 +1100,7 @@
    "date": "2026-08-23",
    "heure": "09:44",
    "jour": "dimanche",
-   "age": 23,
+   "age": 25,
    "vues": 358,
    "likes": 7,
    "comms": 1,
@@ -1089,7 +1120,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.41,
+   "x_med": 0.39,
    "recent": false
   },
   {
@@ -1099,7 +1130,7 @@
    "date": "2026-08-19",
    "heure": "18:51",
    "jour": "mercredi",
-   "age": 27,
+   "age": 28,
    "vues": 8244,
    "likes": 88,
    "comms": 3,
@@ -1119,7 +1150,7 @@
    "cover": "https://instagram.frak2-1.fna.fbcdn.net/v/t51.82787-15/778735642_17897949066574835_4211390032347661117_n.jpg?stp=dst-jpg_e15_p640x640_tt6&_nc_cat=103&_nc_map=urlgen_bucketless&ig_cache_key=Mzk2NzI5Mzk4NTQ3MjYwNDcwMDE3ODk3OTQ5MDYwNTc0ODM1.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjcyMC5zZHIudmlkZW9fdXNlcl9zZWxlY3RlZF90aHVtYm5haWwuQzMifQ%3D%3D&_nc_ohc=hWeCsBKZ9z4Q7kNvwEVHJC2&_nc_oc=AdoJSbeVo8Dv2C4UhzmKPgbRQ3m82dEfFi9PAvvXrbcT2bO7HXkYFRul7kOT16kI2k4&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.frak2-1.fna&_nc_gid=nn2FpeJllu1E0HlG5-SLbw&_nc_ss=7a22e&oh=00_AQJl2ji32yygyKOmYCDEPN7N7yC32twC2B2KqnbHFBm0jQ&oe=6AAF713A",
    "audio": "",
    "collab": [],
-   "x_med": 9.54,
+   "x_med": 8.99,
    "recent": false
   },
   {
@@ -1129,7 +1160,7 @@
    "date": "2026-08-14",
    "heure": "17:19",
    "jour": "vendredi",
-   "age": 32,
+   "age": 33,
    "vues": 32224,
    "likes": 954,
    "comms": 24,
@@ -1149,7 +1180,7 @@
    "cover": "https://instagram.frak1-2.fna.fbcdn.net/v/t51.82787-15/773509067_17896876689574835_935931599793298371_n.jpg?stp=dst-jpg_e35_p640x640_sh2.08_tt6&_nc_cat=109&_nc_map=urlgen_bucketless&ig_cache_key=Mzk2MzYyMzMzMjQ0OTk4MjIyNDE3ODk2ODc2NjgzNTc0ODM1.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjEyMDYuc2RyLnZpZGVvX3VzZXJfc2VsZWN0ZWRfdGh1bWJuYWlsLkMzIn0%3D&_nc_ohc=LKl_Ha_rXdwQ7kNvwFQ-Jn0&_nc_oc=AdpJlvriGO2_t_cAGeDlplZDYfO9e_Bk4I-LsvUKmJk0GY0lCWbHnvGyQRRcEepMtbA&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.frak1-2.fna&_nc_gid=nn2FpeJllu1E0HlG5-SLbw&_nc_ss=7a22e&oh=00_AQKt5GqYlDeZOPj3kK6BEGMM3dn8mn9rMhZ4V32jbvqR0Q&oe=6AAF7FFF",
    "audio": "",
    "collab": [],
-   "x_med": 37.27,
+   "x_med": 35.14,
    "recent": false
   },
   {
@@ -1159,7 +1190,7 @@
    "date": "2026-08-14",
    "heure": "17:15",
    "jour": "vendredi",
-   "age": 32,
+   "age": 33,
    "vues": 1217,
    "likes": 8,
    "comms": 0,
@@ -1179,7 +1210,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 1.41,
+   "x_med": 1.33,
    "recent": false
   },
   {
@@ -1189,7 +1220,7 @@
    "date": "2026-08-14",
    "heure": "17:05",
    "jour": "vendredi",
-   "age": 32,
+   "age": 33,
    "vues": 496,
    "likes": 8,
    "comms": 1,
@@ -1209,7 +1240,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.57,
+   "x_med": 0.54,
    "recent": false
   },
   {
@@ -1219,7 +1250,7 @@
    "date": "2026-08-14",
    "heure": "16:40",
    "jour": "vendredi",
-   "age": 32,
+   "age": 34,
    "vues": 531,
    "likes": 4,
    "comms": 0,
@@ -1239,7 +1270,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.61,
+   "x_med": 0.58,
    "recent": false
   },
   {
@@ -1249,7 +1280,7 @@
    "date": "2026-08-14",
    "heure": "14:47",
    "jour": "vendredi",
-   "age": 32,
+   "age": 34,
    "vues": 838,
    "likes": 10,
    "comms": 0,
@@ -1269,7 +1300,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.97,
+   "x_med": 0.91,
    "recent": false
   },
   {
@@ -1279,7 +1310,7 @@
    "date": "2026-08-12",
    "heure": "19:25",
    "jour": "mercredi",
-   "age": 34,
+   "age": 35,
    "vues": 437,
    "likes": 9,
    "comms": 2,
@@ -1299,7 +1330,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.51,
+   "x_med": 0.48,
    "recent": false
   },
   {
@@ -1309,7 +1340,7 @@
    "date": "2026-08-12",
    "heure": "15:12",
    "jour": "mercredi",
-   "age": 34,
+   "age": 36,
    "vues": 468,
    "likes": 4,
    "comms": 0,
@@ -1329,7 +1360,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.54,
+   "x_med": 0.51,
    "recent": false
   },
   {
@@ -1339,7 +1370,7 @@
    "date": "2026-08-12",
    "heure": "15:08",
    "jour": "mercredi",
-   "age": 34,
+   "age": 36,
    "vues": 771,
    "likes": 3,
    "comms": 4,
@@ -1359,7 +1390,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.89,
+   "x_med": 0.84,
    "recent": false
   },
   {
@@ -1369,7 +1400,7 @@
    "date": "2026-08-11",
    "heure": "13:30",
    "jour": "mardi",
-   "age": 35,
+   "age": 37,
    "vues": 485,
    "likes": 2,
    "comms": 0,
@@ -1389,7 +1420,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.56,
+   "x_med": 0.53,
    "recent": false
   },
   {
@@ -1399,7 +1430,7 @@
    "date": "2026-08-10",
    "heure": "19:11",
    "jour": "lundi",
-   "age": 36,
+   "age": 37,
    "vues": 1599,
    "likes": 16,
    "comms": 0,
@@ -1419,7 +1450,7 @@
    "cover": "https://instagram.frak1-1.fna.fbcdn.net/v/t51.82787-15/772020724_17896222986574835_1247375487509397324_n.jpg?stp=dst-jpg_e15_p640x640_tt6&_nc_cat=108&_nc_map=urlgen_bucketless&ig_cache_key=Mzk2MDc4MDg2Mzc2MDg0MDkzNjE3ODk2MjIyOTgzNTc0ODM1.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjcyMC5zZHIudmlkZW9fdXNlcl9zZWxlY3RlZF90aHVtYm5haWwuQzMifQ%3D%3D&_nc_ohc=9fHJsof1pfwQ7kNvwHRYOUX&_nc_oc=AdoRSYK_X8ox3HchlwLWHd3M62nAPQJGqvTQ0RfV-zS2baWHAI1X-BRWsHiaLlG3HvM&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.frak1-1.fna&_nc_gid=k5D1zuz1e9ovj8HBOzuSTg&_nc_ss=7a22e&oh=00_AQL8ltR4t8uQCT9gdiXcbTZffHZ7mhSPlOGvJiDFVUINKA&oe=6AAF7799",
    "audio": "",
    "collab": [],
-   "x_med": 1.85,
+   "x_med": 1.74,
    "recent": false
   },
   {
@@ -1429,7 +1460,7 @@
    "date": "2026-08-09",
    "heure": "20:31",
    "jour": "dimanche",
-   "age": 37,
+   "age": 38,
    "vues": 635,
    "likes": 5,
    "comms": 0,
@@ -1449,7 +1480,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.73,
+   "x_med": 0.69,
    "recent": false
   },
   {
@@ -1459,7 +1490,7 @@
    "date": "2026-08-05",
    "heure": "16:30",
    "jour": "mercredi",
-   "age": 41,
+   "age": 43,
    "vues": 2117,
    "likes": 23,
    "comms": 3,
@@ -1479,7 +1510,7 @@
    "cover": "https://instagram.frak1-2.fna.fbcdn.net/v/t51.82787-15/766494937_17895381063574835_5163241275869617365_n.jpg?stp=dst-jpg_e35_p640x640_sh2.08_tt6&_nc_cat=107&_nc_map=urlgen_bucketless&ig_cache_key=Mzk1NzA3NTcyNTc0MTIxNjkwMDE3ODk1MzgxMDYwNTc0ODM1.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjEyMDYuc2RyLnZpZGVvX2RlZmF1bHRfY292ZXJfZnJhbWUuQzMifQ%3D%3D&_nc_ohc=Xl2tbJ29PkkQ7kNvwFX3Fc1&_nc_oc=Ado65R-4pBcQ5VlDTC3H_HiyJrC43TBPl-r7fpywA69TwurH0HoRNqipojghLDLkHug&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.frak1-2.fna&_nc_gid=k5D1zuz1e9ovj8HBOzuSTg&_nc_ss=7a22e&oh=00_AQKr-Ms3FNhnvBgV4pBks5LRrGZIsBOyibO75EiEjreiZw&oe=6AAF617B",
    "audio": "",
    "collab": [],
-   "x_med": 2.45,
+   "x_med": 2.31,
    "recent": false
   },
   {
@@ -1489,7 +1520,7 @@
    "date": "2026-07-31",
    "heure": "19:16",
    "jour": "vendredi",
-   "age": 46,
+   "age": 47,
    "vues": 7352,
    "likes": 49,
    "comms": 1,
@@ -1509,7 +1540,7 @@
    "cover": "https://instagram.frak2-2.fna.fbcdn.net/v/t51.82787-15/759871578_17894505705574835_8014796173633474354_n.jpg?stp=dst-jpg_e15_p640x640_tt6&_nc_cat=100&_nc_map=urlgen_bucketless&ig_cache_key=Mzk1MzUzNTcyNzU5NzU4NjA3NjE3ODk0NTA1Njk5NTc0ODM1.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjcyMC5zZHIudmlkZW9fZGVmYXVsdF9jb3Zlcl9mcmFtZS5DMyJ9&_nc_ohc=VYbvLNNHqK0Q7kNvwHHJhGt&_nc_oc=AdqFGykFQNqjskD1eKg-005jDUDH7bCCEWEJ67gt3DNyI-A7cO0igV0kaKNPRjd3lGU&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.frak2-2.fna&_nc_gid=B68N4x0FCSfSduI3Te7fJw&_nc_ss=7a22e&oh=00_AQI_06fqQnLPuGCjqEqBM8NskAkCdvolsQc5OUCt8xG9qA&oe=6AAF61BA",
    "audio": "",
    "collab": [],
-   "x_med": 8.5,
+   "x_med": 8.02,
    "recent": false
   },
   {
@@ -1519,7 +1550,7 @@
    "date": "2026-07-31",
    "heure": "19:15",
    "jour": "vendredi",
-   "age": 46,
+   "age": 47,
    "vues": 7110,
    "likes": 57,
    "comms": 0,
@@ -1539,7 +1570,7 @@
    "cover": "https://instagram.frak1-2.fna.fbcdn.net/v/t51.82787-15/759751759_17894505519574835_3737010538726672014_n.jpg?stp=dst-jpg_e15_p640x640_tt6&_nc_cat=109&_nc_map=urlgen_bucketless&ig_cache_key=Mzk1MzUzNTMyMTc5MDI3NzY4MjE3ODk0NTA1NTE2NTc0ODM1.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjcyMC5zZHIudmlkZW9fZGVmYXVsdF9jb3Zlcl9mcmFtZS5DMyJ9&_nc_ohc=2R_CB-waE5MQ7kNvwHdF9LW&_nc_oc=Adqv1bOITECa6fGKDXuD7TEreD04pJz3vvbvOaXmTAQ6o18EiKi7W_P5SkkDfwZzxzM&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.frak1-2.fna&_nc_gid=k5D1zuz1e9ovj8HBOzuSTg&_nc_ss=7a22e&oh=00_AQL-wjtU6WnYpIWdl1HLR2KGbB784ri7yWhbD9h_cCkCXg&oe=6AAF5ACB",
    "audio": "",
    "collab": [],
-   "x_med": 8.22,
+   "x_med": 7.75,
    "recent": false
   },
   {
@@ -1549,7 +1580,7 @@
    "date": "2026-07-31",
    "heure": "19:10",
    "jour": "vendredi",
-   "age": 46,
+   "age": 47,
    "vues": 969,
    "likes": 4,
    "comms": 0,
@@ -1569,7 +1600,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 1.12,
+   "x_med": 1.06,
    "recent": false
   },
   {
@@ -1579,7 +1610,7 @@
    "date": "2026-07-29",
    "heure": "19:57",
    "jour": "mercredi",
-   "age": 48,
+   "age": 49,
    "vues": 28576,
    "likes": 260,
    "comms": 0,
@@ -1599,7 +1630,7 @@
    "cover": "https://instagram.frak1-2.fna.fbcdn.net/v/t51.82787-15/759575133_17894161821574835_4055437528795196632_n.jpg?stp=dst-jpg_e35_p640x640_sh2.08_tt6&_nc_cat=108&_nc_map=urlgen_bucketless&ig_cache_key=Mzk1MjEwNjgzNTI2MTAzMDEzNDE3ODk0MTYxODE4NTc0ODM1.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjEyMDYuc2RyLnZpZGVvX2RlZmF1bHRfY292ZXJfZnJhbWUuQzMifQ%3D%3D&_nc_ohc=eNJAvWhYIM0Q7kNvwEFruuO&_nc_oc=AdrK03YVFM86zFbndcJk7mEcqt7f2m0LB1LXzQLX0lMlIoIzEuPrdiCz5hL0Rbi7Iic&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.frak1-2.fna&_nc_gid=B68N4x0FCSfSduI3Te7fJw&_nc_ss=7a22e&oh=00_AQIPBjnTxzpvbzytUNBuqg8n_Tx1yCPXTsAAjDHKyHLYoQ&oe=6AAF5484",
    "audio": "",
    "collab": [],
-   "x_med": 33.05,
+   "x_med": 31.16,
    "recent": false
   },
   {
@@ -1609,7 +1640,7 @@
    "date": "2026-07-29",
    "heure": "19:02",
    "jour": "mercredi",
-   "age": 48,
+   "age": 49,
    "vues": 425,
    "likes": 3,
    "comms": 0,
@@ -1629,7 +1660,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.49,
+   "x_med": 0.46,
    "recent": false
   },
   {
@@ -1639,7 +1670,7 @@
    "date": "2026-07-29",
    "heure": "16:27",
    "jour": "mercredi",
-   "age": 48,
+   "age": 50,
    "vues": 2358,
    "likes": 29,
    "comms": 0,
@@ -1659,7 +1690,7 @@
    "cover": "https://instagram.frak1-2.fna.fbcdn.net/v/t51.82787-15/757798198_17894128941574835_292815547650494885_n.jpg?stp=dst-jpg_e15_p640x640_tt6&_nc_cat=109&_nc_map=urlgen_bucketless&ig_cache_key=Mzk1MjAwMDkwMzYwMDUyOTAwMDE3ODk0MTI4OTM1NTc0ODM1.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjcyMC5zZHIudmlkZW9fZGVmYXVsdF9jb3Zlcl9mcmFtZS5DMyJ9&_nc_ohc=EgIWsVfTUowQ7kNvwFlQOcb&_nc_oc=AdqKiTKMlnIhbtQQqh0T54sxFMJL-8QT6agfFdaLxNrqhbhjbTHiYnGoM5FHRKZN8dU&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.frak1-2.fna&_nc_gid=B68N4x0FCSfSduI3Te7fJw&_nc_ss=7a22e&oh=00_AQLoIELYi-J-MipO2TNKdRjrRkAbWp_xyVLQUBH9YA7N7A&oe=6AAF6B3A",
    "audio": "",
    "collab": [],
-   "x_med": 2.73,
+   "x_med": 2.57,
    "recent": false
   },
   {
@@ -1669,7 +1700,7 @@
    "date": "2026-07-28",
    "heure": "20:30",
    "jour": "mardi",
-   "age": 49,
+   "age": 50,
    "vues": 467,
    "likes": 6,
    "comms": 0,
@@ -1689,7 +1720,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.54,
+   "x_med": 0.51,
    "recent": false
   },
   {
@@ -1699,7 +1730,7 @@
    "date": "2026-07-28",
    "heure": "15:43",
    "jour": "mardi",
-   "age": 49,
+   "age": 51,
    "vues": 2452,
    "likes": 19,
    "comms": 2,
@@ -1719,7 +1750,7 @@
    "cover": "https://instagram.frak1-1.fna.fbcdn.net/v/t51.82787-15/756136847_17893955043574835_1746599762444507286_n.jpg?stp=dst-jpg_e35_p640x640_sh2.08_tt6&_nc_cat=103&_nc_map=urlgen_bucketless&ig_cache_key=Mzk1MTI1Mzk1ODgyNTIwMzk0NzE3ODkzOTU1MDM3NTc0ODM1.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjEyMDYuc2RyLnZpZGVvX2RlZmF1bHRfY292ZXJfZnJhbWUuQzMifQ%3D%3D&_nc_ohc=9gopmHCZIT4Q7kNvwHN1H_0&_nc_oc=AdpiLOqcLg6s2jcJUvn8f_t9irFvWZLzhsBGnLoCE_suzIIUxUWyTumFQqYHrq-Sonk&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.frak1-1.fna&_nc_gid=K7TIoJhVT-fgOxKxIhdv5w&_nc_ss=7a22e&oh=00_AQIP8SkkeiZBo6AOPpLDcnU4-YoC9hDm1eYsxmu0vY-hRg&oe=6AAF5ACF",
    "audio": "",
    "collab": [],
-   "x_med": 2.84,
+   "x_med": 2.67,
    "recent": false
   },
   {
@@ -1729,7 +1760,7 @@
    "date": "2026-07-28",
    "heure": "15:30",
    "jour": "mardi",
-   "age": 49,
+   "age": 51,
    "vues": 3081,
    "likes": 29,
    "comms": 0,
@@ -1749,7 +1780,7 @@
    "cover": "https://instagram.frak1-2.fna.fbcdn.net/v/t51.82787-15/756699692_17893954176574835_1849661453413764631_n.jpg?stp=dst-jpg_e15_p640x640_tt6&_nc_cat=103&_nc_map=urlgen_bucketless&ig_cache_key=Mzk1MTI0NzYyNDc2MzM2MzU1ODE3ODkzOTU0MTczNTc0ODM1.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjcyMC5zZHIudmlkZW9fZGVmYXVsdF9jb3Zlcl9mcmFtZS5DMyJ9&_nc_ohc=Xo5AXdewcCkQ7kNvwGqVoAc&_nc_oc=AdoED69lGIdWnp_Ksy5SpRH6UibzVdZiTXG7bxiPQd_AbCF4U_TO24gdaefyQsOgvIA&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.frak1-2.fna&_nc_gid=K7TIoJhVT-fgOxKxIhdv5w&_nc_ss=7a22e&oh=00_AQL4IGx2usrve6ie0b26_A37grk90fBQgFZsaO7f5Wsokw&oe=6AAF5027",
    "audio": "",
    "collab": [],
-   "x_med": 3.56,
+   "x_med": 3.36,
    "recent": false
   },
   {
@@ -1759,7 +1790,7 @@
    "date": "2026-07-27",
    "heure": "20:57",
    "jour": "lundi",
-   "age": 49,
+   "age": 51,
    "vues": 583,
    "likes": 7,
    "comms": 1,
@@ -1779,7 +1810,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.67,
+   "x_med": 0.64,
    "recent": false
   },
   {
@@ -1789,7 +1820,7 @@
    "date": "2026-07-27",
    "heure": "20:34",
    "jour": "lundi",
-   "age": 50,
+   "age": 51,
    "vues": 2066,
    "likes": 21,
    "comms": 1,
@@ -1809,7 +1840,7 @@
    "cover": "https://instagram.frak2-1.fna.fbcdn.net/v/t51.82787-15/756612684_17893964352574835_3020074046948923025_n.jpg?stp=dst-jpg_e15_p640x640_tt6&_nc_cat=102&_nc_map=urlgen_bucketless&ig_cache_key=Mzk1MDY3NTg5MjE4OTE3MTEzNTE3ODkzOTY0MzQ2NTc0ODM1.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjcyMC5zZHIudmlkZW9fZGVmYXVsdF9jb3Zlcl9mcmFtZS5DMyJ9&_nc_ohc=pMd0iSux-LQQ7kNvwFTh2rw&_nc_oc=Adpj7nd0WpnzDqRDmPjooTqlq74lw2XAB22sjUdjRgxZtqgyt7CVJfT6pwOq89toTr0&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.frak2-1.fna&_nc_gid=QCWqDyF8NuReFqKynwl02Q&_nc_ss=7a22e&oh=00_AQI2nOivc06_7myYDIJawwpJ8XahXDUZLc8psOXWIbBjBQ&oe=6AAF75C6",
    "audio": "",
    "collab": [],
-   "x_med": 2.39,
+   "x_med": 2.25,
    "recent": false
   },
   {
@@ -1819,7 +1850,7 @@
    "date": "2026-07-26",
    "heure": "21:30",
    "jour": "dimanche",
-   "age": 50,
+   "age": 52,
    "vues": 1516,
    "likes": 12,
    "comms": 0,
@@ -1839,7 +1870,7 @@
    "cover": "https://instagram.frak1-1.fna.fbcdn.net/v/t51.82787-15/755152108_17893675908574835_7783998785521901905_n.jpg?stp=dst-jpg_e15_p640x640_tt6&_nc_cat=101&_nc_map=urlgen_bucketless&ig_cache_key=Mzk0OTk3OTI0NjMzNTk1MDQ3NDE3ODkzNjc1OTAyNTc0ODM1.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjcyMC5zZHIudmlkZW9fZGVmYXVsdF9jb3Zlcl9mcmFtZS5DMyJ9&_nc_ohc=MxncRoDssOsQ7kNvwHdL3EJ&_nc_oc=Adp4bJC6cUmEyPoIGNmwd__C-YTRCY4Q2WCMJcxTyFSavj--xViv5ziPLIIK7kAbT8Q&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.frak1-1.fna&_nc_gid=QCWqDyF8NuReFqKynwl02Q&_nc_ss=7a22e&oh=00_AQIiU2eF6zHNAxCIo8skWF2riKYw7A9hMjVoP4NKY0EKEQ&oe=6AAF4F27",
    "audio": "",
    "collab": [],
-   "x_med": 1.75,
+   "x_med": 1.65,
    "recent": false
   },
   {
@@ -1849,7 +1880,7 @@
    "date": "2026-07-26",
    "heure": "21:05",
    "jour": "dimanche",
-   "age": 50,
+   "age": 52,
    "vues": 2031,
    "likes": 24,
    "comms": 0,
@@ -1869,7 +1900,7 @@
    "cover": "https://instagram.frak1-2.fna.fbcdn.net/v/t51.82787-15/756039215_17893675140574835_513100707923208715_n.jpg?stp=dst-jpg_e15_p640x640_tt6&_nc_cat=100&_nc_map=urlgen_bucketless&ig_cache_key=Mzk0OTk2NjY3NTk4MzQ4NzkwNjE3ODkzNjc1MTM3NTc0ODM1.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjcyMC5zZHIudmlkZW9fZGVmYXVsdF9jb3Zlcl9mcmFtZS5DMyJ9&_nc_ohc=-W7-8hRtruMQ7kNvwHJqpVQ&_nc_oc=Adqifm7ZYZGyov1JF_zoMbd7S1NTY5i9pi8U4yZVf49j-ZXi8WPgnZGfAqgVNKqgrG0&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.frak1-2.fna&_nc_gid=QCWqDyF8NuReFqKynwl02Q&_nc_ss=7a22e&oh=00_AQKkW654IbRYsvAFwCDJerVqPYxHltmQ-pUTI3SJGsYgag&oe=6AAF5BE9",
    "audio": "",
    "collab": [],
-   "x_med": 2.35,
+   "x_med": 2.21,
    "recent": false
   },
   {
@@ -1879,7 +1910,7 @@
    "date": "2026-07-26",
    "heure": "20:56",
    "jour": "dimanche",
-   "age": 50,
+   "age": 52,
    "vues": 517,
    "likes": 6,
    "comms": 2,
@@ -1899,7 +1930,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.6,
+   "x_med": 0.56,
    "recent": false
   },
   {
@@ -1909,7 +1940,7 @@
    "date": "2026-07-26",
    "heure": "10:29",
    "jour": "dimanche",
-   "age": 51,
+   "age": 53,
    "vues": 1646,
    "likes": 29,
    "comms": 2,
@@ -1929,7 +1960,7 @@
    "cover": "https://instagram.frak1-1.fna.fbcdn.net/v/t51.82787-15/755317343_17893586727574835_1984884527741676658_n.jpg?stp=dst-jpg_e15_p640x640_tt6&_nc_cat=108&_nc_map=urlgen_bucketless&ig_cache_key=Mzk0OTY0NjY1NTI2OTMwNzcxMjE3ODkzNTg2NzI0NTc0ODM1.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjcyMC5zZHIudmlkZW9fZGVmYXVsdF9jb3Zlcl9mcmFtZS5DMyJ9&_nc_ohc=JShQ7GmQLhsQ7kNvwHoLhh0&_nc_oc=Adr1A3kSZlxwujmUCKTM10-9KQaOzzxNTxkoZD_Ubro5PFwTccbnUCfNj3SQNwdn_bw&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.frak1-1.fna&_nc_gid=rrV1UlH0TJF5vjaJlDnnqQ&_nc_ss=7a22e&oh=00_AQIFiXmOdD80JuFDOqhytiqBVZxySDHIcSiTZZd7jbLD0A&oe=6AAF6667",
    "audio": "",
    "collab": [],
-   "x_med": 1.9,
+   "x_med": 1.79,
    "recent": false
   },
   {
@@ -1939,7 +1970,7 @@
    "date": "2026-07-24",
    "heure": "20:50",
    "jour": "vendredi",
-   "age": 53,
+   "age": 54,
    "vues": 453,
    "likes": 3,
    "comms": 0,
@@ -1959,7 +1990,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.52,
+   "x_med": 0.49,
    "recent": false
   },
   {
@@ -1969,7 +2000,7 @@
    "date": "2026-07-23",
    "heure": "19:30",
    "jour": "jeudi",
-   "age": 54,
+   "age": 55,
    "vues": 429,
    "likes": 5,
    "comms": 0,
@@ -1989,7 +2020,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 0.5,
+   "x_med": 0.47,
    "recent": false
   },
   {
@@ -1999,7 +2030,7 @@
    "date": "2026-07-22",
    "heure": "19:43",
    "jour": "mercredi",
-   "age": 55,
+   "age": 56,
    "vues": 4755,
    "likes": 61,
    "comms": 3,
@@ -2019,7 +2050,7 @@
    "cover": "https://instagram.frak2-1.fna.fbcdn.net/v/t51.82787-15/753677247_17892924567574835_5908477662259236022_n.jpg?stp=dst-jpg_e15_p640x640_tt6&_nc_cat=111&_nc_map=urlgen_bucketless&ig_cache_key=Mzk0NzAyNjE0NDI4MjQzNjY3MzE3ODkyOTI0NTYxNTc0ODM1.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjcyMC5zZHIudmlkZW9fZGVmYXVsdF9jb3Zlcl9mcmFtZS5DMyJ9&_nc_ohc=ybZJ3hb0_KMQ7kNvwFnb1ue&_nc_oc=AdoZHlLQpR_KEDkPRfk5xQO1o-vj23-2W5AGBmTdS_DUIEwpc3cjwe8JwsW1_tU8ql4&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.frak2-1.fna&_nc_gid=7jQWRCDOUiQmGj83RBQdFQ&_nc_ss=7a22e&oh=00_AQKT-P879sxDt3caSa3sZq4a0u5Ub4XCK5x9k8Jglh22yA&oe=6AAF6804",
    "audio": "",
    "collab": [],
-   "x_med": 5.5,
+   "x_med": 5.19,
    "recent": false
   },
   {
@@ -2029,7 +2060,7 @@
    "date": "2026-07-21",
    "heure": "18:38",
    "jour": "mardi",
-   "age": 56,
+   "age": 57,
    "vues": 861,
    "likes": 9,
    "comms": 0,
@@ -2049,7 +2080,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 1.0,
+   "x_med": 0.94,
    "recent": false
   },
   {
@@ -2059,7 +2090,7 @@
    "date": "2026-07-17",
    "heure": "16:02",
    "jour": "vendredi",
-   "age": 60,
+   "age": 62,
    "vues": 1605,
    "likes": 13,
    "comms": 0,
@@ -2079,7 +2110,7 @@
    "cover": "https://instagram.frak2-2.fna.fbcdn.net/v/t51.82787-15/748307068_17891962386574835_4423402120357601923_n.jpg?stp=dst-jpg_e15_p640x640_tt6&_nc_cat=101&_nc_map=urlgen_bucketless&ig_cache_key=Mzk0MzI5MTAwNzYzNjAyOTY4MDE3ODkxOTYyMzgwNTc0ODM1.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjcyMC5zZHIudmlkZW9fZGVmYXVsdF9jb3Zlcl9mcmFtZS5DMyJ9&_nc_ohc=G1NiOcs784gQ7kNvwFG5N_u&_nc_oc=AdpvY0RQDSjYNlN39mvqk0HzBNjHTyala63QNYh1i-yNXDPDEvcLfjEm2ep_x-756Ec&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.frak2-2.fna&_nc_gid=7jQWRCDOUiQmGj83RBQdFQ&_nc_ss=7a22e&oh=00_AQIeyX6k1sYsUHwxU3gnL5rENnsVPVODoFBdEJ5ZoHHIQg&oe=6AAF4B8B",
    "audio": "",
    "collab": [],
-   "x_med": 1.86,
+   "x_med": 1.75,
    "recent": false
   },
   {
@@ -2089,7 +2120,7 @@
    "date": "2026-07-16",
    "heure": "19:04",
    "jour": "jeudi",
-   "age": 61,
+   "age": 62,
    "vues": 1315,
    "likes": 10,
    "comms": 0,
@@ -2109,7 +2140,7 @@
    "cover": "",
    "audio": "",
    "collab": [],
-   "x_med": 1.52,
+   "x_med": 1.43,
    "recent": false
   }
  ]

@@ -11,14 +11,15 @@ import csv, sys, json, datetime, pathlib
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 CSV = ROOT / "data" / "abonnes.csv"
 LEADS = ROOT / "data" / "leads-insta.csv"
-FIELDS = ["Pseudo","Nom","Detecte","Profil","Cible","Message propose","Contacte","Date contact","Message envoye","Statut","Conv","Releve","Type"]
+FIELDS = ["Pseudo","Nom","Detecte","Profil","Cible","Message propose","Contacte","Date contact","Message envoye","Statut","Conv","Releve","Type","Abonne le","Premier message le"]
 STATUT = {"nonvu": "envoye", "vu": "vu", "reagi": "reagi", "repondu": "repondu"}
 args = [a for a in sys.argv[1:]]
 today = args[args.index("--date") + 1] if "--date" in args else datetime.date.today().strftime("%d/%m/%Y")
 src = next((a for a in args if a.endswith(".json")), None)
 
 rows = list(csv.DictReader(open(CSV, encoding="utf-8")))
-for r in rows: r.setdefault("Type", "")
+for r in rows:
+    for k in ("Type", "Abonne le", "Premier message le"): r.setdefault(k, "")
 leads = {l["Pseudo"]: l for l in csv.DictReader(open(LEADS, encoding="utf-8"))}
 have = {r["Pseudo"] for r in rows}
 added = 0
@@ -27,7 +28,8 @@ if src:
         if n["pseudo"] in have: continue
         rows.append({"Pseudo": n["pseudo"], "Nom": n.get("nom") or n["pseudo"], "Detecte": today, "Profil": n.get("profil", ""),
                      "Cible": n.get("cible", ""), "Message propose": n.get("message", ""), "Contacte": "non", "Date contact": "",
-                     "Message envoye": "", "Statut": "", "Conv": "", "Releve": today, "Type": n.get("type", "")})
+                     "Message envoye": "", "Statut": "", "Conv": "", "Releve": today, "Type": n.get("type", ""),
+                     "Abonne le": n.get("abonne_le", ""), "Premier message le": ""})
         have.add(n["pseudo"]); added += 1
 newly, changed = 0, 0
 for r in rows:

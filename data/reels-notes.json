@@ -266,6 +266,7 @@
  },
  "_analyse": {
   "resume": [
+   "<b>Point du 17/09 : la semaine a doublé les vues</b> (41 500 vues sur 7 jours contre 18 200 la semaine d'avant, 14 956 le 16/09, meilleur jour depuis le 25/08). Les 3 meilleurs contenus reprennent la recette gagnante, une tension de dirigeant : « Le salarié qui râle tout le temps, ne lui dis jamais arrête de râler mais tu proposes quoi ? » (13 000 vues le 16/09), « Steve Jobs ne parle pas pendant 25 secondes » (7 900 vues le 14/09) et « C'est quoi ces clients qui parlent mal à tes salariés ? » (3 300 vues le 16/09). Les deux du 16/09 et celui du 13/09 (« ta charge mentale explose à cause de ça », 1 800 vues) n'apparaissent pas dans l'onglet Reels du profil : ce sont sans doute des Reels d'essai, montrés d'abord aux non-abonnés. Résultat : 44 abonnements en 5 jours, dont 24 en moins de 24 h.",
    "<b>Le sujet fait les vues, pas le décor.</b> Les Reels sur une tension que vit tout dirigeant (être aimé ou respecté, les critiques, garder son calme quand l'équipe craque, la charge mentale) font <b>6 300 vues en médiane</b>. Les conseils généraux (« le secret #1 », « l'erreur #1 », « le bon mindset ») font <b>425 vues</b> : 15 fois moins.",
    "<b>Les 3 idées gagnantes ont été publiées deux fois et ont marché les deux fois</b> : elles font 6 des 8 meilleurs Reels. Refaire un gagnant avec une nouvelle accroche rapporte plus qu'une idée neuve.",
    "<b>À corriger tout de suite</b> : septembre est retombé à 676 vues en médiane (1 217 en juillet-août) avec surtout des conseils face caméra, et presque aucun Reel ne demande une action simple. Chaque Reel doit finir par un mot-clé à commenter, relié à ManyChat."
@@ -418,5 +419,10 @@
    "<b>Plusieurs Reels à la même heure</b> : le 14/08, 5 Reels en 2 h 30, un seul a dépassé 1 300 vues. Un Reel par jour suffit.",
    "<b>Finir sans action</b> : « Follow @lauric_sergent si t'es dirigeant » ne crée aucune conversation. Chaque Reel finit par un mot-clé à commenter, relié à ManyChat pour envoyer la ressource en privé."
   ]
+ },
+ "DdRKTO7INAP": {
+  "format": "face caméra",
+  "accroche": "Steve Jobs ne parle pas pendant 25 secondes",
+  "sujet": "tension de dirigeant"
  }
 }

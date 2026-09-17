@@ -1,5 +1,5 @@
 {
-"releve": "16/09/2026",
+"releve": "17/09/2026",
 "analyse": [
 {
 "titre": "Les chiffres (relevé du 09/09, conversations depuis mars)",
@@ -780,16 +780,17 @@
 "thread": "340282366841710301244259228003164227490",
 "variante": "suivi",
 "premier": {
-"text": "Hello merci pour ton follow !\n\nJe vois que tu es traiteur, tu diriges plusieurs équipes ? 😀",
-"t": "15/08/2026 18:48"
+"text": "Hello ! Comment vas-tu ?😊",
+"t": "29/08/2026 23:19",
+"partial": true
 },
-"complet": true,
-"nItems": 19,
+"complet": false,
+"nItems": 20,
 "propose": {
 "text": "Avec plaisir pour parler de tes enjeux et défis futurs à relever. \n\nC’est exactement le sens de mon cabinet : accompagner des entrepreneurs pour qu’ils puissent continuer de développer leur business rentable et le plus autonome possible pour respecter leur vie personnelle également. \n\nC’est cet équilibre qui permet de durer !\n\nSi ça te parle, je suis certain que tu trouveras du temps pour qu’on puisse échanger ensemble et trouver des solutions concrètes 😊\n\nTu aurais une disponibilité même en soirée cette semaine?",
 "t": "31/08/2026 09:26",
 "ts": 1788161202,
-"n": 1,
+"n": 2,
 "vocal": false
 },
 "avant": {
@@ -883,7 +884,7 @@
 "w": "L",
 "t": "30/08/2026 21:33",
 "ty": "reel_share",
-"x": "🔥🔥"
+"x": ""
 },
 {
 "w": "P",
@@ -907,7 +908,7 @@
 "w": "L",
 "t": "07/09/2026 21:46",
 "ty": "reel_share",
-"x": "J’ai hâte de voir ça !"
+"x": ""
 },
 {
 "w": "L",
@@ -920,6 +921,12 @@
 "t": "16/09/2026 12:33",
 "ty": "text",
 "x": "Slt \n\nOulala \nJ étais vraiment trop pris mon ami \nMais je vais faire un effort"
+},
+{
+"w": "L",
+"t": "17/09/2026 15:17",
+"ty": "text",
+"x": "Hello ! Merci pour ton retour ! \n\nAhah le but n’est pas de te prendre du temps, ce que je peux te proposer c’est qu’on organise un appel 100% gratuit dans un premier temps, celui-ci nous permettra de faire le point, te donner quelques conseils et voir quels sont les points où il peut être intéressant de creuser et de gagner du temps une bonne fois pour toute\n\nTu as une disponibilité 30 minutes demain ou dans les prochains jours?"
 }
 ],
 "recap": "Traiteur qui dirige des équipes et fait de la promotion immobilière à l'étranger. A dit deux fois qu'il est débordé, décroche à la salle de sport. Il envoie un vocal le 31/08 à 0h37 ; la réponse est un pavé de 8 lignes sur le cabinet qui finit par « une disponibilité même en soirée cette semaine ? ». Jamais ouvert depuis.",
@@ -2397,7 +2404,7 @@
 "w": "L",
 "t": "29/08/2026 23:10",
 "ty": "reel_share",
-"x": "Ça fait des beaux horaires ! Tu as pris des vacances ?"
+"x": ""
 },
 {
 "w": "P",

@@ -412,6 +412,31 @@
   .vkpi .n { font-size: 26px; font-weight: 700; line-height: 1.1; }
   .vkpi .l { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-2); margin-top: 2px; }
   h2.hsec { display: flex; align-items: center; gap: 8px; }
+  /* Setting › ⏱️ Réactivité : rampe ordinale bleue (délais), gris = en attente, rouge statut = sans réponse */
+  .rx-viz { --rx0: #184f95; --rx1: #2a78d6; --rx2: #5598e7; --rx3: #86b6ef; --rx0t: #fff; --rx1t: #fff; --rx2t: #1d1812; --rx3t: #1d1812;
+            --rxw: #cfc5af; --rxn: #d03b3b; }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .rx-viz { --rx0: #9ec5f4; --rx1: #6da7ec; --rx2: #3987e5; --rx3: #1c5cab; --rx0t: #0d0d0d; --rx1t: #0d0d0d; --rx2t: #fff; --rx3t: #fff; --rxw: #383835; }
+  }
+  :root[data-theme="dark"] .rx-viz { --rx0: #9ec5f4; --rx1: #6da7ec; --rx2: #3987e5; --rx3: #1c5cab; --rx0t: #0d0d0d; --rx1t: #0d0d0d; --rx2t: #fff; --rx3t: #fff; --rxw: #383835; }
+  .rxrow { display: grid; grid-template-columns: minmax(130px, 190px) 1fr; gap: 12px; align-items: center; margin: 10px 0; }
+  .rxlab { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.25; }
+  .rxlab small { display: block; font-size: 12px; font-weight: 500; color: var(--muted); }
+  .rxbar { display: flex; gap: 2px; height: 24px; min-width: 0; }
+  .rxseg { height: 100%; min-width: 3px; display: flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 600; white-space: nowrap; cursor: default; outline: none; }
+  .rxseg:last-child { border-radius: 0 4px 4px 0; }
+  .rxseg:hover, .rxseg:focus-visible { filter: brightness(1.12); box-shadow: 0 0 0 2px var(--card), 0 0 0 3px var(--ink-2); }
+  .rxlegend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 12px 0 4px; font-size: 12.5px; color: var(--ink-2); }
+  .rxkey { display: inline-flex; align-items: center; gap: 6px; }
+  .rxkey i, .rxsw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; flex: none; }
+  .rxsw { margin-right: 7px; vertical-align: -1px; }
+  .rxtip { position: fixed; z-index: 60; pointer-events: none; background: var(--card); color: var(--ink); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 12.5px; box-shadow: 0 6px 18px rgba(0,0,0,.14); max-width: 280px; }
+  .rxtip b { display: block; font-size: 14px; }
+  .rxgrid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  table.rxt td, table.rxt th { text-align: right; }
+  table.rxt td:first-child, table.rxt th:first-child { text-align: left; }
+  table.rxt th.grp { text-align: center; border-bottom: 2px solid var(--grid); }
+  @media (max-width: 640px) { .rxrow { grid-template-columns: 1fr; gap: 4px; } }
   h2.hsec::before { content: ""; width: 10px; height: 10px; border-radius: 3px; background: var(--hc, var(--accent)); }
   .wa {
     display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;
@@ -729,6 +754,7 @@
       <div class="subnav" id="subnav-setting">
         <div class="subgrp"><span class="subgl">✉️ Premier message · setters</span>
           <button data-pane="datas">📈 Datas Globale</button>
+          <button data-pane="reac">⏱️ Réactivité <span class="count" id="reac-count"></span></button>
           <button data-pane="eod">📝 EOD <span class="count" id="eod-count"></span></button>
           <button data-pane="abonnes">🆕 Nouveaux abonnés <span class="count" id="abonnes-count"></span></button>
           <button data-pane="script">📣 Script et A/B</button>
@@ -848,6 +874,7 @@
       </div>
       <div id="tab-abonnes" class="pane" hidden>
         <div class="tally-counts" id="nf-pills"></div>
+        <div class="card" id="nf-delai" style="margin:0 0 14px" hidden></div>
         <section id="sec-nf-todo">
           <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px">🚨 Pas encore contactés · message perso prêt à envoyer</h2>
           <div id="nf-todo"></div>
@@ -1089,6 +1116,29 @@
           </div>
         </section>
         <section>
+          <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">💡 Ce qu'on peut en tirer · relevé du 17/09 à 16h40</h2>
+          <div class="card" style="font-size:14.5px;line-height:1.55">
+            <p style="margin:0 0 8px"><b>Les 5 actions de la semaine</b></p>
+            <ol style="margin:0 0 14px;padding-left:20px">
+              <li><b>Répondre aujourd'hui aux 5 leads chauds qui attendent</b> : Diyar Guvenc (depuis le 13/09), Sandrine Denis et Laurianne Baudel (depuis le 14/09), MK beauty (vocal) et Quentin (17/09). Liste à jour dans <a data-go="reac">⏱️ Réactivité</a>.</li>
+              <li><b>Règle : un lead chaud a sa réponse en moins d'1 h</b>. Cette semaine, 1 message de lead chaud sur 19 l'a eue (5 %), contre 7 sur 11 la semaine du 31/08.</li>
+              <li><b>Ajouter un passage le soir vers 20h</b> pour les réponses et les nouveaux abonnés : le soir, 48 % des leads ont leur réponse en moins d'1 h, le matin 6 %. 24 abonnés sur 43 arrivent après 18h ou la nuit et attendent jusqu'au lendemain matin.</li>
+              <li><b>Revenir au message B avec vocal</b> : aucun vocal envoyé depuis le 12/09, alors que le B fait 6 réponses sur 11 envois sur 14 jours (55 %) et les messages écrits 19 sur 135 (14 %).</li>
+              <li><b>Refaire des tensions de dirigeant en Reel</b> : ce sont les 3 meilleurs contenus de la semaine, qui a doublé les vues.</li>
+            </ol>
+            <ul style="margin:0;padding-left:20px">
+              <li><b>Abonnés : 2 625</b>, +25 en 24 h, +44 depuis le 11/09. 44 abonnements en 5 jours, dont 24 entre le 16/09 20h et le 17/09 16h, juste après le Reel du 16/09.</li>
+              <li><b>Vues : 41 526 sur 7 jours, 2,3 fois la semaine d'avant</b> (18 155). 14 956 vues le 16/09, meilleur jour depuis le 25/08. 151 393 vues sur 30 jours, 91 % chez des non-abonnés, 95 % sur les Reels.</li>
+              <li><b>Meilleurs contenus de la semaine</b> : « Le salarié qui râle tout le temps… tu proposes quoi ? » (13 000 vues, 16/09), « Steve Jobs ne parle pas pendant 25 secondes » (7 900, 14/09), « C'est quoi ces clients qui parlent mal à tes salariés ? » (3 300, 16/09), « Ta charge mentale explose à cause de ça » (1 800, 13/09). Sur 30 jours, « Être aimé ou être respecté » reste en tête (37 200). Détail dans Contenu › 🎬 Reels.</li>
+              <li><b>Le profil ne transforme pas en clics</b> : 196 visites du profil sur 7 jours, 1 clic sur le lien de la bio (12 sur 30 jours).</li>
+              <li><b>Messages : 295 envoyés et 100 reçus sur 7 jours</b> (188 et 65 la semaine d'avant). 135 premiers messages : 47 % vus, 15 % de réponses, contre 75 envois, 55 % vus et 25 % de réponses la semaine d'avant. Plus de volume, moins de réponses : le texte écrit « tu es toi-même chef d'entreprise ? » a remplacé le vocal.</li>
+              <li><b>Temps de réponse sur 7 jours</b> (messages de politesse à part) : leads chauds 15 % en moins d'1 h, 25 % en moins de 3 h, 28 % entre 1 et 3 jours, 3 sans réponse après 24 h. Autres leads : 29 % en moins d'1 h, 48 % en moins de 3 h, 9 sans réponse après 24 h.</li>
+              <li><b>Nouveaux abonnés contactés</b> : 9 % en moins d'1 h, 16 % en moins de 3 h, 84 % en moins de 24 h, 3 pas contactés au bout de 24 h (dont yasmine_missaoui, potentielle). Les contacts partent en 2 ou 3 passages par jour (8h40, 11h25 et 14h05 le 17/09), jamais le soir.</li>
+              <li><b>Scan</b> : toujours 21 liens envoyés pour 932 propositions, 8 ouverts, 3 calls bookés. <b>Calls</b> : Marie le 17/09, Maximilien le 21/09, et un appel proposé à Chef Nerry Lianza le 17/09.</li>
+            </ul>
+          </div>
+        </section>
+        <section hidden>
           <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">💡 Ce qu'on peut en tirer · relevé du 15/09 au soir</h2>
           <div class="card" style="font-size:14.5px;line-height:1.55">
             <p style="margin:0 0 8px"><b>Les 4 actions de la semaine</b></p>
@@ -1130,6 +1180,65 @@
         </section>
         <p class="formnote">Les datas viennent du relevé des conversations Instagram (API interne, lecture seule). La liste des leads et les priorités sont dans l'onglet 👤 Leads.</p>
         </div>
+      </div>
+      <div id="tab-reac" class="pane rx-viz" hidden>
+        <div class="tally-counts" id="rx-range" style="align-items:center">
+          <span class="formnote" style="margin:0 4px 0 0;min-width:70px">📅 Période :</span>
+          <button class="pill fpill" data-rx="7">7 j</button>
+          <button class="pill fpill" data-rx="14">14 j</button>
+          <button class="pill fpill" data-rx="30">30 j</button>
+          <button class="pill fpill" data-rx="all">tout le relevé</button>
+          <span class="formnote" style="margin:0 4px 0 14px">Messages de politesse (merci, ok, emoji seul) :</span>
+          <button class="pill fpill" data-rxp="0">mis à part</button>
+          <button class="pill fpill" data-rxp="1">comptés</button>
+        </div>
+        <p class="formnote" id="rx-releve" style="margin:6px 0 0"></p>
+        <div class="tiles" id="rx-kpis" style="margin:14px 0 18px"></div>
+
+        <section>
+          <h2 class="hsec" style="--hc:var(--s2);margin-bottom:10px">💬 Temps de réponse quand un lead écrit · leads chauds et autres leads</h2>
+          <div class="card">
+            <div id="rx-bars"></div>
+            <div class="tbl-scroll" id="rx-table"></div>
+            <p class="formnote" style="margin-top:10px" id="rx-note"></p>
+          </div>
+        </section>
+
+        <section>
+          <h2 class="hsec" style="--hc:var(--s3);margin-bottom:10px">🆕 Délai de premier contact des nouveaux abonnés</h2>
+          <div class="card">
+            <div id="rx-nf-bars"></div>
+            <div class="tbl-scroll" id="rx-nf-table"></div>
+            <p class="formnote" style="margin-top:10px" id="rx-nf-note"></p>
+          </div>
+        </section>
+
+        <section>
+          <h2 class="hsec" style="--hc:var(--s4);margin-bottom:10px">🕐 Selon le moment où le lead écrit ou s'abonne</h2>
+          <div class="rxgrid">
+            <div class="card"><h3 class="mini-title">💬 Quand le lead écrit</h3><div class="tbl-scroll" style="margin-top:0" id="rx-hours"></div></div>
+            <div class="card"><h3 class="mini-title">🆕 Quand la personne s'abonne</h3><div class="tbl-scroll" style="margin-top:0" id="rx-nf-hours"></div></div>
+          </div>
+          <p class="formnote" style="margin-top:8px">Heure de Paris. Chaque ligne se lit seule : part des messages (ou des abonnés) de ce créneau traités en moins d'1 h, de 3 h et de 24 h.</p>
+        </section>
+
+        <section>
+          <h2 class="hsec" style="--hc:var(--accent);margin-bottom:10px">📆 Semaine par semaine</h2>
+          <div class="card"><div class="tbl-scroll" style="margin-top:0" id="rx-weeks"></div>
+          <p class="formnote" style="margin-top:10px">Semaines couvertes par le relevé des conversations, quelle que soit la période choisie. La première semaine et la semaine en cours sont incomplètes (les messages récents peuvent encore être « en attente »). Les heures d'abonnement ne sont connues que depuis le 12/09.</p></div>
+        </section>
+
+        <section id="sec-rx-wait">
+          <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px">✋ Leads sans réponse au moment du relevé</h2>
+          <div class="card"><div class="tbl-scroll" style="margin-top:0" id="rx-wait"></div>
+          <p class="formnote" style="margin-top:10px">Dernier message du lead resté sans réponse de notre côté, sur la période. Les messages de politesse sont mis à part sauf si « comptés » est choisi. Pour répondre avec un message prêt : <a data-go="arep">💬 À répondre</a>.</p></div>
+        </section>
+
+        <section>
+          <h2 class="hsec" style="--hc:var(--s3);margin-bottom:10px">🗂 Détail des nouveaux abonnés · heure d'abonnement et premier message</h2>
+          <div class="card"><div class="tbl-scroll" style="margin-top:0" id="rx-nf-list"></div></div>
+        </section>
+        <div class="rxtip" id="rx-tip" hidden></div>
       </div>
       <div id="tab-eodstats" class="pane" hidden>
       <section>
@@ -1746,6 +1855,7 @@ async function load(showSpinner) {
   get("data/todo.json").then(t => { TODO_SEED = JSON.parse(t); renderTodoTab(); }).catch(() => renderTodoTab());
   get("data/a-repondre.json").then(t => { AREP = JSON.parse(t); renderArepTab(); }).catch(() => renderArepTab());
   get("data/abonnes.csv").then(renderAbonnesTab).catch(() => renderAbonnesTab(""));
+  get("data/reactivite.json").then(t => { REAC = JSON.parse(t); scheduleReac(); }).catch(() => scheduleReac());
   get("data/abonnes_total.csv").then(renderTotalChart).catch(() => renderTotalChart(""));
   get("data/contenu-insta.csv").then(t => { CT_ROWS = parseCSV(t).slice(1).map(r => ({ date: parseDate(r[0]), vues: +r[1] || 0, spect: +r[2] || 0, inter: +r[3] || 0, comptes: +r[4] || 0, visites: +r[5] || 0, liens: +r[6] || 0, followers: +r[7] || 0,
     s7: r[8] ? { vues: +r[8] || 0, spect: +r[9] || 0, inter: +r[10] || 0, comptes: +r[11] || 0, visites: +r[12] || 0, liens: +r[13] || 0 } : null,
@@ -2190,7 +2300,7 @@ function mini(rows30, title, f, color, untrackedNote) {
    (« panes »). Un lien #eod, #script, #lm… ouvre directement le bon pôle et le bon sous-onglet. */
 const TABS = ["dash", "contenu", "setting", "closing", "todo"];
 const PANES = { audience: "contenu", reels: "contenu",
-  eod: "setting", abonnes: "setting", script: "setting", datas: "setting", eodstats: "setting", verif: "setting",
+  eod: "setting", reac: "setting", abonnes: "setting", script: "setting", datas: "setting", eodstats: "setting", verif: "setting",
   arep: "setting", chauds: "setting", lm: "setting", appels: "setting", leads: "setting",
   ventes: "closing" };
 const TAB_ALIAS = { cav: "ventes", car: "ventes", calls: "ventes", tally: "lm", scans: "lm" };   // anciens liens
@@ -2212,6 +2322,7 @@ function showTab(name) {
     try { localStorage.setItem("curPane", JSON.stringify(curPane)); } catch (e) {}
   }
   if (name === "dash") scheduleOverview();
+  if (pane === "reac") setTimeout(() => scheduleReac(), 0);   // différé : showTab tourne aussi pendant le chargement du script
 }
 el("tabbar").addEventListener("click", e => {
   const b = e.target.closest("button");
@@ -2700,6 +2811,7 @@ function renderLeadsTab(leadsText) {
   }).sort((a, b) => (b.arep ? 1 : 0) - (a.arep ? 1 : 0) || LEAD_RANK[b.best] - LEAD_RANK[a.best]);
 
   LEAD_BY_PSEUDO = new Map(leads.filter(l => l.pseudo).map(l => [l.pseudo.toLowerCase(), l]));
+  if (typeof scheduleReac === "function") scheduleReac();
   el("leads-count").textContent = leads.length ? "(" + leads.length + ")" : "";
   el("leads-pills").innerHTML =
     '<button class="pill fpill' + (leadsFilter.f === "all" && !leadsFilter.fv ? " on" : "") + '" data-f="all"><b>' + leads.length + '</b>&nbsp;tous</button>' +
@@ -3247,6 +3359,7 @@ function arepCard(c, i, fait) {
     '</div></div>';
 }
 function renderArepTab() {
+  if (typeof scheduleReac === "function") scheduleReac();
   if (!el("arep-list")) return;
   const convs = (AREP && AREP.convs) || [];
   const map = arepDoneMap();
@@ -3307,6 +3420,7 @@ let APPELS = { convs: [] }, appelsFilter = "all";
 
 function renderAppelsTab(json) {
   APPELS = json && json.convs ? json : { convs: [] };
+  if (typeof scheduleReac === "function") scheduleReac();
   const convs = APPELS.convs;
   el("appels-count").textContent = convs.length ? "(" + convs.length + ")" : "";
   const isPos = c => ["vente", "fait", "booke", "accepte"].includes(c.issue);
@@ -4417,13 +4531,14 @@ function parseAbonnes(text) {
   const ix = n => h.findIndex(c => (c || "").trim().toLowerCase() === n);
   const I = { pseudo: ix("pseudo"), nom: ix("nom"), detecte: ix("detecte"), profil: ix("profil"), cible: ix("cible"),
               msg: ix("message propose"), contacte: ix("contacte"), date: ix("date contact"), envoye: ix("message envoye"),
-              statut: ix("statut"), conv: ix("conv"), releve: ix("releve"), type: ix("type") };
+              statut: ix("statut"), conv: ix("conv"), releve: ix("releve"), type: ix("type"),
+              abonne: ix("abonne le"), premier: ix("premier message le") };
   const g = (r, k) => I[k] < 0 ? "" : (r[I[k]] || "").trim();
   return rows.slice(1).map(r => ({
     pseudo: g(r, "pseudo"), nom: g(r, "nom") || g(r, "pseudo"), detecte: g(r, "detecte"), profil: g(r, "profil"),
     cible: g(r, "cible"), message: g(r, "msg"), contacte: /^(oui|yes|1|true)/i.test(g(r, "contacte")),
     date: g(r, "date"), envoye: g(r, "envoye"), statut: g(r, "statut").toLowerCase(), conv: g(r, "conv"), releve: g(r, "releve"),
-    ancien: /^ancien/i.test(g(r, "type"))
+    ancien: /^ancien/i.test(g(r, "type")), abonneLe: g(r, "abonne"), premierMsg: g(r, "premier")
   })).filter(f => f.pseudo);
 }
 const NF_STATUT = { envoye: "📨 envoyé, pas vu", vu: "👁 vu, pas de réponse", repondu: "💬 a répondu", reagi: "❤️ a réagi" };
@@ -4441,6 +4556,25 @@ function nfCard(f, i, local) {
     '</div></div>';
 }
 let NF_LIST = [];
+/* délai entre l'abonnement (notifications Instagram) et le premier message : rempli par reactivite.py */
+function nfDelai(f) {
+  const t = rxParseDT(f.abonneLe), m = rxParseDT(f.premierMsg);
+  if (!t) return '<span style="color:var(--muted)">–</span>';
+  if (m && m < t - 60) return '<span style="color:var(--muted)">déjà en conv avant</span>';
+  if (m) return '<b>' + rxDur(m - t) + '</b>';
+  const now = REAC && REAC.ts ? REAC.ts : Math.floor(Date.now() / 1000);
+  return '<span style="color:var(--bad);font-weight:600">pas encore (depuis ' + rxDur(now - t) + ')</span>';
+}
+function renderNfDelai() {
+  const box = el("nf-delai");
+  if (!box || !REAC) return;
+  const C = rxCompute(7, false), a = C.aF;
+  box.hidden = !a.tot;
+  if (!a.tot) return;
+  box.innerHTML = '<p class="rstats" style="margin:0">⏱️ <b>Délai de premier contact · 7 derniers jours</b> : <b>' + rxPct(a.u1, a.tot) + '</b> des nouveaux abonnés contactés en moins d\'1 h, <b>' +
+    rxPct(a.u3, a.tot) + '</b> en moins de 3 h, <b>' + rxPct(a.u24, a.tot) + '</b> en moins de 24 h' + (a.none ? ', <b style="color:var(--bad)">' + a.none + ' pas contacté' + (a.none > 1 ? 's' : '') + ' après 24 h</b>' : '') +
+    (a.wait ? ', ' + a.wait + ' en attente depuis moins de 24 h' : '') + ' (' + a.tot + ' abonnés). <a data-go="reac">Tout le détail dans ⏱️ Réactivité ›</a></p>';
+}
 function renderAbonnesTab(text) {
   if (text !== undefined) NF_LIST = parseAbonnes(text);
   const box = el("nf-todo");
@@ -4453,6 +4587,7 @@ function renderAbonnesTab(text) {
   const cnt = el("abonnes-count");
   if (cnt) cnt.textContent = todo.length ? "(" + todo.length + ")" : "";
   NF_TODO_N = todo.length; scheduleOverview();
+  if (typeof scheduleReac === "function") scheduleReac();
   box.innerHTML = todo.map((f, i) => nfCard(f, i, false)).join("") ||
     '<div class="card"><p class="rstats" style="margin:0">✅ Tout le monde a été contacté.</p></div>';
   el("sec-nf-local").hidden = !local.length;
@@ -4465,12 +4600,12 @@ function renderAbonnesTab(text) {
   el("nf-pills").innerHTML = pills.map(p => '<button type="button" class="fpill' + (NF_FILTER === p[0] ? " on" : "") + '" data-f="' + p[0] + '">' + p[1] + ' <b>' + p[2] + '</b></button>').join("");
   const shown = NF_LIST.filter(f => NF_FILTER === "all" || (NF_FILTER === "todo" && !f.contacte && !f.ancien) || (NF_FILTER === "ancien" && f.ancien) || (NF_FILTER === "done" && f.contacte) || (NF_FILTER === "rep" && /repondu|reagi/.test(f.statut)));
   el("nf-data").innerHTML = shown.length ?
-    '<table><thead><tr><th>Abonné</th><th>Abonné le</th><th>Cible</th><th>Contacté</th><th>Date</th><th>Statut</th><th>Message envoyé</th><th>Conv</th></tr></thead><tbody>' +
+    '<table><thead><tr><th>Abonné</th><th>Abonné le</th><th>Cible</th><th>Contacté</th><th>Date</th><th>Délai de contact</th><th>Statut</th><th>Message envoyé</th><th>Conv</th></tr></thead><tbody>' +
     shown.map(f => '<tr' + (!f.contacte ? ' style="background:color-mix(in srgb,var(--bad) 8%,transparent)"' : '') + '>' +
       '<td><a href="https://www.instagram.com/' + esc(f.pseudo) + '/" target="_blank" rel="noopener"><b>' + esc(f.nom) + '</b></a><br><span style="color:var(--muted)">@' + esc(f.pseudo) + '</span></td>' +
-      '<td>' + (f.ancien ? '<span style="color:var(--muted)">ancien · ' + esc(f.detecte) + '</span>' : esc(f.detecte)) + '</td><td>' + esc(f.cible) + '</td>' +
+      '<td>' + (f.ancien ? '<span style="color:var(--muted)">ancien · ' + esc(f.detecte) + '</span>' : f.abonneLe ? '<span style="white-space:nowrap">' + esc(f.abonneLe.replace(/\/\d{4} /, " à ").replace(":", "h")) + '</span>' : esc(f.detecte)) + '</td><td>' + esc(f.cible) + '</td>' +
       '<td>' + (f.contacte ? "✅ oui" : (seen[f.pseudo] ? "☑️ coché, à vérifier" : "❌ non")) + '</td>' +
-      '<td>' + esc(f.date) + '</td><td>' + (NF_STATUT[f.statut] || esc(f.statut)) + '</td>' +
+      '<td>' + esc(f.premierMsg ? f.premierMsg.replace(/\/\d{4} /, " à ").replace(":", "h") : f.date) + '</td><td style="white-space:nowrap">' + nfDelai(f) + '</td><td>' + (NF_STATUT[f.statut] || esc(f.statut)) + '</td>' +
       '<td style="max-width:360px;white-space:pre-wrap;font-size:12.5px">' + esc(f.envoye) + '</td>' +
       '<td>' + (f.conv ? '<a href="' + esc(f.conv) + '" target="_blank" rel="noopener">ouvrir ↗</a>' : '') + '</td></tr>').join("") +
     '</tbody></table>' : '<p class="rstats" style="margin:0">Aucun abonné relevé pour ce filtre.</p>';
@@ -4493,6 +4628,199 @@ document.addEventListener("change", e => {
   try { localStorage.setItem("nf-contacted", JSON.stringify(seen)); } catch (err) {}
   renderAbonnesTab();
 });
+
+/* ---------- Setting › ⏱️ Réactivité (data/reactivite.json + colonnes « Abonne le » / « Premier message le » d'abonnes.csv) ----------
+   1) Temps de réponse : un « tour » = les messages d'un lead d'affilée ; délai = de son premier message au message suivant
+      de notre côté. Leads chauds = étiquette EOD active, scan, call ou vente (onglet Leads), prospect chaud d'À répondre,
+      appel fait / booké / reporté / vente (Appels proposés), étiquette Instagram Prospect, Lead, Booked ou Payé.
+   2) Délai de premier contact : heure d'abonnement (notifications Instagram) → premier message envoyé.
+   Tout se calcule à l'heure du relevé (REAC.ts) : « en attente » et « sans réponse » sont l'état à ce moment-là. */
+let REAC = null, rxRange = "7", rxPoli = "0", RX_T = null;
+try { rxRange = localStorage.getItem("rxRange") || "7"; rxPoli = localStorage.getItem("rxPoli") || "0"; } catch (e) {}
+function scheduleReac() { clearTimeout(RX_T); RX_T = setTimeout(() => { try { renderReac(); } catch (e) { console.error("réactivité", e); } scheduleOverview(); }, 120); }
+const RX_B = [[1, "Moins d'1 h", 0], [3, "1 à 3 h", 1], [6, "3 à 6 h", 2], [12, "6 à 12 h", 2], [24, "12 à 24 h", 2], [72, "1 à 3 jours", 3], [Infinity, "Plus de 3 jours", 3]];
+const RX_WAIT = 7, RX_NONE = 8;
+const RX_CLS = [["Moins d'1 h", "var(--rx0)", "var(--rx0t)"], ["1 à 3 h", "var(--rx1)", "var(--rx1t)"], ["3 à 24 h", "var(--rx2)", "var(--rx2t)"],
+  ["Plus de 24 h", "var(--rx3)", "var(--rx3t)"], ["⏳ En attente, moins de 24 h", "var(--rxw)", "var(--ink)"], ["❌ Sans réponse après 24 h", "var(--rxn)", "#fff"]];
+const RX_ABO_LAB = ["⏳ Pas encore contacté, moins de 24 h", "❌ Pas contacté après 24 h"];
+const rxLab = (i, abo) => abo && i >= 4 ? RX_ABO_LAB[i - 4] : RX_CLS[i][0];
+const RX_HOT_ISSUES = new Set(["fait", "booke", "vente", "reporte"]);
+const RX_KIND = { t: "texte", v: "vocal", e: "réponse à une story", c: "réel partagé", k: "lien", p: "photo", m: "publication partagée", s: "story partagée", r: "photo éphémère", h: "cœur", g: "GIF", x: "autre" };
+const rxBucket = (x, nowTs) => x.r ? RX_B.findIndex(([lim]) => (x.r - x.t) / 3600 < lim) : ((nowTs - x.t) / 3600 < 24 ? RX_WAIT : RX_NONE);
+const rxClassOf = b => b < RX_WAIT ? RX_B[b][2] : b === RX_WAIT ? 4 : 5;
+const rxPct = (a, b) => b ? Math.round(100 * a / b) + "\u00a0%" : "–";
+const rxParis = ts => new Date(ts * 1000 + 2 * 3600e3);   // même fuseau fixe que les scripts de relevé
+const RX_J = ["dim.", "lun.", "mar.", "mer.", "jeu.", "ven.", "sam."];
+const rxWhen = ts => { const d = rxParis(ts); return RX_J[d.getUTCDay()] + " " + pad(d.getUTCDate()) + "/" + pad(d.getUTCMonth() + 1) + " " + pad(d.getUTCHours()) + "h" + pad(d.getUTCMinutes()); };
+const rxDur = sec => { const m = Math.max(0, Math.round(sec / 60)); if (m < 60) return m + " min"; const h = Math.floor(m / 60), mm = m % 60;
+  return h < 24 ? h + " h" + (mm ? " " + pad(mm) : "") : Math.floor(h / 24) + " j " + (h % 24) + " h"; };
+const rxParseDT = v => { const m = /^(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2})$/.exec((v || "").trim()); return m ? Math.floor((Date.UTC(+m[3], +m[2] - 1, +m[1], +m[4], +m[5]) - 2 * 3600e3) / 1000) : 0; };
+function rxAgg(list, nowTs) {
+  const n = new Array(9).fill(0);
+  list.forEach(x => n[rxBucket(x, nowTs)]++);
+  const within = h => list.filter(x => x.r && (x.r - x.t) / 3600 < h).length;
+  return { n, tot: list.length, u1: within(1), u3: within(3), u24: within(24), wait: n[RX_WAIT], none: n[RX_NONE] };
+}
+function rxHotSet() {
+  const s = new Set();
+  if (typeof LEAD_BY_PSEUDO !== "undefined") LEAD_BY_PSEUDO.forEach((l, p) => { if (LEAD_RANK[l.best] >= LEAD_RANK.chaud) s.add(p); });
+  ((typeof AREP !== "undefined" && AREP && AREP.convs) || []).forEach(c => { if (c.categorie === "prospect_chaud" && c.pseudo) s.add(c.pseudo.toLowerCase()); });
+  ((typeof APPELS !== "undefined" && APPELS && APPELS.convs) || []).forEach(c => { if (RX_HOT_ISSUES.has(c.issue) && c.pseudo) s.add(c.pseudo.toLowerCase()); });
+  Object.entries((REAC && REAC.labels) || {}).forEach(([p, lb]) => { if (/Prospect|Lead|Booked|Payé/i.test(lb)) s.add(p.toLowerCase()); });
+  return s;
+}
+/* calcul partagé (sous-onglet + Vue d'ensemble + Nouveaux abonnés) */
+function rxCompute(days, withPoli) {
+  const nowTs = REAC && REAC.ts ? REAC.ts : Math.floor(Date.now() / 1000);
+  const cov = REAC && REAC.couvert_depuis ? rxParseDT(REAC.couvert_depuis.split("-").reverse().join("/") + " 00:00") : 0;
+  const from = days ? nowTs - days * 86400 : cov;
+  const hot = rxHotSet();
+  const tours = ((REAC && REAC.tours) || []).map(([u, t, r, n, kind, poli]) => ({ u: String(u), t, r, n, kind: kind || "", poli: !!poli, hot: hot.has(String(u).toLowerCase()) }));
+  const inP = tours.filter(x => x.t >= from && (withPoli || !x.poli));
+  const H = inP.filter(x => x.hot), O = inP.filter(x => !x.hot);
+  const fAll = (typeof NF_LIST !== "undefined" ? NF_LIST : []).map(f => ({ f, t: rxParseDT(f.abonneLe), m: rxParseDT(f.premierMsg) })).filter(x => x.t);
+  const fIn = fAll.filter(x => x.t >= from);
+  const avant = fIn.filter(x => x.m && x.m < x.t - 60);
+  const F = fIn.filter(x => !(x.m && x.m < x.t - 60)).map(x => ({ ...x, r: x.m || 0 }));
+  return { nowTs, from, tours, inP, H, O, aH: rxAgg(H, nowTs), aO: rxAgg(O, nowTs), F, avant, aF: rxAgg(F, nowTs), fAll };
+}
+function rxBar(label, sub, a, abo) {
+  if (!a.tot) return '<div class="rxrow"><div class="rxlab">' + label + '<small>' + sub + '</small></div><div class="formnote">rien sur la période</div></div>';
+  const cls = [0, 0, 0, 0, 0, 0];
+  a.n.forEach((v, b) => { cls[rxClassOf(b)] += v; });
+  const segs = cls.map((v, i) => v ? '<span class="rxseg" tabindex="0" style="flex:' + v + ' 1 0;background:' + RX_CLS[i][1] + ';color:' + RX_CLS[i][2] + '"' +
+    ' data-tipv="' + Math.round(100 * v / a.tot) + ' %" data-tipl="' + esc(label + " · " + rxLab(i, abo) + " : " + v + " sur " + a.tot) + '"><span class="rxv">' + Math.round(100 * v / a.tot) + '%</span></span>' : "").join("");
+  return '<div class="rxrow"><div class="rxlab">' + label + '<small>' + sub + '</small></div><div class="rxbar">' + segs + '</div></div>';
+}
+const rxLegend = abo => '<div class="rxlegend">' + RX_CLS.map((c, i) => '<span class="rxkey"><i style="background:' + c[1] + '"></i>' + rxLab(i, abo) + '</span>').join("") + '</div>';
+function rxTable(firstCol, cols, abo) {
+  const labs = RX_B.map(b => b[1]).concat([rxLab(4, abo), rxLab(5, abo)]);
+  const head = '<thead><tr><th rowspan="2" style="vertical-align:bottom">' + firstCol + '</th>' + cols.map(c => '<th colspan="3" class="grp">' + c.title + '</th>').join("") + '</tr><tr>' +
+    cols.map(() => '<th>nb</th><th>%</th><th>cumul</th>').join("") + '</tr></thead>';
+  const body = labs.map((lab, b) => '<tr><td class="tot" style="white-space:nowrap"><i class="rxsw" style="background:' + RX_CLS[rxClassOf(b)][1] + '"></i>' + lab + '</td>' +
+    cols.map(c => { const v = c.a.n[b], cum = b < RX_WAIT ? c.a.n.slice(0, b + 1).reduce((x, y) => x + y, 0) : null;
+      return '<td>' + v + '</td><td class="tot">' + rxPct(v, c.a.tot) + '</td><td>' + (cum == null ? "" : rxPct(cum, c.a.tot)) + '</td>'; }).join("") + '</tr>').join("") +
+    '<tr><td class="tot">Total</td>' + cols.map(c => '<td class="tot">' + c.a.tot + '</td><td></td><td></td>').join("") + '</tr>';
+  return '<table class="rxt">' + head + '<tbody>' + body + '</tbody></table>';
+}
+function rxSlotsTable(list, nowTs, unit, verb, abo) {
+  const hourOf = ts => rxParis(ts).getUTCHours(), dowOf = ts => rxParis(ts).getUTCDay();
+  const S = [["🌅 Le matin (6h-12h)", x => hourOf(x.t) >= 6 && hourOf(x.t) < 12], ["☀️ L'après-midi (12h-18h)", x => hourOf(x.t) >= 12 && hourOf(x.t) < 18],
+    ["🌆 Le soir (18h-23h)", x => hourOf(x.t) >= 18 && hourOf(x.t) < 23], ["🌙 La nuit (23h-6h)", x => hourOf(x.t) >= 23 || hourOf(x.t) < 6],
+    ["📅 En semaine", x => dowOf(x.t) >= 1 && dowOf(x.t) <= 5], ["🛋️ Le week-end", x => dowOf(x.t) === 0 || dowOf(x.t) === 6]];
+  if (!list.length) return '<p class="empty-note" style="margin:0">Rien sur la période.</p>';
+  return '<table class="rxt"><thead><tr><th>' + unit + '</th><th>nb</th><th>' + verb + ' &lt; 1 h</th><th>&lt; 3 h</th><th>&lt; 24 h</th><th>' + (abo ? "❌ pas contacté après 24 h" : "❌ sans réponse après 24 h") + '</th></tr></thead><tbody>' +
+    S.map(([lab, f], i) => { const a = rxAgg(list.filter(f), nowTs);
+      return '<tr' + (i === 4 ? ' style="border-top:2px solid var(--grid)"' : '') + '><td class="tot" style="white-space:nowrap">' + lab + '</td><td>' + a.tot + '</td><td class="tot">' + rxPct(a.u1, a.tot) + '</td><td>' +
+        rxPct(a.u3, a.tot) + '</td><td>' + rxPct(a.u24, a.tot) + '</td><td>' + (a.none ? a.none + " · " + rxPct(a.none, a.tot) : "0") + '</td></tr>'; }).join("") + '</tbody></table>';
+}
+function rxLeadCell(u) {
+  const l = typeof LEAD_BY_PSEUDO !== "undefined" ? LEAD_BY_PSEUDO.get(u.toLowerCase()) : null;
+  const nom = l && l.nom && l.nom !== "@" + u ? l.nom : "";
+  return '<a href="https://www.instagram.com/' + esc(u) + '/" target="_blank" rel="noopener"><b>' + esc(nom || "@" + u) + '</b></a>' + (nom ? '<br><span style="color:var(--muted)">@' + esc(u) + '</span>' : '');
+}
+function renderReac() {
+  if (!el("rx-kpis")) return;
+  document.querySelectorAll("#rx-range [data-rx]").forEach(b => b.classList.toggle("on", b.dataset.rx === rxRange));
+  document.querySelectorAll("#rx-range [data-rxp]").forEach(b => b.classList.toggle("on", b.dataset.rxp === rxPoli));
+  if (!REAC) { el("rx-kpis").innerHTML = '<p class="empty-note">Pas encore de relevé de réactivité (data/reactivite.json).</p>'; return; }
+  const days = rxRange === "all" ? null : +rxRange;
+  const C = rxCompute(days, rxPoli === "1"), { nowTs, aH, aO, aF } = C;
+  const lab = days ? "sur " + days + " jours" : "sur tout le relevé";
+  el("rx-releve").textContent = "Relevé Instagram du " + (REAC.genere || "?") + " · conversations relues depuis le " + dfr(REAC.couvert_depuis || "") +
+    " · heures d'abonnement connues depuis le " + (C.fAll.length ? rxWhen(Math.min(...C.fAll.map(x => x.t))).slice(5, 10) : "–") + ".";
+  const kpi = (label, val, sub, col) => '<div class="card tile" style="--tc:' + col + '"><div class="formnote" style="margin:0">' + label + '</div><div style="font-size:28px;font-weight:700;line-height:1.2">' + val + '</div>' + (sub ? '<div class="formnote" style="margin:4px 0 0">' + sub + '</div>' : '') + '</div>';
+  el("rx-kpis").innerHTML =
+    kpi("🔥 Leads chauds · répondus en moins d'1 h", rxPct(aH.u1, aH.tot), rxPct(aH.u3, aH.tot) + " en moins de 3 h · " + aH.tot + " messages reçus " + lab, "var(--s2)") +
+    kpi("🙂 Autres leads · répondus en moins d'1 h", rxPct(aO.u1, aO.tot), rxPct(aO.u3, aO.tot) + " en moins de 3 h · " + aO.tot + " messages reçus " + lab, "var(--accent)") +
+    kpi("🆕 Nouveaux abonnés · contactés en moins de 3 h", rxPct(aF.u3, aF.tot), rxPct(aF.u1, aF.tot) + " en moins d'1 h · " + rxPct(aF.u24, aF.tot) + " en moins de 24 h · " + aF.tot + " abonnés", "var(--s3)") +
+    kpi("❌ Leads sans réponse après 24 h", aH.none + aO.none, "dont " + aH.none + " chaud" + (aH.none > 1 ? "s" : "") + " · + " + (aH.wait + aO.wait) + " en attente depuis moins de 24 h", "var(--bad)");
+  const cntEl = el("reac-count"); if (cntEl) cntEl.textContent = aH.none ? "(" + aH.none + " 🔥)" : "";
+  renderNfDelai();
+
+  el("rx-bars").innerHTML = rxBar("🔥 Leads chauds", aH.tot + " messages reçus", aH) + rxBar("🙂 Autres leads", aO.tot + " messages reçus", aO) + rxLegend(false);
+  el("rx-table").innerHTML = rxTable("Délai de réponse", [{ title: "🔥 Leads chauds", a: aH }, { title: "🙂 Autres leads", a: aO }]);
+  el("rx-note").textContent = "Chaque fois qu'un lead écrit (un ou plusieurs messages d'affilée), le délai court de son premier message jusqu'au message suivant de notre côté, quel qu'il soit. " +
+    "Cumul = part répondue avant la fin de la tranche (ligne « 1 à 3 h » : répondu en moins de 3 h). Les likes de message ne comptent pas. " +
+    (rxPoli === "1" ? "Les messages de politesse sont comptés. " : "Les messages de politesse (merci, ok, bonne soirée, emoji ou cœur seul) sont mis à part : ils n'appellent pas de réponse. ") +
+    "Leads chauds : étiquette posée dans l'EOD, scan, call ou vente, prospect chaud de l'onglet À répondre, appel fait, booké ou reporté, étiquette Instagram Prospect ou Payé. " +
+    "« En attente » et « sans réponse » : état au moment du relevé. Seuls les 40 derniers messages de chaque conversation sont relus.";
+
+  el("rx-nf-bars").innerHTML = rxBar("🆕 Nouveaux abonnés", aF.tot + " abonnés " + lab, aF, true) + rxLegend(true);
+  el("rx-nf-table").innerHTML = rxTable("Délai de premier contact", [{ title: "🆕 Nouveaux abonnés", a: aF }], true);
+  el("rx-nf-note").textContent = "Heure exacte de l'abonnement lue dans les notifications Instagram (elles ne gardent que 5 jours environ : le relevé doit passer au moins tous les 4 jours), " +
+    "puis heure du premier message envoyé. " + (C.avant.length ? C.avant.length + " abonné" + (C.avant.length > 1 ? "s" : "") + " déjà en conversation avant de s'abonner " + (C.avant.length > 1 ? "sont mis" : "est mis") + " à part. " : "") +
+    "« En attente » et « pas contacté » : état au moment du relevé.";
+
+  el("rx-hours").innerHTML = rxSlotsTable(C.inP, nowTs, "Le lead écrit", "répondu");
+  el("rx-nf-hours").innerHTML = rxSlotsTable(C.F, nowTs, "La personne s'abonne", "contacté", true);
+
+  /* semaine par semaine (toutes les semaines du relevé) */
+  const all = rxCompute(null, rxPoli === "1");
+  const monday = ts => { const d = rxParis(ts); const off = (d.getUTCDay() + 6) % 7; return Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() - off) / 1000; };
+  const weeks = [...new Set(all.inP.map(x => monday(x.t)).concat(all.F.map(x => monday(x.t))))].sort((a, b) => b - a);
+  const cells = a => '<td>' + a.tot + '</td><td class="tot">' + rxPct(a.u1, a.tot) + '</td><td>' + rxPct(a.u3, a.tot) + '</td><td>' + (a.none ? a.none : "0") + '</td>';
+  el("rx-weeks").innerHTML = weeks.length ? '<table class="rxt"><thead><tr><th rowspan="2" style="vertical-align:bottom">Semaine</th><th colspan="4" class="grp">🔥 Leads chauds</th><th colspan="4" class="grp">🙂 Autres leads</th><th colspan="4" class="grp">🆕 Nouveaux abonnés</th></tr><tr>' +
+    '<th>reçus</th><th>&lt; 1 h</th><th>&lt; 3 h</th><th>❌</th><th>reçus</th><th>&lt; 1 h</th><th>&lt; 3 h</th><th>❌</th><th>abonnés</th><th>&lt; 1 h</th><th>&lt; 3 h</th><th>❌</th></tr></thead><tbody>' +
+    weeks.map(w => { const inW = x => monday(x.t) === w; const d = new Date(w * 1000);
+      return '<tr><td class="tot" style="white-space:nowrap">du ' + pad(d.getUTCDate()) + '/' + pad(d.getUTCMonth() + 1) + '</td>' + cells(rxAgg(all.H.filter(inW), all.nowTs)) + cells(rxAgg(all.O.filter(inW), all.nowTs)) +
+        (all.F.some(inW) ? cells(rxAgg(all.F.filter(inW), all.nowTs)) : '<td colspan="4" style="text-align:center;color:var(--muted)">pas relevé</td>') + '</tr>'; }).join("") +
+    '</tbody></table>' : '<p class="empty-note" style="margin:0">Pas encore de données.</p>';
+
+  /* leads sans réponse : dernier tour de chaque lead, s'il est resté sans réponse */
+  const lastByLead = new Map();
+  C.tours.forEach(x => { const p = lastByLead.get(x.u); if (!p || x.t > p.t) lastByLead.set(x.u, x); });
+  const waiting = [...lastByLead.values()].filter(x => !x.r && x.t >= C.from && (rxPoli === "1" || !x.poli))
+    .sort((a, b) => (b.hot ? 1 : 0) - (a.hot ? 1 : 0) || a.t - b.t);
+  el("sec-rx-wait").hidden = !waiting.length;
+  el("rx-wait").innerHTML = '<table class="rxt"><thead><tr><th>Lead</th><th style="text-align:left">Type</th><th>A écrit</th><th>Attend depuis</th><th style="text-align:left">Message</th><th>Conv</th></tr></thead><tbody>' +
+    waiting.map(x => { const l = LEAD_BY_PSEUDO.get(x.u.toLowerCase());
+      return '<tr' + (x.hot ? ' style="background:color-mix(in srgb,var(--bad) 7%,transparent)"' : '') + '><td>' + rxLeadCell(x.u) + '</td><td style="text-align:left">' + (x.hot ? "🔥 chaud" : "🙂 autre") + '</td>' +
+        '<td style="white-space:nowrap">' + rxWhen(x.t) + '</td><td class="tot" style="white-space:nowrap">' + rxDur(nowTs - x.t) + '</td>' +
+        '<td style="text-align:left">' + esc([...x.kind].map(k => RX_KIND[k] || "autre").join(" + ")) + (x.n > 1 ? " (" + x.n + " messages)" : "") + '</td>' +
+        '<td>' + (l && l.conv ? '<a href="' + esc(l.conv) + '" target="_blank" rel="noopener">ouvrir ↗</a>' : '') + '</td></tr>'; }).join("") + '</tbody></table>';
+
+  /* détail des nouveaux abonnés */
+  const fl = C.fAll.filter(x => x.t >= C.from).sort((a, b) => b.t - a.t);
+  el("rx-nf-list").innerHTML = fl.length ? '<table class="rxt"><thead><tr><th>Abonné</th><th>Abonné le</th><th>Premier message</th><th>Délai</th><th style="text-align:left">Cible</th><th style="text-align:left">Statut</th></tr></thead><tbody>' +
+    fl.map(x => { const f = x.f, avant = x.m && x.m < x.t - 60;
+      const delai = avant ? '<span style="color:var(--muted)">déjà en conversation avant</span>' : x.m ? '<b>' + rxDur(x.m - x.t) + '</b>' :
+        '<span style="color:var(--bad);font-weight:600">pas encore · depuis ' + rxDur(nowTs - x.t) + '</span>';
+      return '<tr><td><a href="https://www.instagram.com/' + esc(f.pseudo) + '/" target="_blank" rel="noopener"><b>' + esc(f.nom) + '</b></a><br><span style="color:var(--muted)">@' + esc(f.pseudo) + '</span></td>' +
+        '<td style="white-space:nowrap">' + rxWhen(x.t) + '</td><td style="white-space:nowrap">' + (x.m ? rxWhen(x.m) : "–") + '</td><td style="white-space:nowrap">' + delai + '</td>' +
+        '<td style="text-align:left;white-space:nowrap" title="' + esc(f.cible) + '">' + esc((f.cible || "").replace(/\s*\(.*$/, "")) + '</td><td style="text-align:left;white-space:nowrap">' + (NF_STATUT[f.statut] || (f.contacte ? "contacté" : "")) + '</td></tr>'; }).join("") +
+    '</tbody></table>' : '<p class="empty-note" style="margin:0">Aucun abonnement daté sur la période.</p>';
+
+  /* un pourcentage qui ne tient pas dans son segment passe dans l'infobulle (jamais rogné) */
+  document.querySelectorAll("#tab-reac .rxseg .rxv").forEach(v => { const sg = v.parentNode; if (sg.clientWidth && v.offsetWidth + 10 > sg.clientWidth) v.remove(); });
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("#rx-range .fpill");
+  if (!b) return;
+  if (b.dataset.rx) rxRange = b.dataset.rx;
+  if (b.dataset.rxp) rxPoli = b.dataset.rxp;
+  try { localStorage.setItem("rxRange", rxRange); localStorage.setItem("rxPoli", rxPoli); } catch (err) {}
+  renderReac();
+});
+/* infobulle des segments (souris et clavier) */
+function rxTipShow(sg, x, y) {
+  const tip = el("rx-tip"); if (!tip) return;
+  tip.textContent = "";
+  const v = document.createElement("b"); v.textContent = sg.dataset.tipv; tip.appendChild(v);
+  tip.appendChild(document.createTextNode(sg.dataset.tipl));
+  tip.hidden = false;
+  const r = tip.getBoundingClientRect();
+  tip.style.left = Math.min(innerWidth - r.width - 8, x + 12) + "px";
+  tip.style.top = Math.max(8, y - r.height - 12) + "px";
+}
+document.addEventListener("pointermove", e => {
+  const sg = e.target.closest && e.target.closest(".rxseg");
+  if (sg) rxTipShow(sg, e.clientX, e.clientY); else if (el("rx-tip") && !el("rx-tip").hidden && !(document.activeElement && document.activeElement.classList.contains("rxseg"))) el("rx-tip").hidden = true;
+});
+document.addEventListener("focusin", e => { const sg = e.target.closest && e.target.closest(".rxseg"); if (sg) { const r = sg.getBoundingClientRect(); rxTipShow(sg, r.left + r.width / 2, r.top); } });
+document.addEventListener("focusout", e => { if (e.target.closest && e.target.closest(".rxseg") && el("rx-tip")) el("rx-tip").hidden = true; });
+let RX_RZ = null;
+addEventListener("resize", () => { clearTimeout(RX_RZ); RX_RZ = setTimeout(() => { if (el("tab-reac") && !el("tab-reac").hidden) renderReac(); }, 200); });
 
 /* filtre Tous / Remplis / En cours (les pills de compteurs sont cliquables) */
 let tallyFilter = "all";
@@ -5356,6 +5684,7 @@ function renderOverview() {
   const chaudsActifs = VIVIER.filter(v => !ret[v.key]).length;
   const next = [...(CPT.calUpcoming || []).map(c => ({ n: c.name, d: iso(c.start) })), ...(CPT.avenirDeals || []).map(d => ({ n: d.name, d: d.when }))]
     .filter(x => x.d).sort((a, b) => a.d < b.d ? -1 : 1).slice(0, 3);
+  const RX7 = typeof rxCompute === "function" && REAC ? rxCompute(7, false) : null;
   const card = (color, title, go, body) => '<div class="card ovpole" style="--pc:' + color + '"><h3>' + title + '</h3>' + body +
     '<a class="ovgo" data-go="' + go + '">Ouvrir ›</a></div>';
   el("ov-poles").innerHTML =
@@ -5366,10 +5695,14 @@ function renderOverview() {
     card("var(--accent)", "✉️ Setting · 1er message", "eod",
       kv("Accroches sur 7 jours", fmt(acc7.length)) + kv("Taux de réponse 7 j", pctTxt(rep7, acc7.length)) +
       kv("Nouveaux abonnés à contacter", NF_TODO_N == null ? "–" : NF_TODO_N) +
+      (RX7 && RX7.aF.tot ? kv("Abonnés contactés en moins de 3 h (7 j)", rxPct(RX7.aF.u3, RX7.aF.tot)) : "") +
       (NF_TODO_N ? todoLine(NF_TODO_N + " abonné" + (NF_TODO_N > 1 ? "s" : "") + " à contacter", "abonnes") : "") +
       (el("eod-missing") && /badge lose/.test(el("eod-missing").innerHTML) ? todoLine("EOD manquants cette semaine", "eod") : "")) +
     card("var(--s2)", "🎯 Setting · Lauric", "arep",
       kv("Conversations à répondre", AREP_OPEN == null ? "–" : AREP_OPEN) + kv("Leads chauds actifs", chaudsActifs) +
+      (RX7 && RX7.aH.tot ? kv("Chauds répondus en moins d'1 h (7 j)", rxPct(RX7.aH.u1, RX7.aH.tot)) : "") +
+      (RX7 && RX7.aH.tot ? kv("Chauds répondus en moins de 3 h (7 j)", rxPct(RX7.aH.u3, RX7.aH.tot)) : "") +
+      (RX7 && RX7.aH.none ? todoLine(RX7.aH.none + " message" + (RX7.aH.none > 1 ? "s" : "") + " de leads chauds sans réponse après 24 h", "reac") : "") +
       kv("Tâches de Lauric", todoL) +
       (AREP_OPEN ? todoLine("Répondre à " + AREP_OPEN + " conversation" + (AREP_OPEN > 1 ? "s" : ""), "arep") : "") +
       (lmNoLink ? todoLine(lmNoLink + " personne" + (lmNoLink > 1 ? "s" : "") + " ont répondu au scan sans recevoir le lien", "lm") : "")) +

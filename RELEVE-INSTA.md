@@ -187,3 +187,33 @@ n'est pas en place ; seuls les 20 derniers messages de chaque conversation sont 
   Puis `python3 reels.py <export.json> --date "JJ/MM/AAAA HHhMM"` → `data/reels.json`.
 - Les couvertures sont des liens Instagram signés qui expirent en 5 jours environ : la carte affiche alors l'accroche sur fond
   coloré, rien ne casse.
+
+## Sous-onglet « ⏱️ Réactivité » (Setting, ajouté le 17/09/2026)
+
+But : mesurer par tranches de durée (pas en moyenne) le temps de réponse de l'équipe quand un lead écrit, leads chauds
+et autres leads séparés, et le délai entre l'abonnement et le premier message. La page lit `data/reactivite.json`
+et les colonnes `Abonne le` / `Premier message le` de `data/abonnes.csv`.
+
+1. **Heures d'abonnement** (avant ou après la boucle inbox, 1 seul appel) : depuis l'onglet `instagram.com/robots.txt`,
+   `GET /api/v1/news/inbox/?could_truncate_feed=true&should_skip_su=true&mark_as_seen=false&timezone_offset=7200`
+   (en-têtes `x-ig-app-id`, `x-requested-with`). Les `story_type == 101` sont les abonnements, un par personne
+   (`args.timestamp`, `args.profile_id`, `args.profile_name`, jamais groupés). **Environ 5 jours d'historique seulement**
+   (`is_last_page` dès la 1re page le 17/09, 91 notifications) : relever au moins tous les 4 jours, sinon les heures sont
+   perdues. Sortie en lignes `timestamp┃pk┃pseudo` dans un `<pre>` puis `get_page_text` (le texte brut est court).
+   La liste des abonnés (`/friendships/.../followers/`) est dans le même ordre : elle sert de contrôle.
+2. **Boucle inbox à 40 messages** (`window.__T40`, voir « Astuce du 15/09 ») en ajoutant `lb` (étiquettes `label_items`),
+   `g` (groupe) et `nu` (nombre de participants) à chaque conversation.
+3. **Export** : `scripts-releve/export_reac.js` sur `__T40` → tranches `R<k>` (`window.__rpart(k)`, ~50 000 caractères
+   pour 400 conversations, 2 tranches), recollées par `python3 scripts-releve/glue_text.py <scratchpad>/reac.txt --prefix R`.
+4. `python3 reactivite.py <reac.txt> --notif <follows.txt> --date "JJ/MM/AAAA HHhMM"` → `data/reactivite.json`
+   (tours : pseudo, heure du 1er message du lead, heure de notre réponse ou 0, nb de messages, types, politesse)
+   et remplit `Abonne le` / `Premier message le` dans `abonnes.csv`. **Lancer `maj_abonnes.py` avant** (il ajoute les
+   nouveaux abonnés). Fusion : les tours des conversations non relues sont gardés.
+5. `git add data/reactivite.json data/abonnes.csv`.
+
+Règles de calcul (dans la page, fonction `rxCompute`) : un tour = messages du lead d'affilée, le délai court de son
+premier message au message suivant de notre côté ; les likes de message ne comptent pas ; « politesse » (merci, ok,
+bonne soirée, emoji ou cœur seul, « non merci ») mis à part par défaut ; lead chaud = étape chaud ou plus dans Leads
+(étiquette EOD, scan, call, vente), `prospect_chaud` d'À répondre, appel fait / booké / reporté / vente, étiquette
+Instagram Prospect, Lead, Booked ou Payé ; « en attente » (< 24 h) et « sans réponse » (> 24 h) = état à l'heure du relevé
+(`ts`). Abonné déjà en conversation avant de s'abonner : mis à part.
