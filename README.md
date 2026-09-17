@@ -10,7 +10,7 @@
   - Premier message (setters) : 📝 EOD · 🆕 Nouveaux abonnés · 📣 Script et A/B · 📈 Chiffres des accroches (ex-Datas) · 📊 Chiffres EOD (ex-Vue d'ensemble) · 🔍 EOD vs réel
   - Lauric, dès que le lead répond : 💬 À répondre · 🔥 Leads chauds (bouton « Retirer l'étiquette » → « Étiquettes anciennes », ligne `Etiquette` du Google Form `— EtqRetiree : <pseudo> · 1|0`) · 🎁 Lead magnet (ex-Scans Tally : pilotage, Scan Dirigeant, Vidéo YouTube, tous les envois) · 📞 Appels proposés · 👤 Tous les leads
 - **🤝 Closing** : l'ancien onglet Calls est fusionné dans Ventes. Tuiles filtres : à venir (Calendly + datés dans le suivi hors Calendly), calls à remplir, en cours, à relancer, ventes, perdus, CA signé. Le CA encaissé a été retiré de toute la console (les étapes contrat / paiement restent).
-- **✅ To do** : inchangé.
+- **✅ To do**, deux sous-onglets : ⚡ 20/80 du jour (par défaut) · ✅ À faire (l'ancienne liste, inchangée).
 
 Lead magnet : `data/lead-magnets.json` fabriqué par `lead_magnets.py` à partir de l'export `scripts-releve/export_lm.js` (relevé du matin, voir RELEVE-INSTA.md) + `leads-insta.csv`, Tally, Calendly, appels, portefeuille. Analyse rédigée dans `data/lead-magnets-notes.json`.
 
@@ -122,7 +122,22 @@ réponse du lead, conversation complète dépliable en bulles). Source : `data/i
 depuis l'export complet des conversations (voir RELEVE-INSTA.md « Export complet ») ; notes manuelles dans
 `data/insta-appels-notes.json`. Pills = filtre par issue.
 
-## Onglet ✅ To do (11/09)
+## Onglet ✅ To do › ⚡ 20/80 du jour (17/09)
+Sous-onglet par défaut du pôle To do (`PANES.p2080`, `POLE_DEFAULT.todo`) : le plan des 30 minutes qui rapportent le plus,
+orienté « là où le cash est le plus proche » (propositions déjà chiffrées qui attendent un oui, jamais de prospection).
+
+- Source : `data/2080.json`, écrit par Claude après analyse du portefeuille (colonnes Propo / Issue), de Calendly, des scans
+  Tally, du relevé des conversations Instagram (appels proposés, À répondre) et de la To do. Champs d'une action :
+  `id, min, montant` (ou `libelle_montant`), `plus`, `qui, pseudo, tel, mail, canal` (appel · whatsapp · vocal · mail · prepa · message),
+  `titre, depuis, depuis_quoi, pourquoi[], quoi[], message, eviter`. Puis `bonus[]`, `pas_maintenant[]`, `analyse[]` (HTML autorisé
+  dans les points, comme les autres onglets d'analyse), `note`.
+- Tout ce qui vieillit est recalculé à l'ouverture : « il y a N jours » depuis `depuis`, euros et minutes restants, barre de
+  progression, bandeau d'alerte si le plan n'a pas été réécrit aujourd'hui.
+- Cases cochées partagées avec l'équipe par le même Google Form que la To do, setter `Todo`, avec un préfixe qui évite toute
+  collision avec les tâches : `— TodoFait : x-<id> · 1|0`. `render2080()` + `p80DoneMap()` dans index.html.
+- Pour le refaire : relire le portefeuille et les relevés, réécrire `data/2080.json`, pousser. Rien d'autre à toucher.
+
+## Onglet ✅ To do › ✅ À faire (11/09)
 Une liste par personne (pills Lauric, Constant, Maximilien, Cynthia, Alex, tout le monde ; choix mémorisé en localStorage
 `todoWho`). Tâches de base dans `data/todo.json` (écrites par Claude : relances issues de l'analyse des appels, mises à jour
 par la tâche du matin `releve-insta-lauric`). Tâches ajoutées, cochées ou supprimées depuis la page : lignes du Google Form

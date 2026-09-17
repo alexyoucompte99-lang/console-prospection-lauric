@@ -387,6 +387,26 @@
   .vkpi.vf:hover { outline: 2px solid var(--kc); outline-offset: 1px; }
   .vkpi.vf.on { outline: 3px solid var(--kc); outline-offset: 1px; }
 
+  /* onglet ✅ To do › ⚡ 20/80 : le plan de 30 minutes */
+  .p80prin { margin: 0 0 4px; font-size: 14.5px; line-height: 1.55; color: var(--ink-2); max-width: 80ch; }
+  .p80bar { height: 9px; border-radius: 999px; background: var(--grid); overflow: hidden; margin: 16px 0 6px; }
+  .p80bar i { display: block; height: 100%; width: 0; border-radius: 999px; background: var(--good); transition: width .3s ease; }
+  .p80card { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; align-items: start; border-left: 3px solid var(--kc, var(--accent)); }
+  .p80card.done { opacity: .5; }
+  .p80card.done .rname { text-decoration: line-through; color: var(--muted); }
+  .p80card .rname .p80n { color: var(--kc, var(--accent)); margin-right: 4px; }
+  .p80sub { margin: 12px 0 0; font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); }
+  .p80ul { margin: 5px 0 0; padding-left: 19px; font-size: 13.5px; line-height: 1.55; color: var(--ink-2); }
+  .p80ul li { margin: 4px 0; }
+  .p80ul li b, .p80ul li strong { color: var(--ink); }
+  .p80ev { margin: 10px 0 0; font-size: 13px; line-height: 1.5; color: var(--bad); }
+  .p80acts { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; margin-top: 10px; font-size: 13.5px; }
+  .p80list { display: grid; gap: 14px; }
+  .p80rows div { display: flex; flex-wrap: wrap; gap: 4px 10px; padding: 9px 0; border-top: 1px solid var(--border); font-size: 13.5px; color: var(--ink-2); line-height: 1.5; }
+  .p80rows div:first-child { border-top: none; }
+  .p80rows b { color: var(--ink); }
+  @media (max-width: 560px) { .p80card { grid-template-columns: 1fr; } }
+
   /* onglet Ventes */
   .dealedit { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); display: grid; gap: 10px; }
   .dealedit label.flab { display: block; font-size: 12px; font-weight: 600; color: var(--ink-2); margin-bottom: 3px; }
@@ -1529,6 +1549,44 @@
     </div>
 
     <div id="tab-todo" hidden>
+      <div class="subnav" id="subnav-todo">
+        <div class="subgrp">
+          <button data-pane="p2080">⚡ 20/80 du jour <span class="count" id="p80-count"></span></button>
+          <button data-pane="faire">✅ À faire <span class="count" id="faire-count"></span></button>
+        </div>
+      </div>
+
+      <div id="tab-p2080" class="pane">
+        <div class="alert warn" id="p80-stale" hidden><span aria-hidden="true">&#9888;</span><span id="p80-stale-txt"></span></div>
+        <section>
+          <div class="sec-head">
+            <h2 class="hsec" style="--hc:var(--bad);margin:0" id="p80-title">⚡ Les 30 minutes qui rapportent le plus</h2>
+            <span class="formnote" id="p80-when"></span>
+          </div>
+          <p class="p80prin" id="p80-principe"></p>
+          <div class="vkpis" id="p80-kpis" style="margin-top:14px"></div>
+          <div class="p80bar"><i id="p80-bar"></i></div>
+          <p class="formnote" id="p80-progress" style="margin-top:2px"></p>
+        </section>
+        <section>
+          <div class="p80list" id="p80-list"><p class="empty-note">Chargement du plan…</p></div>
+        </section>
+        <section id="p80-sec-bonus" hidden>
+          <h2 class="hsec" style="--hc:var(--s4);margin-bottom:10px">⏭️ Si tu as 15 minutes de plus</h2>
+          <div class="card p80rows" id="p80-bonus"></div>
+        </section>
+        <section id="p80-sec-non" hidden>
+          <h2 class="hsec" style="--hc:var(--muted);margin-bottom:10px">🚫 Ce que tu ne fais pas ce matin</h2>
+          <div class="card p80rows" id="p80-non"></div>
+        </section>
+        <section id="p80-sec-an" hidden>
+          <h2 class="hsec" style="--hc:var(--s5);margin-bottom:10px">🧠 Pourquoi ce plan et pas un autre</h2>
+          <div class="card" id="p80-analyse"></div>
+        </section>
+        <p class="formnote" id="p80-note"></p>
+      </div>
+
+      <div id="tab-faire" class="pane" hidden>
       <div class="tally-counts" id="todo-pills"></div>
       <section>
         <h2 class="hsec" style="--hc:var(--bad);margin-bottom:10px" id="todo-title">✅ À faire</h2>
@@ -1555,7 +1613,7 @@
         </form>
       </section>
       <p class="formnote" id="todo-note"></p>
-    
+      </div><!-- /tab-faire -->
     </div>
 
     <footer id="foot"></footer>
@@ -1853,6 +1911,7 @@ async function load(showSpinner) {
   INSTA_ACT_TEXT = await get("data/insta-activite.csv").catch(() => "");
   get("data/insta-appels.json").then(t => renderAppelsTab(JSON.parse(t))).catch(() => renderAppelsTab(null));
   get("data/todo.json").then(t => { TODO_SEED = JSON.parse(t); renderTodoTab(); }).catch(() => renderTodoTab());
+  get("data/2080.json").then(t => { P80 = JSON.parse(t); render2080(); }).catch(() => render2080());
   get("data/a-repondre.json").then(t => { AREP = JSON.parse(t); renderArepTab(); }).catch(() => renderArepTab());
   get("data/abonnes.csv").then(renderAbonnesTab).catch(() => renderAbonnesTab(""));
   get("data/reactivite.json").then(t => { REAC = JSON.parse(t); scheduleReac(); }).catch(() => scheduleReac());
@@ -2302,9 +2361,10 @@ const TABS = ["dash", "contenu", "setting", "closing", "todo"];
 const PANES = { audience: "contenu", reels: "contenu",
   eod: "setting", reac: "setting", abonnes: "setting", script: "setting", datas: "setting", eodstats: "setting", verif: "setting",
   arep: "setting", chauds: "setting", lm: "setting", appels: "setting", leads: "setting",
-  ventes: "closing" };
+  ventes: "closing",
+  p2080: "todo", faire: "todo" };
 const TAB_ALIAS = { cav: "ventes", car: "ventes", calls: "ventes", tally: "lm", scans: "lm" };   // anciens liens
-const POLE_DEFAULT = { contenu: "audience", setting: "datas", closing: "ventes" };
+const POLE_DEFAULT = { contenu: "audience", setting: "datas", closing: "ventes", todo: "p2080" };
 let curPane = {};
 try { curPane = JSON.parse(localStorage.getItem("curPane") || "{}"); } catch (e) {}
 function showTab(name) {
@@ -2394,7 +2454,7 @@ const frDateTime = s => {
 function renderExtras(eodText, tallyText, partialsText, pfText, calText, leadsText) {
   DUP_KEYS = parseDupKeys(eodText);
   VOTES = parseVotes(eodText); renderNewAcc();
-  TODO_EOD_TEXT = eodText || ""; renderTodoTab(); renderArepTab();
+  TODO_EOD_TEXT = eodText || ""; renderTodoTab(); render2080(); renderArepTab();
   DEAL_EDITS = parseDealEdits(eodText);
   CALL_EDITS = parseCallEdits(eodText);
   STAGE_EDITS = parseStages(eodText);
@@ -3198,7 +3258,7 @@ function todoState() {
 }
 function todoPost(line) {
   try { const p = todoPending(); p.push({ line, ts: Date.now() }); localStorage.setItem("todoPending", JSON.stringify(p)); } catch (e) {}
-  renderTodoTab();
+  renderTodoTab(); render2080();
   return postEodRow("Todo", line).catch(() => alert("La modification n'a pas pu être envoyée, réessaie."));
 }
 function renderTodoTab() {
@@ -3207,6 +3267,7 @@ function renderTodoTab() {
   const today = iso(new Date());
   const open = all.filter(t => !t.fait);
   el("todo-count").textContent = open.length ? "(" + open.length + ")" : "";
+  el("faire-count").textContent = open.length ? "(" + open.length + ")" : "";
   const nb = who => open.filter(t => who === "all" || t.qui === who).length;
   el("todo-pills").innerHTML =
     '<button class="pill fpill' + (todoWho === "all" ? " on" : "") + '" data-who="all"><b>' + nb("all") + '</b>&nbsp;tout le monde</button>' +
@@ -3266,6 +3327,125 @@ el("todo-form").addEventListener("submit", async e => {
   el("td-send").disabled = false;
   el("td-texte").value = ""; el("td-lien").value = ""; el("td-date").value = "";
   const m = el("td-msg"); m.hidden = false; m.textContent = "Ajoutée pour " + qui + " ✅"; setTimeout(() => { m.hidden = true; }, 2500);
+});
+
+/* ---------- onglet ✅ To do › ⚡ 20/80 : le plan de 30 minutes ----------
+   Source : data/2080.json, écrit par Claude après analyse du portefeuille (propositions chiffrées
+   et issues), de Calendly, des scans, du relevé des conversations Instagram et de la To do.
+   Les cases cochées passent par le même Google Form que la To do, setter réservé « Todo » :
+     « — TodoFait : x-<id> · 1|0 » (le préfixe x- évite toute collision avec les tâches).
+   Le plan est écrit à la main, mais tout ce qui vieillit (délais, reste à faire, minutes, euros)
+   est recalculé à l'ouverture de la page. */
+let P80 = null;
+const P80_CANAL = {
+  appel:    ["📞 au téléphone", "var(--bad)"],
+  whatsapp: ["📱 par WhatsApp", "var(--good)"],
+  vocal:    ["🎙️ en vocal Insta", "var(--s5)"],
+  mail:     ["✉️ par mail", "var(--s1)"],
+  prepa:    ["🧭 préparation", "var(--s4)"],
+  message:  ["💬 un message", "var(--accent)"],
+};
+function p80DoneMap() {
+  const done = {}, lines = [];
+  parseCSV(TODO_EOD_TEXT || "").slice(1).forEach(r => {
+    [r[5], r[6], r[12]].map(x => (x || "").trim()).filter(Boolean).join("\n").split("\n").forEach(l => lines.push(l));
+  });
+  todoPending().forEach(p => lines.push(p.line));
+  lines.forEach(l => { const m = /—\s*TodoFait\s*:\s*(x-[\w-]+)\s*·\s*([01])/.exec(l); if (m) done[m[1]] = m[2] === "1"; });
+  return done;
+}
+const p80Eur = n => Number(n).toLocaleString("fr-FR") + "&nbsp;€";
+function p80Days(d) {                                   // "2026-09-03" -> nombre de jours écoulés
+  if (!/^\d{4}-\d\d-\d\d$/.test(d || "")) return null;
+  return Math.round((new Date(iso(new Date()) + "T12:00:00") - new Date(d + "T12:00:00")) / 86400000);
+}
+function p80Since(a) {
+  const n = p80Days(a.depuis);
+  if (n == null || !a.depuis_quoi) return "";
+  const lab = n <= 0 ? a.depuis_quoi + " aujourd'hui" : n === 1 ? a.depuis_quoi + " hier" : a.depuis_quoi + " il y a " + n + " jours";
+  return '<span class="badge ' + (n >= 7 ? "lose" : n >= 3 ? "warn2" : "gray") + '">⏳ ' + esc(lab) + "</span>";
+}
+function render2080() {
+  if (!el("p80-list")) return;
+  if (!P80 || !(P80.actions || []).length) {
+    el("p80-list").innerHTML = '<p class="empty-note">Le plan du jour n\'a pas encore été écrit. Demande à Claude « refais le 20/80 de Lauric ».</p>';
+    return;
+  }
+  const done = p80DoneMap(), acts = P80.actions;
+  const isDone = a => !!done["x-" + a.id];
+  const reste = acts.filter(a => !isDone(a));
+  const min = a => +a.min || 0, eur = a => +a.montant || 0;
+  const totMin = acts.reduce((t, a) => t + min(a), 0), totEur = acts.reduce((t, a) => t + eur(a), 0);
+  const faitMin = acts.filter(isDone).reduce((t, a) => t + min(a), 0);
+  const nEur = acts.filter(a => eur(a)).length;
+  el("p80-count").textContent = reste.length ? "(" + reste.length + ")" : "";
+  el("p80-title").textContent = "⚡ " + (P80.titre || "Les 30 minutes qui rapportent le plus");
+  el("p80-when").textContent = P80.genere ? "Plan du " + frDate(P80.genere) : "";
+  el("p80-principe").textContent = P80.principe || "";
+
+  const jours = p80Days(P80.genere);
+  el("p80-stale").hidden = !(jours && jours >= 1);
+  if (jours && jours >= 1) el("p80-stale-txt").innerHTML = "Ce plan a été écrit il y a <b>" + jours + " jour" + (jours > 1 ? "s" : "") +
+    "</b>. Les montants et les délais ci-dessous ne bougent pas tout seuls : demande à Claude « refais le 20/80 de Lauric » pour le réécrire sur les données du jour.";
+
+  const kpi = (label, val, sub, col) => '<div class="card tile" style="--tc:' + col + '"><div class="formnote" style="margin:0">' + label +
+    '</div><div style="font-size:28px;font-weight:700;line-height:1.2">' + val + '</div><div class="formnote" style="margin:4px 0 0">' + sub + '</div></div>';
+  el("p80-kpis").innerHTML =
+    kpi("Cash en attente d'un oui", p80Eur(totEur), nEur + " propositions déjà chiffrées, zéro prospection à faire", "var(--good)") +
+    kpi("Temps à y passer", totMin + " min", acts.length + " actions, la plus longue " + Math.max.apply(null, acts.map(min)) + " min", "var(--accent)") +
+    kpi("Fait aujourd'hui", acts.length - reste.length + " / " + acts.length, faitMin + " min sur " + totMin + " · " +
+      p80Eur(acts.filter(isDone).reduce((t, a) => t + eur(a), 0)) + " traités", reste.length ? "var(--bad)" : "var(--good)");
+  el("p80-bar").style.width = (totMin ? Math.round(100 * faitMin / totMin) : 0) + "%";
+  el("p80-progress").textContent = reste.length
+    ? "Il reste " + reste.reduce((t, a) => t + min(a), 0) + " minutes de plan, soit " + p80Eur(reste.reduce((t, a) => t + eur(a), 0)).replace("&nbsp;", " ") + " encore sur la table."
+    : "Plan du jour terminé. Le reste de la journée peut partir sur le volume (scan, nouveaux abonnés, contenu).";
+
+  const lien = (href, txt) => '<a class="vivlink" href="' + esc(href) + '" target="_blank" rel="noopener">' + txt + "</a>";
+  el("p80-list").innerHTML = acts.map((a, i) => {
+    const can = P80_CANAL[a.canal] || ["", "var(--accent)"], fait = isDone(a);
+    const liens = [];
+    if (a.tel) liens.push(lien("tel:" + String(a.tel).replace(/\s/g, ""), "📞 " + esc(a.tel)));
+    if (a.tel && waLink(a.tel)) liens.push(lien(waLink(a.tel), "📱 WhatsApp"));
+    if (a.mail) liens.push(lien("mailto:" + a.mail, "✉️ " + esc(a.mail)));
+    if (a.pseudo) liens.push(lien("https://www.instagram.com/" + a.pseudo + "/", "@" + esc(a.pseudo) + " ↗"));
+    return '<div class="rcard p80card' + (fait ? " done" : "") + '" style="--kc:' + can[1] + '">' +
+      '<button type="button" class="todo-check' + (fait ? " on" : "") + '" data-p80="' + esc(a.id) + '" title="' +
+        (fait ? "Remettre à faire" : "Marquer comme fait") + '">' + (fait ? "✓" : "") + "</button>" +
+      '<div class="todo-body"><div class="rhead"><span class="rname"><span class="p80n">' + (i + 1) + ".</span> " + esc(a.titre) + "</span>" +
+        (eur(a) ? '<span class="badge win">' + p80Eur(eur(a)) + (a.plus ? " <small>puis " + p80Eur(a.plus) + "</small>" : "") + "</span>"
+                : a.libelle_montant ? '<span class="badge next">' + esc(a.libelle_montant) + "</span>" : "") +
+        (can[0] ? '<span class="badge src">' + can[0] + "</span>" : "") +
+        '<span class="badge gray">' + min(a) + " min</span>" + p80Since(a) + "</div>" +
+      (a.qui ? '<p class="rstats" style="margin-top:6px"><b>' + esc(a.qui) + "</b></p>" : "") +
+      '<p class="p80sub">Pourquoi c\'est là que le cash est le plus proche</p><ul class="p80ul">' +
+        (a.pourquoi || []).map(x => "<li>" + x + "</li>").join("") + "</ul>" +
+      '<p class="p80sub">Ce que tu fais, exactement</p><ol class="p80ul">' +
+        (a.quoi || []).map(x => "<li>" + x + "</li>").join("") + "</ol>" +
+      (a.message ? '<div class="msgcard" id="p80-msg-' + i + '">' + esc(a.message) + '</div>' +
+        '<button type="button" class="copybtn" data-copy="p80-msg-' + i + '">Copier le message</button>' : "") +
+      (a.eviter ? '<p class="p80ev">🚫 ' + esc(a.eviter) + "</p>" : "") +
+      (liens.length ? '<p class="p80acts">' + liens.join('<span class="formnote" style="margin:0">·</span>') + "</p>" : "") +
+      "</div></div>";
+  }).join("");
+
+  const bonus = P80.bonus || [];
+  el("p80-sec-bonus").hidden = !bonus.length;
+  el("p80-bonus").innerHTML = bonus.map(b => "<div><b>" + esc(b.qui) + "</b> " + esc(b.quoi) +
+    (b.pseudo ? " " + lien("https://www.instagram.com/" + b.pseudo + "/", "↗") : "") + "</div>").join("");
+  const non = P80.pas_maintenant || [];
+  el("p80-sec-non").hidden = !non.length;
+  el("p80-non").innerHTML = non.map(n => "<div><b>" + esc(n.titre) + "</b> " + esc(n.pourquoi) + "</div>").join("");
+  const an = P80.analyse || [];
+  el("p80-sec-an").hidden = !an.length;
+  el("p80-analyse").innerHTML = an.map(sec => '<h3 class="mini-title">' + esc(sec.titre) + '</h3><ul style="margin:0 0 14px;padding-left:20px;line-height:1.6">' +
+    (sec.points || []).map(x => "<li>" + x + "</li>").join("") + "</ul>").join("");
+  el("p80-note").textContent = P80.note || "";
+}
+document.addEventListener("click", e => {
+  const c = e.target.closest("[data-p80]");
+  if (!c) return;
+  const id = "x-" + c.dataset.p80;
+  todoPost("— TodoFait : " + id + " · " + (p80DoneMap()[id] ? 0 : 1));
 });
 
 /* ---------- onglet 💬 À répondre : les conversations Instagram où le lead attend ----------

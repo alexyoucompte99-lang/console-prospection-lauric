@@ -1,0 +1,214 @@
+{
+  "genere": "2026-09-17",
+  "budget": 30,
+  "titre": "Les 30 minutes qui rapportent le plus aujourd'hui",
+  "principe": "Aucune prospection dans ce plan. 25 890 € de propositions déjà chiffrées attendent un oui ou un non depuis 8 à 17 jours : c'est le seul endroit du business où l'argent est à un appel de distance. Tout le reste (scan en masse, nouveaux abonnés, hors cible) rapporte peut-être en octobre.",
+  "actions": [
+    {
+      "id": "morgane",
+      "min": 6,
+      "montant": 10000,
+      "qui": "Morgane Schmitt",
+      "pseudo": "morganefitgirl_",
+      "tel": "0782839913",
+      "canal": "appel",
+      "titre": "Appeler Morgane et lui donner les chiffres qu'elle attend",
+      "depuis": "2026-09-03",
+      "depuis_quoi": "propo de 10 000 € HT / 12 mois posée au call du 03/09",
+      "pourquoi": [
+        "C'est la plus grosse somme ouverte du business : 10 000 € HT sur 12 mois, projet fitness monté avec son conjoint (deux décideurs, un seul a été au call).",
+        "Le deal n'est pas perdu, il est en suspens pour une raison connue : son vocal du 08/09 disait sa frustration de ne pas avoir eu de roadmap chiffrée au premier call. La réponse est partie sur WhatsApp, et depuis, le seul message envoyé est le partage YouTube de masse du 11/09.",
+        "Elle n'a plus rien écrit depuis le 03/09. Deux semaines de silence après une propo à 10 000 €, ça se débloque au téléphone, pas en DM."
+      ],
+      "quoi": [
+        "Avant d'appeler, écrire sur une feuille 3 chiffres et rien de plus : objectif de CA à 12 mois, les 3 jalons (trimestre 1, 2, 3), le prix au mois.",
+        "Appeler le 07 82 83 99 13, annoncer 10 minutes, tenir 10 minutes.",
+        "Finir sur un choix fermé, jamais sur « je te laisse réfléchir » : démarrage début octobre ou report à janvier."
+      ],
+      "message": "Hello Morgane, j'ai repris ton retour sur la roadmap chiffrée et tu avais raison de me le dire. J'ai posé les 3 jalons et le chiffre d'affaires visé à 12 mois pour votre projet, ça tient sur une page. Je t'appelle aujourd'hui pour te la lire en 10 minutes, avec Nicolas si vous êtes tous les deux dispo. Ensuite tu me dis simplement si on démarre en octobre ou si on reporte à janvier.",
+      "eviter": "Ne renvoie aucun contenu, aucune vidéo, aucun article. Le dernier message qu'elle a reçu de toi est un partage de masse alors qu'elle attendait une roadmap : c'est ça qui a refroidi le deal."
+    },
+    {
+      "id": "ulrich",
+      "min": 4,
+      "montant": 890,
+      "plus": 5000,
+      "qui": "Ulrich (repreneur au Bénin)",
+      "canal": "mail",
+      "mail": "uchitou1@gmail.com",
+      "titre": "Faire signer le contrat d'Ulrich avant l'audit des 2 et 3 octobre",
+      "depuis": "2026-08-31",
+      "depuis_quoi": "contrat envoyé par mail",
+      "pourquoi": [
+        "C'est le seul euro signable cette semaine : audit à 890 € TTC validé au R2 du 28/08, dates déjà posées (2 et 3 octobre, 4 h), contrat envoyé le 31/08 et jamais revenu.",
+        "Derrière l'audit il y a la vraie propo : 5 000 € sur 3 mois pour la reprise. Un audit payé, c'est un client qui a déjà sorti sa carte une fois.",
+        "Un contrat qui traîne 17 jours n'est presque jamais un refus : c'est un mail perdu, un virement international à préparer, ou personne qui relance."
+      ],
+      "quoi": [
+        "Renvoyer le contrat en pièce jointe dans un nouveau mail (l'ancien fil est peut-être en spam), objet court avec la date.",
+        "Donner le moyen de paiement dans le mail, pas sur demande : lien ou IBAN, montant exact, et « facture envoyée après réception ».",
+        "Utiliser la date comme raison de relancer, c'est la seule qui ne met pas de pression commerciale."
+      ],
+      "message": "Bonjour Ulrich, je bloque les 2 et 3 octobre à ton nom pour l'audit. Pour figer le créneau il me manque juste le contrat signé et le règlement de 890 € TTC. Je te remets le contrat en pièce jointe et le moyen de paiement juste en dessous, tu me renvoies le document signé par retour de mail. Dès que c'est fait je t'envoie le programme des 4 heures et la liste des documents à préparer.",
+      "eviter": "Ne propose pas un nouveau point de cadrage gratuit avant la signature. Le cadrage, c'est justement l'audit qu'il doit payer."
+    },
+    {
+      "id": "veronique",
+      "min": 4,
+      "montant": 5000,
+      "qui": "Véronique Varamo",
+      "pseudo": "veroniquevaramo",
+      "canal": "vocal",
+      "titre": "Transformer le oui de Véronique en date et en acompte",
+      "depuis": "2026-09-09",
+      "depuis_quoi": "oui écrit sur la proposition à 5 000 €",
+      "pourquoi": [
+        "Elle a écrit oui noir sur blanc le 09/09 : « concernant ta proposition, je réponds oui, mais légèrement plus tard, je le prévois dans ma compta d'ici le mois prochain ». C'est le seul accord verbal du pipeline.",
+        "Deux messages sont partis depuis (acompte proposé le 09/09, semaine du 6 octobre proposée le 13/09) et elle n'a pas répondu depuis 8 jours. Un oui sans date se dilue en novembre puis en janvier.",
+        "Son objectif est concret et daté : 10 clients B2B. Plus on démarre tard, moins la promesse tient."
+      ],
+      "quoi": [
+        "Un vocal de 40 secondes, pas un écrit : le troisième message écrit qui repose la même question ne sera pas lu.",
+        "Une seule question fermée à la fin : mardi 7 ou jeudi 9 octobre.",
+        "Proposer un acompte de 500 € qui bloque le tarif et la date, le solde en octobre quand son budget passe."
+      ],
+      "message": "Véronique, c'est Lauric. On avait dit le mois prochain pour le budget, donc j'organise la suite maintenant pour que tu n'aies plus à y penser. Je te réserve la première séance la semaine du 6 octobre : mardi 7 ou jeudi 9, tu me dis juste lequel des deux. Pour bloquer la date et le tarif il suffit d'un acompte de 500 €, le reste part en octobre comme prévu dans ta compta. Réponds-moi juste mardi ou jeudi et je m'occupe du reste.",
+      "eviter": "Pas de relance écrite qui répète « est-ce que tu as réfléchi ». Elle a déjà réfléchi et déjà dit oui, il ne reste qu'une date à cocher."
+    },
+    {
+      "id": "lamia",
+      "min": 4,
+      "montant": 10000,
+      "qui": "Lamia Mbarek",
+      "pseudo": "lamiambare",
+      "tel": "+21652693293",
+      "canal": "whatsapp",
+      "titre": "Rattraper le R2 de Lamia en appel WhatsApp, sans lien visio",
+      "depuis": "2026-08-27",
+      "depuis_quoi": "R2 en no show",
+      "pourquoi": [
+        "10 000 € sur 10 mois étaient sur la table (stratégie textile en Tunisie), le R2 du 27/08 est tombé en no show et personne n'a rattrapé depuis 3 semaines.",
+        "Le no show vient très probablement du canal, pas du refus : au R1 du 11/08 elle a écrit « je n'arrive pas à me connecter » puis « on peut faire un call WhatsApp ? ». On lui a renvoyé un lien Google Meet.",
+        "Elle a réagi en cœur à un message sans répondre : le fil est vivant, il est juste sur le mauvais canal."
+      ],
+      "quoi": [
+        "L'appeler en appel WhatsApp, jamais en visio Meet, jamais avec un lien à cliquer.",
+        "Proposer deux créneaux fermes à son heure locale (elle a 1 h de décalage), pas « quelles sont tes dispos ».",
+        "Reprendre son sujet à elle (la nouvelle stratégie textile) et pas l'accompagnement."
+      ],
+      "message": "Bonjour Lamia, on s'était manqués fin août et je n'ai pas relancé, c'est de ma faute. Je te propose qu'on reprenne là où on s'était arrêtés sur ta stratégie textile, en appel WhatsApp direct cette fois, sans lien à cliquer. Demain 10h ou jeudi 16h chez toi, lequel des deux te va ? Je t'appelle à l'heure choisie, 30 minutes maximum.",
+      "eviter": "Aucun lien Google Meet, aucun Calendly. Deux appels ont déjà failli sauter là-dessus."
+    },
+    {
+      "id": "marie",
+      "min": 5,
+      "libelle_montant": "R1 aujourd'hui",
+      "qui": "Marie Thiney",
+      "pseudo": "thineymarie",
+      "canal": "prepa",
+      "titre": "Préparer la visio de Marie, elle est aujourd'hui",
+      "depuis": "2026-09-17",
+      "depuis_quoi": "visio confirmée",
+      "pourquoi": [
+        "C'est le seul R1 de la journée, dirigeante dans l'événementiel, scan rempli avec un score de 21 et classée dans la cible.",
+        "Elle n'a jamais donné ses sujets prioritaires malgré la relance du 16/09 (elle a réagi en cœur sans répondre). Un appel qui démarre à froid se termine en « je réfléchis ».",
+        "La leçon Morgane coûte 10 000 € : un premier call sans chiffres annoncés laisse le prospect frustré. Ça se règle en 5 minutes de préparation."
+      ],
+      "quoi": [
+        "Relire ses 9 réponses au scan dans Setting puis Lead magnet, et repérer les 2 réponses les plus dures : ce sont les questions d'ouverture de l'appel.",
+        "Annoncer le déroulé dès la première minute : 20 minutes de diagnostic, 10 minutes de roadmap chiffrée, une proposition à la fin.",
+        "Envoyer le message de confirmation 2 heures avant, avec le lien visio dans le message."
+      ],
+      "message": "Bonjour Marie, je te confirme notre visio d'aujourd'hui. On va faire simple : 20 minutes sur ta situation et ce qui te bloque en ce moment, puis je te donne ma lecture chiffrée de ta fin d'année et ce que je ferais à ta place. Tu ressors de l'appel avec un plan, que tu travailles avec moi ensuite ou pas. Voici le lien juste ici, à tout à l'heure.",
+      "eviter": "Ne commence pas par « raconte-moi ton parcours ». Tu as déjà ses réponses au scan, entre directement dans le sujet qui la gêne."
+    },
+    {
+      "id": "paulandre",
+      "min": 3,
+      "libelle_montant": "R2 à fixer",
+      "qui": "Paul André Guérin",
+      "pseudo": "myshampouineuse",
+      "tel": "0633768484",
+      "canal": "appel",
+      "titre": "Poser un créneau ferme à Paul André, il attend depuis 5 jours",
+      "depuis": "2026-09-12",
+      "depuis_quoi": "son dernier message sans réponse",
+      "pourquoi": [
+        "Note du R1 du 08/09 : « très ouvert au sujet, la question c'est QUAND ». Un prospect qui en est là ne se relance pas, il se cale.",
+        "Son dernier message du 12/09 (« je prends le temps de regarder quand je suis au calme ») n'a jamais eu de réponse. Il est en priorité 1 dans À répondre depuis 5 jours.",
+        "Sur ce lead, la donnée est nette : une question courte a débloqué en 4 minutes ce que 5 relances n'avaient pas fait, et il a lui-même choisi le téléphone à 13h."
+      ],
+      "quoi": [
+        "L'appeler ou lui écrire avec un créneau ferme, dans la même formule que la dernière fois qui a marché.",
+        "Un seul créneau proposé, pas une plage, pas une question ouverte.",
+        "Reprendre son mot (« au calme ») pour montrer que le message a été lu."
+      ],
+      "message": "Bonjour Paul André, vous m'avez dit que vous regardiez ça au calme, donc je vous propose le moment le plus calme de votre journée : demain 13h, comme la dernière fois. 20 minutes au téléphone, on parle de la suite concrètement et vous me dites si c'est le bon moment ou pas. Si 13h ne va pas, dites-moi juste une heure et je m'adapte.",
+      "eviter": "Surtout pas « avez-vous une dispo cette semaine ». Sur les 33 appels proposés, les 5 créneaux précis ont donné 5 appels, les questions ouvertes ont donné zéro."
+    },
+    {
+      "id": "recos",
+      "min": 4,
+      "libelle_montant": "2 noms",
+      "qui": "Maxime Vial et Lisa & Nicolas",
+      "canal": "message",
+      "titre": "Demander deux recommandations aux clients qui paient déjà",
+      "depuis": "2026-08-24",
+      "depuis_quoi": "dernière vente signée",
+      "pourquoi": [
+        "Trois clients ont payé entre 5 000 € et 7 500 € : Maxime Fusaro (5 000 € soldés en mai), Maxime Vial (5 000 € HT, avec 6 mois de plus notés « à venir ») et Lisa & Nicolas (7 500 € HT depuis le 24/08).",
+        "En face, Instagram a coûté 910 propositions de scan en août pour 21 liens envoyés et 3 calls. Un dirigeant qui paie 7 500 € connaît d'autres dirigeants qui peuvent payer 7 500 €.",
+        "Maxime Vial a 6 mois supplémentaires en attente de confirmation : c'est 5 000 € à verrouiller en un message, pas en une vente."
+      ],
+      "quoi": [
+        "Message 1 à Maxime Vial : confirmer la reconduction des 6 mois et fixer la date de départ.",
+        "Message 2 à Lisa et Nicolas : demander un nom, un seul, avec un critère précis (dirigeant avec des salariés).",
+        "Ne jamais demander « si tu connais quelqu'un » : demander une personne et un prénom."
+      ],
+      "message": "Salut, une question rapide et tu me réponds quand tu veux. Dans ton entourage pro, il y a un dirigeant avec des salariés qui vit exactement ce que tu vivais avant qu'on travaille ensemble ? Je ne cherche pas une liste, juste un prénom. Je le contacte de ma part, je dis que tu m'as parlé de lui, et je lui offre le même premier échange qu'à toi. S'il n'y a personne, ça ne change rien entre nous.",
+      "eviter": "Ne demande pas un témoignage et une recommandation dans le même message. Une demande par message, sinon les deux tombent."
+    }
+  ],
+  "bonus": [
+    { "qui": "Anouck (nanouanouck)", "quoi": "Elle signait la reprise de sa bijouterie le 15/09 et la tâche est en retard dans la To do. Une question fermée sur la signature, c'est le seul levier qui la fait répondre.", "pseudo": "nanouanouck" },
+    { "qui": "Loïc (camelia_by_loic)", "quoi": "Maison de thé, 4 collaborateurs, 2e boutique en ouverture : cœur de cible. Il a écrit le dernier message le 03/09 et attend depuis 14 jours.", "pseudo": "camelia_by_loic" },
+    { "qui": "Adann (adannkfils)", "quoi": "Directeur général d'une association de 30 salariés qui vise 100 puis 200. Priorité 1 dans À répondre, il a donné son chiffre de croissance : rebondir dessus et proposer 2 créneaux.", "pseudo": "adannkfils" },
+    { "qui": "Georges (abiaad_georges)", "quoi": "Cœur de cible multi-activités, il a posé une question jeudi et attend depuis 4 jours. Sa taille d'équipe sur la fintech est la seule info qui manque pour chiffrer.", "pseudo": "abiaad_georges" },
+    { "qui": "XL Services Nantes", "quoi": "Dirigeant de PME services, objectif 1 M€, 2 chefs d'équipe, budget déjà cadré et appel accepté sur « préparer 2027 ». Plus rien depuis le 14/08.", "pseudo": "xl.services.nantes" }
+  ],
+  "pas_maintenant": [
+    { "titre": "Envoyer le scan en masse", "pourquoi": "910 propositions en août, 21 liens réellement envoyés, 3 calls. Le goulot n'est pas le nombre de messages envoyés, c'est le lien qui ne part pas. À traiter cette semaine, pas dans les 30 minutes qui rapportent." },
+    { "titre": "Contacter les nouveaux abonnés", "pourquoi": "Utile et régulier, mais c'est du cash à 30 ou 60 jours. Aucun abonné contacté ce matin ne signera ce mois-ci." },
+    { "titre": "Relancer les hors cible", "pourquoi": "Wedding planner solo, salariés, coachs sans équipe : 4 appels faits, 0 vente. Les 3 clients qui paient sont tous des sociétés avec des salariés." },
+    { "titre": "Les relances de masse sans créneau", "pourquoi": "Le message « j'offre 1h de coaching » a fait 9 envois et 0 appel. Le 11/09, un partage YouTube de masse est même parti à Morgane, qui a une proposition de 10 000 € en suspens." },
+    { "titre": "Répondre aux 14 conversations hors cible de À répondre", "pourquoi": "Ça entretient le lien et le bouche-à-oreille, ça ne produit aucune vente à court terme. C'est du travail d'après-midi." }
+  ],
+  "analyse": [
+    {
+      "titre": "Où est le cash aujourd'hui",
+      "points": [
+        "<b>25 890 € de propositions déjà chiffrées attendent une réponse</b> : Morgane 10 000 €, Lamia 10 000 €, Véronique 5 000 € (oui écrit) et Ulrich 890 € avec contrat envoyé. Aucun de ces quatre leads ne demande de prospection, juste un appel.",
+        "<b>Le plus vieux dossier ouvert a 21 jours</b> (Lamia, no show du 27/08) et le plus récent 8 jours (Véronique). Aucun n'a dit non. Ils sont en attente d'une décision que personne ne leur demande de prendre.",
+        "<b>En face, le haut de l'entonnoir est saturé</b> : 1 563 conversations relevées, 910 propositions de scan en août, et 3 ventes depuis mars. Le levier le moins cher du business n'est pas d'ajouter du volume, c'est de conclure ce qui est déjà ouvert."
+      ]
+    },
+    {
+      "titre": "Ce que les chiffres disent sur la façon de conclure",
+      "points": [
+        "<b>Un créneau précis obtient l'appel, une question ouverte ne l'obtient jamais</b> : 5 propositions avec une heure ferme (« demain 11h », « midi vous convient ? ») ont donné 5 appels. « Tu as une dispo ? » répété en boucle n'en a donné aucun.",
+        "<b>Le canal choisi par le lead double le taux de présence</b> : Paul André a demandé le téléphone à 13h et l'appel a eu lieu ; Lamia a demandé WhatsApp, on lui a envoyé un lien Meet et le R2 est tombé en no show.",
+        "<b>Le délai tue plus que le message</b> : Morgane a été bookée 17 jours après la proposition et son deal est en suspens ; Lisa et Nicolas, seule vente du relevé, ont eu la proposition dans l'élan de leur réponse et ont signé 7 500 €.",
+        "<b>Un premier call sans chiffres annoncés coûte le deal</b> : c'est le reproche explicite de Morgane après le call du 03/09. À appliquer dès aujourd'hui avec Marie."
+      ]
+    },
+    {
+      "titre": "Qui achète, à quel prix",
+      "points": [
+        "<b>Ceux qui paient sont des sociétés avec des salariés</b> : Lisa et Nicolas 7 500 € HT (3 laveries reprises, 2 associés), Maxime Fusaro 5 000 € (laboratoire, soldé), Maxime Vial 5 000 € HT avec 6 mois de plus à venir.",
+        "<b>Ceux qui acceptent l'appel le plus facilement n'achètent pas</b> : solos et micro-entreprises, appel obtenu en 1 à 4 jours, 4 appels faits et 0 vente. Ce sont eux qui remplissent l'agenda et vident les journées.",
+        "<b>Le prix de vente moyen est autour de 5 000 €</b>. Une seule signature vaut donc plus que 900 messages de prospection : c'est exactement pourquoi ce plan ne contient aucune prospection."
+      ]
+    }
+  ],
+  "note": "Plan écrit à partir du portefeuille des leads (propositions et issues), de Calendly, des scans du lead magnet, du relevé des conversations Instagram (appels proposés, À répondre) et de la To do. Les montants viennent des lignes « Propo » du portefeuille. À refaire avec Claude quand les quatre propositions du haut sont tranchées."
+}
