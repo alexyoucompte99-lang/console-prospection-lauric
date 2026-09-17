@@ -2,8 +2,68 @@
   "genere": "2026-09-17",
   "budget": 30,
   "titre": "Les 30 minutes qui rapportent le plus aujourd'hui",
-  "principe": "Aucune prospection dans ce plan. 25 890 € de propositions déjà chiffrées attendent un oui ou un non depuis 8 à 17 jours : c'est le seul endroit du business où l'argent est à un appel de distance. Tout le reste (scan en masse, nouveaux abonnés, hors cible) rapporte peut-être en octobre.",
+  "principe": "On commence par l'endroit qui coûte le plus cher et qui ne se voit nulle part : 9 des 12 calls perdus n'ont aucune raison écrite. Ensuite on va chercher les 25 890 € de propositions déjà chiffrées qui attendent un oui ou un non depuis 8 à 17 jours. Zéro prospection dans ce plan : le scan en masse, les nouveaux abonnés et les hors cible rapportent peut-être en octobre.",
   "actions": [
+    {
+      "id": "suivi",
+      "min": 8,
+      "libelle_montant": "9 non sur 12 sans raison écrite",
+      "qui": "Les 12 calls qui n'ont pas abouti",
+      "canal": "suivi",
+      "go": "ventes",
+      "go_label": "Ouvrir Closing › Ventes",
+      "titre": "Mettre à jour le suivi des calls et écrire pourquoi ça n'a pas closé",
+      "depuis": "2026-08-17",
+      "depuis_quoi": "dernier non enregistré",
+      "pourquoi": [
+        "Sur les 12 dossiers qui n'ont pas abouti, <b>9 n'ont aucune raison écrite</b> : la colonne Issue dit NON et c'est tout. Un non sans raison ne se corrige pas, il se répète au call suivant.",
+        "<b>Les 3 seules raisons notées parlent toutes d'argent</b> : « trop cher » (Lucie), « a choisi un coach local moins cher » (Stéphane), « aucun moyen » (Amélie). Sur la même période, trois dirigeants ont payé 5 000, 5 000 et 7 500 € pour la même offre. Le prix n'est donc pas le problème, c'est l'habillage poli d'une peur que personne n'a fait sortir.",
+        "Le dossier le plus cher du lot est Florian, noté « très bon feeling » et quand même perdu. Tant que la vraie raison n'est pas écrite quelque part, elle continue de coûter un call sur deux."
+      ],
+      "quoi": [
+        "Ouvrir Closing puis Ventes et remplir les 9 dossiers muets avec le bouton ✏️ Modifier : une ligne par call, la phrase exacte du lead entre guillemets, jamais un résumé. La note part dans le Sheet, toute l'équipe la voit.",
+        "Ranger chaque non dans une des 4 cases de la grille ci-dessous. Si aucune ne colle, c'est que la raison n'a pas été entendue pendant le call : elle est à aller chercher.",
+        "Envoyer le message d'autopsie aux 3 non les plus récents et les plus proches de la cible : Florian, Clément (Easy Clean) et Charlotte. Question fermée, aucune relance commerciale, c'est ce qui fait répondre.",
+        "Pour le call d'aujourd'hui avec Marie, poser les deux questions de la colonne « la question qui la fait sortir » avant même de parler du prix."
+      ],
+      "grille": {
+        "titre": "Ce qu'il dit, ce qu'il a peur de dire, et ce qui le rassure",
+        "cols": [
+          "Ce qu'il dit",
+          "La peur en dessous",
+          "La question qui la fait sortir",
+          "Ce qui le rassure vraiment"
+        ],
+        "lignes": [
+          [
+            "« C'est trop cher »",
+            "Payer et se retrouver exactement au même endroit dans 6 mois. Ce n'est pas la somme qui fait peur, c'est de la perdre une fois de plus.",
+            "« Si le prix n'était pas un sujet, tu démarrerais lundi ? » S'il dit oui, c'est vraiment de la trésorerie et ça s'échelonne. S'il hésite, la vraie raison arrive dans les secondes qui suivent.",
+            "Un résultat daté à 30 jours, écrit noir sur blanc, et un paiement en deux fois. Lucie et Stéphane sont partis sur ce mot sans que personne ne creuse."
+          ],
+          [
+            "« J'en parle à mon associé, à ma femme »",
+            "Se faire reprocher la dépense, ou engager seul un argent qui engage le couple ou la société.",
+            "« Qu'est-ce qu'il va te répondre, mot pour mot ? » puis « qu'est-ce qui le ferait dire oui ? »",
+            "Refaire le call à deux, jamais une plaquette à transmettre. Morgane a un conjoint cofondateur qui n'était pas au call du 03/09, et 10 000 € dorment depuis."
+          ],
+          [
+            "« Ce n'est pas le bon moment »",
+            "Qu'un accompagnement ajoute du travail à quelqu'un qui est déjà en train de couler. Il entend « des devoirs en plus ».",
+            "« Qu'est-ce qui doit être vrai dans 3 mois pour que ce soit le bon moment ? »",
+            "Montrer ce que ça enlève de son agenda, pas ce que ça ajoute. Le premier livrable doit lui rendre des heures dès la première semaine."
+          ],
+          [
+            "« Je vais réfléchir »",
+            "La peur de fond, celle qu'aucun dirigeant ne dit à voix haute : payer un accompagnement, c'est s'avouer qu'il n'y arrive pas seul, avec des salariés qui le regardent tenir debout.",
+            "« Qu'est-ce qui te ferait dire non ? » puis se taire, vraiment, jusqu'à ce qu'il réponde.",
+            "Nommer la peur à sa place et la banaliser : personne n'a appris à diriger, ils l'ont tous pris en route. Le Scan pose déjà la question (« ce que vous portez vraiment, vous en parlez à qui ? »), il suffit de la reposer au moment du prix."
+          ]
+        ]
+      },
+      "message": "Bonjour Florian, je ne reviens pas te vendre quoi que ce soit, le non est un non et c'est très bien comme ça. Je te demande juste 30 secondes : qu'est-ce qui t'a fait dire non, vraiment ? Le prix, le moment, le fait que tu ne voyais pas ce que ça allait changer concrètement, ou moi ? Réponds-moi en un mot, même brutal. Ça me sert à ne pas refaire la même erreur avec le prochain dirigeant en face de moi.",
+      "eviter": "Ne note jamais « pas intéressé » ou « trop cher » tout seul dans le suivi. Ce sont des formules de politesse, pas des raisons : écrites comme ça, elles ne servent à personne et le call suivant repart à zéro."
+    },
     {
       "id": "morgane",
       "min": 6,
@@ -30,7 +90,7 @@
     },
     {
       "id": "ulrich",
-      "min": 4,
+      "min": 3,
       "montant": 890,
       "plus": 5000,
       "qui": "Ulrich (repreneur au Bénin)",
@@ -54,7 +114,7 @@
     },
     {
       "id": "veronique",
-      "min": 4,
+      "min": 3,
       "montant": 5000,
       "qui": "Véronique Varamo",
       "pseudo": "veroniquevaramo",
@@ -77,7 +137,7 @@
     },
     {
       "id": "lamia",
-      "min": 4,
+      "min": 3,
       "montant": 10000,
       "qui": "Lamia Mbarek",
       "pseudo": "lamiambare",
@@ -101,7 +161,7 @@
     },
     {
       "id": "marie",
-      "min": 5,
+      "min": 4,
       "libelle_montant": "R1 aujourd'hui",
       "qui": "Marie Thiney",
       "pseudo": "thineymarie",
@@ -145,43 +205,60 @@
       ],
       "message": "Bonjour Paul André, vous m'avez dit que vous regardiez ça au calme, donc je vous propose le moment le plus calme de votre journée : demain 13h, comme la dernière fois. 20 minutes au téléphone, on parle de la suite concrètement et vous me dites si c'est le bon moment ou pas. Si 13h ne va pas, dites-moi juste une heure et je m'adapte.",
       "eviter": "Surtout pas « avez-vous une dispo cette semaine ». Sur les 33 appels proposés, les 5 créneaux précis ont donné 5 appels, les questions ouvertes ont donné zéro."
-    },
-    {
-      "id": "recos",
-      "min": 4,
-      "libelle_montant": "2 noms",
-      "qui": "Maxime Vial et Lisa & Nicolas",
-      "canal": "message",
-      "titre": "Demander deux recommandations aux clients qui paient déjà",
-      "depuis": "2026-08-24",
-      "depuis_quoi": "dernière vente signée",
-      "pourquoi": [
-        "Trois clients ont payé entre 5 000 € et 7 500 € : Maxime Fusaro (5 000 € soldés en mai), Maxime Vial (5 000 € HT, avec 6 mois de plus notés « à venir ») et Lisa & Nicolas (7 500 € HT depuis le 24/08).",
-        "En face, Instagram a coûté 910 propositions de scan en août pour 21 liens envoyés et 3 calls. Un dirigeant qui paie 7 500 € connaît d'autres dirigeants qui peuvent payer 7 500 €.",
-        "Maxime Vial a 6 mois supplémentaires en attente de confirmation : c'est 5 000 € à verrouiller en un message, pas en une vente."
-      ],
-      "quoi": [
-        "Message 1 à Maxime Vial : confirmer la reconduction des 6 mois et fixer la date de départ.",
-        "Message 2 à Lisa et Nicolas : demander un nom, un seul, avec un critère précis (dirigeant avec des salariés).",
-        "Ne jamais demander « si tu connais quelqu'un » : demander une personne et un prénom."
-      ],
-      "message": "Salut, une question rapide et tu me réponds quand tu veux. Dans ton entourage pro, il y a un dirigeant avec des salariés qui vit exactement ce que tu vivais avant qu'on travaille ensemble ? Je ne cherche pas une liste, juste un prénom. Je le contacte de ma part, je dis que tu m'as parlé de lui, et je lui offre le même premier échange qu'à toi. S'il n'y a personne, ça ne change rien entre nous.",
-      "eviter": "Ne demande pas un témoignage et une recommandation dans le même message. Une demande par message, sinon les deux tombent."
     }
   ],
   "bonus": [
-    { "qui": "Anouck (nanouanouck)", "quoi": "Elle signait la reprise de sa bijouterie le 15/09 et la tâche est en retard dans la To do. Une question fermée sur la signature, c'est le seul levier qui la fait répondre.", "pseudo": "nanouanouck" },
-    { "qui": "Loïc (camelia_by_loic)", "quoi": "Maison de thé, 4 collaborateurs, 2e boutique en ouverture : cœur de cible. Il a écrit le dernier message le 03/09 et attend depuis 14 jours.", "pseudo": "camelia_by_loic" },
-    { "qui": "Adann (adannkfils)", "quoi": "Directeur général d'une association de 30 salariés qui vise 100 puis 200. Priorité 1 dans À répondre, il a donné son chiffre de croissance : rebondir dessus et proposer 2 créneaux.", "pseudo": "adannkfils" },
-    { "qui": "Georges (abiaad_georges)", "quoi": "Cœur de cible multi-activités, il a posé une question jeudi et attend depuis 4 jours. Sa taille d'équipe sur la fintech est la seule info qui manque pour chiffrer.", "pseudo": "abiaad_georges" },
-    { "qui": "XL Services Nantes", "quoi": "Dirigeant de PME services, objectif 1 M€, 2 chefs d'équipe, budget déjà cadré et appel accepté sur « préparer 2027 ». Plus rien depuis le 14/08.", "pseudo": "xl.services.nantes" }
+    {
+      "qui": "Maxime Vial et Lisa & Nicolas",
+      "quoi": "Les deux demandes de recommandation aux clients qui paient déjà (5 000 € et 7 500 €), plus les 6 mois supplémentaires de Maxime Vial à verrouiller. 4 minutes, à faire dès que le suivi des calls est à jour."
+    },
+    {
+      "qui": "Anouck (nanouanouck)",
+      "quoi": "Elle signait la reprise de sa bijouterie le 15/09 et la tâche est en retard dans la To do. Une question fermée sur la signature, c'est le seul levier qui la fait répondre.",
+      "pseudo": "nanouanouck"
+    },
+    {
+      "qui": "Loïc (camelia_by_loic)",
+      "quoi": "Maison de thé, 4 collaborateurs, 2e boutique en ouverture : cœur de cible. Il a écrit le dernier message le 03/09 et attend depuis 14 jours.",
+      "pseudo": "camelia_by_loic"
+    },
+    {
+      "qui": "Adann (adannkfils)",
+      "quoi": "Directeur général d'une association de 30 salariés qui vise 100 puis 200. Priorité 1 dans À répondre, il a donné son chiffre de croissance : rebondir dessus et proposer 2 créneaux.",
+      "pseudo": "adannkfils"
+    },
+    {
+      "qui": "Georges (abiaad_georges)",
+      "quoi": "Cœur de cible multi-activités, il a posé une question jeudi et attend depuis 4 jours. Sa taille d'équipe sur la fintech est la seule info qui manque pour chiffrer.",
+      "pseudo": "abiaad_georges"
+    },
+    {
+      "qui": "XL Services Nantes",
+      "quoi": "Dirigeant de PME services, objectif 1 M€, 2 chefs d'équipe, budget déjà cadré et appel accepté sur « préparer 2027 ». Plus rien depuis le 14/08.",
+      "pseudo": "xl.services.nantes"
+    }
   ],
   "pas_maintenant": [
-    { "titre": "Envoyer le scan en masse", "pourquoi": "910 propositions en août, 21 liens réellement envoyés, 3 calls. Le goulot n'est pas le nombre de messages envoyés, c'est le lien qui ne part pas. À traiter cette semaine, pas dans les 30 minutes qui rapportent." },
-    { "titre": "Contacter les nouveaux abonnés", "pourquoi": "Utile et régulier, mais c'est du cash à 30 ou 60 jours. Aucun abonné contacté ce matin ne signera ce mois-ci." },
-    { "titre": "Relancer les hors cible", "pourquoi": "Wedding planner solo, salariés, coachs sans équipe : 4 appels faits, 0 vente. Les 3 clients qui paient sont tous des sociétés avec des salariés." },
-    { "titre": "Les relances de masse sans créneau", "pourquoi": "Le message « j'offre 1h de coaching » a fait 9 envois et 0 appel. Le 11/09, un partage YouTube de masse est même parti à Morgane, qui a une proposition de 10 000 € en suspens." },
-    { "titre": "Répondre aux 14 conversations hors cible de À répondre", "pourquoi": "Ça entretient le lien et le bouche-à-oreille, ça ne produit aucune vente à court terme. C'est du travail d'après-midi." }
+    {
+      "titre": "Envoyer le scan en masse",
+      "pourquoi": "910 propositions en août, 21 liens réellement envoyés, 3 calls. Le goulot n'est pas le nombre de messages envoyés, c'est le lien qui ne part pas. À traiter cette semaine, pas dans les 30 minutes qui rapportent."
+    },
+    {
+      "titre": "Contacter les nouveaux abonnés",
+      "pourquoi": "Utile et régulier, mais c'est du cash à 30 ou 60 jours. Aucun abonné contacté ce matin ne signera ce mois-ci."
+    },
+    {
+      "titre": "Relancer les hors cible",
+      "pourquoi": "Wedding planner solo, salariés, coachs sans équipe : 4 appels faits, 0 vente. Les 3 clients qui paient sont tous des sociétés avec des salariés."
+    },
+    {
+      "titre": "Les relances de masse sans créneau",
+      "pourquoi": "Le message « j'offre 1h de coaching » a fait 9 envois et 0 appel. Le 11/09, un partage YouTube de masse est même parti à Morgane, qui a une proposition de 10 000 € en suspens."
+    },
+    {
+      "titre": "Répondre aux 14 conversations hors cible de À répondre",
+      "pourquoi": "Ça entretient le lien et le bouche-à-oreille, ça ne produit aucune vente à court terme. C'est du travail d'après-midi."
+    }
   ],
   "analyse": [
     {
@@ -190,6 +267,15 @@
         "<b>25 890 € de propositions déjà chiffrées attendent une réponse</b> : Morgane 10 000 €, Lamia 10 000 €, Véronique 5 000 € (oui écrit) et Ulrich 890 € avec contrat envoyé. Aucun de ces quatre leads ne demande de prospection, juste un appel.",
         "<b>Le plus vieux dossier ouvert a 21 jours</b> (Lamia, no show du 27/08) et le plus récent 8 jours (Véronique). Aucun n'a dit non. Ils sont en attente d'une décision que personne ne leur demande de prendre.",
         "<b>En face, le haut de l'entonnoir est saturé</b> : 1 563 conversations relevées, 910 propositions de scan en août, et 3 ventes depuis mars. Le levier le moins cher du business n'est pas d'ajouter du volume, c'est de conclure ce qui est déjà ouvert."
+      ]
+    },
+    {
+      "titre": "Pourquoi ça ne close pas, et pourquoi personne ne le sait",
+      "points": [
+        "<b>9 non sur 12 n'ont aucune raison écrite dans le suivi.</b> On sait que Charlotte, Clément, Anthony, Mamy et Christian ont dit non, on ne sait pas de quoi ils ont eu peur. Le call suivant refait donc exactement la même erreur.",
+        "<b>Les 3 raisons notées parlent toutes d'argent</b>, alors que trois autres dirigeants ont payé 5 000, 5 000 et 7 500 € pour la même offre à la même période. Le prix, c'est ce qu'on répond quand on ne veut pas dire le reste.",
+        "<b>La peur de fond d'un dirigeant n'est pas la dépense, c'est l'aveu.</b> Payer un accompagnement, c'est écrire noir sur blanc « je n'y arrive pas seul » quand on a une équipe qui vous regarde tenir. C'est précisément la question que le Scan pose déjà et que personne ne repose au moment de donner le prix.",
+        "<b>Ce qui rassure n'est jamais un argument, c'est une preuve de même nature</b> : un client qui avait la même peur, un premier résultat daté à 30 jours, un premier pas plus petit (deux fois, un jalon à un mois). Trois clients payants suffisent à fabriquer ces preuves, elles ne sont écrites nulle part aujourd'hui."
       ]
     },
     {
@@ -210,5 +296,5 @@
       ]
     }
   ],
-  "note": "Plan écrit à partir du portefeuille des leads (propositions et issues), de Calendly, des scans du lead magnet, du relevé des conversations Instagram (appels proposés, À répondre) et de la To do. Les montants viennent des lignes « Propo » du portefeuille. À refaire avec Claude quand les quatre propositions du haut sont tranchées."
+  "note": "Plan écrit à partir du portefeuille des leads (colonnes Propo, Issue et notes de call), de Calendly, des scans du lead magnet, du relevé des conversations Instagram (appels proposés, À répondre) et de la To do. Les montants viennent des lignes « Propo » du portefeuille, le décompte des non de la colonne « Issue ». À refaire avec Claude quand le suivi des calls est à jour et que les quatre propositions du haut sont tranchées."
 }

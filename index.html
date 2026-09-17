@@ -401,6 +401,10 @@
   .p80ul li b, .p80ul li strong { color: var(--ink); }
   .p80ev { margin: 10px 0 0; font-size: 13px; line-height: 1.5; color: var(--bad); }
   .p80acts { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; margin-top: 10px; font-size: 13.5px; }
+  .p80grid { margin-top: 8px; }
+  .p80grid table { font-size: 13px; }
+  .p80grid th, .p80grid td { text-align: left; white-space: normal; vertical-align: top; line-height: 1.5; min-width: 150px; padding: 8px 12px 8px 0; }
+  .p80grid td:first-child { font-weight: 700; color: var(--ink); min-width: 125px; }
   .p80list { display: grid; gap: 14px; }
   .p80rows div { display: flex; flex-wrap: wrap; gap: 4px 10px; padding: 9px 0; border-top: 1px solid var(--border); font-size: 13.5px; color: var(--ink-2); line-height: 1.5; }
   .p80rows div:first-child { border-top: none; }
@@ -3344,6 +3348,7 @@ const P80_CANAL = {
   mail:     ["✉️ par mail", "var(--s1)"],
   prepa:    ["🧭 préparation", "var(--s4)"],
   message:  ["💬 un message", "var(--accent)"],
+  suivi:    ["🗂️ dans la console", "var(--s2)"],
 };
 function p80DoneMap() {
   const done = {}, lines = [];
@@ -3408,6 +3413,7 @@ function render2080() {
     if (a.tel && waLink(a.tel)) liens.push(lien(waLink(a.tel), "📱 WhatsApp"));
     if (a.mail) liens.push(lien("mailto:" + a.mail, "✉️ " + esc(a.mail)));
     if (a.pseudo) liens.push(lien("https://www.instagram.com/" + a.pseudo + "/", "@" + esc(a.pseudo) + " ↗"));
+    if (a.go) liens.push('<a class="vivlink" href="#' + esc(a.go) + '" data-go="' + esc(a.go) + '">' + esc(a.go_label || "Ouvrir l'onglet") + " →</a>");
     return '<div class="rcard p80card' + (fait ? " done" : "") + '" style="--kc:' + can[1] + '">' +
       '<button type="button" class="todo-check' + (fait ? " on" : "") + '" data-p80="' + esc(a.id) + '" title="' +
         (fait ? "Remettre à faire" : "Marquer comme fait") + '">' + (fait ? "✓" : "") + "</button>" +
@@ -3421,6 +3427,10 @@ function render2080() {
         (a.pourquoi || []).map(x => "<li>" + x + "</li>").join("") + "</ul>" +
       '<p class="p80sub">Ce que tu fais, exactement</p><ol class="p80ul">' +
         (a.quoi || []).map(x => "<li>" + x + "</li>").join("") + "</ol>" +
+      (a.grille ? '<p class="p80sub">' + esc(a.grille.titre || "La grille") + '</p><div class="tbl-scroll p80grid"><table><thead><tr>' +
+        (a.grille.cols || []).map(c => "<th>" + esc(c) + "</th>").join("") + "</tr></thead><tbody>" +
+        (a.grille.lignes || []).map(l => "<tr>" + l.map(c => "<td>" + esc(c) + "</td>").join("") + "</tr>").join("") +
+        "</tbody></table></div>" : "") +
       (a.message ? '<div class="msgcard" id="p80-msg-' + i + '">' + esc(a.message) + '</div>' +
         '<button type="button" class="copybtn" data-copy="p80-msg-' + i + '">Copier le message</button>' : "") +
       (a.eviter ? '<p class="p80ev">🚫 ' + esc(a.eviter) + "</p>" : "") +

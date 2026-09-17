@@ -135,6 +135,9 @@ orienté « là où le cash est le plus proche » (propositions déjà chiffrée
   progression, bandeau d'alerte si le plan n'a pas été réécrit aujourd'hui.
 - Cases cochées partagées avec l'équipe par le même Google Form que la To do, setter `Todo`, avec un préfixe qui évite toute
   collision avec les tâches : `— TodoFait : x-<id> · 1|0`. `render2080()` + `p80DoneMap()` dans index.html.
+- Action 1 imposée par Alex (17/09) : **mettre à jour le suivi des calls et écrire pourquoi ça n'a pas closé**. Elle porte une
+  `grille` (rendue en tableau : ce qu'il dit / la peur en dessous / la question qui la fait sortir / ce qui le rassure), le message
+  d'autopsie à envoyer aux non closés, et un lien interne vers l'onglet où remplir (`go` + `go_label`, ex. `ventes`).
 - Pour le refaire : relire le portefeuille et les relevés, réécrire `data/2080.json`, pousser. Rien d'autre à toucher.
 
 ## Onglet ✅ To do › ✅ À faire (11/09)
